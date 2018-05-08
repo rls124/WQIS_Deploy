@@ -1,0 +1,243 @@
+/*
+   Ben Color Scheme
+        Alabaster - #f4f6fa
+        Anakiwa - #8eceff
+        Cornflower Blue - #638de2
+        Waterloo - #6e7393
+        Astronaut - #2a5171
+
+*/
+
+body{
+    /*    background-image: url("../img/stripes.svg");*/
+    background-color:grey;
+    background-size:100% 100%;
+    background-repeat: no-repeat;
+    color:#373737;/*default text color to charcoal*/
+    background-attachment: fixed;
+}
+/*
+    Overridden css
+*/
+
+
+.btn-close{
+    background-color: #868E96;
+    border: medium solid #868E96;
+    color: white;
+}
+.btn-close:hover{
+    background-color: #d4d8db;
+    text-shadow: 1px 1px 3px black;
+    color:black;
+}
+
+.btn-close:active{
+    background-color: #dddddd;
+    border: medium solid #77b0d9;
+    color: black;
+}
+
+.btn-close:disabled:hover{
+    background-color: #2a5171;
+    border-color: #2a5171;
+    text-shadow: none;
+    color: white;
+    cursor: auto;
+}
+
+/*
+    Page specific css
+*/
+.panel{
+    /*background-color: #0b1a28;/*#312f32;*//*#373737;*/
+    border-radius: 5px;
+    border: solid thin rgb(150, 150, 150);/*#373737;*/
+    /*margin-bottom: 5px;*/
+}
+
+.panel-title{
+    color: black;
+    font-weight: normal;
+    margin-left: 10px;
+}
+
+.list-group-item{
+    border: solid thin #312f32;/*#373737;*/
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.spacer{
+    margin-top:60px;
+}
+
+/* New Changes admin panel */
+.card{
+    border: solid medium #868E96;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.card:hover{
+    transition: .2s;
+    background-color: #e5f1fc;
+    border: solid medium #367fc8;
+}
+
+.card:active{
+    border: solid medium #83c4f0;
+    outline: solid medium #8eceff;
+}
+
+.big-card{
+    border: solid medium #2a5171;
+}
+
+.big-card:hover{
+    border: solid medium #2a5171;
+    background-color: white;
+    cursor: default;
+}
+
+.big-card:active{
+    border: solid medium #2a5171;
+    outline: none;
+}
+
+.card-info {
+    border: none;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.card-info:hover{
+    border: none;
+    background-color: white;
+    cursor: default;
+}
+
+.card-info:active{
+    border: none;
+    outline: none;
+}
+
+.card-block{
+    padding: 10px 10px 5px 10px;
+}
+
+.cardCollapse, .cardModal{
+    color: black;
+}
+
+.cardModal:hover{
+    text-decoration: none;
+    color: black;
+}
+
+.modal-content{
+    border: solid medium #2a5171;
+}
+
+#fileType, #entryType{
+    border: solid thin #868E96 !important;
+}
+
+#infoGlyph{
+    color: #2a5171;
+}
+
+#infoGlyph:hover{
+    color: #638de2;
+}
+/*
+#sampleFile{
+    background-color: #1fa83d;
+    border: medium solid #1fa83d;
+    color: white;
+}
+
+#sampleFile:hover{
+    background-color: #5cf77e;
+    text-shadow: 1px 1px 3px black;
+    color: black;
+}
+
+#sampleFile:active{
+    background-color: #dddddd;
+    border: medium solid #77b0d9;
+    color: black;
+}*/
+
+.sampleFileDisabled{
+    /*    background-color: #6eb57d !important;
+        border-color: #6eb57d !important;
+        text-shadow: none;
+        color: white;
+        cursor: auto;*/
+    background-color: #748EA2;
+    border-color: #748EA2;
+    text-shadow: none;
+    color: white;
+    cursor: auto;
+}
+
+.sampleFileDisabled:hover{
+    /*    background-color: #6eb57d;
+        border-color: #6eb57d !important;
+        text-shadow: none !important;
+        color: white !important;
+        cursor: auto;*/
+    background-color: #748EA2;
+    border-color: #748EA2;
+    text-shadow: none;
+    color: white;
+    cursor: auto;
+}
+
+
+ul {
+    list-style-type:none;
+}
+
+.info-li {
+    margin-bottom: 10px;
+}
+
+#FileUploadDiv {
+    border: solid thin #868E96;
+    background-color: #eaeaea;
+}
+
+.center {
+    margin-left: 0px;
+    margin-right: 0px;
+}

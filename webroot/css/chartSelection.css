@@ -1,0 +1,88 @@
+/*
+    For chart selection page
+*/
+
+.card{
+    background-color:#dddddd;
+    border: none;
+}
+
+.select{
+    font-size: 12pt;
+    height: 50px;
+}
+
+.select:focus, .date-picker:focus{
+    transition: .1s;
+    outline: solid #2a5171;
+}
+
+#measurementsHeading, #dateRangeHeading{
+    font-size: 20pt;
+}
+
+#wqisMeaning{
+    font-size: 10pt;
+}
+
+#wqisMeaningHeading{
+    font-size: 10pt;
+}
+
+#wqisMeaning{
+    color: #2a5171;
+    font-style: italic;
+    text-decoration: none;
+    text-align: center;
+}
+
+#wqisMeaning:hover{
+    cursor: pointer;
+    color: #638de2;
+    text-decoration: none;
+}
+
+/*
+    Table Stuff
+*/
+table{
+    width: 100%;
+}
+
+th{
+    text-align: center;
+}
+
+td{
+    vertical-align: top;
+}
+
+.measurements_Table_Heading{
+    background-color: #2a5171;
+    text-shadow: 1px 1px 3px #2a5171;
+    color: white;
+    text-align: center;
+}
+
+#startDate, #endDate{
+    font-size: 12pt;
+    height: 38px;
+}
+
+#startDate:focus, #endDate:focus{
+    transition: .1s;
+    outline: solid #2a5171;
+}
+
+/*
+    Button Stuff
+*/
+
+.chartselect-btn{
+    width: 170px;
+}
+
+.datepicker{
+    border: solid medium #2a5171;
+    background-color: #f4f6fa;
+}

@@ -1,0 +1,27 @@
+label{
+    display: block;
+}
+.scrollmeasures{
+    max-height: 115px !important;
+}
+.scrollsites{
+    background-color: #f2f2f2;
+
+}
+.scrollCheckbox {
+
+    background-color: #f2f2f2;
+    overflow-y: auto;
+    max-height: 200px;
+    padding: 5px;
+}
+
+.datepicker{
+    background-color: #f4f6fa;
+}
+
+
+.card{
+    background-color:#dddddd;
+    border: none;
+}

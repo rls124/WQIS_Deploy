@@ -1,0 +1,20 @@
+.box{
+    margin-bottom: 10px;
+}
+
+.heading > a{
+    color: #2a5171;
+}
+
+.heading > a:hover{
+    text-decoration: none;
+}
+
+.card-block{
+    padding: 10px;
+}
+
+.textarea{
+    margin: auto;
+    padding: 10px;
+}
