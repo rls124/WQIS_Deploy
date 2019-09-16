@@ -96,11 +96,11 @@
 	<div class="card-block">
 	    <h5 class="centeredText card-title">Environmental Resources Center</h5>
 	    <hr style="width: 75%">
-	    <a href="http://erc.ipfw.edu" target="_blank">
+	    <a href="http://erc.pfw.edu" target="_blank">
 		<img class="mb-1 ml-2 float-md-right float-sm-none" id="ercImg" src="webroot/img/erc-turtle.jpg" alt="Turtle" />
 	    </a>
 	    <p class="card-text" id="ercInfo">
-		The Environmental Resources Center is one of IPFW's Centers of Excellence. ERC promotes understanding and conservation of the natural resources of the region through scientific research, educational opportunities and outreach. Learn more at <a href="http://erc.ipfw.edu" target="_blank">erc.ipfw.edu</a>
+		The Environmental Resources Center is one of PFW's Centers of Excellence. ERC promotes understanding and conservation of the natural resources of the region through scientific research, educational opportunities and outreach. Learn more at <a href="http://erc.pfw.edu" target="_blank">erc.pfw.edu</a>
 	    </p>
 	</div>
     </div>
