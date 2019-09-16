@@ -54,8 +54,9 @@ $(document).ready(function () {
 			success: function (response) {
 				downloadFile(response, type);
 			}
-		});
+		});	
 	});
+	
 	function downloadFile(fileData, type) {
 		if (fileData.length < 1) {
 			return;

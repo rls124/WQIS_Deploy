@@ -293,7 +293,7 @@
                                     'BacteriaData' => $bactDateAndData, 
                                     'NutrientData' => $nutrientDateAndData, 
                                     'PestData' => $pestDateAndData]);
-				$this->response->body($json);
+				$this->response->withStringBody($json);
 			}
 		}
 

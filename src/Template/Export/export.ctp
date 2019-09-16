@@ -95,7 +95,7 @@
                     <div class="card mb-3">
                         <h5 class="centeredText card-title">From</h5>
 			<?=
-			    $this->Form->input('startdate', [
+			    $this->Form->control('startdate', [
 				'label' => false,
 				'type' => 'text',
 				'class' => 'form-control date-picker col-lg-12',
@@ -107,7 +107,7 @@
                     <div class="card mb-3">
                         <h5 class="centeredText card-title">To</h5>
 			<?=
-			    $this->Form->input('enddate', [
+			    $this->Form->control('enddate', [
 				'label' => false,
 				'type' => 'text',
 				'class' => 'form-control date-picker col-lg-12',
