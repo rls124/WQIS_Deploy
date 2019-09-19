@@ -4,18 +4,19 @@
         if (isset($valid)) {
             echo "<p>Error with file upload: </p>";
             echo "<p>" . $valid['errorMessage'] . "</p>";
-        } else if (isset($log)) {
+        }
+		else if (isset($log)) {
             ?>
             <table class="table">
                 <thead>
-                    <tr>
-                        <th>Site Number</th>
-                        <th>Longitude</th>
-                        <th>Latitude</th>
-                        <th>Site Location</th>
-                        <th>Site Name</th>
-                        <th>Messages</th>
-                    </tr>
+					<tr>
+					<?php
+						foreach ($columnsText as $col) {
+							echo "<th>" . $col . "</th>";
+						}
+					?>
+						<th>Messages</th>
+					</tr>
                 </thead>
                 <tbody>
                     <?php
@@ -24,8 +25,8 @@
                         foreach ($val as $k => $v) {
                             echo "<td>";
                             if (is_array($v)) {
-                                if (isset($v['Site_Number'])) {
-                                    echo "Site Number already exists";
+                                if (isset($v['Sample_Number'])) {
+                                    echo "Sample Number already exists at that location";
                                 } else {
                                     foreach ($v as $errorKey => $errorVal) {
                                         echo $errorKey . '<br>' . $errorVal[key($errorVal)];
@@ -38,7 +39,8 @@
                         }
                         echo "</tr>";
                     }
-                } else {
+                }
+				else {
                     echo '<p> No file selected for upload </p>';
                 }
             ?>

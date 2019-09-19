@@ -102,11 +102,7 @@
                 <div class="row">
 		    <?=
 			$this->Form->select('fileType', [
-			    'bacteria' => 'Bacteria Data Import',
-			    'nutrient' => 'Nutrient Data Import',
-			    'pesticide' => 'Pesticide Data Import',
-			    'wqm' => 'Water Quality Meter Data Import',
-			    'site' => 'Site Information Import'
+				'generic' => 'Generic Samples Import'
 			    ], [
 			    'class' => 'ml-3 mr-3 mb-3 btn btn-default col-sm',
 			    'empty' => 'Select File Type...',
@@ -188,57 +184,18 @@
 
 <script>
     $("#fileType").change(function () {
-	var fileType = $(this).val();
-	var location;
-	var downloadLocation;
-	var onclick = "return true";
+		var fileType = $(this).val();
+		var location;
+		var downloadLocation;
+		var onclick = "return true";
 
-	switch (fileType) {
-	    case 'bacteria':
-		location = "<?= $this->Html->Url->build(['controller' => 'BacteriaSamples', 'action' => 'uploadlog']); ?>";
-		downloadLocation = "../files/sample-bacteria-data-import1.csv";
+		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'uploadlog']); ?>";
 		$("#sampleFile").removeClass('sampleFileDisabled');
 		checkSubmitFileBtn();
-		break;
-	    case 'nutrient':
-		location = "<?= $this->Html->Url->build(['controller' => 'NutrientSamples', 'action' => 'uploadlog']); ?>";
-		downloadLocation = "../files/sample-nutrients-data-import.csv";
-		$("#sampleFile").removeClass('sampleFileDisabled');
-		checkSubmitFileBtn();
-		break;
-	    case 'pesticide':
-		location = "<?= $this->Html->Url->build(['controller' => 'PesticideSamples', 'action' => 'uploadlog']); ?>";
-		downloadLocation = "../files/sample-pesticide-data-import.csv";
-		$("#sampleFile").removeClass('sampleFileDisabled');
-		checkSubmitFileBtn();
-		break;
-	    case 'wqm':
-		location = "<?= $this->Html->Url->build(['controller' => 'WaterQualitySamples', 'action' => 'uploadlog']); ?>";
-		downloadLocation = "../files/sample-wqm-data-import.csv";
-		$("#sampleFile").removeClass('sampleFileDisabled');
-		checkSubmitFileBtn();
-		break;
-	    case 'site':
-		location = "<?= $this->Html->Url->build(['controller' => 'SiteLocations', 'action' => 'uploadlog']); ?>";
-		downloadLocation = "../files/sample-site-import.csv";
-		$("#sampleFile").removeClass('sampleFileDisabled');
-		checkSubmitFileBtn();
-		break;
-	    default:
-		location = "javascript:void(0);";
-		downloadLocation = "";
-		onclick = "return false";
-		$("#sampleFile").removeClass('sampleFileDisabled');
-		$("#sampleFile").addClass('sampleFileDisabled');
-		checkSubmitFileBtn();
-		break;
-	}
-	//onclick="window.open('file.doc')"
-	$("#fileupload").attr("action", location);
-	$("#sampleFile").attr("href", downloadLocation);
-	$("#sampleFile").attr("onclick", onclick);
-	//$("#sampleFile").attr("onclick", "window.open('" + downloadLocation + "')");
-	//$("#downloadSampleBtn").attr("action", downloadLocation);
+	
+		$("#fileupload").attr("action", location);
+		$("#sampleFile").attr("href", downloadLocation);
+		$("#sampleFile").attr("onclick", onclick);
     });
 </script>
 <script>

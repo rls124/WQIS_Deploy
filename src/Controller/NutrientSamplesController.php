@@ -206,52 +206,6 @@
 	    $this->set('_serialize', ['nutrientSample']);
 	}
 
-	public function uploadlog() {
-	    //Get the data from the file
-	    $file = $this->request->getData('file');
-	    if ($this->request->is('post') && $file) {
-		//Check if file is valid
-		$valid = $this->_fileIsValid($file);
-		if (!$valid['isValid']) {
-		    $this->set(compact('valid'));
-		    return;
-		}
-		$csv = array_map('str_getcsv', file($file['tmp_name']));
-		//Columns in the file
-		$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus',
-		    'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Comments');
-		$log = array();
-		//Go through each non-header row
-		for ($row = 1; $row < sizeof($csv); $row++) {
-
-		    $currentRow = array();
-		    $uploadData = [];
-		    //Get every column's data in the row
-
-		    for ($column = 0; $column < sizeof($columns); $column++) {
-			$currentElement = $csv[$row][$column];
-			$currentColumn = $columns[$column];
-			//Check if the current column name does not contain exception
-			if (strpos($currentColumn, "Exception") === false) {
-			    $currentRow[] = $currentElement;
-			}
-
-			$uploadData[$currentColumn] = $currentElement;
-		    }
-		    //Create the entity to save
-		    $nutrientSample = $this->NutrientSamples->patchEntity($this->NutrientSamples->newEntity(), $uploadData);
-
-		    if ($this->NutrientSamples->save($nutrientSample)) {
-			$currentRow[] = "File uploaded successfully";
-		    } else {
-			$currentRow[] = $nutrientSample->getErrors();
-		    }
-		    $log[] = $currentRow;
-		}
-		$this->set(compact('log'));
-	    }
-	}
-
 	public function updatefield() {
 	    $this->render(false);
 	    //Ensure sample number data was included

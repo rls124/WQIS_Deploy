@@ -217,54 +217,6 @@
 	    $this->set('_serialize', ['waterQualitySample']);
 	}
 
-	public function uploadlog() {
-	    //Get the data from the file
-	    $file = $this->request->getData('file');
-	    if ($this->request->is('post') && $file) {
-		//Check if file is valid
-		$valid = $this->_fileIsValid($file);
-		if (!$valid['isValid']) {
-		    $this->set(compact('valid'));
-		    return;
-		}
-		$csv = array_map('str_getcsv', file($file['tmp_name']));
-		//Columns in the file
-		$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Water_Temp',
-		    'Water_Temp_Exception', 'pH', 'pH_Exception', 'Conductivity', 'Conductivity_Exception', 'TDS',
-		    'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value',
-		    'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
-		$log = array();
-		//Go through each non-header row
-		for ($row = 1; $row < sizeof($csv); $row++) {
-
-		    $currentRow = array();
-		    $uploadData = [];
-		    //Get every column's data in the row
-
-		    for ($column = 0; $column < sizeof($columns); $column++) {
-			$currentElement = $csv[$row][$column];
-			$currentColumn = $columns[$column];
-			//Check if the current column name does not contain exception
-			if (strpos($currentColumn, "Exception") === false) {
-			    $currentRow[] = $currentElement;
-			}
-
-			$uploadData[$currentColumn] = $currentElement;
-		    }
-		    //Create the entity to save
-		    $waterQualitySample = $this->WaterQualitySamples->patchEntity($this->WaterQualitySamples->newEntity(), $uploadData);
-
-		    if ($this->WaterQualitySamples->save($waterQualitySample)) {
-			$currentRow[] = "File uploaded successfully";
-		    } else {
-			$currentRow[] = $waterQualitySample->getErrors();
-		    }
-		    $log[] = $currentRow;
-		}
-		$this->set(compact('log'));
-	    }
-	}
-
 	public function updatefield() {
 	    $this->render(false);
 	    //Ensure sample number data was included

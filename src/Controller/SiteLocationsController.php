@@ -38,48 +38,6 @@
 			$this->set('_serialize', ['siteLocation']);
 		}
 
-		public function uploadlog() {
-			//Get the data from the file
-			$file = $this->request->getData('file');
-			if ($this->request->is('post') && $file) {
-				//Check if file is valid
-				$valid = $this->_fileIsValid($file);
-				if (!$valid['isValid']) {
-					$this->set(compact('valid'));
-					return;
-				}
-				$csv = array_map('str_getcsv', file($file['tmp_name']));
-				//Columns in the file
-				$columns = array('Site_Number', 'Monitored', 'Longitude', 'Latitude', 'Site_Location', 'Site_Name');
-				$log = array();
-				//Go through each non-header row
-				for ($row = 1; $row < sizeof($csv); $row++) {
-
-					$currentRow = array();
-					$uploadData = [];
-
-					//Get every column's data in the row
-					for ($column = 0; $column < sizeof($columns); $column++) {
-						$currentElement = $csv[$row][$column];
-						$currentColumn = $columns[$column];
-						$currentRow[] = $currentElement;
-						$uploadData[$currentColumn] = $currentElement;
-					}
-
-					//Create the entity to save
-					$siteLocation = $this->SiteLocations->patchEntity($this->SiteLocations->newEntity(), $uploadData);
-
-					if ($this->SiteLocations->save($siteLocation)) {
-						$currentRow[] = "File uploaded successfully";
-					} else {
-						$currentRow[] = $siteLocation->getErrors();
-					}
-					$log[] = $currentRow;
-				}
-				$this->set(compact('log'));
-			}
-		}
-
 		public function daterange() {
 			$this->render(false);
 			//Ensure that site is in POST data
