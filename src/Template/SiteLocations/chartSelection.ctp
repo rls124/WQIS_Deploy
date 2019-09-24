@@ -1,11 +1,50 @@
+<link rel="stylesheet" href="../resources/ol.css">
+<link rel="stylesheet" href="../resources/fontawesome-all.min.css">
+<link rel="stylesheet" type="text/css" href="../resources/horsey.min.css">
+<link rel="stylesheet" type="text/css" href="../resources/ol3-search-layer.min.css">
+<link rel="stylesheet" href="../resources/ol3-layerswitcher.css">
+<link rel="stylesheet" href="../resources/qgis2web.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
+<style>
+		.search-layer {
+			top: 65px;
+			left: .5em;
+		}
+		.ol-touch .search-layer {
+			top: 80px;
+		}
+		html, body {
+			background-color: #ffffff;
+		}
+		.ol-control button {
+			background-color: #f8f8f8 !important;
+			color: #000000 !important;
+			border-radius: 0px !important;
+		}
+		.ol-zoom, .geolocate, .gcd-gl-control .ol-control {
+			background-color: rgba(255,255,255,.4) !important;
+			padding: 3px !important;
+		}
+		.ol-scale-line {
+			background: none !important;
+		}
+		.ol-scale-line-inner {
+			border: 2px solid #f8f8f8 !important;
+			border-top: none !important;
+			background: rgba(255, 255, 255, 0.5) !important;
+			color: black !important;
+		}
+		#map {
+			width: 1000px;
+			height: 500px;
+		}
+</style>
+
 <?= $this->Html->script('dateautofill.js') ?>
-
 <?= $this->Html->script('chartSelectionValidation.js') ?>
-
 <?= $this->Html->css('chartSelection.css') ?>
 
 <div class="container roundGreyBox">
@@ -17,11 +56,8 @@
             <option value="select" selected="selected">Select Collection Site</option>
 
             <?php
-                //This is for populating the site drop down box.
-
-
+                //This is for populating the site drop down box
                 foreach ($siteLocations as $siteLocation) {
-
                     $siteNumber = $this->Number->format($siteLocation->Site_Number);
                     $siteName = h($siteLocation->Site_Name);
                     $siteLocation = h($siteLocation->Site_Location);
@@ -80,7 +116,7 @@
                     <div class="card mb-3">
                         <h5 class="centeredText card-title">From</h5>
                         <?=
-                            $this->Form->input('startdate', [
+                            $this->Form->control('startdate', [
                                 'label' => false,
                                 'type' => 'text',
                                 'class' => 'form-control date-picker col-lg-12',
@@ -92,7 +128,7 @@
                     <div class="card mb-3">
                         <h5 class="centeredText card-title">To</h5>
                         <?=
-                            $this->Form->input('enddate', [
+                            $this->Form->control('enddate', [
                                 'label' => false,
                                 'type' => 'text',
                                 'class' => 'form-control date-picker col-lg-12',
@@ -105,9 +141,82 @@
             </div>
         </div>
         <br>
-        <!--<img class="mb-3" src="../img/SampleMap.jpg" alt="This is where the map would go" style="height:400px; width:100%; border: solid thin black;">-->
-        <!--<iframe id='map' src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d385168.20958135213!2d-85.09480212578119!3d41.0443596614833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1523901620332" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>    </fieldset>-->
-        <div class='mb-3' id='map' style='width:100%; height:500px; border: solid black thin'></div>
+        <div id="map">
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
+        </div>
+        <script src="../resources/qgis2web_expressions.js"></script>
+        <script src="../resources/polyfills.js"></script>
+        <script src="../resources/functions.js"></script>
+        <script src="../resources/ol.js"></script>
+        <script src="http://cdn.polyfill.io/v2/polyfill.min.js?features=Element.prototype.classList,URL"></script>
+        <script src="../resources/horsey.min.js"></script>
+        <script src="../resources/ol3-search-layer.min.js"></script>
+        <script src="../resources/ol3-layerswitcher.js"></script>
+		
+		<script>
+		var request = new XMLHttpRequest();
+		request.open('POST', './fetchSites', false);  // `false` makes the request synchronous
+		request.send(null);
+		
+		var string_sampleData_1 = request.responseText;
+		
+		//for some reason the controller is returning a JSON string *plus* the HTML for the page... I don't even know. Lets just split off the part we need
+		var json_sampleData_1 = JSON.parse(string_sampleData_1.split("<!DOCTYPE html>", 2)[0]);
+		
+		//now we need to extract the relevant parts and build what qgis2web expects
+		var correctFormat = {};
+		
+		correctFormat.type = 'FeatureCollection';
+		correctFormat.name = 'sampleData_1';
+		correctFormat.crs = { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } };
+		
+		var features = [];
+		
+		for (var i=0; i<json_sampleData_1["SiteData"].length; i++) {
+			var latitude = json_sampleData_1["SiteData"][i]["Latitude"];
+			var longitude = json_sampleData_1["SiteData"][i]["Longitude"];
+			
+			var thisFeature = {};
+			thisFeature.type = "Feature";
+			var properties = {};
+			properties.latitude = latitude;
+			properties.longitude = longitude;
+			
+			thisFeature.properties = properties;
+			
+			var geometry = {};
+			geometry.type = "Point";
+			
+			var coords = [];
+
+			coords.push(longitude);
+			coords.push(latitude);
+			
+			geometry.coordinates = coords;
+			thisFeature.geometry = geometry;
+			
+			features.push(thisFeature);
+		}
+		
+		correctFormat.features = features;
+		
+		json_sampleData_1 = correctFormat;
+		
+		/*
+		if (request.status === 200) {
+			console.log(request.responseText);
+		}
+		*/
+		</script>
+		
+        <script src="../styles/sampleData_1_style.js"></script>
+        <script src="../layers/layers.js" type="text/javascript"></script> 
+        <script src="../resources/qgis2web.js"></script>
+        <script src="../resources/Autolinker.min.js"></script>
+		
     <div class="container text-center">
         <?=
             $this->Form->button('View Chart', [
@@ -136,7 +245,7 @@
 
     <?= $this->Form->end() ?>
 </div>
-<script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwcJIWDoWbEgt7mX_j5CXGevgWvQPh6bc&callback=initMap' type="text/javascript"></script>
+
 <script>
     $('#viewChartBtn').click(function () {
         changeURL('chartview');
@@ -201,7 +310,8 @@
                     location = "javascript:void(0);";
                     break;
             }
-        } else if (actionType === 'tableview') {
+        }
+		else if (actionType === 'tableview') {
             switch (category) {
                 case 'bacteria':
                     location = "<?= $this->Html->Url->build(['controller' => 'BacteriaSamples', 'action' => 'tableview']); ?>";
@@ -223,10 +333,7 @@
 
         $("#chartSelect").attr("action", location);
     }
-
-
 </script>
-
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

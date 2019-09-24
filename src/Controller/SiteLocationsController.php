@@ -216,11 +216,11 @@
 
 		public function fetchSites() {
 			$this->render(false);
+			
 			if ($this->request->is('post')) {
+				$this->log("Fetching sites", 'debug');
 				//Get the sites
-				$sites = $this->SiteLocations
-					->find('all')
-                                        ->order('Site_Number');
+				$sites = $this->SiteLocations->find('all')->order('Site_Number');
 
                                 $this->loadModel('BacteriaSamples');
                                 $this->loadModel('NutrientSamples');
@@ -245,13 +245,15 @@
                                                         "order by site_location_id";
                                 $pestDateAndData = $connection->execute($pestQuery)->fetchAll('assoc');
                                 
-				$this->response->type('json');
+				$this->response->withType('json');
 				$json = json_encode([
                                     'SiteData' => $sites, 
                                     'BacteriaData' => $bactDateAndData, 
                                     'NutrientData' => $nutrientDateAndData, 
                                     'PestData' => $pestDateAndData]);
-				$this->response->withStringBody($json);
+				//$this->log($json, 'debug');
+				//$this->response->withStringBody($json);
+				echo $json;
 			}
 		}
 
