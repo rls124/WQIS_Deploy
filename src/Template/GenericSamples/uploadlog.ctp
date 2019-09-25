@@ -1,3 +1,9 @@
+<style>
+.error {
+	color: red;
+}
+</style>
+
 <div class="container roundGreyBox">
     <h1>File Upload Report</h1>
     <?php
@@ -7,6 +13,13 @@
         }
 		else if (isset($log)) {
             ?>
+			
+			<?php
+			if ($countFails > 0) {
+				$totalCount = $countFails + $countSuccesses;
+				echo "<span class='error'>There were problems with your file upload. " . $countSuccesses . " out of " . $totalCount . " rows successfully uploaded</span><br>";
+				echo "Rows with problems are displayed below";
+			?>
             <table class="table">
                 <thead>
 					<tr>
@@ -26,19 +39,33 @@
                             echo "<td>";
                             if (is_array($v)) {
                                 if (isset($v['Sample_Number'])) {
-                                    echo "Sample Number already exists at that location";
-                                } else {
-                                    foreach ($v as $errorKey => $errorVal) {
-                                        echo $errorKey . '<br>' . $errorVal[key($errorVal)];
-                                    }
+									echo "<span class='error'>Sample Number already exists at that location</span>";
                                 }
-                            } else {
-                                echo $v;
-                            }
-                            echo "</td>";
-                        }
+								else {
+									foreach ($v as $errorKey => $errorVal) {
+										echo "<span class='error'>" . $errorKey . '</span><br><span>' . $errorVal[key($errorVal)] . "</span>";
+									}
+								}
+							}
+							else {
+								echo $v;
+							}
+							echo "</td>";
+						}
                         echo "</tr>";
                     }
+					?>
+				
+		</tbody>
+	</table>
+	
+	<?php
+			}
+			else {
+				echo "File uploaded successfully. " . $countSuccesses . " rows added.";
+			}
+	?>
+				<?php
                 }
 				else {
                     echo '<p> No file selected for upload </p>';
