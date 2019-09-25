@@ -55,28 +55,63 @@
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav mr-auto navbar-right">
                             <li class="nav-item">
-                                <?= $this->Html->link(__('View Water Quality Data'), ['controller' => 'SiteLocations', 'action' => 'chartselection'], ['class' => 'nav-link']) ?>
+								<?php
+								if ($this->name == "SiteLocations") {
+									echo "<a href=\"../site-locations/chartselection\" class=\"nav-link active\">View Water Quality Data</a>";
+								}
+								else {
+									echo "<a href=\"../site-locations/chartselection\" class=\"nav-link\">View Water Quality Data</a>";
+								}
+								?>
                             </li>
                             <?php if ($admin) { ?>
                                 <li class="nav-item">
-                                    <?= $this->Html->link(__('Admin Panel'), ['controller' => 'pages', 'action' => 'administratorpanel'], ['class' => 'nav-link']) ?>
+									<?php
+									if ($this->name == "Pages") {
+										//strictly, probably should have a separate value for admin. This organization is fucked, will deal with it later
+										echo "<a href=\"../pages/administratorpanel\" class=\"nav-link active\">Admin Panel</a>";
+									}
+									else {
+										echo "<a href=\"../pages/administratorpanel\" class=\"nav-link\">Admin Panel</a>";
+									}
+									?>
                                 </li>
                                 <?php
                             }
                             ?>
-			    <div style="padding-right: 20px;"></div>
-                            <li>
-                                <?= $this->Html->link(__('User Profile'), ['controller' => 'Users', 'action' => 'edituserinfo'], ['class' => 'nav-link']) ?>
+                            <li class="nav-item">
+								<?php
+								if ($this->name == "Users") {
+									echo "<a href=\"../users/edituserinfo\" class=\"nav-link active\">User Profile</a>";
+								}
+								else {
+									echo "<a href=\"../users/edituserinfo\" class=\"nav-link\">User Profile</a>";
+								}
+								?>
                             </li>
                             <?php if ($admin) { ?>
-                            <li>
-                                 <?= $this->Html->link(__('Feedback'), ['controller' => 'Feedback', 'action' => 'adminfeedback'], ['class' => 'nav-link']) ?>
+                            <li class="nav-item">
+								<?php
+								if ($this->name == "Feedback") {
+									echo "<a href=\"../feedback/adminfeedback\" class=\"nav-link active\">Feedback</a>";
+								}
+								else {
+									echo "<a href=\"../feedback/adminfeedback\" class=\"nav-link\">Feedback</a>";
+								}
+								?>
                             </li>
                             <?php 
                             } 
                             else { ?>
-                            <li>
-                                <?= $this->Html->link(__('Feedback'), ['controller' => 'Feedback', 'action' => 'userfeedback'], ['class' => 'nav-link']) ?>
+                            <li class="nav-item">
+                                <?php
+								if ($this->name == "Feedback") {
+									echo "<a href=\"../feedback/userfeedback\" class=\"nav-link active\">Feedback</a>";
+								}
+								else {
+									echo "<a href=\"../feedback/userfeedback\" class=\"nav-link\">Feedback</a>";
+								}
+								?>
                             </li>
                             <?php
                             }
@@ -84,8 +119,6 @@
                         </ul>
 
                         <input class="btn btn-outline-primary" type='button' value='Logout' onclick="location.href = '<?php echo $this->Url->build(['controller' => 'users', 'action' => 'logout']); ?>';" />
-
-                    </div>
                     <?php
                 }
             ?>
