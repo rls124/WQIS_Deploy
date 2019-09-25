@@ -105,7 +105,7 @@
 
                 <div class="row mb-3">
 				
-                    <label class="btn btn-file btn-basic  ml-3 mr-1" style="font-size: 14pt; margin-top: 5px;">Choose File <input type="file" name="file" accept=".csv" id="fileType"> </label>
+                    <label class="btn btn-file btn-basic  ml-3 mr-1" style="font-size: 14pt; margin-top: 5px;">Choose File <input type="file" name="file" accept=".csv" id="chooseFileButton"> </label>
 					
                     <div class="col-sm ml-2 mr-3 mb-1 mt-1" id="FileUploadDiv" style="padding-left: 5px;">
                         <label id="FileUploadLabel" style="font-size: 14pt; margin-top: 8px; color: #919191;"> File Name</label>
@@ -179,19 +179,10 @@
 </div>
 
 <script>
-    $("#fileType").change(function () {
-		var fileType = $(this).val();
-		var location;
-		var downloadLocation;
-		var onclick = "return true";
-
-		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'uploadlog']); ?>";
-		$("#sampleFile").removeClass('sampleFileDisabled');
-		checkSubmitFileBtn();
-	
+    $("#chooseFileButton").change(function () {
+		var location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'uploadlog']); ?>";
+		$("#submitFile").prop('disabled', false);
 		$("#fileupload").attr("action", location);
-		$("#sampleFile").attr("href", downloadLocation);
-		$("#sampleFile").attr("onclick", onclick);
     });
 </script>
 
@@ -239,13 +230,3 @@
 	$("#entryForm").attr("action", location);
     });
 </script>
-<script>
-    function checkSubmitFileBtn() {
-	if (document.getElementById("fileType").files.length !== 0) {
-	    $("#submitFile").prop('disabled', false);
-	} else {
-	    $("#submitFile").prop('disabled', true);
-	}
-    }
-</script>
-
