@@ -9,38 +9,31 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
 <style>
-		.search-layer {
-			top: 65px;
-			left: .5em;
-		}
-		.ol-touch .search-layer {
-			top: 80px;
-		}
-		html, body {
-			background-color: #ffffff;
-		}
-		.ol-control button {
-			background-color: #f8f8f8 !important;
-			color: #000000 !important;
-			border-radius: 0px !important;
-		}
-		.ol-zoom, .geolocate, .gcd-gl-control .ol-control {
-			background-color: rgba(255,255,255,.4) !important;
-			padding: 3px !important;
-		}
-		.ol-scale-line {
-			background: none !important;
-		}
-		.ol-scale-line-inner {
-			border: 2px solid #f8f8f8 !important;
-			border-top: none !important;
-			background: rgba(255, 255, 255, 0.5) !important;
-			color: black !important;
-		}
-		#map {
-			width: 1000px;
-			height: 500px;
-		}
+.search-layer {
+	top: 65px;
+	left: .5em;
+}
+.ol-touch .search-layer {
+	top: 80px;
+}
+.ol-control button {
+	background-color: #f8f8f8 !important;
+	color: #000000 !important;
+	border-radius: 0px !important;
+}
+.ol-zoom, .geolocate, .gcd-gl-control .ol-control {
+	background-color: rgba(255,255,255,.4) !important;
+	padding: 3px !important;
+}
+.ol-scale-line {
+	background: none !important;
+}
+.ol-scale-line-inner {
+	border: 2px solid #f8f8f8 !important;
+	border-top: none !important;
+	background: rgba(255, 255, 255, 0.5) !important;
+	color: black !important;
+}
 </style>
 
 <?= $this->Html->script('dateautofill.js') ?>

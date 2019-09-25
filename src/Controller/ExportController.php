@@ -81,28 +81,9 @@
 			else {
 				$data = ['error' => 'input type not found', 'listType' => $inputType];
 			}
-/*
-			$this->set(compact('data'));
-			$response = $this->response;
-			$response->type('application/json')->body(json_encode($data));
-
-			//$this->set('response', json_encode($data));
-
-			//$this->log(json_encode($data), 'debug');
-			//$this->log($response, 'debug');
-*/
 
 			$this->set(compact('data'));
-			
-			/*
-			$response = $this->response;
-			$response->type('json');
-			$response->body(json_encode($data));
-			
-			return $response;
-			*/
 			
 			return $this->response->withType("application/json")->withStringBody(json_encode($data));
 		}
-
 	}

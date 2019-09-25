@@ -210,7 +210,7 @@
 				->find('all')
 				->where(['ID = ' => $siteid])
 				->first();
-			//Delete the site
+			//delete the site
 			$this->SiteLocations->delete($site);
 		}
 
@@ -218,8 +218,7 @@
 			$this->render(false);
 			
 			if ($this->request->is('post')) {
-				$this->log("Fetching sites", 'debug');
-				//Get the sites
+				//get the sites
 				$sites = $this->SiteLocations->find('all')->order('Site_Number');
 
                                 $this->loadModel('BacteriaSamples');
@@ -251,8 +250,7 @@
                                     'BacteriaData' => $bactDateAndData, 
                                     'NutrientData' => $nutrientDateAndData, 
                                     'PestData' => $pestDateAndData]);
-				//$this->log($json, 'debug');
-				//$this->response->withStringBody($json);
+				
 				echo $json;
 			}
 		}
