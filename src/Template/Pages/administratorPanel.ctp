@@ -99,32 +99,28 @@
 			'name' => 'fileupload'
 		    ])
 		?>
-                <div class="row">
-		    <?=
-			$this->Form->select('fileType', [
-				'generic' => 'Generic Samples Import'
-			    ], [
-			    'class' => 'ml-3 mr-3 mb-3 btn btn-default col-sm',
-			    'empty' => 'Select File Type...',
-			    'id' => 'fileType'
-			    ]
-			)
-		    ?>
-                </div>
+                <div class="row"> </div>
+
+				
 
                 <div class="row mb-3">
-                    <label class="ml-3" style="font-size: 14pt; margin-top: 3px;">File Name: </label>
-                    <div class="col-sm ml-2 mr-3" id="FileUploadDiv" style="padding-left: 5px;">
-                        <label id="FileUploadLabel" style="font-size: 12pt; margin-top: 5px; font-weight: bold"></label>
+				
+                    <label class="btn btn-file btn-basic  ml-3 mr-1" style="font-size: 14pt; margin-top: 5px;">Choose File <input type="file" name="file" accept=".csv" id="fileType"> </label>
+					
+                    <div class="col-sm ml-2 mr-3 mb-1 mt-1" id="FileUploadDiv" style="padding-left: 5px;">
+                        <label id="FileUploadLabel" style="font-size: 14pt; margin-top: 8px; color: #919191;"> File Name</label>
                     </div>
+					
                 </div>
+				
+				<div class="row mb-3"> </div>
+				<div class="row mb-3"> </div>
+		
 
                 <div class="row center mb-0">
-                    <a type="submit" href="..\webroot\files\All_Sample_Files.zip" onclick="return false" class="mb-0 btn btn-basic col-sm sampleFileDisabled" id="sampleFile" name="sampleFile" style="height: 43px;">Download Sample File</a>
-                    <label class = "btn btn-file btn-basic col-sm ml-1 mr-1" style="height:43px">
-			Select File <input type="file" name="file" accept=".csv" id="upload">
-                    </label>
-                    <input type="submit" class="mb-0 btn btn-basic col-sm" value="Import Data" id="submitFile" name="submitFile" style="height: 43px;" disabled>
+                    <a type="submit" href="..\webroot\files\All_Sample_Files.zip"  class="mb-0 mt-1 btn btn-basic col-sm sampleFile" id="sampleFileDisabled" name="sampleFile" style="height: 43px;">Download Sample File</a>
+					
+                    <input type="submit" class="mb-0 ml-4 mt-1 btn btn-basic col-sm" value="Import Data" id="submitFile" name="submitFile" style="height: 43px;" disabled>
                 </div>
 		<?= $this->Form->end() ?>
             </div>
@@ -198,12 +194,14 @@
 		$("#sampleFile").attr("onclick", onclick);
     });
 </script>
+
 <script>
     $(document).ready(function () {
 	$('#infoGlyph').tooltip();
 	$("input:file").change(function () {
 	    var fileName = $(this).val();
 	    fileName = fileName.replace(/^.*[\\\/]/, '');
+		document.getElementById("FileUploadLabel").style.color = "black";
 	    $("#FileUploadLabel").html(fileName);
 	    checkSubmitFileBtn();
 	});
@@ -211,6 +209,7 @@
 
 
 </script>
+
 <script>
     $("#entryType").change(function () {
 	var entryType = $(this).val();
@@ -242,7 +241,7 @@
 </script>
 <script>
     function checkSubmitFileBtn() {
-	if (document.getElementById("upload").files.length !== 0 && document.getElementById("fileType").selectedIndex !== 0) {
+	if (document.getElementById("fileType").files.length !== 0) {
 	    $("#submitFile").prop('disabled', false);
 	} else {
 	    $("#submitFile").prop('disabled', true);
