@@ -26,6 +26,14 @@ body{
     background-attachment: fixed;
 }
 
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+    font-size: small;
+}
+
 /*Bootstrap Overrides*/
 .active{
     color:#a3e8a6;

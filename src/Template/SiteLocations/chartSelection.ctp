@@ -1,9 +1,9 @@
-<link rel="stylesheet" href="../resources/ol.css">
-<link rel="stylesheet" href="../resources/fontawesome-all.min.css">
-<link rel="stylesheet" type="text/css" href="../resources/horsey.min.css">
-<link rel="stylesheet" type="text/css" href="../resources/ol3-search-layer.min.css">
-<link rel="stylesheet" href="../resources/ol3-layerswitcher.css">
-<link rel="stylesheet" href="../resources/qgis2web.css">
+<link rel="stylesheet" href="../css/ol.css">
+<link rel="stylesheet" href="../css/fontawesome-all.min.css">
+<link rel="stylesheet" type="text/css" href="../css/horsey.min.css">
+<link rel="stylesheet" type="text/css" href="../css/ol3-search-layer.min.css">
+<link rel="stylesheet" href="../css/ol3-layerswitcher.css">
+<link rel="stylesheet" href="../css/qgis2web.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
@@ -140,14 +140,14 @@
                 <div id="popup-content"></div>
             </div>
         </div>
-        <script src="../resources/qgis2web_expressions.js"></script>
-        <script src="../resources/polyfills.js"></script>
-        <script src="../resources/functions.js"></script>
-        <script src="../resources/ol.js"></script>
+        <script src="../js/qgis2web_expressions.js"></script>
+        <script src="../js/polyfills.js"></script>
+        <script src="../js/functions.js"></script>
+        <script src="../js/ol.js"></script>
         <script src="http://cdn.polyfill.io/v2/polyfill.min.js?features=Element.prototype.classList,URL"></script>
-        <script src="../resources/horsey.min.js"></script>
-        <script src="../resources/ol3-search-layer.min.js"></script>
-        <script src="../resources/ol3-layerswitcher.js"></script>
+        <script src="../js/horsey.min.js"></script>
+        <script src="../js/ol3-search-layer.min.js"></script>
+        <script src="../js/ol3-layerswitcher.js"></script>
 		
 		<script>
 		var request = new XMLHttpRequest();
@@ -206,9 +206,9 @@
 		</script>
 		
         <script src="../styles/sampleData_1_style.js"></script>
-        <script src="../layers/layers.js" type="text/javascript"></script> 
-        <script src="../resources/qgis2web.js"></script>
-        <script src="../resources/Autolinker.min.js"></script>
+        <script src="../js/layers.js" type="text/javascript"></script> 
+        <script src="../js/qgis2web.js"></script>
+        <script src="../js/Autolinker.min.js"></script>
 		
     <div class="container text-center">
         <?=
