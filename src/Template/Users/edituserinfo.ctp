@@ -49,7 +49,7 @@
         <?php if ($userinfo !== NULL) { ?>
             <div class="form-group row">
             <?=
-                $this->Form->input('firstname', [
+                $this->Form->control('firstname', [
                     'label' => [
                         'text' => 'First Name',
                         'class' => 'col-lg-2 label-reg lol'
@@ -70,7 +70,7 @@
             </div>
             <div class="form-group row">
             <?=
-                $this->Form->input('lastname', [
+                $this->Form->control('lastname', [
                     'label' => [
                         'text' => 'Last Name',
                         'class' => 'col-lg-2 label-reg lol'
@@ -91,7 +91,7 @@
             </div>
             <div class="form-group row">
             <?=
-                $this->Form->input('organization', [
+                $this->Form->control('organization', [
                     'label' => [
                         'text' => 'Organization',
                         'class' => 'col-lg-2 label-reg lol'
@@ -112,7 +112,7 @@
             </div>
             <div class="form-group row">
             <?=
-                $this->Form->input('position', [
+                $this->Form->control('position', [
                     'label' => [
                         'text' => 'Position',
                         'class' => 'col-lg-2 label-reg lol'
