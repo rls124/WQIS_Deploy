@@ -1,13 +1,13 @@
 var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
-var sketch;
 
 closer.onclick = function() {
     container.style.display = 'none';
     closer.blur();
     return false;
 };
+
 var overlayPopup = new ol.Overlay({
     element: container
 });
@@ -43,7 +43,7 @@ document.getElementsByClassName('search-layer')[0].getElementsByTagName('button'
     
 map.getView().fit([-9497435.528598, -5408445.934593, 14518474.994557, 15851540.430167], map.getSize());
 map.getView().setCenter(ol.proj.fromLonLat([-85.1394, 41.0793]));
-map.getView().setZoom(12);
+map.getView().setZoom(8);
 
 var NO_POPUP = 0
 var ALL_FIELDS = 1
@@ -81,14 +81,7 @@ var featureOverlay = new ol.layer.Vector({
     updateWhileInteracting: true // optional, for instant visual feedback
 });
 
-var doHighlight = false;
-var doHover = false;
-
-var highlight;
 var onPointerMove = function(evt) {
-    if (!doHover && !doHighlight) {
-        return;
-    }
     var pixel = map.getEventPixel(evt.originalEvent);
     var coord = evt.coordinate;
     var popupField;
@@ -122,16 +115,20 @@ var onPointerMove = function(evt) {
                         if (currentFeatureKeys[i] != 'geometry') {
                             popupField = '';
                             if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "inline label") {
-                            popupField += '<th>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</th><td>';
-                            } else {
+								popupField += '<th>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</th><td>';
+                            }
+							else {
                                 popupField += '<td colspan="2">';
                             }
+							
                             if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "header label") {
                                 popupField += '<strong>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</strong><br />';
                             }
+							
                             if (layer.get('fieldImages')[currentFeatureKeys[i]] != "Photo") {
                                 popupField += (clusterFeature.get(currentFeatureKeys[i]) != null ? Autolinker.link(String(clusterFeature.get(currentFeatureKeys[i]))) + '</td>' : '');
-                            } else {
+                            }
+							else {
                                 popupField += (clusterFeature.get(currentFeatureKeys[i]) != null ? '<img src="images/' + clusterFeature.get(currentFeatureKeys[i]).replace(/[\\\/:]/g, '_').trim()  + '" /></td>' : '');
                             }
                             popupText += '<tr>' + popupField + '</tr>';
@@ -150,15 +147,19 @@ var onPointerMove = function(evt) {
                         popupField = '';
                         if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "inline label") {
                             popupField += '<th>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</th><td>';
-                        } else {
+                        }
+						else {
                             popupField += '<td colspan="2">';
                         }
+						
                         if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "header label") {
                             popupField += '<strong>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</strong><br />';
                         }
+						
                         if (layer.get('fieldImages')[currentFeatureKeys[i]] != "Photo") {
                             popupField += (currentFeature.get(currentFeatureKeys[i]) != null ? Autolinker.link(String(currentFeature.get(currentFeatureKeys[i]))) + '</td>' : '');
-                        } else {
+                        }
+						else {
                             popupField += (currentFeature.get(currentFeatureKeys[i]) != null ? '<img src="images/' + currentFeature.get(currentFeatureKeys[i]).replace(/[\\\/:]/g, '_').trim()  + '" /></td>' : '');
                         }
                         popupText += '<tr>' + popupField + '</tr>';
@@ -174,52 +175,6 @@ var onPointerMove = function(evt) {
     }
 	else {
         popupText += '</ul>';
-    }
-
-    if (doHighlight) {
-        if (currentFeature !== highlight) {
-            if (highlight) {
-                featureOverlay.getSource().removeFeature(highlight);
-            }
-            if (currentFeature) {
-                var styleDefinition = currentLayer.getStyle().toString();
-
-                if (currentFeature.getGeometry().getType() == 'Point') {
-                    var radius = styleDefinition.split('radius')[1].split(' ')[1];
-
-                    highlightStyle = new ol.style.Style({
-                        image: new ol.style.Circle({
-                            fill: new ol.style.Fill({
-                                color: "#ffff00"
-                            }),
-                            radius: radius
-                        })
-                    })
-                }
-				else if (currentFeature.getGeometry().getType() == 'LineString') {
-                    var featureWidth = styleDefinition.split('width')[1].split(' ')[1].replace('})','');
-
-                    highlightStyle = new ol.style.Style({
-                        stroke: new ol.style.Stroke({
-                            color: '#ffff00',
-                            lineDash: null,
-                            width: featureWidth
-                        })
-                    });
-
-                }
-				else {
-                    highlightStyle = new ol.style.Style({
-                        fill: new ol.style.Fill({
-                            color: '#ffff00'
-                        })
-                    })
-                }
-                featureOverlay.getSource().addFeature(currentFeature);
-                featureOverlay.setStyle(highlightStyle);
-            }
-            highlight = currentFeature;
-        }
     }
 };
 
@@ -282,18 +237,22 @@ var onSingleClick = function(evt) {
                     for (var i=0; i<currentFeatureKeys.length; i++) {
                         if (currentFeatureKeys[i] != 'geometry') {
                             popupField = '';
-                            if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "inline label") {
+							
+							if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "inline label") {
                                 popupField += '<th>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</th><td>';
                             }
 							else {
                                 popupField += '<td colspan="2">';
                             }
-                            if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "header label") {
+                            
+							if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "header label") {
                                 popupField += '<strong>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</strong><br />';
                             }
+							
                             if (layer.get('fieldImages')[currentFeatureKeys[i]] != "Photo") {
                                 popupField += (currentFeature.get(currentFeatureKeys[i]) != null ? Autolinker.link(String(currentFeature.get(currentFeatureKeys[i]))) + '</td>' : '');
-                            } else {
+                            }
+							else {
                                 popupField += (currentFeature.get(currentFeatureKeys[i]) != null ? '<img src="images/' + currentFeature.get(currentFeatureKeys[i]).replace(/[\\\/:]/g, '_').trim()  + '" /></td>' : '');
                             }
                             popupText += '<tr>' + popupField + '</tr>';
@@ -306,7 +265,8 @@ var onSingleClick = function(evt) {
     });
     if (popupText == '<ul>') {
         popupText = '';
-    } else {
+    }
+	else {
         popupText += '</ul>';
     }
     
@@ -336,47 +296,10 @@ var onSingleClick = function(evt) {
     }
 };
 
-var ajaxTest = function(handleData) {
-	//fetches site information from the database
-	$.ajax({
-		type: 'Post',
-		url: './fetchSites',
-		datatype: 'json',
-		success: function(response) {
-				handleData(response);
-			},
-		error: function(XMLHttpRequest, textStatus, errorThrown) { 
-			alert("Status: " + textStatus);
-			alert("Error: " + errorThrown);
-			}
-	});
-}
-
-
 
 map.on('pointermove', function(evt) {
-    onPointerMove(evt);
+	onPointerMove(evt);
 });
 map.on('singleclick', function(evt) {
-    onSingleClick(evt);
-	
-	/*
-	//ajax testing
-	var json_sampleData_1;
-	
-	ajaxTest(function(output) {
-		json_sampleData_1 = output;
-	});
-	*/
+	onSingleClick(evt);
 });
-
-
-
-
-
-var attribution = document.getElementsByClassName('ol-attribution')[0];
-var attributionList = attribution.getElementsByTagName('ul')[0];
-var firstLayerAttribution = attributionList.getElementsByTagName('li')[0];
-var qgis2webAttribution = document.createElement('li');
-qgis2webAttribution.innerHTML = '<a href="https://github.com/tomchadwin/qgis2web">qgis2web</a>';
-attributionList.insertBefore(qgis2webAttribution, firstLayerAttribution);
