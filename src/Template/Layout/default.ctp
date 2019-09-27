@@ -57,10 +57,10 @@
                             <li class="nav-item">
 								<?php
 								if ($this->name == "SiteLocations") {
-									echo "<a href=\"../site-locations/chartselection\" class=\"nav-link active\">View Water Quality Data</a>";
+									echo "<a href=\"/WQIS/site-locations/chartselection\" class=\"nav-link active\">View Water Quality Data</a>";
 								}
 								else {
-									echo "<a href=\"../site-locations/chartselection\" class=\"nav-link\">View Water Quality Data</a>";
+									echo "<a href=\"/WQIS/site-locations/chartselection\" class=\"nav-link\">View Water Quality Data</a>";
 								}
 								?>
                             </li>
@@ -69,10 +69,10 @@
 									<?php
 									if ($this->name == "Pages") {
 										//strictly, probably should have a separate value for admin. This organization is fucked, will deal with it later
-										echo "<a href=\"../pages/administratorpanel\" class=\"nav-link active\">Admin Panel</a>";
+										echo "<a href=\"/WQIS/pages/administratorpanel\" class=\"nav-link active\">Admin Panel</a>";
 									}
 									else {
-										echo "<a href=\"../pages/administratorpanel\" class=\"nav-link\">Admin Panel</a>";
+										echo "<a href=\"/WQIS/pages/administratorpanel\" class=\"nav-link\">Admin Panel</a>";
 									}
 									?>
                                 </li>
@@ -82,10 +82,10 @@
                             <li class="nav-item">
 								<?php
 								if ($this->name == "Users") {
-									echo "<a href=\"../users/edituserinfo\" class=\"nav-link active\">User Profile</a>";
+									echo "<a href=\"/WQIS/users/edituserinfo\" class=\"nav-link active\">User Profile</a>";
 								}
 								else {
-									echo "<a href=\"../users/edituserinfo\" class=\"nav-link\">User Profile</a>";
+									echo "<a href=\"/WQIS/users/edituserinfo\" class=\"nav-link\">User Profile</a>";
 								}
 								?>
                             </li>
@@ -93,10 +93,10 @@
                             <li class="nav-item">
 								<?php
 								if ($this->name == "Feedback") {
-									echo "<a href=\"../feedback/adminfeedback\" class=\"nav-link active\">Feedback</a>";
+									echo "<a href=\"/WQIS/feedback/adminfeedback\" class=\"nav-link active\">Feedback</a>";
 								}
 								else {
-									echo "<a href=\"../feedback/adminfeedback\" class=\"nav-link\">Feedback</a>";
+									echo "<a href=\"/WQIS/feedback/adminfeedback\" class=\"nav-link\">Feedback</a>";
 								}
 								?>
                             </li>
@@ -106,10 +106,10 @@
                             <li class="nav-item">
                                 <?php
 								if ($this->name == "Feedback") {
-									echo "<a href=\"../feedback/userfeedback\" class=\"nav-link active\">Feedback</a>";
+									echo "<a href=\"/WQIS/feedback/userfeedback\" class=\"nav-link active\">Feedback</a>";
 								}
 								else {
-									echo "<a href=\"../feedback/userfeedback\" class=\"nav-link\">Feedback</a>";
+									echo "<a href=\"/WQIS/feedback/userfeedback\" class=\"nav-link\">Feedback</a>";
 								}
 								?>
                             </li>
