@@ -1,35 +1,10 @@
 <link rel="stylesheet" href="../css/ol.css">
 <link rel="stylesheet" href="../css/fontawesome-all.min.css">
-<link rel="stylesheet" type="text/css" href="../css/horsey.min.css">
-<link rel="stylesheet" type="text/css" href="../css/ol3-search-layer.min.css">
 <link rel="stylesheet" href="../css/ol3-layerswitcher.css">
-<link rel="stylesheet" href="../css/qgis2web.css">
+<link rel="stylesheet" href="../css/map.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-
-<style>
-.search-layer {
-	top: 65px;
-	left: .5em;
-}
-.ol-touch .search-layer {
-	top: 80px;
-}
-.ol-zoom, .geolocate, .gcd-gl-control .ol-control {
-	background-color: rgba(255,255,255,.4) !important;
-	padding: 3px !important;
-}
-.ol-scale-line {
-	background: none !important;
-}
-.ol-scale-line-inner {
-	border: 2px solid #f8f8f8 !important;
-	border-top: none !important;
-	background: rgba(255, 255, 255, 0.5) !important;
-	color: black !important;
-}
-</style>
 
 <?= $this->Html->script('dateautofill.js') ?>
 <?= $this->Html->script('chartSelectionValidation.js') ?>
@@ -44,7 +19,7 @@
             <option value="select" selected="selected">Select Collection Site</option>
 
             <?php
-                //This is for populating the site drop down box
+                //populate the site drop down box
                 foreach ($siteLocations as $siteLocation) {
                     $siteNumber = $this->Number->format($siteLocation->Site_Number);
                     $siteName = h($siteLocation->Site_Name);
@@ -167,74 +142,18 @@
 			}
 		</script>
 		
-        <script src="../js/qgis2web_expressions.js"></script>
+        <script src="../js/map_expressions.js"></script>
         <script src="../js/polyfills.js"></script>
         <script src="../js/functions.js"></script>
         <script src="../js/ol.js"></script>
         <script src="http://cdn.polyfill.io/v2/polyfill.min.js?features=Element.prototype.classList,URL"></script>
-        <script src="../js/horsey.min.js"></script>
-        <script src="../js/ol3-search-layer.min.js"></script>
         <script src="../js/ol3-layerswitcher.js"></script>
 		
 		<script>
-		var request = new XMLHttpRequest();
-		request.open('POST', './fetchSites', false);  // `false` makes the request synchronous
-		request.send(null);
-		
-		var string_sampleData_1 = request.responseText;
-		
-		//for some reason the controller is returning a JSON string *plus* the HTML for the page... I don't even know. Lets just split off the part we need
-		var json_sampleData_1 = JSON.parse(string_sampleData_1.split("<!DOCTYPE html>", 2)[0]);
-		
-		//alert(JSON.stringify(json_sampleData_1)); //for debugging purposes
-		
-		//now we need to extract the relevant parts and build what qgis2web expects
-		var correctFormat = {};
-		
-		correctFormat.type = 'FeatureCollection';
-		correctFormat.name = 'sampleData_1';
-		correctFormat.crs = { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } };
-		
-		var features = [];
-		
-		for (var i=0; i<json_sampleData_1["SiteData"].length; i++) {
-			var latitude = json_sampleData_1["SiteData"][i]["Latitude"];
-			var longitude = json_sampleData_1["SiteData"][i]["Longitude"];
-			var siteLocation = json_sampleData_1["SiteData"][i]["Site_Location"];
-			var siteName = json_sampleData_1["SiteData"][i]["Site_Name"];
-			
-			var thisFeature = {};
-			thisFeature.type = "Feature";
-			var properties = {};
-			properties.latitude = latitude;
-			properties.longitude = longitude;
-			properties.siteLocation = siteLocation;
-			properties.siteName = siteName;
-			
-			thisFeature.properties = properties;
-			
-			var geometry = {};
-			geometry.type = "Point";
-			
-			var coords = [];
-
-			coords.push(longitude);
-			coords.push(latitude);
-			
-			geometry.coordinates = coords;
-			thisFeature.geometry = geometry;
-			
-			features.push(thisFeature);
-		}
-		
-		correctFormat.features = features;
-		
-		json_sampleData_1 = correctFormat;
+			json_sampleData_1 = initMap();
 		</script>
 		
-        <script src="../styles/sampleData_1_style.js"></script>
-        <script src="../js/layers.js" type="text/javascript"></script> 
-        <script src="../js/qgis2web.js"></script>
+        <script src="../js/map.js"></script>
         <script src="../js/Autolinker.min.js"></script>
 		
     <div class="container text-center">

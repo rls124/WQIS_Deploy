@@ -2,23 +2,52 @@ var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
 
-/*
-var select = new ol.interaction.Select({
-    condition: ol.events.condition.click,
-    toggleCondition: ol.events.condition.shiftKeyOnly,  
-});
-var features = select.getFeatures();
-*/
-
-var unselectedStyle = [ new ol.style.Style({
-        image: new ol.style.Circle({radius: 4.0 + size,
+var unselectedStyle = [new ol.style.Style({
+        image: new ol.style.Circle({radius: 4.0,
             stroke: new ol.style.Stroke({color: 'rgba(35,35,35,1.0)', lineDash: null, lineCap: 'butt', lineJoin: 'miter', width: 0}), fill: new ol.style.Fill({color: 'rgba(245, 66, 239, 1.0)'})}),
     })];
 
-var selectedStyle = [ new ol.style.Style({
-        image: new ol.style.Circle({radius: 4.0 + size,
+var selectedStyle = [new ol.style.Style({
+        image: new ol.style.Circle({radius: 4.0,
             stroke: new ol.style.Stroke({color: 'rgba(3,3,3,1.0)', lineDash: null, lineCap: 'butt', lineJoin: 'miter', width: 0}), fill: new ol.style.Fill({color: 'rgba(24, 66, 239, 1.0)'})}),
     })];
+
+//layers stuff
+var wms_layers = [];
+
+var lyr_OpenStreetMap_0 = new ol.layer.Tile({
+	'title': 'OpenStreetMap',
+	'type': 'base',
+	'opacity': 1.000000,
+	source: new ol.source.XYZ({
+		url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+		})
+	});
+	
+var format_sampleData_1 = new ol.format.GeoJSON();
+
+var features_sampleData_1 = format_sampleData_1.readFeatures(json_sampleData_1, {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+
+var jsonSource_sampleData_1 = new ol.source.Vector();
+
+jsonSource_sampleData_1.addFeatures(features_sampleData_1);
+var lyr_sampleData_1 = new ol.layer.Vector({
+	declutter: true,
+	source:jsonSource_sampleData_1, 
+	style: unselectedStyle,
+	title: '<img src="styles/legend/sampleData_1.png" /> sampleData'
+});
+
+lyr_OpenStreetMap_0.setVisible(true);
+lyr_sampleData_1.setVisible(true);
+var layersList = [lyr_OpenStreetMap_0,lyr_sampleData_1];
+lyr_sampleData_1.set('fieldAliases', {'LATITUDE': 'LATITUDE', 'LONGITUDE': 'LONGITUDE', 'WaterSampleValue': 'WaterSampleValue', 'Name': 'Name'});
+lyr_sampleData_1.set('fieldImages', {'LATITUDE': '', 'LONGITUDE': '', 'WaterSampleValue': '', });
+lyr_sampleData_1.set('fieldLabels', {'LATITUDE': 'inline label', 'LONGITUDE': 'inline label', 'WaterSampleValue': 'inline label', 'Name': 'inline label'});
+
+lyr_sampleData_1.on('precompose', function(evt) {
+	evt.context.globalCompositeOperation = 'normal';
+});
 
 closer.onclick = function() {
     container.style.display = 'none';
@@ -30,14 +59,7 @@ var overlayPopup = new ol.Overlay({
     element: container
 });
 
-var expandedAttribution = new ol.control.Attribution({
-    collapsible: false
-});
-
 var map = new ol.Map({
-    controls: ol.control.defaults({attribution:false}).extend([
-        expandedAttribution
-    ]),
     target: document.getElementById('map'),
     renderer: 'canvas',
     overlays: [overlayPopup],
@@ -46,19 +68,6 @@ var map = new ol.Map({
          maxZoom: 28, minZoom: 1
     })
 });
-
-//map.addInteraction(select);
-
-var searchLayer = new ol.SearchLayer({
-	layer: lyr_sampleData_1,
-	colName: 'WaterSampleValue',
-	zoom: 10,
-	collapsed: true,
-	map: map
-});
-
-map.addControl(searchLayer);
-document.getElementsByClassName('search-layer')[0].getElementsByTagName('button')[0].className += ' fa fa-camera-retro';
     
 map.getView().fit([-9497435.528598, -5408445.934593, 14518474.994557, 15851540.430167], map.getSize());
 map.getView().setCenter(ol.proj.fromLonLat([-85.1394, 41.0793]));
@@ -78,7 +87,6 @@ function getPopupFields(layerList, layer) {
     var idx = layersList.indexOf(layer) - (layersList.length - popupLayers.length);
     return popupLayers[idx];
 }
-
 
 var collection = new ol.Collection();
 var featureOverlay = new ol.layer.Vector({
