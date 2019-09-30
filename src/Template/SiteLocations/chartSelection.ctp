@@ -16,11 +16,6 @@
 .ol-touch .search-layer {
 	top: 80px;
 }
-.ol-control button {
-	background-color: #f8f8f8 !important;
-	color: #000000 !important;
-	border-radius: 0px !important;
-}
 .ol-zoom, .geolocate, .gcd-gl-control .ol-control {
 	background-color: rgba(255,255,255,.4) !important;
 	padding: 3px !important;
@@ -133,13 +128,45 @@
                 </div>
             </div>
         </div>
-        <br>
-        <div id="map">
-            <div id="popup" class="ol-popup">
-                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                <div id="popup-content"></div>
-            </div>
-        </div>
+
+		<div class="container">
+			<div class="row display-flex">
+				<div id="map" class="col-lg-10">
+					<div id="popup" class="ol-popup">
+						<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+						<div id="popup-content"></div>
+					</div>
+				</div>
+				<div class="col-lg-2 panel panel-primary">
+					<div class="panel-body" style="overflow-y: scroll; height: 430px;">
+					<ul class="list-group">
+					<?php
+					//populate the site list box
+					foreach ($siteLocations as $siteLocation) {
+						$siteNumber = $this->Number->format($siteLocation->Site_Number);
+						$siteName = h($siteLocation->Site_Name);
+						$siteLocation = h($siteLocation->Site_Location);
+						echo "<li class=\"list-group-item\" id=\"$siteLocation\" onclick=\"clickedLocationButton(this.id)\">$siteName - $siteLocation</li>";
+					}
+					?>
+					</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			function clickedLocationButton(id) {
+				var el = document.getElementById(id);
+				if (el.style.backgroundColor == "grey") {
+					el.style.backgroundColor = "white";
+				}
+				else {
+					el.style.backgroundColor = "grey";
+				}
+			}
+		</script>
+		
         <script src="../js/qgis2web_expressions.js"></script>
         <script src="../js/polyfills.js"></script>
         <script src="../js/functions.js"></script>
@@ -159,6 +186,8 @@
 		//for some reason the controller is returning a JSON string *plus* the HTML for the page... I don't even know. Lets just split off the part we need
 		var json_sampleData_1 = JSON.parse(string_sampleData_1.split("<!DOCTYPE html>", 2)[0]);
 		
+		//alert(JSON.stringify(json_sampleData_1)); //for debugging purposes
+		
 		//now we need to extract the relevant parts and build what qgis2web expects
 		var correctFormat = {};
 		
@@ -171,12 +200,16 @@
 		for (var i=0; i<json_sampleData_1["SiteData"].length; i++) {
 			var latitude = json_sampleData_1["SiteData"][i]["Latitude"];
 			var longitude = json_sampleData_1["SiteData"][i]["Longitude"];
+			var siteLocation = json_sampleData_1["SiteData"][i]["Site_Location"];
+			var siteName = json_sampleData_1["SiteData"][i]["Site_Name"];
 			
 			var thisFeature = {};
 			thisFeature.type = "Feature";
 			var properties = {};
 			properties.latitude = latitude;
 			properties.longitude = longitude;
+			properties.siteLocation = siteLocation;
+			properties.siteName = siteName;
 			
 			thisFeature.properties = properties;
 			
@@ -197,12 +230,6 @@
 		correctFormat.features = features;
 		
 		json_sampleData_1 = correctFormat;
-		
-		/*
-		if (request.status === 200) {
-			console.log(request.responseText);
-		}
-		*/
 		</script>
 		
         <script src="../styles/sampleData_1_style.js"></script>

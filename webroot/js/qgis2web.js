@@ -2,6 +2,24 @@ var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
 
+/*
+var select = new ol.interaction.Select({
+    condition: ol.events.condition.click,
+    toggleCondition: ol.events.condition.shiftKeyOnly,  
+});
+var features = select.getFeatures();
+*/
+
+var unselectedStyle = [ new ol.style.Style({
+        image: new ol.style.Circle({radius: 4.0 + size,
+            stroke: new ol.style.Stroke({color: 'rgba(35,35,35,1.0)', lineDash: null, lineCap: 'butt', lineJoin: 'miter', width: 0}), fill: new ol.style.Fill({color: 'rgba(245, 66, 239, 1.0)'})}),
+    })];
+
+var selectedStyle = [ new ol.style.Style({
+        image: new ol.style.Circle({radius: 4.0 + size,
+            stroke: new ol.style.Stroke({color: 'rgba(3,3,3,1.0)', lineDash: null, lineCap: 'butt', lineJoin: 'miter', width: 0}), fill: new ol.style.Fill({color: 'rgba(24, 66, 239, 1.0)'})}),
+    })];
+
 closer.onclick = function() {
     container.style.display = 'none';
     closer.blur();
@@ -29,6 +47,7 @@ var map = new ol.Map({
     })
 });
 
+//map.addInteraction(select);
 
 var searchLayer = new ol.SearchLayer({
 	layer: lyr_sampleData_1,
@@ -196,6 +215,19 @@ var onSingleClick = function(evt) {
             }
             currentFeature = feature;
             clusteredFeatures = feature.get("features");
+			
+			//highlight in the site list box and in the map
+			var elementID = currentFeature["values_"]["siteLocation"];
+			var locationButton = document.getElementById(elementID);
+			if (locationButton.style.backgroundColor == "grey") {
+				locationButton.style.backgroundColor = "white";
+				currentFeature.setStyle(unselectedStyle);
+			}
+			else {
+				locationButton.style.backgroundColor = "grey";
+				currentFeature.setStyle(selectedStyle);
+			}
+			
             var clusterFeature;
             if (typeof clusteredFeatures !== "undefined") {
                 if (doPopup) {
@@ -263,6 +295,7 @@ var onSingleClick = function(evt) {
             }
         }
     });
+	
     if (popupText == '<ul>') {
         popupText = '';
     }
@@ -295,7 +328,6 @@ var onSingleClick = function(evt) {
         closer.blur();
     }
 };
-
 
 map.on('pointermove', function(evt) {
 	onPointerMove(evt);
