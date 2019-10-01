@@ -92,6 +92,9 @@
 	public function uploadGeneric($columnIDs, $columnsText, $csv, $modelBare) {
 		$log = array();
 		
+		$countSuccesses = 0;
+		$countFails = 0;
+		
 		//go through each non-header row
 		for ($row=1; $row<sizeof($csv); $row++) {
 			$currentRow = array();
@@ -113,15 +116,24 @@
 			$entity = $modelBare->patchEntity($modelBare->newEntity(), $uploadData);
 			
 			if ($modelBare->save($entity)) {
-				$currentRow[] = "File uploaded successfully";
+				//success
+				
+				//$currentRow[] = "File uploaded successfully";
+				//we don't care about successful rows at all, just increment the number of successes
+				$countSuccesses++;
 			}
 			else {
+				//failure
 				$currentRow[] = $entity->getErrors();
+				$log[] = $currentRow;
+				$countFails++;
 			}
-			$log[] = $currentRow;
+			//$log[] = $currentRow;
 		}
 		
 		$this->set(compact('log'));
 		$this->set(compact('columnsText'));
+		$this->set('countSuccesses', $countSuccesses);
+		$this->set('countFails', $countFails);
 	}
 }
