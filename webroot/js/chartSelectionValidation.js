@@ -86,9 +86,10 @@ function initMap() {
             url: 'fetchSites',
             datatype: 'JSON',
             success: function(response) {
-                
+				response = JSON.parse(response); //server is returning that as text for... some reason?
+				
                 // Adds markers to the Google Map at each sites longitude and latitude.
-                for (var i = 0; i < response[SITE_DATA].length; i++){
+                for (var i = 0; i < response["SiteData"].length; i++){
                     var latLng = new google.maps.LatLng(response[SITE_DATA][i]['Latitude'], response[SITE_DATA][i]['Longitude']);
                     var siteNumber = response[SITE_DATA][i]['Site_Number'];
                     var siteName = response[SITE_DATA][i]['Site_Name'];
@@ -116,6 +117,7 @@ function initMap() {
                     var alachlor = 'No Data';
                     var metolachlor = 'No Data';
                     
+					
                     // Check to see if the current site has bacteria data associated with it
                     var bactSiteNumber = response[BACTERIA_DATA][currentBactRow]['site_location_id'];
                     if (siteNumber == bactSiteNumber) {
@@ -125,7 +127,7 @@ function initMap() {
                         }
                         currentBactRow++;
                     }
-                    
+					
                     // Check to see if the current site has nutrient data associated with it
                     var nutrientSiteNumber = response[NUTRIENT_DATA][currentNutrientRow]['site_location_id'];
                     if (siteNumber == nutrientSiteNumber) {
@@ -141,7 +143,7 @@ function initMap() {
                         }
                         currentNutrientRow++;
                     }
-                    
+					
                      // Check to see if the current site has pesticide data associated with it
                     var pestSiteNumber = response[PEST_DATA][currentPestRow]['site_location_id'];
                     if (siteNumber == pestSiteNumber) {
@@ -157,7 +159,6 @@ function initMap() {
                         }
                         currentPestRow++;
                     }
-
                     
                     // Sets up an info window with most recent information pertaining to a particular site.
                     marker.info = new google.maps.InfoWindow({
