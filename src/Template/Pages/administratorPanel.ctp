@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="row center mb-0">
-                    <a type="submit" href="" onclick="return false" class="mb-0 btn btn-basic col-sm sampleFileDisabled" id="sampleFile" name="sampleFile" style="height: 43px;">Download Sample File</a>
+                    <a type="submit" href="..\webroot\files\All_Sample_Files.zip" onclick="return false" class="mb-0 btn btn-basic col-sm sampleFileDisabled" id="sampleFile" name="sampleFile" style="height: 43px;">Download Sample File</a>
                     <label class = "btn btn-file btn-basic col-sm ml-1 mr-1" style="height:43px">
 			Select File <input type="file" name="file" accept=".csv" id="upload">
                     </label>
