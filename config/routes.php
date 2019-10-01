@@ -75,9 +75,3 @@
 	 */
 	$routes->fallbacks(DashedRoute::class);
     });
-
-    /**
-     * Load all plugin routes. See the Plugin documentation on
-     * how to customize the loading of plugin routes.
-     */
-    Plugin::routes();
