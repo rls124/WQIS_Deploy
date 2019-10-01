@@ -73,7 +73,7 @@ function initMap() {
             mapTypeId: google.maps.MapTypeId.HYBRID
         });
         
-        var kmlurl = "http://topaz.ipfw.edu/wqis.kml";
+        var kmlurl = "http://emerald.pfw.edu/wqis.kml";
         //var kmlurl = "../img/wqis.kml"; // Note: local implementation of kml is impossible, must be hosted
 	var ctaLayer = new google.maps.KmlLayer({
             url: kmlurl,
