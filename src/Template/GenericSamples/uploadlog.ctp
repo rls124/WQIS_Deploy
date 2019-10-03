@@ -4,8 +4,8 @@
 }
 </style>
 
-<div class="container roundGreyBox">
-    <h1>File Upload Report</h1>
+<div class="container roundGreyBox" style="min-height:500px">
+    <h1><?php echo $fileTypeName?> File Upload Report</h1>
     <?php
         if (isset($valid)) {
             echo "<p>Error with file upload: </p>";
@@ -62,13 +62,15 @@
 	<?php
 			}
 			else {
-				echo "File uploaded successfully. " . $countSuccesses . " rows added.";
+				echo "<h3>File uploaded successfully. " . $countSuccesses . " rows added.</h3>";
+				
+				echo "<a href=\"/WQIS/pages/administratorpanel\">Return to administrator panel</a>";
 			}
 	?>
 				<?php
                 }
 				else {
-                    echo '<p> No file selected for upload </p>';
+                    echo '<h2>No file selected for upload</h2>';
                 }
             ?>
         </tbody>
