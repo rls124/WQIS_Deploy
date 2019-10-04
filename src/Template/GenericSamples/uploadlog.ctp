@@ -59,6 +59,8 @@
 		</tbody>
 	</table>
 	
+	<a href="/WQIS/pages/administratorpanel">Return to administrator panel</a>
+	
 	<?php
 			}
 			else {
@@ -70,7 +72,19 @@
 				<?php
                 }
 				else {
-                    echo '<h2>No file selected for upload</h2>';
+					?>
+                    <h2>Not a valid filetype</h2>
+					<p>The uploaded file did not match any expected type of data file. Hints:
+					<ul>
+						<li>
+							Ensure that the file is a valid CSV (comma separated values) file
+						</li>
+						<li>
+							Check that the column headers are present, and match the format shown in the appropriate <a href="/WQIS/webroot/files/All_Sample_Files.zip">example file</a>
+						</li>
+					</ul>
+					</p>
+					<?php
                 }
             ?>
         </tbody>
@@ -79,6 +93,5 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
