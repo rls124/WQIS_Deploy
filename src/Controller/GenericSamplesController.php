@@ -64,27 +64,28 @@
 	}
 
 	public function getFileType($csv) {
-		$bacteriaHeader = array("Site number", "Date", "Sample_number", "EcoliRawCount", "ECOLI", "EcoliException", "TotalColiformRawCount", "TotalColiform", "ColiformException", "Comments");
-		$nutrientHeader = array("Site number", "Date", "Sample_number", "Phosphorus", "PhosphorusException", "NH3-N", "NH3-NException", "DRP", "Comments");
-		$pesticideHeader = array("Site number", "Date", "Sample_number", "Atrazine", "AtrazineException", "Alachlor", "AlachlorException", "Metolachlor", "MetolachlorException", "Comments");
-		$WQMHeader = array("Site number", "Date", "Sample_number", "Time", "Water_Temp", "WaterTempException", "PH", "pHException", "Conductivity", "ConductivityException", "TDS", "TDSException", "DO", "DOException", "Turbidity (meter reading)", "TurbidityException", "Turbidity (scale value)", "Comments", "ImportDate", "ImportTime", "Requires_checking");
-		$siteInfoHeader = array("Site_Number", "Longitude", "Latitude", "Site_Location", "Site_Name");
+		//these terms are unique to their respective file type (and complex enough to not be accidentally found inside another string)
+		$bacteriaUniqueTerm = "coliform";
+		$nutrientUniqueTerm = "phosphorus";
+		$pesticideUniqueTerm = "atrazine";
+		$WQMUniqueTerm = "conductivity";
+		$siteInfoUniqueTerm = "longitude";
 		
-		$headerRow = $csv[0];
+		$headerRow = implode(",", $csv[0]);
 		
-		if ($headerRow == $bacteriaHeader) {
+		if (stripos($headerRow, $bacteriaUniqueTerm) !== false) {
 			return 1;
 		}
-		else if ($headerRow == $nutrientHeader) {
+		else if (stripos($headerRow, $nutrientUniqueTerm) !== false) {
 			return 2;
 		}
-		else if ($headerRow == $pesticideHeader) {
+		else if (stripos($headerRow, $pesticideUniqueTerm) !== false) {
 			return 3;
 		}
-		else if ($headerRow == $WQMHeader) {
+		else if (stripos($headerRow, $WQMUniqueTerm) !== false) {
 			return 4;
 		}
-		else if ($headerRow == $siteInfoHeader) {
+		else if (stripos($headerRow, $siteInfoUniqueTerm) !== false) {
 			return 5;
 		}
 	}
