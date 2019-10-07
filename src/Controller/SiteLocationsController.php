@@ -215,44 +215,45 @@
 		}
 
 		public function fetchSites() {
-			$this->render(false);
+			$this->autoRender = false;
 			
 			if ($this->request->is('post')) {
 				//Get the sites
 				$sites = $this->SiteLocations->find('all')->order('Site_Number');
 
-                                $this->loadModel('BacteriaSamples');
-                                $this->loadModel('NutrientSamples');
-                                $this->loadModel('PesticideSamples');
+				$this->loadModel('BacteriaSamples');
+				$this->loadModel('NutrientSamples');
+				$this->loadModel('PesticideSamples');
+
+				$connection = ConnectionManager::get('default');
+				$bactQuery = "SELECT max(Date) as 'Date', Ecoli, site_location_id " .
+					"FROM bacteria_samples " .
+					"group by site_location_id " .
+					"order by site_location_id";
+				$bactDateAndData = $connection->execute($bactQuery)->fetchAll('assoc');
+
+				$nutrientQuery = "SELECT max(Date) as 'Date', site_location_id, Phosphorus, NitrateNitrite, DRP " .
+					"FROM nutrient_samples " .
+					"group by site_location_id " .
+					"order by site_location_id";
+				$nutrientDateAndData = $connection->execute($nutrientQuery)->fetchAll('assoc');
+
+				$pestQuery = "SELECT max(Date) as 'Date', site_location_id, Atrazine, Alachlor, Metolachlor " . 
+					"FROM pesticide_samples " .
+					"group by site_location_id " .
+					"order by site_location_id";
+				$pestDateAndData = $connection->execute($pestQuery)->fetchAll('assoc');
                                 
-                                $connection = ConnectionManager::get('default');
-                                $bactQuery = "SELECT max(Date) as 'Date', Ecoli, site_location_id " .
-                                                        "FROM bacteria_samples " .
-                                                        "group by site_location_id " .
-                                                        "order by site_location_id";
-                                $bactDateAndData = $connection->execute($bactQuery)->fetchAll('assoc');
-                                
-                                $nutrientQuery = "SELECT max(Date) as 'Date', site_location_id, Phosphorus, NitrateNitrite, DRP " .
-                                                        "FROM nutrient_samples " .
-                                                        "group by site_location_id " .
-                                                        "order by site_location_id";
-                                $nutrientDateAndData = $connection->execute($nutrientQuery)->fetchAll('assoc');
-                                
-                                $pestQuery = "SELECT max(Date) as 'Date', site_location_id, Atrazine, Alachlor, Metolachlor " . 
-                                                        "FROM pesticide_samples " .
-                                                        "group by site_location_id " .
-                                                        "order by site_location_id";
-                                $pestDateAndData = $connection->execute($pestQuery)->fetchAll('assoc');
-                                
-				$this->response->withType('json');
 				$json = json_encode([
-                                    'SiteData' => $sites, 
-                                    'BacteriaData' => $bactDateAndData, 
-                                    'NutrientData' => $nutrientDateAndData, 
-                                    'PestData' => $pestDateAndData]);
-				echo $json;
+					'SiteData' => $sites, 
+					'BacteriaData' => $bactDateAndData, 
+					'NutrientData' => $nutrientDateAndData, 
+					'PestData' => $pestDateAndData]);
 				
-				$this->log($json, 'debug');
+				$this->response = $this->response->withStringBody($json);
+				$this->response = $this->response->withType('json');
+				
+				return $this->response;
 			}
 		}
 	}

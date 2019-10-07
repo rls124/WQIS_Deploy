@@ -84,7 +84,7 @@ function initMap() {
 		url: 'fetchSites',
 		datatype: 'JSON',
 		success: function(response) {
-			response = JSON.parse(response); //server is returning that as text for... some reason?
+			//response = JSON.parse(response); //server is returning that as text for... some reason?
             
 			// Adds markers to the Google Map at each sites longitude and latitude.
 			for (var i = 0; i < response[SITE_DATA].length; i++){
