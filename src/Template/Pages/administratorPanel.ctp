@@ -202,6 +202,18 @@
 </script>
 
 <script>
+	$(function(){
+	$('#fileupload').submit(function(){
+    $("input[type='submit']", this)
+      .val("Please Wait...")
+      .attr('disabled', 'disabled');
+    return true;
+  });
+});
+</script>
+
+
+<script>
     $("#entryType").change(function () {
 	var entryType = $(this).val();
 	var location;
