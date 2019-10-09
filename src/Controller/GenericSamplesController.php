@@ -74,29 +74,114 @@
 	}
 
 	public function getFileType($csv) {
-		//these terms are unique to their respective file type (and complex enough to not be accidentally found inside another string)
-		$bacteriaUniqueTerm = "coliform";
-		$nutrientUniqueTerm = "phosphorus";
-		$pesticideUniqueTerm = "atrazine";
-		$WQMUniqueTerm = "conductivity";
-		$siteInfoUniqueTerm = "longitude";
+		/*
+		use column header names from the CSV to determine which type of file is being uploaded
+		rather complicated because we have to not only check which type of file it is, but also make sure that *all* required columns are present and *no* extras are.
+		which itself is complicated by the existence of multiple different formats in the sample/export files we're looking at. So check all of the valid options
+	
+		many of these entries will disappear once we obsolete the exception columns
+		*/
 		
-		$headerRow = implode(",", $csv[0]);
+		$headerRow = $csv[0];
 		
-		if (stripos($headerRow, $bacteriaUniqueTerm) !== false) {
-			return 1;
-		}
-		else if (stripos($headerRow, $nutrientUniqueTerm) !== false) {
-			return 2;
-		}
-		else if (stripos($headerRow, $pesticideUniqueTerm) !== false) {
-			return 3;
-		}
-		else if (stripos($headerRow, $WQMUniqueTerm) !== false) {
-			return 4;
-		}
-		else if (stripos($headerRow, $siteInfoUniqueTerm) !== false) {
-			return 5;
+		$bacteriaHeader = array(
+			array("site number", "site_number", "sitenumber"),
+			array("date"),
+			array("sample number", "sample_number", "samplenumber"),
+			array("ecoliraw", "ecolirawcount", "ecoli raw", "ecoli_raw", "ecoli raw count", "ecoli_raw_count"),
+			array("ecoli"),
+			array("ecoli exception", "ecoli_exception", "ecoliexception"),
+			array("total coliform raw", "total_coliform_raw", "totalcoliformraw", "total coliform raw count", "total_coliform_raw_count", "totalcoliformrawcount"),
+			array("total coliform", "total_coliform", "totalcoliform"),
+			array("coliform exception", "coliform_exception", "coliformexception", "total coliform exception", "total_coliform_exception", "totalcoliformexception"),
+			array("comments"),
+		);
+		
+		$nutrientHeader = array(
+			array("site number", "site_number", "sitenumber"),
+			array("date"),
+			array("sample number", "sample_number", "samplenumber"),
+			array("phosphorus"),
+			array("phosphorus exception", "phosphorus_exception", "phosphorusexception"),
+			array("nh3-n", "nitrate nitrite", "nitrate_nitrite", "nitratenitrite"),
+			array("nh3-n exception", "nh3-n_exception", "nh3-nexception", "nitrate nitrite exception", "nitrate_nitrite_exception", "nitratenitriteexception"),
+			array("drp"),
+			array("comments"),
+		);
+		
+		$pesticideHeader = array(
+			array("site number", "site_number", "sitenumber"),
+			array("date"),
+			array("sample number", "sample_number", "samplenumber"),
+			array("atrazine"),
+			array("atrazine exception", "atrazine_exception", "atrazineexception"),
+			array("alachlor"),
+			array("alachor exception", "alachor_exception", "alachlorexception"),
+			array("metolachlor"),
+			array("metolachor exception", "metolachor_exception", "metolachlorexception"),
+			array("comments"),
+		);
+		
+		$WQMHeader = array(
+			array("site number", "site_number", "sitenumber"),
+			array("date"),
+			array("sample number", "sample_number", "sample_number"),
+			array("time"),
+			array("water temp", "water_temp", "watertemp", "water temperature", "water_temperature", "watertemperature"),
+			array("water temp exception", "water_temp_exception", "watertempexception", "water temperature exception", "water_temperature_exception", "watertemperatureexception"),
+			array("ph"),
+			array("ph exception", "ph_exception", "phexception"),
+			array("conductivity"),
+			array("conductivity exception", "conductivity_exception", "conductivityexception"),
+			array("tds"),
+			array("tds exception", "tds_exception", "tdsexception"),
+			array("do"),
+			array("do exception", "do_exception", "doexception"),
+			array("turbidity (meter reading)"),
+			array("turbidity exception", "turbidity_exception", "turbidityexception"),
+			array("turbidity (scale value)"),
+			array("comments"),
+			array("import date", "import_date", "importdate"),
+			array("import time", "import_time", "importtime"),
+			array("requires checking", "requires_checking", "requireschecking"),
+		);
+		
+		$siteInfoHeader = array(
+			array("site number", "site_number", "sitenumber"),
+			array("longitude"),
+			array("latitude"),
+			array("site location", "site_location", "sitelocation"),
+			array("site name", "site_name", "sitename"),
+		);
+		
+		$validHeaders = array($bacteriaHeader, $nutrientHeader, $pesticideHeader, $WQMHeader, $siteInfoHeader);
+		
+		for ($typeNumber=0; $typeNumber<sizeof($validHeaders); $typeNumber++) {
+			$correctType = true;
+			
+			for ($i=0; $i<sizeof($headerRow); $i++) {
+				$cell = strtolower($headerRow[$i]); //eliminates capitalization as a concern
+				$cellValid = false;
+				
+				for ($j=0; $j<sizeof($validHeaders[$typeNumber]); $j++) {
+					//check each variant
+					for ($k=0; $k<sizeof($validHeaders[$typeNumber][$j]); $k++) {
+						if ($cell == $validHeaders[$typeNumber][$j][$k]) {
+							$cellValid = true;
+							break 2;
+						}
+					}
+				}
+				
+				if ($cellValid == false) {
+					$correctType = false;
+					break;
+				}
+			}
+			
+			if ($correctType == true) {
+				return $typeNumber + 1;
+			}
 		}
 	}
 	
