@@ -1,14 +1,7 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<!-- Bacteria -->
-<?= $this->Html->css('entryForm.css') ?>
-<?= $this->Html->script('entryForm.js') ?>
-
 <div class="container-fluid roundGreyBox">
-	<?= $this->Form->create($bacteriaSample) ?>
+	<?= $this->Form->create($nutrientSample) ?>
     <fieldset>
-
-        <p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  Bacteria Entry Form
+        <p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  Nutrient Entry Form
             <a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
                 <span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
             </a></p>
@@ -16,20 +9,22 @@
 
         <div class="collapse" id="collapseInfo">
             <div class="card card-body">
-                <p>This form is used to enter bacteria levels (E. Coli raw count) for one or more sites taken on a particular date.</p>
+                <p>This form is used to enter nutrient levels (total phosphorus and nitrate/nitrite) for one or more sites taken on a particular date.</p>
                 <ol>
                     <li>Select or enter a date.</li>
                     <li>Select a site. Sample Number will automatically be generated.</li>
-                    <li>Select E. coli. raw count. E. coli level will automatically be generated. If no reading is available this field may be left empty.</li>
-                    <li>Select Total coliform raw count. Total coliform level will automatically be generated. If no reading is available this field may be left empty.</li>
+                    <li>Enter Total Phosphorus level. Currently accepted values are between 0.001 and 10. If no reading is available this field may be left empty.</li>
+                    <li>Enter Nitrate/Nitrite level. Currently accepted values are between 0.100 and 25.000. If no reading is available this field may be left empty.<li>
+                    <li>Enter Dissolved Reactive Phosphorus level. Currently accepted values are between 0.001 and 2.000. If no reading is available this field may be left empty.</li>
                     <li>Enter Comments, if desired.</li>
                 </ol>
                 <p>To record data for another site, press the Add Site button.</p>
             </div>
         </div>
+
         <div class="form-group row">
 			<?=
-				$this->Form->input('Date', [
+				$this->Form->control('Date', [
 					'label' => [
 						'class' => 'col-lg-1 label-reg text-right centerLabel mt-4'
 					],
@@ -37,7 +32,7 @@
 						'inputContainer' => '{{content}}'
 					],
 					'type' => 'text',
-					'class' => "form-control date-picker entryControl col-lg-2 textinput mt-3 date", //'form-control date-picker entryControl',
+					'class' => "form-control date-picker entryControl col-lg-2 textinput mt-3", //'form-control date-picker entryControl',
 					'placeholder' => 'mm/dd/yyyy'
 				])
 			?>
@@ -48,11 +43,10 @@
                     <thead>
                         <tr>
                             <th>Site</th>
-                            <th>Sample_Number</th>
-                            <th>Ecoli Raw Count</th>
-                            <th>Ecoli<br>(CFU/100 ml)</th>
-                            <th>Total Coliform<br>Raw Count</th>
-                            <th>Total Coliform<br>(CFU/100 ml)</th>
+                            <th>Sample Number</th>
+                            <th>Nitrate/Nitrite<br>(mg/L)</th>
+                            <th>Total Phosphorus<br>(mg/L)</th>
+                            <th>Dissolved Reactive Phosphorus<br>(mg/L)</th>
                             <th>Comments</th>
                             <th>Actions</th>
                         </tr>
@@ -60,7 +54,6 @@
                     <tbody id="tableBody">
                         <tr id="row-0">
                             <td>
-
                                 <select class="form-control entryControl siteselect" id="site_location_id-0" name="site_location_id-0">
                                     <option value="" selected="selected">Site</option>
 									<?php
@@ -73,64 +66,51 @@
 										}
 									?>
                                 </select>
-
                             </td>
 							<?=
-								$this->Form->input('sample_number-0', [
+								$this->Form->control('sample_number-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control entryControl samplenumber',
 									'id' => 'sample_number-0',
+									'class' => 'form-control entryControl samplenumber',
 									'readonly' => true
 								])
 							?>
-                            <td>
-
-								<?=
-									$this->Form->select('ecolirawcount-0', $rawCount, [
-										'id' => 'ecolirawcount-0',
-										'empty' => 'ND',
-										'class' => 'form-control entryControl entryDropDown'
-									])
-								?>
-
-                            </td>
 							<?=
-								$this->Form->input('ecoli-0', [
+								$this->Form->control('phosphorus-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control',
-									'readonly' => true
+									'class' => 'form-control entryControl'
 								])
 							?>
-                            <td>
-								<?=
-									$this->Form->select('totalcoliformrawcount-0', $rawCount, [
-										'id' => 'totalcoliformrawcount-0',
-										'empty' => 'ND',
-										'class' => 'form-control entryControl entryDropDown'
-									])
-								?>
-                            </td>
 							<?=
-								$this->Form->input('totalcoliform-0', [
+								$this->Form->control('nitratenitrite-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control',
-									'readonly' => true
+									'class' => 'form-control entryControl'
 								])
 							?>
 							<?=
-								$this->Form->input('comments-0', [
+								$this->Form->control('drp-0', [
+									'templates' => [
+										'inputContainer' => '<td>{{content}}</td>',
+										'label' => false
+									],
+									'type' => 'number',
+									'class' => 'form-control entryControl'
+								])
+							?>
+							<?=
+								$this->Form->control('comments-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -154,6 +134,7 @@
                     </tbody>
                 </table>
             </div>
+
 			<?=
 				$this->Form->hidden('totalrows', [
 					'value' => '0',
@@ -162,11 +143,12 @@
 			?>
 
 			<?=
-				$this->Form->button('Submit Bacteria Measurements', [
+				$this->Form->button('Submit Nutrient Measurements', [
 					'class' => 'btn btn-basic mb-3',
 					'style' => 'float: right;'
 				])
 			?>
+
 			<?=
 				$this->Form->button('Add Monitored Sites', [
 					'class' => 'btn btn-basic mb-3 mr-2',
@@ -183,15 +165,8 @@
 					'style' => 'float: right;'
 				])
 			?>
+
         </div>
     </fieldset>
 	<?= $this->Form->end() ?>
 </div>
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
-

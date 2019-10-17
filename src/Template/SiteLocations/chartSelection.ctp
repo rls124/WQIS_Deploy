@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
@@ -157,20 +156,20 @@
         var tableLocation;
         switch (entryType) {
             case 'bacteria':
-                tableLocation = "<?= $this->Html->Url->build(['controller' => 'BacteriaSamples', 'action' => 'tableview']); ?>";
-                chartLocation = "<?= $this->Html->Url->build(['controller' => 'BacteriaSamples', 'action' => 'chartview']); ?>";
+                tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
+                chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
                 break;
             case 'nutrient':
-                tableLocation = "<?= $this->Html->Url->build(['controller' => 'NutrientSamples', 'action' => 'tableview']); ?>";
-                chartLocation = "<?= $this->Html->Url->build(['controller' => 'NutrientSamples', 'action' => 'chartview']); ?>";
+                tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
+                chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
                 break;
             case 'pesticide':
-                tableLocation = "<?= $this->Html->Url->build(['controller' => 'PesticideSamples', 'action' => 'tableview']); ?>";
-                chartLocation = "<?= $this->Html->Url->build(['controller' => 'PesticideSamples', 'action' => 'chartview']); ?>";
+                tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
+                chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
                 break;
             case 'wqm':
-                tableLocation = "<?= $this->Html->Url->build(['controller' => 'WaterQualitySamples', 'action' => 'tableview']); ?>";
-                chartLocation = "<?= $this->Html->Url->build(['controller' => 'WaterQualitySamples', 'action' => 'chartview']); ?>";
+                tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
+                chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
                 break;
             default:
                 tableLocation = "javascript:void(0);";
@@ -186,16 +185,16 @@
         if (actionType === 'chartview') {
             switch (category) {
                 case 'bacteria':
-                    location = "<?= $this->Html->Url->build(['controller' => 'BacteriaSamples', 'action' => 'chartview']); ?>";
+                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
                     break;
                 case 'nutrient':
-                    location = "<?= $this->Html->Url->build(['controller' => 'NutrientSamples', 'action' => 'chartview']); ?>";
+                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
                     break;
                 case 'pesticide':
-                    location = "<?= $this->Html->Url->build(['controller' => 'PesticideSamples', 'action' => 'chartview']); ?>";
+                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
                     break;
                 case 'wqm':
-                    location = "<?= $this->Html->Url->build(['controller' => 'WaterQualitySamples', 'action' => 'chartview']); ?>";
+                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
                     break;
                 default:
                     location = "javascript:void(0);";
@@ -204,16 +203,16 @@
         } else if (actionType === 'tableview') {
             switch (category) {
                 case 'bacteria':
-                    location = "<?= $this->Html->Url->build(['controller' => 'BacteriaSamples', 'action' => 'tableview']); ?>";
+                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
                     break;
                 case 'nutrient':
-                    location = "<?= $this->Html->Url->build(['controller' => 'NutrientSamples', 'action' => 'tableview']); ?>";
+                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
                     break;
                 case 'pesticide':
-                    location = "<?= $this->Html->Url->build(['controller' => 'PesticideSamples', 'action' => 'tableview']); ?>";
+                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
                     break;
                 case 'wqm':
-                    location = "<?= $this->Html->Url->build(['controller' => 'WaterQualitySamples', 'action' => 'tableview']); ?>";
+                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
                     break;
                 default:
                     location = "javascript:void(0);";
@@ -223,12 +222,7 @@
 
         $("#chartSelect").attr("action", location);
     }
-
-
 </script>
 
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>

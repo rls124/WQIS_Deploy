@@ -123,7 +123,6 @@
                     <input type="submit" class="mb-0 ml-4 mt-1 btn btn-basic col-sm" value="Import Data" id="submitFile" name="submitFile" style="height: 43px;" disabled >
 					<img id="loadingIcon" src="..\webroot\img\loading.gif" style="display: block; margin-top: 12px; margin-left: 6px; auto; width: 32px; height: 32px; visibility: hidden;">
                 </div>
-				
 		<?= $this->Form->end() ?>
             </div>
         </div>
@@ -209,12 +208,12 @@
     $("input[type='submit']", this)
       .val("Please Wait...")
       .attr('disabled', 'disabled');
+	
 	$('#loadingIcon').css('visibility', 'visible');
     return true;
   });
 });
 </script>
-
 
 <script>
     $("#entryType").change(function () {
@@ -222,19 +221,19 @@
 	var location;
 	switch (entryType) {
 	    case 'bacteria':
-		location = "<?= $this->Html->Url->build(['controller' => 'BacteriaSamples', 'action' => 'entryform']); ?>";
+		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>";
 		$("#EntryFormBtn").prop('disabled', false);
 		break;
 	    case 'nutrient':
-		location = "<?= $this->Html->Url->build(['controller' => 'NutrientSamples', 'action' => 'entryform']); ?>";
+		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>";
 		$("#EntryFormBtn").prop('disabled', false);
 		break;
 	    case 'pesticide':
-		location = "<?= $this->Html->Url->build(['controller' => 'PesticideSamples', 'action' => 'entryform']); ?>";
+		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>";
 		$("#EntryFormBtn").prop('disabled', false);
 		break;
 	    case 'wqm':
-		location = "<?= $this->Html->Url->build(['controller' => 'WaterQualitySamples', 'action' => 'entryform']); ?>";
+		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>";
 		$("#EntryFormBtn").prop('disabled', false);
 		break;
 	    default:

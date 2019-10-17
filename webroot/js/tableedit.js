@@ -3,7 +3,6 @@
 
 //first we have to run "document ready" because otherwise the page can't access the inputs.
 $(document).ready(function () {
-
     $(".inputHide").on("click", function () {
         var label = $(this);
         var input = $('#' + label.attr('for'));
@@ -46,9 +45,7 @@ $(document).ready(function () {
                 $("#Comments-" + rowNumber).text(value);
             }
         });
-
     });
-
 
     $(".tableInput").focusout(function () {
         var input = $(this);
@@ -79,46 +76,41 @@ $(document).ready(function () {
 
                 if (value === '') {
                     label.text('  ');
-
-                } else {
+                }
+				else {
                     label.text(value);
                 }
             }
         });
-
     });
 
-
-    //For now, for saftey reasons, will make this a double click option.
-    $(".delete").click(function () {
-        var input = $(this);
-        if (!input.attr('id')) {
-            return;
-        }
-        $.confirm("Are you sure you want to delete this record?", function (bool) {
-            if (bool) {
-                var rowNumber = (input.attr('id')).split("-")[1];
-                //get the sample number.
-                var sampleNumber = $('#samplenumber-' + rowNumber).val();
-                //Now send ajax data to a delete script.
-                $.ajax({
-                    type: "POST",
-                    url: "deleteRecord",
-                    datatype: 'JSON',
-                    data: {
-                        'sampleNumber': sampleNumber
-                    },
-                    success: function () {
-                        //document.getElementById("tableView").deleteRow(rowNumber + 1);
-
-                        $.alert("Record deleted.", function () {
-
-                            location.reload();
-                        });
-                    }
-                });
-            }
-        });
-
-    });
+	$(".delete").click(function () {
+		var input = $(this);
+		if (!input.attr('id')) {
+			return;
+		}
+		
+		$.confirm("Are you sure you want to delete this record?", function (bool) {
+			if (bool) {
+				var rowNumber = (input.attr('id')).split("-")[1];
+				var sampleNumber = $('#samplenumber-' + rowNumber).val();
+				
+				//Now send ajax data to a delete script
+				$.ajax({
+					type: "POST",
+					url: "deleteRecord",
+					datatype: 'JSON',
+					data: {
+						'sampleNumber': sampleNumber,
+						'type': sampleType
+					},
+					success: function () {
+						$.alert("Record deleted.", function () {
+							location.reload();
+						});
+					}
+				});
+			}
+		});
+	});
 });
