@@ -6,8 +6,9 @@
 <div class="container roundGreyBox">
     <p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-home" style="font-size:20pt;"></span>  Administrator Panel
         <a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-	    <span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
-	</a></p>
+			<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
+		</a>
+	</p>
     <hr>
 
     <div class="collapse" id="collapseInfo">
@@ -99,9 +100,7 @@
 			'name' => 'fileupload'
 		    ])
 		?>
-                <div class="row"> </div>
-
-				
+                <div class="row"> </div>	
 
                 <div class="row mb-3">
 				
@@ -175,72 +174,40 @@
                 </div>
             </a>
         </div>
-        
     </div>
 </div>
 
 <script>
-    $("#chooseFileButton").change(function () {
-		var location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'uploadlog']); ?>";
-		$("#submitFile").prop('disabled', false);
-		$("#fileupload").attr("action", location);
-    });
-</script>
+$("#entryType").change(function () {
+	$("#EntryFormBtn").prop('disabled', ($(this).val() == "")); //enable the button if any entry form type is selected, disable it otherwise
+});
 
-<script>
-    $(document).ready(function () {
+$("#chooseFileButton").change(function () {
+	//might be good to have a "clear" button for this...
+	$("#submitFile").prop('disabled', false);
+});
+
+$(document).ready(function () {
 	$('#infoGlyph').tooltip();
 	$("input:file").change(function () {
-	    var fileName = $(this).val();
-	    fileName = fileName.replace(/^.*[\\\/]/, '');
+		var fileName = $(this).val();
+		fileName = fileName.replace(/^.*[\\\/]/, '');
 		document.getElementById("FileUploadLabel").style.color = "black";
-	    $("#FileUploadLabel").html(fileName);
-	    checkSubmitFileBtn();
+		$("#FileUploadLabel").html(fileName);
 	});
-    });
-
-
-</script>
-
-<script>
-	$(function(){
-	$('#fileupload').submit(function(){
-    $("input[type='submit']", this)
-      .val("Please Wait...")
-      .attr('disabled', 'disabled');
 	
-	$('#loadingIcon').css('visibility', 'visible');
-    return true;
-  });
+	$("#entryForm").attr("action", "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>");
+	$("#fileupload").attr("action", "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'uploadlog']); ?>");
 });
-</script>
 
-<script>
-    $("#entryType").change(function () {
-	var entryType = $(this).val();
-	var location;
-	switch (entryType) {
-	    case 'bacteria':
-		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>";
-		$("#EntryFormBtn").prop('disabled', false);
-		break;
-	    case 'nutrient':
-		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>";
-		$("#EntryFormBtn").prop('disabled', false);
-		break;
-	    case 'pesticide':
-		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>";
-		$("#EntryFormBtn").prop('disabled', false);
-		break;
-	    case 'wqm':
-		location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'entryform']); ?>";
-		$("#EntryFormBtn").prop('disabled', false);
-		break;
-	    default:
-		location = "javascript:void(0);";
-		$("#EntryFormBtn").prop('disabled', true);
-		break;
-	}
-	$("#entryForm").attr("action", location);
-    });
+$(function(){
+	$('#fileupload').submit(function(){
+		$("input[type='submit']", this)
+			.val("Please Wait...")
+			.attr('disabled', 'disabled');
+	
+		$('#loadingIcon').css('visibility', 'visible');
+		return true;
+	});
+});
 </script>
