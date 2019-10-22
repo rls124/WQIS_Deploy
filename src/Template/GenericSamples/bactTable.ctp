@@ -12,7 +12,7 @@
         <tbody>
 	    <?php
 		$row = 0;
-		foreach ($bacteriaSamples as $bacteriaSample):
+		foreach ($samples as $bacteriaSample):
 		    ?>
 		    <tr>
 	    		<td>

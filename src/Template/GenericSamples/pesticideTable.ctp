@@ -11,7 +11,7 @@
         <tbody>
 	    <?php
 		$row = 0;
-		foreach ($pesticideSamples as $pesticideSample):
+		foreach ($samples as $pesticideSample):
 		    ?>
 		    <tr>
 	    		<td>

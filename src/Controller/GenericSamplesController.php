@@ -1,192 +1,85 @@
 <?php
-
     namespace App\Controller;
 
     use App\Controller\AppController;
 
     class GenericSamplesController extends AppController {
-		
+	
 	public function tableview() {
-		//get type of table from post data
-		if ($_POST["categorySelect"] == "bacteria") {
-			$this->loadModel('BacteriaSamples');
-			//checks to see if this had POST data
-			if ($this->request->getData()) {
-				//set all relevant POST data to variables
-				$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
-				$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
-				$site = $this->request->getData('site');
-				
-				//write POST data into session
-				$this->request->getSession()->write([
-					'startdate' => $startdate,
-					'enddate' => $enddate,
-					'site' => $site,
-					'tableType' => 'bacteria'
-				]);
-			}
-		
-			$bacteriaSamples = $this->paginate(
-			$this->BacteriaSamples->find('all', [
-				'conditions' => [
-				'and' => [
-					'site_location_id' => $site,
-					[
-					'BacteriaSamples.Date >=' => $startdate,
-					'BacteriaSamples.Date <= ' => $enddate
-					]
-				]
-				]
-			])->order(['Date' => 'Desc'])
-			);
-			
-			//get the info about the site number
-			$siteLocation = $this->BacteriaSamples->SiteLocations->find('all', [
-				'conditions' => [
-				'Site_number' => $site
-				]
-			])->first();
-			$this->set(compact('siteLocation'));
-			$this->set(compact('bacteriaSamples'));
-			$this->set('_serialize', ['bacteriaSamples']);
-			$this->set('sampleType', "bacteria");
+		//checks to see if this had POST data
+		if (!($this->request->getData())) {
+			return;
 		}
-		else if ($_POST["categorySelect"] == "nutrient") {
+		
+		//get type of table from post data
+		$type = $_POST["categorySelect"];
+		
+		if ($type == "bacteria") {
+			$this->loadModel('BacteriaSamples');
+			
+			$modelName = "BacteriaSamples";
+			$modelBare = $this->BacteriaSamples;
+		}
+		else if ($type == "nutrient") {
 			$this->loadModel('NutrientSamples');
 			
-			//checks to see if this had POST data
-			if ($this->request->getData()) {
-				//set all relevant POST data to variables
-				$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
-				$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
-				$site = $this->request->getData('site');
-				
-				//Write POST data into session
-				$this->request->session()->write([
-					'startdate' => $startdate,
-					'enddate' => $enddate,
-					'site' => $site,
-					'tableType' => 'nutrient'
-				]);
-			}
-			
-			//find all samples found at the site between the date ranges
-			$nutrientSamples = $this->paginate(
-			$this->NutrientSamples->find('all', [
-				'conditions' => [
-				'and' => [
-					'site_location_id' => $site,
-					[
-					'NutrientSamples.Date >=' => $startdate,
-					'NutrientSamples.Date <= ' => $enddate
-					]
-				]
-				]
-			])->order(['Date' => 'Desc'])
-			);
-			
-			//get the info about the site number
-			$siteLocation = $this->NutrientSamples->SiteLocations->find('all', [
-				'conditions' => [
-				'Site_number' => $site
-				]
-			])->first();
-			$this->set(compact('siteLocation'));
-			$this->set(compact('nutrientSamples'));
-			$this->set('_serialize', ['nutrientSamples']);
-			$this->set('sampleType', "nutrient");
+			$modelName = "NutrientSamples";
+			$modelBare = $this->NutrientSamples;
 		}
-		else if ($_POST["categorySelect"] == "pesticide") {
+		else if ($type == "pesticide") {
 			$this->loadModel('PesticideSamples');
 			
-			//checks to see if this had POST data
-			if ($this->request->getData()) {
-				//set all relevant POST data to variables
-				$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
-				$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
-				$site = $this->request->getData('site');
-			
-				//write POST data into session
-				$this->request->session()->write([
-					'startdate' => $startdate,
-					'enddate' => $enddate,
-					'site' => $site,
-					'tableType' => 'pesticide'
-				]);
-			}
-			
-			//Find all samples found at the site between the date ranges
-			$pesticideSamples = $this->paginate(
-			$this->PesticideSamples->find('all', [
-				'conditions' => [
-				'and' => [
-					'site_location_id' => $site,
-					[
-					'PesticideSamples.Date >=' => $startdate,
-					'PesticideSamples.Date <= ' => $enddate
-					]
-				]
-				]
-			])->order(['Date' => 'Desc'])
-			);
-			
-			//get the info about the site number
-			$siteLocation = $this->PesticideSamples->SiteLocations->find('all', [
-				'conditions' => [
-				'Site_number' => $site
-				]
-			])->first();
-			$this->set(compact('siteLocation'));
-			$this->set(compact('pesticideSamples'));
-			$this->set('_serialize', ['pesticideSamples']);
-			$this->set('sampleType', "pesticide");
+			$modelName = "PesticideSamples";
+			$modelBare = $this->PesticideSamples;
 		}
-		elseif ($_POST["categorySelect"] == "wqm") {
+		elseif ($type == "wqm") {
 			$this->loadModel('WaterQualitySamples');
-			//Checks to see if this had POST data
-			if ($this->request->getData()) {
-				//set all relevant POST data to variables
-				$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
-				$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
-				$site = $this->request->getData('site');
 			
-				//write POST data into session
-				$this->request->session()->write([
-					'startdate' => $startdate,
-					'enddate' => $enddate,
-					'site' => $site,
-					'tableType' => 'wqm'
-				]);
-			}
-			//Find all samples found at the site between the date ranges
-			$wqmSamples = $this->paginate(
-			$this->WaterQualitySamples->find('all', [
-				'conditions' => [
-				'and' => [
-					'site_location_id' => $site,
-					[
-					'WaterQualitySamples.Date >=' => $startdate,
-					'WaterQualitySamples.Date <= ' => $enddate
-					]
-				]
-				]
-			])->order(['Date' => 'Desc'])
-			);
-	    
-			//Get the info about the site number
-			$siteLocation = $this->WaterQualitySamples->SiteLocations->find('all', [
-				'conditions' => [
-				'Site_number' => $site
-				]
-			])->first();
-			$this->set(compact('siteLocation'));
-			$this->set(compact('wqmSamples'));
-			$this->set('_serialize', ['wqmSamples']);
-			$this->set('sampleType', "wqm");
+			$modelName = "WaterQualitySamples";
+			$modelBare = $this->WaterQualitySamples;
 		}
 		else {
-			$this->log("Posted " . $_POST["categorySelect"], 'debug');
+			$this->log("Posted " . $type, 'debug');
+			return;
 		}
+		
+		//set all relevant POST data to variables
+		$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
+		$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
+		$site = $this->request->getData('site');
+			
+		//write POST data into session
+		$this->request->getSession()->write([
+			'startdate' => $startdate,
+			'enddate' => $enddate,
+			'site' => $site,
+			'tableType' => $type
+		]);
+		
+		$samples = $this->paginate(
+		$modelBare->find('all', [
+			'conditions' => [
+			'and' => [
+				'site_location_id' => $site,
+				[
+				$modelName . '.Date >=' => $startdate,
+				$modelName . '.Date <= ' => $enddate
+				]
+			]
+			]
+		])->order(['Date' => 'Desc'])
+		);
+		
+		//get the info about the site number
+		$siteLocation = $modelBare->SiteLocations->find('all', [
+			'conditions' => [
+			'Site_number' => $site
+			]
+		])->first();
+		$this->set(compact('siteLocation'));
+		$this->set(compact('samples'));
+		$this->set('_serialize', ['samples']);
+		$this->set('sampleType', $type);
 	}
 
 	public function uploadlog() {
@@ -261,8 +154,6 @@
 		use column header names from the CSV to determine which type of file is being uploaded
 		rather complicated because we have to not only check which type of file it is, but also make sure that *all* required columns are present and *no* extras are.
 		which itself is complicated by the existence of multiple different formats in the sample/export files we're looking at. So check all of the valid options
-	
-		many of these entries will disappear once we obsolete the exception columns
 		*/
 		
 		$headerRow = $csv[0];
@@ -423,278 +314,126 @@
 		
 		if ($_POST["type"] == "bacteria") {
 			$this->loadModel('BacteriaSamples');
-			
-			//Get the sample we are deleting
-			$bacteriaSample = $this->BacteriaSamples
-				->find('all')
-				->where(['Sample_Number = ' => $sampleNumber])
-				->first();
-			
-			//delete it
-			$this->BacteriaSamples->delete($bacteriaSample);
+			$modelBare = $this->BacteriaSamples;
 		}
 		elseif ($_POST["type"] == "nutrient") {
 			$this->loadModel('NutrientSamples');
-			
-			//Get the sample we are deleting
-			$nutrientSample = $this->NutrientSamples
-				->find('all')
-				->where(['Sample_Number = ' => $sampleNumber])
-				->first();
-				
-			//Delete it
-			$this->NutrientSamples->delete($nutrientSample);
+			$modelBare = $this->NutrientSamples;
 		}
 		elseif ($_POST["type"] == "pesticide") {
 			$this->loadModel('PesticideSamples');
-			
-			//Get the sample we are deleting
-			$pesticideSample = $this->PesticideSamples
-				->find('all')
-				->where(['Sample_Number = ' => $sampleNumber])
-				->first();
-				
-			//Delete it
-			$this->PesticideSamples->delete($pesticideSample);
+			$modelBare = $this->PesticideSamples;
 		}
 		elseif ($_POST["type"] == "wqm") {
 			$this->loadModel('WaterQualitySamples');
-			
-			//Get the sample we are deleting
-			$waterQualitySample = $this->WaterQualitySamples
-				->find('all')
-				->where(['Sample_Number = ' => $sampleNumber])
-				->first();
-			
-			//Delete it
-			$this->WaterQualitySamples->delete($waterQualitySample);
+			$modelBare = $this->WaterQualitySamples;
 		}
+		
+		//Get the sample we are deleting
+		$sample = $modelBare
+			->find('all')
+			->where(['Sample_Number = ' => $sampleNumber])
+			->first();
+		
+		//delete it
+		$modelBare->delete($sample);
 	}
 
 	public function entryform() {
 		if (isset($_POST["ecolirawcount-0"]) || $_POST["entryType"] == "bacteria") { //should return true either if we're trying to go to the entry form, or already submitted from it. Need to clean this up later
 			$this->loadModel('BacteriaSamples');
 			
-			$bacteriaSample = $this->BacteriaSamples->newEntity();
-			//Check if the request is post, and the request has at least one sample
-			if ($this->request->is('post') && $this->request->getData('site_location_id-0')) {
-				$successes = 0;
-				$fails = 0;
-				$failsDetailed = "";
-				//Get the total rows submitted
-				$rows = $this->request->getData('totalrows');
-				//All of the columns that will be filled upon submission
-				$columns = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount',
-					'Ecoli', 'EcoliException', 'TotalColiformRawCount', 'TotalColiform', 'ColiformException', 'Comments');
-				
-				//rows start at number 0, meaning we have to include the amount
-				for ($i = 0; $i <= $rows; $i++) {
-					$rowData = [];
-					//Go through each column and find the postdata name that is associated
-					for ($col = 0; $col < sizeof($columns); $col++) {
-						$requestField = "";
-
-						if ($columns[$col] !== 'Date') {
-							$requestField = strtolower($columns[$col]) . "-" . $i;
-						}
-						else {
-							$requestField = $columns[$col];
-						}
-						$rowData[$columns[$col]] = $this->request->getData($requestField);
-					}
-				
-					//Create the entity to save
-					$bacteriaSample = $this->BacteriaSamples->patchEntity($this->BacteriaSamples->newEntity(), $rowData);
-					if ($this->BacteriaSamples->save($bacteriaSample)) {
-						$successes++;
-					}
-					else {
-						$fails++;
-						$failsDetailed .= $rowData['Sample_Number'] . ', ';
-					}
-				}
-				if ($successes) {
-					$this->Flash->success(__($successes . ' bacteria sample(s) has been saved.'));
-				}
-				if ($fails) {
-					$this->Flash->error(__($fails . ' bacteria sample(s) could not be saved. Failure on number(s): ' . substr($failsDetailed, 0, strlen($failsDetailed) - 2)));
-				}
-			}
+			$name = "bacteria";
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount',
+				'Ecoli', 'EcoliException', 'TotalColiformRawCount', 'TotalColiform', 'ColiformException', 'Comments');
 			
-			$siteLocations = $this->BacteriaSamples->SiteLocations->find('all');
-			$this->set(compact('bacteriaSample', 'siteLocations'));
-			$this->set('_serialize', ['bacteriaSample']);
-
-			$rawCount = [];
-			for ($i = 0; $i <= 51; $i++) {
-				$rawCount[] = $i;
-			}
-			$this->set(compact('rawCount'));
+			$modelBare = $this->BacteriaSamples;
 		}
 		elseif (isset($_POST["phosphorus-0"]) || $_POST["entryType"] == "nutrient") { //nutrient form or form submission
 			$this->loadModel('NutrientSamples');
 			
-			$nutrientSample = $this->NutrientSamples->newEntity();
-			//check if the request is post, and the request has at least one sample
-			if ($this->request->is('post') && $this->request->getData('site_location_id-0')) {
-				$successes = 0;
-				$fails = 0;
-				$failsDetailed = "";
-				//Get the total rows submitted
-				$rows = $this->request->getData('totalrows');
-				//All of the columns that will be filled upon submission
-				$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus',
-					'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Comments');
-				
-				//rows start at number 0, meaning we have to include the amount
-				for ($i = 0; $i <= $rows; $i++) {
-					$rowData = [];
-					//Go through each column and find the postdata name that is associated
-					for ($col = 0; $col < sizeof($columns); $col++) {
-						$requestField = "";
-						if ($columns[$col] !== 'Date') {
-							$requestField = strtolower($columns[$col]) . "-" . $i;
-						}
-						else {
-							$requestField = $columns[$col];
-						}
-						$rowData[$columns[$col]] = $this->request->getData($requestField);
-					}
-					//Create the entity to save
-					$nutrientSample = $this->NutrientSamples->patchEntity($this->NutrientSamples->newEntity(), $rowData);
-					if ($this->NutrientSamples->save($nutrientSample)) {
-						$successes++;
-					}
-					else {
-						$fails++;
-						$failsDetailed .= $rowData['Sample_Number'] . ', ';
-					}
-				}
-	
-				if ($successes) {
-					$this->Flash->success(__($successes . ' nutrient sample(s) has been saved.'));
-				}
-				if ($fails) {
-					$this->Flash->error(__($fails . ' nutrient sample(s) could not be saved. Failure on number(s): ' . substr($failsDetailed, 0, strlen($failsDetailed) - 2)));
-				}
-			}
-			$siteLocations = $this->NutrientSamples->SiteLocations->find('all');
-			$this->set(compact('nutrientSample', 'siteLocations'));
-			$this->set('_serialize', ['nutrientSample']);
+			$name = "nutrient";
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus',
+				'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Comments');
+			
+			$modelBare = $this->NutrientSamples;
 		}
 		elseif (isset($_POST["atrazine-0"]) || $_POST["entryType"] == "pesticide") { //pesticide form or form submission
 			$this->loadModel('PesticideSamples');
-		
-			$pesticideSample = $this->PesticideSamples->newEntity();
-			//Check if the request is post, and the request has at least one sample
-			if ($this->request->is('post') && $this->request->getData('site_location_id-0')) {
-				$successes = 0;
-				$fails = 0;
-				$failsDetailed = "";
-				//Get the total rows submitted
-				$rows = $this->request->getData('totalrows');
-				//All of the columns that will be filled upon submission
-				$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine',
-					'AltrazineException', 'Alachlor', 'AlachlorException', 'Metolachlor', 'MetolachlorException', 'Comments');
-				
-				//rows start at number 0, meaning we have to include the amount
-				for ($i = 0; $i <= $rows; $i++) {
-					$rowData = [];
-					//Go through each column and find the postdata name that is associated
-					for ($col = 0; $col < sizeof($columns); $col++) {
-						$requestField = "";
-						if ($columns[$col] !== 'Date') {
-							$requestField = strtolower($columns[$col]) . "-" . $i;
-						}
-						else {
-							$requestField = $columns[$col];
-						}
-						
-						$rowData[$columns[$col]] = $this->request->getData($requestField);
-					}
-					//Create the entity to save
-					$pesticideSample = $this->PesticideSamples->patchEntity($this->PesticideSamples->newEntity(), $rowData);
-					if ($this->PesticideSamples->save($pesticideSample)) {
-						$successes++;
-					} else {
-						$fails++;
-						$failsDetailed .= $rowData['Sample_Number'] . ', ';
-					}
-				}
-
-				if ($successes) {
-					$this->Flash->success(__($successes . ' pesticide sample(s) has been saved.'));
-				}
-				if ($fails) {
-					$this->Flash->error(__($fails . ' pesticide sample(s) could not be saved. Failure on number(s): ' . substr($failsDetailed, 0, strlen($failsDetailed) - 2)));
-				}
-			}
 			
-			$siteLocations = $this->PesticideSamples->SiteLocations->find('all');
-			$this->set(compact('pesticideSample', 'siteLocations'));
-			$this->set('_serialize', ['pesticideSample']);
+			$name = "pesticide";
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine',
+				'AltrazineException', 'Alachlor', 'AlachlorException', 'Metolachlor', 'MetolachlorException', 'Comments');
+			
+			$modelBare = $this->PesticideSamples;
 		}
 		elseif (isset($_POST["ph-0"]) || $_POST["entryType"] == "wqm") { //water quality form or form submission
 			$this->loadModel('WaterQualitySamples');
 			
-			$waterQualitySample = $this->WaterQualitySamples->newEntity();
-			//Check if the request is post, and the request has at least one sample
-			if ($this->request->is('post') && $this->request->getData('site_location_id-0')) {
-				$successes = 0;
-				$fails = 0;
-				$failsDetailed = "";
-				//Get the total rows submitted
-				$rows = $this->request->getData('totalrows');
-				//All of the columns that will be filled upon submission
-				$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Water_Temp',
-					'Water_Temp_Exception', 'pH', 'pH_Exception', 'Conductivity', 'Conductivity_Exception', 'TDS',
-					'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value',
-					'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
-				//rows start at number 0, meaning we have to include the amount.
-				for ($i = 0; $i <= $rows; $i++) {
-					$rowData = [];
-					//Go through each column and find the postdata name that is associated
-					for ($col = 0; $col < sizeof($columns); $col++) {
-						$requestField = "";
-						if ($columns[$col] !== 'Date') {
-							$requestField = strtolower($columns[$col]) . "-" . $i;
-						}
-						else {
-							$requestField = $columns[$col];
-						}
-						$rowData[$columns[$col]] = $this->request->getData($requestField);
-					}
-					
-					//create the entity to save
-					$waterQualitySample = $this->WaterQualitySamples->patchEntity($this->WaterQualitySamples->newEntity(), $rowData);
+			$name = "waterQualitySample";
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Water_Temp',
+				'Water_Temp_Exception', 'pH', 'pH_Exception', 'Conductivity', 'Conductivity_Exception', 'TDS',
+				'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value',
+				'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+			
+			$modelBare = $this->WaterQualitySamples;
+		}
+		
+		$rows = $this->request->getData('totalrows');
+		$request = $this->request;
+		
+		$sample = $modelBare->newEntity();
+		
+		//check if the request is post, and the request has at least one sample
+		if ($request->is('post') && $request->getData('site_location_id-0')) {
+			$successes = 0;
+			$fails = 0;
+			$failsDetailed = "";
+			
+			//rows start at number 0, meaning we have to include the amount
+			for ($i = 0; $i <= $rows; $i++) {
+				$rowData = [];
+				
+				//go through each column and find the postdata name that is associated
+				for ($col = 0; $col < sizeof($columns); $col++) {
+					$requestField = "";
 
-					if ($this->WaterQualitySamples->save($waterQualitySample)) {
-						$successes++;
+					if ($columns[$col] !== 'Date') {
+						$requestField = strtolower($columns[$col]) . "-" . $i;
 					}
 					else {
-						$fails++;
-						$failsDetailed .= $rowData['Sample_Number'] . ', ';
+						$requestField = $columns[$col];
 					}
+					$rowData[$columns[$col]] = $request->getData($requestField);
 				}
-
-				if ($successes) {
-					$this->Flash->success(__($successes . ' water quality meter sample(s) has been saved.'));
+			
+				//create the entity to save
+				$sample = $modelBare->patchEntity($modelBare->newEntity(), $rowData);
+				if ($modelBare->save($sample)) {
+					$successes++;
 				}
-				if ($fails) {
-					$this->Flash->error(__($fails . ' water quality meter sample(s) could not be saved. Failure on number(s): ' . substr($failsDetailed, 0, strlen($failsDetailed) - 2)));
+				else {
+					$fails++;
+					$failsDetailed .= $rowData['Sample_Number'] . ', ';
 				}
 			}
-	
-			$siteLocations = $this->WaterQualitySamples->SiteLocations->find('all');
-			$this->set(compact('waterQualitySample', 'siteLocations'));
-			$this->set('_serialize', ['waterQualitySample']);
+			if ($successes) {
+				$this->Flash->success(__($successes . ' ' . $name . ' sample(s) has been saved.'));
+			}
+			if ($fails) {
+				$this->Flash->error(__($fails . ' ' . $name . ' sample(s) could not be saved. Failure on number(s): ' . substr($failsDetailed, 0, strlen($failsDetailed) - 2)));
+			}
 		}
 		
-		else {
-			//just for testing purposes
-			$this->log("request: " . print_r($_POST, true), 'debug');
+		$siteLocations = $modelBare->SiteLocations->find('all');
+		$this->set(compact('sample', 'siteLocations'));
+		$this->set('_serialize', ['sample']);
+
+		$rawCount = [];
+		for ($i = 0; $i <= 51; $i++) {
+			$rawCount[] = $i;
 		}
-		
+		$this->set(compact('rawCount'));
 		
 		if (isset($_POST["entryType"])) {
 			$this->set('formType', $_POST["entryType"]);
@@ -702,8 +441,6 @@
 	}
 
 	public function updatefield() {
-		$this->log("request: " . print_r($_POST, true), 'debug');
-		
 		$this->render(false);
 		
 		//Ensure sample number data was included
@@ -717,56 +454,30 @@
 		
 		if ($_POST["parameter"] == "EcoliRawCount" || $_POST["parameter"] == "Ecoli" || $_POST["parameter"] == "TotalColiformRawCount" || $_POST["parameter"] == "TotalColiform") { //bacteria
 			$this->loadModel('BacteriaSamples');
-			
-			//Get the sample we are editing
-			$bacteriaSample = $this->BacteriaSamples
-				->find('all')
-				->where(['Sample_Number = ' => $sampleNumber])
-				->first();
-			//Set the edited field
-			$bacteriaSample->$parameter = $value;
-			//Save changes
-			$this->BacteriaSamples->save($bacteriaSample);
+			$modelBare = $this->BacteriaSamples;
 		}
 		elseif ($_POST["parameter"] == "NitrateNitrite" || $_POST["parameter"] == "Phosphorus" || $_POST["parameter"] == "DRP") { //nutrient
 			$this->loadModel('NutrientSamples');
-		
-			//Get the sample we are editing
-			$nutrientSample = $this->NutrientSamples
-				->find('all')
-				->where(['Sample_Number = ' => $sampleNumber])
-				->first();
-			//Set the edited field
-			$nutrientSample->$parameter = $value;
-			//Save changes
-			$this->NutrientSamples->save($nutrientSample);
+			$modelBare = $this->NutrientSamples;
 		}
 		elseif ($_POST["parameter"] == "Atrazine" || $_POST["parameter"] == "Alachlor" || $_POST["parameter"] == "Metolachlor") { //pesticide
 			$this->loadModel('PesticideSamples');
-		
-			//Get the sample we are editing
-			$pesticideSample = $this->PesticideSamples
-				->find('all')
-				->where(['Sample_Number = ' => $sampleNumber])
-				->first();
-			//Set the edited field
-			$pesticideSample->$parameter = $value;
-			//Save changes
-			$this->PesticideSamples->save($pesticideSample);
+			$modelBare = $this->PesticideSamples;
 		}
 		elseif ($_POST["parameter"] == "Conductivity" || $_POST["parameter"] == "DO" || $_POST["parameter"] == "pH" || $_POST["parameter"] == "Water_Temp" || $_POST["parameter"] == "TDS" || $_POST["parameter"] == "Turbidity") { //water quality
 			$this->loadModel('WaterQualitySamples');
-			
-			//Get the sample we are editing
-			$waterQualitySample = $this->WaterQualitySamples
-				->find('all')
-				->where(['Sample_Number = ' => $sampleNumber])
-				->first();
-			//Set the edited field
-			$waterQualitySample->$parameter = $value;
-			//Save changes
-			$this->WaterQualitySamples->save($waterQualitySample);
+			$modelBare = $this->WaterQualitySamples;
 		}
+		
+		//Get the sample we are editing
+		$sample = $modelBare
+			->find('all')
+			->where(['Sample_Number = ' => $sampleNumber])
+			->first();
+		//Set the edited field
+		$sample->$parameter = $value;
+		//Save changes
+		$modelBare->save($sample);
 	}
 
 	public function chartView() {

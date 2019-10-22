@@ -1,5 +1,5 @@
 <div class="container-fluid roundGreyBox">
-	<?= $this->Form->create($bacteriaSample) ?>
+	<?= $this->Form->create($sample) ?>
     <fieldset>
 
         <p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  Bacteria Entry Form
@@ -58,7 +58,6 @@
                                     <option value="" selected="selected">Site</option>
 									<?php
 										foreach ($siteLocations as $siteLocation) {
-
 											$siteNumber = $this->Number->format($siteLocation->Site_Number);
 											$siteName = h($siteLocation->Site_Name);
 											$siteLocation = h($siteLocation->Site_Location);
@@ -80,7 +79,6 @@
 								])
 							?>
                             <td>
-
 								<?=
 									$this->Form->select('ecolirawcount-0', $rawCount, [
 										'id' => 'ecolirawcount-0',
@@ -88,7 +86,6 @@
 										'class' => 'form-control entryControl entryDropDown'
 									])
 								?>
-
                             </td>
 							<?=
 								$this->Form->control('ecoli-0', [

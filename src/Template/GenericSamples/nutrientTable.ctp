@@ -11,7 +11,7 @@
         <tbody>
 	    <?php
 		$row = 0;
-		foreach ($nutrientSamples as $nutrientSample):
+		foreach ($samples as $nutrientSample):
 		    ?>
 		    <tr>
 	    		<td><?=

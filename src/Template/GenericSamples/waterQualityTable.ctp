@@ -14,7 +14,7 @@
         <tbody>
 	    <?php
 		$row = 0;
-		foreach ($wqmSamples as $wqmSample):
+		foreach ($samples as $wqmSample):
 		    ?>
 		    <tr>
 	    		<td>
