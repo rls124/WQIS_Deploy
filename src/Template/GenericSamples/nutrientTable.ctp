@@ -5,6 +5,7 @@
                 <th>Nitrate/Nitrite (mg/L)</th>
                 <th>Total Phosphorus (mg/L)</th>
                 <th>Dissolved Reactive Phosphorus (mg/L)</th>
+				<th>Ammonia (mg/L)</th>
 			<th>Actions</th>
             </tr>
         </thead>
@@ -78,6 +79,21 @@
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
 					'text' => $nutrientSample->DRP . ' '
+				    ]
+				])
+				?>
+	    		</td>
+				
+				<td><?=
+				$this->Form->control('Ammonia-' . $row, ['maxlength' => '5',
+				    'size' => '5',
+				    'class' => 'inputfields tableInput',
+				    'value' => $nutrientSample->Ammonia,
+				    'style' => 'display: none',
+				    'label' => [
+					'style' => 'display: in-line; cursor: pointer',
+					'class' => 'btn btn-thin inputHide',
+					'text' => $nutrientSample->Ammonia . ' '
 				    ]
 				])
 				?>

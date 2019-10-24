@@ -110,7 +110,7 @@
 			else if ($fileType == 2) {
 				//nutrient
 				$this->loadModel('NutrientSamples');
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Comments');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Ammonia', 'Comments');
 				$columnText = array("Site Number", "Date", "Sample number", "Phosphorus (mg/L)", "Nitrate/Nitrite (mg/L)", "Dissolved Reactive Phosphorus", "Comments");
 				GenericSamplesController::uploadGeneric($columnIDs, $columnText, $csv, $this->NutrientSamples);
 				
@@ -180,6 +180,7 @@
 			array("nh3-n", "nitrate nitrite", "nitrate_nitrite", "nitratenitrite"),
 			array("nh3-n exception", "nh3-n_exception", "nh3-nexception", "nitrate nitrite exception", "nitrate_nitrite_exception", "nitratenitriteexception"),
 			array("drp"),
+			array("ammonia"),
 			array("comments"),
 		);
 		
@@ -354,7 +355,7 @@
 			
 			$name = "nutrient";
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus',
-				'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Comments');
+				'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Ammonia', 'Comments');
 			
 			$modelBare = $this->NutrientSamples;
 		}
@@ -456,7 +457,7 @@
 			$this->loadModel('BacteriaSamples');
 			$modelBare = $this->BacteriaSamples;
 		}
-		elseif ($_POST["parameter"] == "NitrateNitrite" || $_POST["parameter"] == "Phosphorus" || $_POST["parameter"] == "DRP") { //nutrient
+		elseif ($_POST["parameter"] == "NitrateNitrite" || $_POST["parameter"] == "Phosphorus" || $_POST["parameter"] == "DRP" || $_POST["parameter"] == "Ammonia") { //nutrient
 			$this->loadModel('NutrientSamples');
 			$modelBare = $this->NutrientSamples;
 		}
@@ -467,6 +468,10 @@
 		elseif ($_POST["parameter"] == "Conductivity" || $_POST["parameter"] == "DO" || $_POST["parameter"] == "pH" || $_POST["parameter"] == "Water_Temp" || $_POST["parameter"] == "TDS" || $_POST["parameter"] == "Turbidity") { //water quality
 			$this->loadModel('WaterQualitySamples');
 			$modelBare = $this->WaterQualitySamples;
+		}
+		
+		else {
+			$this->log("request: " . print_r($_POST, true), 'debug');
 		}
 		
 		//Get the sample we are editing
@@ -551,7 +556,7 @@
 			$response->body(json_encode([$bacteriaSamples, $threshold]));
 			return $response;
 		}
-		elseif ($_POST["measure"] == "nitrateNitrite" || $_POST["measure"] == "phosphorus" || $_POST["measure"] == "drp") { //nutrient
+		elseif ($_POST["measure"] == "nitrateNitrite" || $_POST["measure"] == "phosphorus" || $_POST["measure"] == "drp" || $_POST["measure"] == "ammonia") { //nutrient
 			$this->loadModel('NutrientSamples');
 
 			//Set the name of the measure
@@ -565,6 +570,8 @@
 			case 'drp':
 				$thresMeasure = 'Dissolved Reactive Phosphorus (mg/L)';
 				break;
+			case 'ammonia':
+				$thresMeasure = 'Ammonia (mg/L)';
 			default:
 				$thresMeasure = $measure;
 				break;

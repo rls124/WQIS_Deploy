@@ -16,6 +16,7 @@
      * @property float $NitrateNitrite
      * @property int $NitrateNitriteException
      * @property float $DRP
+	 * @property float $Ammonia
      * @property string $Comments
      *
      * @property \App\Model\Entity\SiteLocation $site_location
@@ -40,6 +41,7 @@
             'NitrateNitrite' => true,
             'NitrateNitriteException' => true,
             'DRP' => true,
+			'Ammonia' => true,
             'Comments' => true,
             'site_location' => true
         ];
@@ -47,5 +49,4 @@
         protected function _setDate($date) {
             return date('Y-m-d', strtotime($date));
         }
-
     }

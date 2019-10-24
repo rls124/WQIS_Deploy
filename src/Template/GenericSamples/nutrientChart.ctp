@@ -45,7 +45,8 @@
 				echo($this->Form->select('measurementSelect', [
 					'nitrateNitrite' => 'Nitrate/Nitrite (mg/L)',
 					'phosphorus' => 'Total Phosphorus (mg/L)',
-					'drp' => 'Dissolved Reactive Phosphorus (mg/L)'
+					'drp' => 'Dissolved Reactive Phosphorus (mg/L)',
+					'ammonia' => 'Ammonia (mg/L)'
 					], [
 					'label' => 'Measurement',
 					'id' => 'measurementSelect',

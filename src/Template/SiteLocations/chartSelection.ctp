@@ -8,7 +8,7 @@
 <?= $this->Html->css('chartSelection.css') ?>
 
 <div class="container roundGreyBox">
-    <?= $this->Form->create('chartselection', ['url' => ['controller' => 'BacteriaSamples', 'action' => 'tableview'], 'id' => 'chartSelect']) ?>
+    <?= $this->Form->create('chartselection', ['url' => ['controller' => 'GenericSamples', 'action' => 'tableview'], 'id' => 'chartSelect']) ?>
     <fieldset>
         <h3 class="pt-3 centeredText">Collection Site</h3>
         <hr>
@@ -17,10 +17,7 @@
 
             <?php
                 //This is for populating the site drop down box.
-
-
                 foreach ($siteLocations as $siteLocation) {
-
                     $siteNumber = $this->Number->format($siteLocation->Site_Number);
                     $siteName = h($siteLocation->Site_Name);
                     $siteLocation = h($siteLocation->Site_Location);
@@ -225,4 +222,4 @@
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+/<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>

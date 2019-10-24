@@ -1,4 +1,3 @@
-
 function changeMeasures() {
     dropMeasures();
     var chosenMeasure = document.getElementById('categorySelect');
@@ -7,7 +6,8 @@ function changeMeasures() {
     var nutrientData = {'select': ['Select a measure'],
         'nitrateNitrite': ['Nitrate/Nitrite (mg/L)'],
         'phosphorus': ['Total Phosphorus (mg/L)'],
-        'drp': ['Dissolved Reactive Phosphorus (mg/L)']};
+        'drp': ['Dissolved Reactive Phosphorus (mg/L)'],
+		'ammonia': ['Ammonia (mg/L)']};
     var pesticideData = {'select': ['Select a measure'],
         'alachlor': ['Alachlor (µg/L)'],
         'atrazine': ['Atrazine (µg/L)'],

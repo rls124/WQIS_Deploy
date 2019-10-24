@@ -232,7 +232,7 @@
 					"order by site_location_id";
 				$bactDateAndData = $connection->execute($bactQuery)->fetchAll('assoc');
 
-				$nutrientQuery = "SELECT max(Date) as 'Date', site_location_id, Phosphorus, NitrateNitrite, DRP " .
+				$nutrientQuery = "SELECT max(Date) as 'Date', site_location_id, Phosphorus, NitrateNitrite, DRP, Ammonia " .
 					"FROM nutrient_samples " .
 					"group by site_location_id " .
 					"order by site_location_id";

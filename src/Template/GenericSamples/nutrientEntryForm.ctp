@@ -47,6 +47,7 @@
                             <th>Nitrate/Nitrite<br>(mg/L)</th>
                             <th>Total Phosphorus<br>(mg/L)</th>
                             <th>Dissolved Reactive Phosphorus<br>(mg/L)</th>
+							<th>Ammonia<br>(mg/L)</th>
                             <th>Comments</th>
                             <th>Actions</th>
                         </tr>
@@ -101,6 +102,16 @@
 							?>
 							<?=
 								$this->Form->control('drp-0', [
+									'templates' => [
+										'inputContainer' => '<td>{{content}}</td>',
+										'label' => false
+									],
+									'type' => 'number',
+									'class' => 'form-control entryControl'
+								])
+							?>
+							<?=
+								$this->Form->control('ammonia-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false

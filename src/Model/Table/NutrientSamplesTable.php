@@ -81,6 +81,10 @@
             $validator
                 ->decimal('DRP')
                 ->allowEmpty('DRP');
+				
+			$validator
+				->decimal('Ammonia')
+				->allowEmpty('Ammonia');
 
             $validator
                 ->scalar('Comments')
@@ -102,5 +106,4 @@
 
             return $rules;
         }
-
     }
