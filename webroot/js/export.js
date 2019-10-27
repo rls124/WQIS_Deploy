@@ -139,7 +139,8 @@ $(document).ready(function () {
 			case 'nutrient':
 				measures['nitrateNitrite'] = 'Nitrate/Nitrite (mg/L)';
 				measures['phosphorus'] = 'Total Phosphorus (mg/L)';
-				measures['drp'] = 'Total Phosphorus (mg/L)';
+				measures['drp'] = 'Dissolved Reactive Phosphorus (mg/L)';
+				measures['ammonia'] = 'Ammonia (mg/L)';
 				break;
 			case 'pesticide':
 

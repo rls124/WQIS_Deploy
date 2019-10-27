@@ -85,14 +85,15 @@ $(document).ready(function () {
     });
 
 	$(".delete").click(function () {
-		var input = $(this);
-		if (!input.attr('id')) {
+		var rowDiv = this;
+		
+		if (!$(rowDiv).attr('id')) {
 			return;
 		}
 		
 		$.confirm("Are you sure you want to delete this record?", function (bool) {
 			if (bool) {
-				var rowNumber = (input.attr('id')).split("-")[1];
+				var rowNumber = ($(rowDiv).attr('id')).split("-")[1];
 				var sampleNumber = $('#samplenumber-' + rowNumber).val();
 				
 				//Now send ajax data to a delete script
@@ -106,7 +107,10 @@ $(document).ready(function () {
 					},
 					success: function () {
 						$.alert("Record deleted.", function () {
-							location.reload();
+							//remove the row from view
+							rowDiv.parentNode.parentNode.style.display = "none";
+							
+							//future work: build a new table, to still maintain 20 total rows and have correct black/white/black sequencing after deletions
 						});
 					}
 				});
