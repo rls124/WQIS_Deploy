@@ -3,7 +3,8 @@
                 <th>Date</th>
                 <th>Sample<br>Number</th>
                 <th>Conductivity<br>(mS/cm)</th>
-                <th>Dissolved Oxygen<br>(mg/L)</th>
+				<th>Dissolved Oxygen<br>(mg/L)</th>
+				<th>Bridge to Water Height<br>(m)</th>
                 <th>pH</th>
                 <th>Temperature<br>(°C)</th>
                 <th>Total Dissolved Solids<br>(g/L)</th>
@@ -72,6 +73,21 @@
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
 					'text' => $wqmSample->DO . ' '
+				    ]
+				])
+				?>
+				</td>
+				<td>
+				<?=
+				$this->Form->control('Bridge_To_Water_Height-' . $row, ['maxlength' => '5',
+				    'size' => '5',
+				    'class' => 'inputfields tableInput',
+				    'value' => $wqmSample->Bridge_To_Water_Height,
+				    'style' => 'display: none',
+				    'label' => [
+					'style' => 'display: in-line; cursor: pointer',
+					'class' => 'btn btn-thin inputHide',
+					'text' => $wqmSample->Bridge_To_Water_Height . ' '
 				    ]
 				])
 				?>

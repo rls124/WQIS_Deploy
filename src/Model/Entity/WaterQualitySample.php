@@ -12,6 +12,7 @@
      * @property \Cake\I18n\FrozenDate $Date
      * @property int $Sample_Number
      * @property \Cake\I18n\FrozenTime $Time
+     * @property float $Bridge_To_Water_Height
      * @property int $Water_Temp
      * @property int $Water_Temp_Exception
      * @property float $pH
@@ -48,6 +49,7 @@
             'Date' => true,
             'Sample_Number' => true,
             'Time' => true,
+            'Bridge_To_Water_Height' => true,
             'Water_Temp' => true,
             'Water_Temp_Exception' => true,
             'pH' => true,

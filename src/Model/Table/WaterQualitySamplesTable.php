@@ -68,6 +68,10 @@
                 ->notEmpty('Time');
 
             $validator
+                ->decimal('Bridge_To_Water_Height')
+                ->allowEmpty('Bridge_To_Water_Height');
+
+            $validator
                 ->integer('Water_Temp')
                 ->allowEmpty('Water_Temp');
 

@@ -52,7 +52,8 @@
                         <tr>
                             <th>Site</th>
                             <th>Sample<br>Number</th>
-                            <th>Time<br></th>
+							<th>Time<br></th>
+							<th>Bridge to Water Height<br>(m)</th>
                             <th>pH</th>
                             <th>Water Temp<br>(°C)</th>
                             <th>Conductivity<br>(mS/cm)</th>
@@ -101,6 +102,16 @@
 									'type' => 'text',
 									'class' => 'form-control entryControl',
 									'pattern' => "[012]?[0-9]:[0-9][0-9]"
+								])
+							?>
+							<?=
+								$this->Form->control('bridge_to_water_height-0', [
+									'templates' => [
+										'inputContainer' => '<td>{{content}}</td>',
+										'label' => false
+									],
+									'type' => 'number',
+									'class' => 'form-control entryControl',
 								])
 							?>
 							<?=

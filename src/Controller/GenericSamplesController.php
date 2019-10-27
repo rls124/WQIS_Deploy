@@ -131,10 +131,7 @@
 			else if ($fileType == 4) {
 				//wqm
 				$this->loadModel('WaterQualitySamples');
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Water_Temp',
-					'Water_Temp_Exception', 'pH', 'pH_Exception', 'Conductivity', 'Conductivity_Exception', 'TDS',
-					'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value',
-					'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_To_Water_Height', 'Water_Temp', 'Water_Temp_Exception', 'pH', 'pH_Exception','Conductivity', 'Conductivity_Exception', 'TDS', 'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 				$columnText = array("Site Number", "Date", "Sample number", "Time", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time", "Requires Checking");
 				GenericSamplesController::uploadGeneric($columnIDs, $columnText, $csv, $this->WaterQualitySamples);
 				
@@ -205,6 +202,7 @@
 			array("date"),
 			array("sample number", "sample_number", "sample_number"),
 			array("time"),
+			array("bridge_to_water_height", "bridge to water height"),
 			array("water temp", "water_temp", "watertemp", "water temperature", "water_temperature", "watertemperature"),
 			array("water temp exception", "water_temp_exception", "watertempexception", "water temperature exception", "water_temperature_exception", "watertemperatureexception"),
 			array("ph"),
@@ -375,7 +373,8 @@
 			$this->loadModel('WaterQualitySamples');
 			
 			$name = "waterQualitySample";
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Water_Temp',
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time',
+				'Bridge_To_Water_Height', 'Water_Temp',
 				'Water_Temp_Exception', 'pH', 'pH_Exception', 'Conductivity', 'Conductivity_Exception', 'TDS',
 				'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value',
 				'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
@@ -468,7 +467,7 @@
 			$this->loadModel('PesticideSamples');
 			$modelBare = $this->PesticideSamples;
 		}
-		elseif ($_POST["parameter"] == "Conductivity" || $_POST["parameter"] == "DO" || $_POST["parameter"] == "pH" || $_POST["parameter"] == "Water_Temp" || $_POST["parameter"] == "TDS" || $_POST["parameter"] == "Turbidity") { //water quality
+		elseif ($_POST["parameter"] == "Conductivity" || $_POST["parameter"] == "DO" || $_POST["parameter"] == "pH" || $_POST["parameter"] == "Water_Temp" || $_POST["parameter"] == "TDS" || $_POST["parameter"] == "Turbidity" || $_POST["parameter"] == "Bridge_To_Water_Height") { //water quality
 			$this->loadModel('WaterQualitySamples');
 			$modelBare = $this->WaterQualitySamples;
 		}
@@ -679,7 +678,7 @@
 			$response->body(json_encode([$pesticideSamples, $threshold]));
 			return $response;
 		}
-		elseif ($_POST["measure"] == "conductivity" || $_POST["measure"] == "do" || $_POST["measure"] == "ph" || $_POST["measure"] == "water_temp" || $_POST["measure"] == "tds" || $_POST["measure"] == "turbidity") { //water quality meter
+		elseif ($_POST["measure"] == "conductivity" || $_POST["measure"] == "do" || $_POST["measure"] == "ph" || $_POST["measure"] == "water_temp" || $_POST["measure"] == "tds" || $_POST["measure"] == "turbidity" || $_POST["measure"] == "bridge_to_water_height") { //water quality meter
 			$this->loadModel('WaterQualitySamples');
 
 			//Set the name of the measure
@@ -695,6 +694,9 @@
 				break;
 			case 'water_temp':
 				$thresMeasure = 'Water Temperature%';
+				break;
+			case 'bridge_to_water_height':
+				$thresMeasure = 'Bridge to Water Height';
 				break;
 			case 'tds':
 				$thresMeasure = 'Total Dissolved Solids (g/L)';
