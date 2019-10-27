@@ -137,23 +137,8 @@
 		    <div class="cssload-dot"></div>
 		    <div class="cssload-dot"></div>
 		</div>
-		<?php
-		    /*$this->Form->input('sitenumber', [
-			'label' => [
-			    'text' => 'Site Number',
-			    'class' => 'label-reg lol'
-			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "sitenumber",
-			'id' => "edit-sitenumber",
-			'placeholder' => "Site Number..."
-		    ]);*/
-		?>
 		<?=
-		    $this->Form->input('longitude', [
+		    $this->Form->control('longitude', [
 			'label' => [
 			    'text' => 'Longitude',
 			    'class' => 'label-reg lol'
@@ -168,7 +153,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('latitude', [
+		    $this->Form->control('latitude', [
 			'label' => [
 			    'text' => 'Latitude',
 			    'class' => 'label-reg lol'
@@ -183,7 +168,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('sitelocation', [
+		    $this->Form->control('sitelocation', [
 			'label' => [
 			    'text' => 'Site Location',
 			    'class' => 'label-reg lol'
@@ -198,7 +183,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('sitename', [
+		    $this->Form->control('sitename', [
 			'label' => [
 			    'text' => 'Site Name',
 			    'class' => 'label-reg lol'
@@ -269,7 +254,7 @@
                     <div class="cssload-dot"></div>
                 </div>
 		<?=
-		    $this->Form->input('sitenumber', [
+		    $this->Form->control('sitenumber', [
 			'label' => [
 			    'text' => 'Site Number',
 			    'class' => 'label-reg lol'
@@ -284,7 +269,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('longitude', [
+		    $this->Form->control('longitude', [
 			'label' => [
 			    'text' => 'Longitude',
 			    'class' => 'label-reg lol'
@@ -299,7 +284,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('latitude', [
+		    $this->Form->control('latitude', [
 			'label' => [
 			    'text' => 'Latitude',
 			    'class' => 'label-reg lol'
@@ -314,7 +299,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('sitelocation', [
+		    $this->Form->control('sitelocation', [
 			'label' => [
 			    'text' => 'Site Location',
 			    'class' => 'label-reg lol'
@@ -329,7 +314,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('sitename', [
+		    $this->Form->control('sitename', [
 			'label' => [
 			    'text' => 'Site Name',
 			    'class' => 'label-reg lol'
