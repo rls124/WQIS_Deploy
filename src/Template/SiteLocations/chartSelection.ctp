@@ -147,79 +147,25 @@
             return false;
         }
     });
+	
+	$(document).ready(function() {
+		var tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
+		var chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
+		$("#chartSelect").attr("action", tableLocation);
+	});
 
-    $("#categorySelect").change(function () {
-        var entryType = $(this).val();
-        var tableLocation;
-        switch (entryType) {
-            case 'bacteria':
-                tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
-                chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
-                break;
-            case 'nutrient':
-                tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
-                chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
-                break;
-            case 'pesticide':
-                tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
-                chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
-                break;
-            case 'wqm':
-                tableLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
-                chartLocation = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
-                break;
-            default:
-                tableLocation = "javascript:void(0);";
-                chartLocation = "javascript:void(0);";
-                break;
-        }
-        $("#chartSelect").attr("action", tableLocation);
-    });
     function changeURL(actionType) {
-        var category = $("#categorySelect").val();
-
-        var location;
-        if (actionType === 'chartview') {
-            switch (category) {
-                case 'bacteria':
-                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
-                    break;
-                case 'nutrient':
-                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
-                    break;
-                case 'pesticide':
-                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
-                    break;
-                case 'wqm':
-                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
-                    break;
-                default:
-                    location = "javascript:void(0);";
-                    break;
-            }
-        } else if (actionType === 'tableview') {
-            switch (category) {
-                case 'bacteria':
-                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
-                    break;
-                case 'nutrient':
-                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
-                    break;
-                case 'pesticide':
-                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
-                    break;
-                case 'wqm':
-                    location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
-                    break;
-                default:
-                    location = "javascript:void(0);";
-                    break;
-            }
-        }
+		var location;
+		if (actionType == 'tableview') {
+			location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'tableview']); ?>";
+		}
+		else {
+			location = "<?= $this->Html->Url->build(['controller' => 'GenericSamples', 'action' => 'chartview']); ?>";
+		}
 
         $("#chartSelect").attr("action", location);
     }
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-/<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
