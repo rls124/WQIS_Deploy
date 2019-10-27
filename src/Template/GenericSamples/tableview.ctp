@@ -3,6 +3,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
+	<?php
+		$sampleType = $_SESSION["tableType"];
+		$siteLocation = $_SESSION["siteLocation"];
+		//$samples = $_SESSION["samples"];
+	?>
+
 <?php
 	//need to set a javascript variable listing the type of measurement. Kinda kludge, meh
 	echo "<script>var sampleType = \"" . $sampleType . "\";</script>";
@@ -21,7 +27,7 @@
 	    echo "$siteNumber $siteName - $siteLocation";
 	?>
     </h3>
-    <table id='tableView'  class="table table-striped table-responsive">
+    <table id='tableView' class="table table-striped table-responsive">
 	
 	<?php
 	if ($sampleType == "bacteria") {		
@@ -38,7 +44,6 @@
 	}
 	
 	?>
-	
         
     </table>
     <hr>

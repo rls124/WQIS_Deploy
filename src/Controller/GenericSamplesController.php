@@ -6,13 +6,23 @@
     class GenericSamplesController extends AppController {
 	
 	public function tableview() {
-		//checks to see if this had POST data
-		if (!($this->request->getData())) {
-			return;
+		//check if there is post data
+		if ($this->request->getData()) {
+			$type = $_POST["categorySelect"];
+			
+			//set all relevant POST data to variables
+			$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
+			$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
+			$site = $this->request->getData('site');
 		}
-		
-		//get type of table from post data
-		$type = $_POST["categorySelect"];
+		else {
+			$type = $_SESSION["tableType"];
+			
+			//set all relevant SESSION data to variables
+			$startdate = date('Ymd', strtotime($_SESSION['startdate']));
+			$enddate = date('Ymd', strtotime($_SESSION['enddate']));
+			$site = $_SESSION["site"];
+		}
 		
 		if ($type == "bacteria") {
 			$this->loadModel('BacteriaSamples');
@@ -38,23 +48,6 @@
 			$modelName = "WaterQualitySamples";
 			$modelBare = $this->WaterQualitySamples;
 		}
-		else {
-			$this->log("Posted " . $type, 'debug');
-			return;
-		}
-		
-		//set all relevant POST data to variables
-		$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
-		$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
-		$site = $this->request->getData('site');
-			
-		//write POST data into session
-		$this->request->getSession()->write([
-			'startdate' => $startdate,
-			'enddate' => $enddate,
-			'site' => $site,
-			'tableType' => $type
-		]);
 		
 		$samples = $this->paginate(
 		$modelBare->find('all', [
@@ -76,6 +69,16 @@
 			'Site_number' => $site
 			]
 		])->first();
+		
+		//write data into session
+		$this->request->getSession()->write([
+			'startdate' => $startdate,
+			'enddate' => $enddate,
+			'site' => $site,
+			'tableType' => $type,
+			'siteLocation' => $siteLocation
+		]);
+		
 		$this->set(compact('siteLocation'));
 		$this->set(compact('samples'));
 		$this->set('_serialize', ['samples']);
