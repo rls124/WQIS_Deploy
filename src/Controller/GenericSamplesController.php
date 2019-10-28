@@ -680,7 +680,7 @@
 			$response->body(json_encode([$pesticideSamples, $threshold]));
 			return $response;
 		}
-		elseif ($_POST["measure"] == "conductivity" || $_POST["measure"] == "do" || $_POST["measure"] == "ph" || $_POST["measure"] == "water_temp" || $_POST["measure"] == "tds" || $_POST["measure"] == "turbidity") { //water quality meter
+		elseif ($_POST["measure"] == "conductivity" || $_POST["measure"] == "do" || $_POST["measure"] == "ph" || $_POST["measure"] == "water_temp" || $_POST["measure"] == "tds" || $_POST["measure"] == "turbidity" || $_POST["measure"] == "bridge_to_water_height") { //water quality meter
 			$this->loadModel('WaterQualitySamples');
 
 			//Set the name of the measure

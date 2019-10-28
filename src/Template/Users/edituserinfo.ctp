@@ -62,8 +62,6 @@
                     'name' => "firstname",
                     'id' => "firstname",
                     'placeholder' => "Your First Name...",
-                    //'oninput' => "ensurecontrol();",
-                    //'onfocus' => "toggle(this);"
                 ]);
             ?>
             <p class="errorMessage" id="firstnameError"></p>
@@ -83,8 +81,6 @@
                     'name' => "lastname",
                     'id' => "lastname",
                     'placeholder' => "Your Last Name...",
-                    //'oninput' => "ensurecontrol();",
-                    //'onfocus' => "toggle(this);"
                 ]);
             ?>
             <p class="errorMessage" id="lastnameError"></p>
@@ -104,8 +100,6 @@
                     'name' => "organization",
                     'id' => "organization",
                     'placeholder' => "Your Organization...",
-                    //'oninput' => "ensurecontrol();",
-                    //'onfocus' => "toggle(this);"
                 ]);
             ?>
             <p class="errorMessage" id="organizationError"></p>
@@ -125,8 +119,6 @@
                     'name' => "position",
                     'id' => "position",
                     'placeholder' => "Your Position...",
-                    //'oninput' => "ensurecontrol();",
-                    //'onfocus' => "toggle(this);"
                 ]);
             ?>
             <p class="errorMessage" id="positionError"></p>
@@ -189,7 +181,7 @@
                     'id' => 'securityquestion1',
                     'class' => 'form-control select secPage',
                     'style' => 'font-size: 9pt;',
-                    'onchange' => "ensureSecuritycontrol();"
+                    'onchange' => "ensureSecurityInput();"
                     ]
                 );
             ?>
@@ -204,7 +196,7 @@
                     'name' => "securityanswer1",
                     'id' => "securityanswer1",
                     'placeholder' => "Your Answer...",
-                    'oninput' => "ensureSecuritycontrol();"
+                    'oninput' => "ensureSecurityInput();"
                 ]);
             ?>
             <p class="errorMessage" id="securityanswer1Error" style=""></p>
@@ -223,7 +215,7 @@
                     'id' => 'securityquestion2',
                     'class' => 'form-control select secPage',
                     'style' => 'font-size: 9pt;',
-                    'onchange' => "ensureSecuritycontrol();"
+                    'onchange' => "ensureSecurityInput();"
                     ]
                 );
             ?>
@@ -238,7 +230,7 @@
                     'name' => "securityanswer2",
                     'id' => "securityanswer2",
                     'placeholder' => "Your Answer...",
-                    'oninput' => "ensureSecuritycontrol();"
+                    'oninput' => "ensureSecurityInput();"
                 ]);
             ?>
             <p class="errorMessage" id="securityanswer2Error" style=""></p>
@@ -257,7 +249,7 @@
                     'id' => 'securityquestion3',
                     'class' => 'form-control select secPage',
                     'style' => 'font-size: 9pt;',
-                    'onchange' => "ensureSecuritycontrol();"
+                    'onchange' => "ensureSecurityInput();"
                     ]
                 );
             ?>
@@ -272,7 +264,7 @@
                     'name' => "securityanswer3",
                     'id' => "securityanswer3",
                     'placeholder' => "Your Answer...",
-                    'oninput' => "ensureSecuritycontrol();"
+                    'oninput' => "ensureSecurityInput();"
                 ]);
             ?>
             <p class="errorMessage" id="securityanswer3Error" style=""></p>
