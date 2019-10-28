@@ -47,7 +47,7 @@ body{
     border-radius:6px;
     margin-top:15px;
     margin-bottom: 10%;
-    overflow: hidden;
+    overflow-x: auto;
     box-shadow:3px 3px 3px black;
 }
 

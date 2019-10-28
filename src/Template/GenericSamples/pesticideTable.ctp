@@ -5,7 +5,8 @@
                 <th>Atrazine (µg/L)</th>
                 <th>Alachlor (µg/L)</th>
                 <th>Metolachlor (µg/L)</th>
-			<th>Actions</th>
+				<th>Comments</th>
+				<th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -88,14 +89,8 @@
 				])
 				?>
 	    		</td>
-	    		<td class="actions">
-				<?=
-				$this->Html->tag('span', $pesticideSample->Comments, [
-				    'id' => 'Comments-' . $row,
-				    'class' => 'Comments-' . $row,
-				    'hidden'
-				])
-				?>
+				
+				<td>
 				<?=
 				$this->Html->tag('span', "", [
 				    'data-toggle' => 'modal',
@@ -103,6 +98,16 @@
 				    'class' => "comment glyphicon glyphicon-comment",
 				    'id' => 'CommentIcon-' . $row,
 				    'name' => 'CommentIcon-' . $row
+				])
+				?>
+				</td>
+				
+	    		<td class="actions">
+				<?=
+				$this->Html->tag('span', $pesticideSample->PesticideComments, [
+				    'id' => 'PesticideComments-' . $row,
+				    'class' => 'PesticideComments-' . $row,
+				    'hidden'
 				])
 				?>
 

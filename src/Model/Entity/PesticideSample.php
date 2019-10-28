@@ -17,7 +17,7 @@
      * @property int $AlachlorException
      * @property float $Metolachlor
      * @property int $MetolachlorException
-     * @property string $Comments
+     * @property string $PesticideComments
      *
      * @property \App\Model\Entity\SiteLocation $site_location
      */
@@ -42,12 +42,11 @@
             'AlachlorException' => true,
             'Metolachlor' => true,
             'MetolachlorException' => true,
-            'Comments' => true,
+            'PesticideComments' => true,
             'site_location' => true
         ];
 
         protected function _setDate($date) {
             return date('Y-m-d', strtotime($date));
         }
-
     }

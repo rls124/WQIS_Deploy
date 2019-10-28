@@ -6,7 +6,8 @@
                 <th>Total Phosphorus (mg/L)</th>
                 <th>Dissolved Reactive Phosphorus (mg/L)</th>
 				<th>Ammonia (mg/L)</th>
-			<th>Actions</th>
+				<th>Comments</th>
+				<th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -98,16 +99,7 @@
 				])
 				?>
 	    		</td>
-
-	    		<td class="actions">
-				<?=
-				$this->Html->tag('span', $nutrientSample->Comments, [
-				    'id' => 'Comments-' . $row,
-				    'class' => 'Comments-' . $row,
-				    'hidden'
-				])
-				?>
-
+				<td>
 				<?=
 				$this->Html->tag('span', "", [
 				    'data-toggle' => 'modal',
@@ -115,6 +107,16 @@
 				    'class' => "comment glyphicon glyphicon-comment",
 				    'id' => 'CommentIcon-' . $row,
 				    'name' => 'CommentIcon-' . $row
+				])
+				?>
+				</td>
+
+	    		<td class="actions">
+				<?=
+				$this->Html->tag('span', $nutrientSample->NutrientComments, [
+				    'id' => 'NutrientComments-' . $row,
+				    'class' => 'NutrientComments-' . $row,
+				    'hidden'
 				])
 				?>
 

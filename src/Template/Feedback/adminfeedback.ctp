@@ -2,6 +2,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 <?= $this->Html->script('feedback.js') ?>
 <?= $this->Html->css('userManagement.css') ?>
+<?= $this->Html->css('loading.css') ?>
+
 <div class="container roundGreyBox">
 
     <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-list-alt" style="font-size: 20pt;"></span>  Feedback
@@ -53,29 +55,4 @@
     </table>
 </div>
    
-<div class="csscssload-load-frame loadingspinnermain">
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-       <div class="cssload-dot"></div>
-</div>
+<?php include "../Layout/loadingSpinner.ctp"; ?>

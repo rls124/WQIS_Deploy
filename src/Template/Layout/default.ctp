@@ -131,6 +131,35 @@
         <div class="container clearfix">
             <?= $this->fetch('content') ?>
         </div>
+	
+		<!--loading spinner-->
+		<div class="csscssload-load-frame loadingspinnermain">
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+			<div class="cssload-dot"></div>
+		</div>
+		
         <footer>
         </footer>
     </body>

@@ -17,7 +17,7 @@
      * @property int $TotalColiformRawCount
      * @property int $TotalColiform
      * @property int $ColiformException
-     * @property string $Comments
+     * @property string $BacteriaComments
      *
      * @property \App\Model\Entity\SiteLocation $site_location
      */
@@ -42,12 +42,11 @@
             'TotalColiformRawCount' => true,
             'TotalColiform' => true,
             'ColiformException' => true,
-            'Comments' => true,
+            'BacteriaComments' => true,
             'site_location' => true
         ];
 
         protected function _setDate($date) {
             return date('Y-m-d', strtotime($date));
         }
-
     }

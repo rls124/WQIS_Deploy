@@ -26,7 +26,7 @@
      * @property int $Turbidity
      * @property int $Turbidity_Exception
      * @property int $Turbidity_Scale_Value
-     * @property string $Comments
+     * @property string $WaterQualityComments
      * @property \Cake\I18n\FrozenDate $Import_Date
      * @property \Cake\I18n\FrozenTime $Import_Time
      * @property string $Requires_Checking
@@ -63,7 +63,7 @@
             'Turbidity' => true,
             'Turbidity_Exception' => true,
             'Turbidity_Scale_Value' => true,
-            'Comments' => true,
+            'WaterQualityComments' => true,
             'Import_Date' => true,
             'Import_Time' => true,
             'Requires_Checking' => true,
@@ -73,5 +73,4 @@
         protected function _setDate($date) {
             return date('Y-m-d', strtotime($date));
         }
-
     }

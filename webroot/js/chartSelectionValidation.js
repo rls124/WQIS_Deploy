@@ -14,7 +14,7 @@ function changeMeasures() {
         'metolachlor': ['Metolachlor (µg/L)']};
     var physProp = {'select': ['Select a measure'],
         'conductivity': ['Conductivity (mS/cm)'],
-		'do': ['Dissolved Oxygen (mg/L'],
+        'do': ['Dissolved Oxygen (mg/L'],
 		'bridge_to_water_height': ['Bridge to Water Height (m)'],
         'ph': ['pH'],
         'water_temp': ['Water Temperature (°C)'],

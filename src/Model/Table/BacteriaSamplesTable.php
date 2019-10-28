@@ -87,9 +87,9 @@
                 ->allowEmpty('ColiformException');
 
             $validator
-                ->scalar('Comments')
-                ->maxLength('Comments', 200)
-                ->allowEmpty('Comments');
+                ->scalar('BacteriaComments')
+                ->maxLength('BacteriaComments', 200)
+                ->allowEmpty('BacteriaComments');
 
             return $validator;
         }

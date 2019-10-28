@@ -6,6 +6,7 @@
 				<th>Ecoli<br> (CFU/100 ml)</th>
 				<th>Total Coliform<br>Raw Count</th>
 				<th>Total Coliform<br>(CFU/100)</th>
+				<th>Comments</th>
 				<th>Actions</th>
             </tr>
         </thead>
@@ -99,14 +100,7 @@
 				])
 				?>
 	    		</td>
-	    		<td class="actions">
-				<?=
-				$this->Html->tag('span', $bacteriaSample->Comments, [
-				    'id' => 'Comments-' . $row,
-				    'class' => 'Comments-' . $row,
-				    'hidden'
-				])
-				?>
+				<td>
 				<?=
 				$this->Html->tag('span', "", [
 				    'data-toggle' => 'modal',
@@ -114,6 +108,15 @@
 				    'class' => "comment glyphicon glyphicon-comment",
 				    'id' => 'CommentIcon-' . $row,
 				    'name' => 'CommentIcon-' . $row
+				])
+				?>
+	    		</td>
+	    		<td class="actions">
+				<?=
+				$this->Html->tag('span', $bacteriaSample->BacteriaComments, [
+				    'id' => 'BacteriaComments-' . $row,
+				    'class' => 'BacteriaComments-' . $row,
+				    'hidden'
 				])
 				?>
 				<?=

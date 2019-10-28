@@ -124,9 +124,9 @@
                 ->allowEmpty('Turbidity_Scale_Value');
 
             $validator
-                ->scalar('Comments')
-                ->maxLength('Comments', 200)
-                ->allowEmpty('Comments');
+                ->scalar('WaterQualityComments')
+                ->maxLength('WaterQualityComments', 200)
+                ->allowEmpty('WaterQualityComments');
 
             $validator
                 ->date('Import_Date')
@@ -156,5 +156,4 @@
 
             return $rules;
         }
-
     }

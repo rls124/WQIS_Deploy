@@ -131,8 +131,8 @@
 			else if ($fileType == 4) {
 				//wqm
 				$this->loadModel('WaterQualitySamples');
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_To_Water_Height', 'Water_Temp', 'Water_Temp_Exception', 'pH', 'pH_Exception','Conductivity', 'Conductivity_Exception', 'TDS', 'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
-				$columnText = array("Site Number", "Date", "Sample number", "Time", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time", "Requires Checking");
+ 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_To_Water_Height', 'Water_Temp', 'Water_Temp_Exception', 'pH', 'pH_Exception','Conductivity', 'Conductivity_Exception', 'TDS', 'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+				$columnText = array("Site Number", "Date", "Sample number", "Time", "Bridge to Water Height", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time", "Requires Checking");
 				GenericSamplesController::uploadGeneric($columnIDs, $columnText, $csv, $this->WaterQualitySamples);
 				
 				$this->set("fileTypeName", "Water Quality Samples");
@@ -453,21 +453,22 @@
 		$sampleNumber = $this->request->getData('sampleNumber');
 		
 		$parameter = $this->request->getData('parameter');
+		$parameter = strtolower($parameter); //shouldn't need to do this, but it'll reduce the risk of someone fucking this up again. Like I did.
 		$value = $this->request->getData('value');
 		
-		if ($_POST["parameter"] == "EcoliRawCount" || $_POST["parameter"] == "Ecoli" || $_POST["parameter"] == "TotalColiformRawCount" || $_POST["parameter"] == "TotalColiform") { //bacteria
+		if ($parameter == "ecolirawcount" || $parameter == "ecoli" || $parameter == "totalcoliformrawcount" || $parameter == "totalcoliform" || $parameter == "bacteriacomments") { //bacteria
 			$this->loadModel('BacteriaSamples');
 			$modelBare = $this->BacteriaSamples;
 		}
-		elseif ($_POST["parameter"] == "NitrateNitrite" || $_POST["parameter"] == "Phosphorus" || $_POST["parameter"] == "DRP" || $_POST["parameter"] == "Ammonia") { //nutrient
+		elseif ($parameter == "nitratenitrite" || $parameter == "phosphorus" || $parameter == "drp" || $parameter == "ammonia" || $parameter == "nutrientcomments") { //nutrient
 			$this->loadModel('NutrientSamples');
 			$modelBare = $this->NutrientSamples;
 		}
-		elseif ($_POST["parameter"] == "Atrazine" || $_POST["parameter"] == "Alachlor" || $_POST["parameter"] == "Metolachlor") { //pesticide
+		elseif ($parameter == "atrazine" || $parameter == "alachlor" || $parameter == "metolachlor" || $parameter == "pesticidecomments") { //pesticide
 			$this->loadModel('PesticideSamples');
 			$modelBare = $this->PesticideSamples;
 		}
-		elseif ($_POST["parameter"] == "Conductivity" || $_POST["parameter"] == "DO" || $_POST["parameter"] == "pH" || $_POST["parameter"] == "Water_Temp" || $_POST["parameter"] == "TDS" || $_POST["parameter"] == "Turbidity" || $_POST["parameter"] == "Bridge_To_Water_Height") { //water quality
+		elseif ($parameter == "conductivity" || $parameter == "do" || $parameter == "ph" || $parameter == "water_temp" || $parameter == "tds" || $parameter == "turbidity" || $parameter == "bridge_to_water_height" || $parameter == "waterqualitycomments") { //water quality meter
 			$this->loadModel('WaterQualitySamples');
 			$modelBare = $this->WaterQualitySamples;
 		}
@@ -482,6 +483,7 @@
 			->where(['Sample_Number = ' => $sampleNumber])
 			->first();
 		//Set the edited field
+		$parameter = $this->request->getData('parameter');
 		$sample->$parameter = $value;
 		//Save changes
 		$modelBare->save($sample);
@@ -678,7 +680,7 @@
 			$response->body(json_encode([$pesticideSamples, $threshold]));
 			return $response;
 		}
-		elseif ($_POST["measure"] == "conductivity" || $_POST["measure"] == "do" || $_POST["measure"] == "ph" || $_POST["measure"] == "water_temp" || $_POST["measure"] == "tds" || $_POST["measure"] == "turbidity" || $_POST["measure"] == "bridge_to_water_height") { //water quality meter
+		elseif ($_POST["measure"] == "conductivity" || $_POST["measure"] == "do" || $_POST["measure"] == "ph" || $_POST["measure"] == "water_temp" || $_POST["measure"] == "tds" || $_POST["measure"] == "turbidity") { //water quality meter
 			$this->loadModel('WaterQualitySamples');
 
 			//Set the name of the measure

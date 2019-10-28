@@ -87,9 +87,9 @@
                 ->allowEmpty('MetolachlorException');
 
             $validator
-                ->scalar('Comments')
-                ->maxLength('Comments', 200)
-                ->allowEmpty('Comments');
+                ->scalar('PesticideComments')
+                ->maxLength('PesticideComments', 200)
+                ->allowEmpty('PesticideComments');
 
             return $validator;
         }

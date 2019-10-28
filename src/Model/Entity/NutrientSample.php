@@ -17,7 +17,7 @@
      * @property int $NitrateNitriteException
      * @property float $DRP
 	 * @property float $Ammonia
-     * @property string $Comments
+     * @property string $NutrientComments
      *
      * @property \App\Model\Entity\SiteLocation $site_location
      */
@@ -42,7 +42,7 @@
             'NitrateNitriteException' => true,
             'DRP' => true,
 			'Ammonia' => true,
-            'Comments' => true,
+            'NutrientComments' => true,
             'site_location' => true
         ];
 

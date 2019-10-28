@@ -49,7 +49,7 @@
         <?php if ($userinfo !== NULL) { ?>
             <div class="form-group row">
             <?=
-                $this->Form->input('firstname', [
+                $this->Form->control('firstname', [
                     'label' => [
                         'text' => 'First Name',
                         'class' => 'col-lg-2 label-reg lol'
@@ -62,7 +62,7 @@
                     'name' => "firstname",
                     'id' => "firstname",
                     'placeholder' => "Your First Name...",
-                    //'oninput' => "ensureInput();",
+                    //'oninput' => "ensurecontrol();",
                     //'onfocus' => "toggle(this);"
                 ]);
             ?>
@@ -70,7 +70,7 @@
             </div>
             <div class="form-group row">
             <?=
-                $this->Form->input('lastname', [
+                $this->Form->control('lastname', [
                     'label' => [
                         'text' => 'Last Name',
                         'class' => 'col-lg-2 label-reg lol'
@@ -83,7 +83,7 @@
                     'name' => "lastname",
                     'id' => "lastname",
                     'placeholder' => "Your Last Name...",
-                    //'oninput' => "ensureInput();",
+                    //'oninput' => "ensurecontrol();",
                     //'onfocus' => "toggle(this);"
                 ]);
             ?>
@@ -91,7 +91,7 @@
             </div>
             <div class="form-group row">
             <?=
-                $this->Form->input('organization', [
+                $this->Form->control('organization', [
                     'label' => [
                         'text' => 'Organization',
                         'class' => 'col-lg-2 label-reg lol'
@@ -104,7 +104,7 @@
                     'name' => "organization",
                     'id' => "organization",
                     'placeholder' => "Your Organization...",
-                    //'oninput' => "ensureInput();",
+                    //'oninput' => "ensurecontrol();",
                     //'onfocus' => "toggle(this);"
                 ]);
             ?>
@@ -112,7 +112,7 @@
             </div>
             <div class="form-group row">
             <?=
-                $this->Form->input('position', [
+                $this->Form->control('position', [
                     'label' => [
                         'text' => 'Position',
                         'class' => 'col-lg-2 label-reg lol'
@@ -125,7 +125,7 @@
                     'name' => "position",
                     'id' => "position",
                     'placeholder' => "Your Position...",
-                    //'oninput' => "ensureInput();",
+                    //'oninput' => "ensurecontrol();",
                     //'onfocus' => "toggle(this);"
                 ]);
             ?>
@@ -189,7 +189,7 @@
                     'id' => 'securityquestion1',
                     'class' => 'form-control select secPage',
                     'style' => 'font-size: 9pt;',
-                    'onchange' => "ensureSecurityInput();"
+                    'onchange' => "ensureSecuritycontrol();"
                     ]
                 );
             ?>
@@ -204,7 +204,7 @@
                     'name' => "securityanswer1",
                     'id' => "securityanswer1",
                     'placeholder' => "Your Answer...",
-                    'oninput' => "ensureSecurityInput();"
+                    'oninput' => "ensureSecuritycontrol();"
                 ]);
             ?>
             <p class="errorMessage" id="securityanswer1Error" style=""></p>
@@ -223,7 +223,7 @@
                     'id' => 'securityquestion2',
                     'class' => 'form-control select secPage',
                     'style' => 'font-size: 9pt;',
-                    'onchange' => "ensureSecurityInput();"
+                    'onchange' => "ensureSecuritycontrol();"
                     ]
                 );
             ?>
@@ -238,7 +238,7 @@
                     'name' => "securityanswer2",
                     'id' => "securityanswer2",
                     'placeholder' => "Your Answer...",
-                    'oninput' => "ensureSecurityInput();"
+                    'oninput' => "ensureSecuritycontrol();"
                 ]);
             ?>
             <p class="errorMessage" id="securityanswer2Error" style=""></p>
@@ -257,7 +257,7 @@
                     'id' => 'securityquestion3',
                     'class' => 'form-control select secPage',
                     'style' => 'font-size: 9pt;',
-                    'onchange' => "ensureSecurityInput();"
+                    'onchange' => "ensureSecuritycontrol();"
                     ]
                 );
             ?>
@@ -272,7 +272,7 @@
                     'name' => "securityanswer3",
                     'id' => "securityanswer3",
                     'placeholder' => "Your Answer...",
-                    'oninput' => "ensureSecurityInput();"
+                    'oninput' => "ensureSecuritycontrol();"
                 ]);
             ?>
             <p class="errorMessage" id="securityanswer3Error" style=""></p>

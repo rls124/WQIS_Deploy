@@ -1,6 +1,19 @@
 //Create the functionality to determine which field was selected, then send a query to update the field.
 //Additionally, must be able to delete a row from the database.
 
+//loading graphic
+$(document).ajaxStart(function () {
+    $('.loadingspinner-edit').css('visibility', 'visible');
+    $('.loadingspinnermain').css('visibility', 'visible');
+    $('.loadingspinner-add').css('visibility', 'visible');
+    $('body').css('cursor', 'wait');
+}).ajaxStop(function () {
+    $('.loadingspinner-edit').css('visibility', 'hidden');
+    $('.loadingspinnermain').css('visibility', 'hidden');
+    $('.loadingspinner-add').css('visibility', 'hidden');
+    $('body').css('cursor', 'default');
+});
+
 //first we have to run "document ready" because otherwise the page can't access the inputs.
 $(document).ready(function () {
     $(".inputHide").on("click", function () {
@@ -16,9 +29,26 @@ $(document).ready(function () {
 
         var rowNumber = (input.attr('id')).split("-")[1];
         var commentInfo = $("#commentinfo");
-        commentInfo.val($("#Comments-" + rowNumber).text());
+		
+		//fill in from hidden variable
+		var elementPrefix;
+		if (sampleType == "bacteria") {
+			elementPrefix = "BacteriaComments";
+		}
+		else if (sampleType == "nutrient") {
+			elementPrefix = "NutrientComments";
+		}
+		else if (sampleType == "pesticide") {
+			elementPrefix = "PesticideComments";
+		}
+		else {
+			elementPrefix = "WaterQualityComments";
+		}
+		
+		var commentText = document.getElementById(elementPrefix + "-" + rowNumber).innerHTML;
+		commentInfo.val(commentText);
+		
         commentInfo.attr('data-row-number', rowNumber);
-
     });
 
     $("#saveBtn").click(function () {
@@ -29,7 +59,21 @@ $(document).ready(function () {
         }
         var rowNumber = input.attr('data-row-number');
         var sampleNumber = $('#samplenumber-' + rowNumber).val();
-        var parameter = 'Comments';
+		
+		var parameter;
+		if (sampleType == "bacteria") {
+			parameter = "BacteriaComments";
+		}
+		else if (sampleType == "nutrient") {
+			parameter = "NutrientComments";
+		}
+		else if (sampleType == "pesticide") {
+			parameter = "PesticideComments";
+		}
+		else {
+			parameter = "WaterQualityComments";
+		}
+		
         var value = input.val();
 
         $.ajax({
@@ -106,12 +150,13 @@ $(document).ready(function () {
 						'type': sampleType
 					},
 					success: function () {
-						$.alert("Record deleted.", function () {
-							//remove the row from view
-							rowDiv.parentNode.parentNode.style.display = "none";
-							
-							//future work: build a new table, to still maintain 20 total rows and have correct black/white/black sequencing after deletions
-						});
+						//remove the row from view
+						rowDiv.parentNode.parentNode.style.display = "none";
+						
+						//future work: build a new table, to still maintain 20 total rows and have correct black/white/black sequencing after deletions
+					},
+					fail: function () {
+						alert("Deletion failed");
 					}
 				});
 			}

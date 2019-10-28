@@ -3,13 +3,14 @@
                 <th>Date</th>
                 <th>Sample<br>Number</th>
                 <th>Conductivity<br>(mS/cm)</th>
-				<th>Dissolved Oxygen<br>(mg/L)</th>
+                <th>Dissolved Oxygen<br>(mg/L)</th>
 				<th>Bridge to Water Height<br>(m)</th>
                 <th>pH</th>
                 <th>Temperature<br>(°C)</th>
                 <th>Total Dissolved Solids<br>(g/L)</th>
                 <th>Turbidity<br>(NTU)</th>
-			<th>Actions</th>
+				<th>Comments</th>
+				<th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -76,7 +77,7 @@
 				    ]
 				])
 				?>
-				</td>
+	    		</td>
 				<td>
 				<?=
 				$this->Form->control('Bridge_To_Water_Height-' . $row, ['maxlength' => '5',
@@ -153,7 +154,27 @@
 				])
 				?>
 	    		</td>
+				
+				<td>
+				<?=
+				$this->Html->tag('span', "", [
+				    'data-toggle' => 'modal',
+				    'data-target' => '#myModal',
+				    'class' => "comment glyphicon glyphicon-comment",
+				    'id' => 'CommentIcon-' . $row,
+				    'name' => 'CommentIcon-' . $row
+				])
+				?>
+				</td>
+				
 	    		<td class="actions">
+				<?=
+				$this->Html->tag('span', $wqmSample->WaterQualityComments, [
+				    'id' => 'WaterQualityComments-' . $row,
+				    'class' => 'WaterQualityComments-' . $row,
+				    'hidden'
+				])
+				?>
 				<?=
 				$this->Html->tag('span', "", [
 				    'class' => "delete glyphicon glyphicon-trash",

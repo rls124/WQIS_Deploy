@@ -87,9 +87,9 @@
 				->allowEmpty('Ammonia');
 
             $validator
-                ->scalar('Comments')
-                ->maxLength('Comments', 200)
-                ->allowEmpty('Comments');
+                ->scalar('NutrientComments')
+                ->maxLength('NutrientComments', 200)
+                ->allowEmpty('NutrientComments');
 
             return $validator;
         }

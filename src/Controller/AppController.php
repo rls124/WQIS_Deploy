@@ -40,6 +40,10 @@
          */
         public function initialize() {
             parent::initialize();
+			
+			$this->loadComponent('RequestHandler', [
+				'enableBeforeRedirect' => false,
+			]);
 
             $this->loadComponent('RequestHandler');
             $this->loadComponent('Flash');
