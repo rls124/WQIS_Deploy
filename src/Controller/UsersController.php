@@ -164,6 +164,7 @@
 				->find('all')
 				->where(['username = ' => $username])
 				->first();
+				
 			//Update the data
 			$user->firstname = $this->request->getData('firstname');
 			$user->lastname = $this->request->getData('lastname');
@@ -295,10 +296,10 @@
 					->find('all')
 					->where(['username = ' => $username])
 					->first();
-
+					
 				$this->response->type('json');
 
-				if (count($user) === 0) {
+				if ($user == null) {
 					$json = json_encode([
 						'Message' => 'Error'
 					]);
@@ -335,15 +336,17 @@
 				$responseMessage = '';
 				$responseData = '';
 
-				if (count($user) === 0) {
+				if ($user == null) {
 					$responseMessage = 'That username does not exist, please enter another';
 					$responseData = 'Error';
-				} else {
+				}
+				else {
 					if ($user->securityanswer1 === Security::hash($securityanswer1, 'sha256') &&
 						$user->securityanswer2 === Security::hash($securityanswer2, 'sha256') &&
 						$user->securityanswer3 === Security::hash($securityanswer3, 'sha256')) {
 						$responseData = 'GoToUserInformationPage';
-					} else {
+					}
+					else {
 						$responseMessage = 'One or more of the provided answers are incorrect';
 						$responseData = 'Error';
 					}
