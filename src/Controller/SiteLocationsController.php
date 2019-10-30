@@ -136,15 +136,17 @@
 				->where(['ID = ' => $siteid])
 				->first();
 
-			$this->response->type('json');
-
 			$json = json_encode(['sitenumber' => $site->Site_Number,
 				'monitored' => $site->Monitored,
 				'longitude' => $site->Longitude,
 				'latitude' => $site->Latitude,
 				'sitelocation' => $site->Site_Location,
 				'sitename' => $site->Site_Name]);
-			$this->response->body($json);
+			
+			$this->response = $this->response->withStringBody($json);
+			$this->response = $this->response->withType('json');
+				
+			return $this->response;
 		}
 
 		public function updatesitedata() {
@@ -166,7 +168,6 @@
 			$site->Latitude = $this->request->getData('latitude');
 			$site->Site_Location = $this->request->getData('location');
 			$site->Site_Name = $this->request->getData('sitename');
-
 
 			if ($this->SiteLocations->save($site)) {
 				return;
