@@ -98,12 +98,7 @@
 <div id="editSiteModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
-	<?=
-	    $this->Form->create(false, [
-		'id' => 'updateSiteForm'
-		]
-	    )
-	?>
+	<form id="updateSiteForm">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="edit-header">Edit Site: </h4>
@@ -111,32 +106,6 @@
                 <p hidden id="edit-sitenumber"></p>
             </div>
             <div class="modal-body">
-		<div class="csscssload-load-frame loadingspinner-edit">
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		</div>
 		<?=
 		    $this->Form->control('longitude', [
 			'label' => [
@@ -199,11 +168,11 @@
 		?>
             </div>
             <div class="modal-footer">
-                <button type="submit" id='update-btn' name='update-btn' class="btn btn-default btn-basic btn btn-sm">Save</button>
+                <button type="button" id='update-btn' name='update-btn' class="btn btn-default btn-basic btn btn-sm" onclick="updateButton()">Save</button>
                 <button type="button" id="edit-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
             </div>
         </div>
-	<?= $this->Form->end() ?>
+	</form>
     </div>
 </div>
 
@@ -227,32 +196,6 @@
                 <h4 class="modal-title">Add New Site</h4>
             </div>
             <div class="modal-body">
-                <div class="csscssload-load-frame loadingspinner-add">
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                </div>
 		<?=
 		    $this->Form->control('sitenumber', [
 			'label' => [

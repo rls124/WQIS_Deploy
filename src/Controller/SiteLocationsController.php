@@ -162,8 +162,16 @@
 				->find('all')
 				->where(['ID = ' => $siteid])
 				->first();
-			//Update all the fields
-			$site->Monitored = $this->request->getData('monitored');
+
+			//Update all the fields			
+			$monitored = $this->request->getData('monitored');
+			if ($monitored == "1" || $monitored == "true") {
+				$site->Monitored == true;
+			}
+			else {
+				$site->Monitored == false;
+			}
+			
 			$site->Longitude = $this->request->getData('longitude');
 			$site->Latitude = $this->request->getData('latitude');
 			$site->Site_Location = $this->request->getData('location');
