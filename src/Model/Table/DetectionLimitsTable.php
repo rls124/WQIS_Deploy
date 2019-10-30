@@ -17,8 +17,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\DetectionLimit[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\DetectionLimit findOrCreate($search, callable $callback = null, $options = [])
  */
-class DetectionLimitsTable extends Table
-{
+class DetectionLimitsTable extends Table {
 
     /**
      * Initialize method
@@ -26,8 +25,7 @@ class DetectionLimitsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
         $this->setTable('detection_limits');
@@ -41,8 +39,7 @@ class DetectionLimitsTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
-    {
+    public function validationDefault(Validator $validator) {
         $validator
             ->scalar('Measure')
             ->maxLength('Measure', 100)

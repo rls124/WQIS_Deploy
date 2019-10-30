@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function () {
     $('#message').on('click', function () {
         $(this).addClass("hidden");
@@ -125,7 +122,6 @@ function displayError(formInputID, errorMessID, errorMessage){
     $(errorMessID).text(errorMessage);
     $(formInputID).css({'backgroundColor' : '#fcf7f7', 'border' : 'solid #a30000'});
 }
-
 
 function removeErrorMessages() {
     $('p').each(function(){

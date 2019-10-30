@@ -107,5 +107,4 @@
 
             return $rules;
         }
-
     }

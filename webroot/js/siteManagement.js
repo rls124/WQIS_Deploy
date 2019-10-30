@@ -1,4 +1,3 @@
-
 $(document).ajaxStart(function () {
     $('.loadingspinner-edit').css('visibility', 'visible');
     $('.loadingspinnermain').css('visibility', 'visible');
@@ -64,19 +63,14 @@ $(document).ready(function () {
         });
     });
     
-    
-    
-    
     $('body').on('change', '.checkbox', function () {
-        
         var input = $(this);
         if (!input.attr('id')) {
             return;
         }
    
-       
         var siteid = (input.attr('id')).split("-")[1];
-         console.log(siteid);
+        console.log(siteid);
         var monitored;
         
         console.log(!$('#td-' + siteid + '-monitoredcheckbox').is(":checked"));
@@ -91,22 +85,12 @@ $(document).ready(function () {
             monitored = 1;
         }
         
-        //This is the quick and dirty way of doing it. 
-        //Rather than changing the method in the sitelocation controller,
-        //we're just sending the same data to the database, along with the updated site monitoring.
+        //This is the quick and dirty way of doing it. Rather than changing the method in the sitelocation controller, we're just sending the same data to the database, along with the updated site monitoring.
         var longitude = parseFloat($('#td-' + siteid + '-longitude').text());
 	var latitude = parseFloat($('#td-' + siteid + '-latitude').text());	
 	var location = $('#td-' + siteid + '-siteLoc').text();
 	var sitename = $('#td-' + siteid + '-siteName').text();
         var sitenumber = parseInt($('#td-' + siteid + '-siteNum').text());
-        //$('#td-' + siteid + '-siteNum').text(sitenumber);
-
-        //console.log(monitored);
-        //console.log(longitude);
-        //console.log(latitude);
-        //console.log(location);
-        //console.log(sitename);
-        //console.log(sitenumber);
         
         $.ajax({
             type: 'POST',
@@ -292,11 +276,7 @@ $(document).ready(function () {
         var flag = true;
         $('tr').each(function(){
             var celltext = $(this).find('td:first').text();
-            /*console.log('did we get here???');
-            var celltext = $(this).html();
-            console.log(celltext);*/
-            if(sitenumber === celltext){
-                
+            if (sitenumber === celltext) {
                 flag = false;
             }
         });
@@ -334,4 +314,3 @@ function validateInput(longitude, latitude, sitelocation, sitename) {
     }
     return true;
 }
-

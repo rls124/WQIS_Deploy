@@ -17,19 +17,15 @@
             ]
         )
     ?>
-    <!--<div class="container">-->
-        <!--<div class="form-group row">-->
             <?=
                 $this->Form->control('Username', [
                     'label' => [
                         'text' => 'Username',
                         'class' => 'label-reg'
-                        //'class' => 'col-lg-2 label-reg lol'
                     ],
                     'templates' => [
                         'inputContainer' => '{{content}}'
                     ],
-                    //'class' => "col-lg-10 form-control mainPage textinput",
                     'class' => 'form-control mainPage textinput',
                     'name' => "username",
                     'id' => "username",
@@ -37,17 +33,14 @@
                 ]);
             ?>
             <p class="errorMessage" id="usernameError" style=""></p>
-        <!--</div>-->
-    <!--</div>-->
     
     <input type="button" class="btn mb-3 btn-basic" id="confirmUsername-btn" value="Confirm Username" style="float: right">
 
     <div class="collapse.show" id="collapseInfo">
-	<div class="securityQuestions">
+		<div class="securityQuestions">
 	    
-	</div>
+		</div>
     </div>
     <?= $this->Form->end() ?>
-    
-    
+        
 </div>

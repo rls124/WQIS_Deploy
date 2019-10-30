@@ -54,5 +54,3 @@
         </tbody>
     </table>
 </div>
-   
-<?php include "../Layout/loadingSpinner.ctp"; ?>

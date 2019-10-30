@@ -79,7 +79,6 @@
 		
 		<?=
 		    $this->Form->control('CommentInfo', ['maxlength' => '200',
-			//'size' => '200',
 			'templates' => [
 			    'inputContainer' => '{{content}}'
 			],

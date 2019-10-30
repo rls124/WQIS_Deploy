@@ -10,8 +10,7 @@ use Cake\ORM\Entity;
  * @property float $Lowest_Acceptable_Value
  * @property float $Highest_Acceptable_Value
  */
-class DetectionLimit extends Entity
-{
+class DetectionLimit extends Entity {
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

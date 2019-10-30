@@ -176,7 +176,6 @@ $(document).ready(function () {
 		    //append new data points to the beginning of data[]
 		    dataBySite[sites[q]] = newDataPoints.concat(dataBySite[sites[q]]);
 		}
-
 	    }
 
 	    //data points in-between existing ones
@@ -193,7 +192,6 @@ $(document).ready(function () {
 		    //Add the point at at the correct position
 		    dataBySite[sites[q]].splice(++i, 0, obj);
 		}
-
 	    }
 
 	    //if the date selected is after the last date, insert blank values to represent weeks without data
@@ -630,9 +628,5 @@ $(document).ready(function () {
 	    .attr("opacity", function (d) {
 		return d.opacity;
 	    });
-
     }
-
 });
-
-

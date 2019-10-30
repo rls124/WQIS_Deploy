@@ -38,5 +38,4 @@
 			//Save changes
 			$this->DetectionLimits->save($DetectionLimit);
 		}
-
 	}

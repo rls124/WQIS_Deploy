@@ -1,6 +1,4 @@
 $(function () {
-
-
     $("#site").change(function () {
         getRange();
     });
@@ -8,8 +6,7 @@ $(function () {
         getRange();
     });
     function getRange() {
-
-//If both variables are not null, then we may submit an sql request.
+		//If both variables are not null, then we may submit an sql request.
         var siteData = document.querySelector('#site').value;
         var categoryData = $('#categorySelect').val();
         if ((siteData !== null && siteData !== 'select') && categoryData !== null) {

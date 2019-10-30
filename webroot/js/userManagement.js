@@ -330,19 +330,6 @@ function validatePassword(userpw, passConfirm) {
     return true;
 }
 
-/*function ensureInput(){
- with (document.forms.addUserForm) {
- var btn = document.getElementById("#add-btn");
- if (firstname.value !== "" && lastname.value !== "" && email.value !== "" &&
- organization.value !== "" && position.value !== "" &&
- username.value !== "" && userpw.value !== "" && passConfirm.value !== "") {
- btn.disabled = false;
- } else {
- btn.disabled = true;
- }
- }
- }*/
-
 /*
  * Creates a popover box upon focus of the email input field
  * that contains instructions for entering in email addresses.
@@ -401,6 +388,7 @@ $(function () {
                 $(this).popover('hide');
             });
 });
+
 $(function () {
     $("#add-passConfirm")
             .popover({trigger: "focus", title: 'Password Guidelines', placement: "top", html: true,

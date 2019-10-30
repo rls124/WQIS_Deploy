@@ -43,5 +43,4 @@
             'pesticide_samples' => true,
             'water_quality_samples' => true
         ];
-
     }

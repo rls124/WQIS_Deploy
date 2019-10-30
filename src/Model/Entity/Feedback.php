@@ -10,8 +10,7 @@ use Cake\ORM\Entity;
  * @property float $Minimum_Acceptable_Value
  * @property float $Maximum_Acceptable_Value
  */
-class Feedback extends Entity
-{
+class Feedback extends Entity {
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

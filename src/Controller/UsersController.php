@@ -45,7 +45,6 @@
 				}
 
 				//If we could not save the user, display the appropriate message
-
 				$username = $this->request->getData('username');
 				$usererror = $this->Users
 					->find('all')
@@ -177,7 +176,8 @@
 
 			if ($userpw != '' && $userpw == $passConfirm) {
 				$user->userpw = $userpw;
-			} else {
+			}
+			else {
 				return;
 			}
 			if ($this->Users->save($user)) {
@@ -187,8 +187,6 @@
 
 		public function edituserinfo() {
 			if ($this->request->is('post') || $this->Auth->User('username')) {
-				//if (!$this->request->getData('userpw') && !$passConfirm = $this->request->getData('passConfirm')){
-				//if (!$this->request->getData('userpw') && !$this->request->getData('passConfirm')){
 				//If there is no first name, or passwords
 				if (!$this->request->getData('firstname') && !($this->request->getData('userpw') && $this->request->getData('passConfirm'))) {
 					if ($this->Auth->User('username')) {
@@ -198,7 +196,8 @@
 							->where(['username = ' => $username])
 							->first();
 						$this->set(compact('user'));
-					} else {
+					}
+					else {
 						$username = $this->request->getData('username');
 						$this->set(compact('username'));
 					}
@@ -303,7 +302,8 @@
 					$json = json_encode([
 						'Message' => 'Error'
 					]);
-				} else {
+				}
+				else {
 					$json = json_encode([
 						'Message' => 'Success',
 						'username' => $user->username,
@@ -359,5 +359,4 @@
 			}
 			return $this->redirect(['controller' => 'Users', 'action' => 'login']);
 		}
-
 	}

@@ -6,7 +6,6 @@ label{
     border: solid thin gray;
 }
 .scrollCheckbox {
-
     background-color: #f2f2f2;
     overflow-y: auto;
     max-height: 200px;

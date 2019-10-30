@@ -25,8 +25,7 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string $securityquestion3
  * @property string $securityanswer3
  */
-class User extends Entity
-{
+class User extends Entity {
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -58,5 +57,4 @@ class User extends Entity
     protected function _setuserpw($password) {
         return (new DefaultPasswordHasher())->hash($password);
     }
-
 }

@@ -101,32 +101,6 @@
                 <p hidden id="edit-username"></p>
             </div>
             <div class="modal-body">
-		<div class="csscssload-load-frame loadingspinner-edit">
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		    <div class="cssload-dot"></div>
-		</div>
 		<?=
 		    $this->Form->input('firstname', [
 			'label' => [
@@ -140,8 +114,6 @@
 			'name' => "firstname",
 			'id' => "edit-firstname",
 			'placeholder' => "Your First Name...",
-			//'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -157,8 +129,6 @@
 			'name' => "lastname",
 			'id' => "edit-lastname",
 			'placeholder' => "Your Last Name...",
-			//'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -174,8 +144,6 @@
 			'name' => "email",
 			'id' => "edit-email",
 			'placeholder' => "Your Email...",
-			//'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -191,8 +159,6 @@
 			'name' => "organization",
 			'id' => "edit-organization",
 			'placeholder' => "Your Organization...",
-			//'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -208,8 +174,6 @@
 			'name' => "position",
 			'id' => "edit-position",
 			'placeholder' => "Your Position...",
-			//'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
                 <label for='#edit-adminChk'>Set as administrator: </label>
@@ -235,8 +199,6 @@
 			'name' => "userpw",
 			'id' => "edit-userpw",
 			'placeholder' => "Your Password...",
-			//'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -252,8 +214,6 @@
 			'name' => "passConfirm",
 			'id' => "edit-passConfirm",
 			'placeholder' => "Your Password...",
-			//'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
             </div>
@@ -272,15 +232,13 @@
     <div class="modal-dialog">
 	<?=
 	    $this->Form->create(false, [
-		'id' => 'addUserForm'//,
-		//'onsubmit' => 'return validate()'
+		'id' => 'addUserForm'
 		]
 	    )
 	?>
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <!--button type="button" class="close" data-dismiss="modal">&times;</button-->
                 <h4 class="modal-title">Add New User</h4>
             </div>
             <div class="modal-body">
@@ -323,8 +281,6 @@
 			'name' => "firstname",
 			'id' => "add-firstname",
 			'placeholder' => "Your First Name...",
-//		    'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -340,8 +296,6 @@
 			'name' => "lastname",
 			'id' => "add-lastname",
 			'placeholder' => "Your Last Name...",
-//		    'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -357,8 +311,6 @@
 			'name' => "email",
 			'id' => "add-email",
 			'placeholder' => "Your Email...",
-//		    'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -374,8 +326,6 @@
 			'name' => "organization",
 			'id' => "add-organization",
 			'placeholder' => "Your Organization...",
-//		    'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -391,8 +341,6 @@
 			'name' => "position",
 			'id' => "add-position",
 			'placeholder' => "Your Position...",
-//		    'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -408,8 +356,6 @@
 			'name' => "username",
 			'id' => "add-username",
 			'placeholder' => "Your Username...",
-//		    'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
                 <label for='#add-adminChk'>Set as administrator: </label>
@@ -438,8 +384,6 @@
 			'name' => "userpw",
 			'id' => "add-userpw",
 			'placeholder' => "Your Password...",
-//		    'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
 		<?=
@@ -455,8 +399,6 @@
 			'name' => 'passConfirm',
 			'id' => "add-passConfirm",
 			'placeholder' => "Your Password...",
-//		    'oninput' => "ensureInput();",
-			//'onfocus' => "toggle(this);"
 		    ]);
 		?>
             </div>

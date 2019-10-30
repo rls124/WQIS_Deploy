@@ -180,10 +180,6 @@
 				$SiteLocation = $this->SiteLocations->patchEntity($SiteLocation, $this->request->getData());
 
 				$Site_Number = $this->request->getData('Site_Number');
-//                $Longitude = $this->request->getData('Longitude');
-//                $Latitude = $this->request->getData('Latitude');
-//                $Site_Location = $this->request->getData('Site_Location');
-//                $Site_Name = $this->request->getData('Site_Name');
 
 				if ($this->SiteLocations->save($SiteLocation)) {
 					$site = $this->SiteLocations

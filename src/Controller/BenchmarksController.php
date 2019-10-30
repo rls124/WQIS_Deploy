@@ -39,5 +39,4 @@
 			//Save changes
 			$this->Benchmarks->save($benchmark);
 		}
-
 	}

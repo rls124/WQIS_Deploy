@@ -61,7 +61,8 @@ $(document).ready( function(){
 		if (value === '') {
 		    label.text('  ');
 
-		} else {
+		}
+		else {
 		    label.text(value);
 		}
                 $('.message').html('<strong>'+ parameter +'</strong> for <strong>' + measure +' </strong> has been updated to <strong>' + value +'</strong>');
@@ -79,8 +80,5 @@ $(document).ready( function(){
                 $('.message').addClass('error');
             }
 	});
-
     });
 });
-
-

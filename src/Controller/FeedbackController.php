@@ -8,7 +8,6 @@
 	class FeedbackController extends AppController {
 
 		public function userFeedback() {
-
 			$Feedback = $this->Feedback->newEntity();
 			if ($this->request->is('post')) {
 				//Get Post Data and store it in the new entity
@@ -19,7 +18,8 @@
 					$this->Flash->success(__('Your feedback has been saved.'));
 
 					return $this->redirect(['action' => 'userfeedback']);
-				} else {
+				}
+				else {
 					$this->Flash->error(__('The feedback could not be saved. Please, try again.'));
 				}
 			}
@@ -31,7 +31,6 @@
 		}
 
 		public function deleteFeedback() {
-
 			$this->render(false);
 			//Ensure the request has the relevant field
 			if (!$this->request->getData('ID')) {
@@ -48,5 +47,4 @@
 			//Delete it
 			$this->Feedback->delete($record);
 		}
-
 	}

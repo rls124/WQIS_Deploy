@@ -114,5 +114,3 @@ function jsUpdateSize(){
 };
 window.onload = jsUpdateSize;       // When the page first loads
 window.onresize = jsUpdateSize;     // When the browser changes size
-
-

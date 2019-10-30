@@ -1,9 +1,9 @@
 function ensurePasswordInput() {
     if($('#userpw').val() !== '' && $('#passConfirm').val() !== ''){
         $('#changePass-btn').removeAttr('disabled');
-    } else {
-        $('#changePass-btn').attr('disabled','disabled');
-        
+    }
+	else {
+        $('#changePass-btn').attr('disabled','disabled');    
     }
 }
 
@@ -74,7 +74,8 @@ function validatePass() {
     if (!validatePassword()) { 
         if(!$('#firstname').length) {
             displayError('#userpw','#passError', 'Please enter a valid password');
-        } else {
+        }
+		else {
             displayError('#userpw','#passError', 'Please enter a valid password if you wish to change your password');
         }
         return false;
@@ -83,7 +84,8 @@ function validatePass() {
         if(!$('#firstname').length) {
             displayError('#userpw','#passError', 'Please ensure passwords match');
             displayError('#passConfirm','#passConfirmError', 'Please ensure passwords match');
-        } else {
+        }
+		else {
             displayError('#userpw','#passError', 'Please ensure passwords match if you wish to change your password');
             displayError('#passConfirm','#passConfirmError', 'Please ensure passwords match if you wish to change your password');
         }
@@ -103,19 +105,19 @@ function validatePassword() {
     var charCounter = 0;
 
     if (/\d/.test(password)) {
-	charCounter++;
+		charCounter++;
     }
     if (/[a-z]/.test(password)) {
-	charCounter++;
+		charCounter++;
     }
     if (/[A-Z]/.test(password)) {
-	charCounter++;
+		charCounter++;
     }
     if (/[\!\@\#\$\%\^\&\*\(\)\_\-\+\=\|\{\}\[\]\:\;\"\'\<\>\,\.\?\/\~\`]/.test(password)) {
-	charCounter++;
+		charCounter++;
     }
     if (charCounter < 3) {
-	return false;
+		return false;
     }
     return true;
 }
@@ -148,9 +150,6 @@ $(function () {
 	    .popover({trigger: "focus", title: 'Password Guidelines', placement: "top", html: true,
 		content: "Passwords must match"})
 	    .blur(function () {
-		$(this).popover('hide');
+			$(this).popover('hide');
 	    });
 });
-
-
-
