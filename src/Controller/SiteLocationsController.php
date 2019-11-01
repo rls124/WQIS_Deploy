@@ -112,8 +112,11 @@
 			//Format date properly
 			$mindate = date('m/d/Y', strtotime($measureQuery['mindate']));
 			$maxdate = date('m/d/Y', strtotime($measureQuery['maxdate']));
-			$dateRange = [$mindate, $maxdate];
-			$this->response->body(json_encode($dateRange));
+			$dateRange = json_encode([$mindate, $maxdate]);
+			
+			$this->response = $this->response->withStringBody($dateRange);
+			$this->response = $this->response->withType('json');
+				
 			return $this->response;
 		}
 

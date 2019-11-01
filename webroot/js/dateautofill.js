@@ -18,8 +18,7 @@ $(function () {
                     'category': categoryData
                 },
                 datatype: 'JSON',
-                success: function (dataRaw) {
-                    var data = JSON.parse(dataRaw);
+                success: function (data) {
                     var startDateData = data[0];
                     var endDateData = data[1];
                     $('#startdate').val(startDateData);
