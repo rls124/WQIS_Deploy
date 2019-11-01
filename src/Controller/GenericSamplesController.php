@@ -5,6 +5,14 @@
 
     class GenericSamplesController extends AppController {
 	
+	public function removeBOM($str) {
+		//remove the UTF-8 byte order mark (BOM). Excel exports CSVs with this, its unneeded and breaks our importer, so remove it
+		if(substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
+			$str=substr($str, 3);
+		}
+		return $str;
+	}	
+	
 	public function tableview() {
 		//check if there is post data
 		if ($this->request->getData()) {
@@ -157,6 +165,8 @@
 		*/
 		
 		$headerRow = $csv[0];
+		
+		$headerRow[0] = GenericSamplesController::removeBOM($headerRow[0]); //fix issue with Excel exporting CSVs with UTF-8 BOM encoding
 		
 		$bacteriaHeader = array(
 			array("site number", "site_number", "sitenumber"),
