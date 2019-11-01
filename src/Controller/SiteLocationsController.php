@@ -46,69 +46,41 @@
 			}
 
 			$site = $this->request->getData('site');
-			$this->loadModel('BacteriaSamples');
-			$this->loadModel('PesticideSamples');
-			$this->loadModel('NutrientSamples');
-			$this->loadModel('WaterQualitySamples');
+			
 			switch ($this->request->getData('category')) {
-
 				case "bacteria":
-					//Get min/max date of all the sites
-					$measureQuery = $this->BacteriaSamples
-							->find('all', [
-								'conditions' => [
-									'site_location_id' => $site
-								],
-								'fields' => [
-									'mindate' => 'MIN(Date)',
-									'maxdate' => 'MAX(Date)'
-								]
-							])->first();
-
+					$this->loadModel('BacteriaSamples');
+					$model = $this->BacteriaSamples;
 					break;
 				case "nutrient":
-					//Get min/max date of all the sites
-					$measureQuery = $this->NutrientSamples
-							->find('all', [
-								'conditions' => [
-									'site_location_id' => $site
-								],
-								'fields' => [
-									'mindate' => 'MIN(Date)',
-									'maxdate' => 'MAX(Date)'
-								]
-							])->first();
+					$this->loadModel('NutrientSamples');
+					$model = $this->NutrientSamples;
 					break;
 				case "pesticide":
-					//Get min/max date of all the sites
-					$measureQuery = $this->PesticideSamples
-							->find('all', [
-								'conditions' => [
-									'site_location_id' => $site
-								],
-								'fields' => [
-									'mindate' => 'MIN(Date)',
-									'maxdate' => 'MAX(Date)'
-								]
-							])->first();
+					$this->loadModel('PesticideSamples');
+					$model = $this->PesticideSamples;
 					break;
 				case "wqm":
-					//Get min/max date of all the sites
-					$measureQuery = $this->WaterQualitySamples
-							->find('all', [
-								'conditions' => [
-									'site_location_id' => $site
-								],
-								'fields' => [
-									'mindate' => 'MIN(Date)',
-									'maxdate' => 'MAX(Date)'
-								]
-							])->first();
+					$this->loadModel('WaterQualitySamples');
+					$model = $this->WaterQualitySamples;
 					break;
 				default:
 					$this->response->body(json_encode(['', '']));
 					return $this->response;
 			}
+			
+			//Get min/max date of all the sites
+			$measureQuery = $model
+				->find('all', [
+					'conditions' => [
+						'site_location_id' => $site
+					],
+					'fields' => [
+						'mindate' => 'MIN(Date)',
+						'maxdate' => 'MAX(Date)'
+					]
+				])->first();
+			
 			//Format date properly
 			$mindate = date('m/d/Y', strtotime($measureQuery['mindate']));
 			$maxdate = date('m/d/Y', strtotime($measureQuery['maxdate']));
@@ -116,7 +88,7 @@
 			
 			$this->response = $this->response->withStringBody($dateRange);
 			$this->response = $this->response->withType('json');
-				
+			
 			return $this->response;
 		}
 
