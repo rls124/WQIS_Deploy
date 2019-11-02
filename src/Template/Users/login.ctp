@@ -5,7 +5,7 @@
 
     <div class="mt-3">
         <h1 class="centeredText" id="wqisHeading">Water Quality Information Service</h1>
-        <span id="wqisInfo">The Water Quality Information Service is a resource for researchers, agency officials, and the general public for organizing and presenting water quality data from the St. Joseph, St. Marys, Auglaize and Upper Maumee River watersheds. It is maintained by the St. Joseph River Watershed Initiative in collaboration with the Environmental Resources Center at Indiana University Purdue University Fort Wayne.</span>
+        <span id="wqisInfo">The Water Quality Information Service is a resource for researchers, agency officials, and the general public for organizing and presenting water quality data from the St. Joseph, St. Marys, Auglaize and Upper Maumee River watersheds. It is maintained by the St. Joseph River Watershed Initiative in collaboration with the Environmental Resources Center at Purdue University Fort Wayne.</span>
     </div>
 
     <hr>
