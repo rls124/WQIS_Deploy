@@ -512,16 +512,15 @@
 		$this->render(false);
 		$this->loadModel("Benchmarks");
 		
-		// get request data
+		//get request data
 		$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
 		$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
 		$sites = $this->request->getData('sites');
 		$measure = $this->request->getData('measure');
 		
-		//we cant (currently) get the category directly from POST data, so determine it from the measures we get. Not efficient, not pretty, good enough
-		
-		if ($_POST["measure"] == "ecoli") { //bacteria category
-			$this->loadModel('BacteriaSamples');
+		//we cant get the category directly from POST data, so determine it from the measures we get. Not efficient, not pretty, good enough
+		if ($measure == "ecoli") { //bacteria category
+			$model = "BacteriaSamples";
 
 			//Set the name of the measure
 			switch ($measure . "") {
@@ -532,46 +531,9 @@
 				$thresMeasure = $measure;
 				break;
 			}
-			//Get theshold data
-			$threshold = $this->Benchmarks->find('all', [
-			'fields' => [
-				'min' => 'Minimum_Acceptable_Value',
-				'max' => 'Maximum_Acceptable_Value'
-			],
-			'conditions' => [
-				'and' => [
-				'Measure LIKE' => $thresMeasure
-				]
-			]
-			]);
-			//If there is no min/max for theshold, set as null
-			if ($threshold->isEmpty()) {
-				$threshold = [['min' => NULL, 'max' => NULL]];
-			}
-			//Get data requested
-			$bacteriaSamples = $this->BacteriaSamples->find('all', [
-				'fields' => [
-				'site' => 'site_location_id',
-				'date' => 'Date',
-				'value' => $measure
-				],
-				'conditions' => [
-				'and' => [
-					'site_location_id IN ' => $sites,
-					[
-					'BacteriaSamples.Date >=' => $startdate,
-					'BacteriaSamples.Date <= ' => $enddate
-					]
-				]
-				]
-			])->order(['Date' => 'ASC']);
-			$response = $this->response;
-			$response->type('application/json');
-			$response->body(json_encode([$bacteriaSamples, $threshold]));
-			return $response;
 		}
-		elseif ($_POST["measure"] == "nitrateNitrite" || $_POST["measure"] == "phosphorus" || $_POST["measure"] == "drp" || $_POST["measure"] == "ammonia") { //nutrient
-			$this->loadModel('NutrientSamples');
+		elseif (in_array($measure, ["nitrateNitrite", "phosphorus", "drp", "ammonia"])) { //nutrient
+			$model = "NutrientSamples";
 
 			//Set the name of the measure
 			switch ($measure . "") {
@@ -590,49 +552,9 @@
 				$thresMeasure = $measure;
 				break;
 			}
-
-			//Get theshold data
-			$threshold = $this->Benchmarks->find('all', [
-			'fields' => [
-				'min' => 'Minimum_Acceptable_Value',
-				'max' => 'Maximum_Acceptable_Value'
-			],
-			'conditions' => [
-				'and' => [
-				'Measure LIKE' => $thresMeasure
-				]
-			]
-			]);
-
-			//If there is no min/max for theshold, set as null
-			if ($threshold->isEmpty()) {
-				$threshold = [['min' => NULL, 'max' => NULL]];
-			}
-			//Get data requested
-			$wqmSamples = $this->NutrientSamples->find('all', [
-				'fields' => [
-				'site' => 'site_location_id',
-				'date' => 'Date',
-				'value' => $measure
-				],
-				'conditions' => [
-				'and' => [
-					'site_location_id IN ' => $sites,
-					[
-					'NutrientSamples.Date >=' => $startdate,
-					'NutrientSamples.Date <= ' => $enddate
-					]
-				]
-				]
-			])->order(['Date' => 'ASC']);
-
-			$response = $this->response;
-			$response->type('json');
-			$response->body(json_encode([$wqmSamples, $threshold]));
-			return $response;
 		}
-		elseif ($_POST["measure"] == "alachlor" || $_POST["measure"] == "atrazine" || $_POST["measure"] == "metolachlor") { //pesticide
-			$this->loadModel('PesticideSamples');
+		elseif (in_array($measure, ["alachlor", "atrazine", "metolachlor"])) { //pesticide
+			$model = "PesticideSamples";
 
 			//set the name of the measure
 			switch ($measure . "") {
@@ -649,49 +571,9 @@
 				$thresMeasure = $measure;
 				break;
 			}
-
-			//Get theshold data
-			$threshold = $this->Benchmarks->find('all', [
-			'fields' => [
-				'min' => 'Minimum_Acceptable_Value',
-				'max' => 'Maximum_Acceptable_Value'
-			],
-			'conditions' => [
-				'and' => [
-				'Measure LIKE' => $thresMeasure
-				]
-			]
-			]);
-
-			//If there is no min/max for theshold, set as null
-			if ($threshold->isEmpty()) {
-				$threshold = [['min' => NULL, 'max' => NULL]];
-			}
-			//Get data requested
-			$pesticideSamples = $this->PesticideSamples->find('all', [
-				'fields' => [
-				'site' => 'site_location_id',
-				'date' => 'Date',
-				'value' => $measure
-				],
-				'conditions' => [
-				'and' => [
-					'site_location_id IN ' => $sites,
-					[
-					'PesticideSamples.Date >=' => $startdate,
-					'PesticideSamples.Date <= ' => $enddate
-					]
-				]
-				]
-			])->order(['Date' => 'ASC']);
-
-			$response = $this->response;
-			$response->type('json');
-			$response->body(json_encode([$pesticideSamples, $threshold]));
-			return $response;
 		}
-		elseif ($_POST["measure"] == "conductivity" || $_POST["measure"] == "do" || $_POST["measure"] == "ph" || $_POST["measure"] == "water_temp" || $_POST["measure"] == "tds" || $_POST["measure"] == "turbidity" || $_POST["measure"] == "bridge_to_water_height") { //water quality meter
-			$this->loadModel('WaterQualitySamples');
+		elseif (in_array($measure, ["conductivity", "do", "ph", "water_temp", "tds", "turbidity", "bridge_to_water_height"])) { //water quality meter
+			$model = "WaterQualitySamples";
 
 			//Set the name of the measure
 			switch ($measure . "") {
@@ -720,11 +602,14 @@
 				$thresMeasure = $measure;
 				break;
 			}
-
-			//Get theshold data
-			$threshold = $this->Benchmarks->find('all', [
+		}
+		
+		$this->loadModel($model);
+		
+		//Get theshold data
+		$threshold = $this->Benchmarks->find('all', [
 			'fields' => [
-				'min' => 'Minimum_Acceptable_Value',
+			'min' => 'Minimum_Acceptable_Value',
 				'max' => 'Maximum_Acceptable_Value'
 			],
 			'conditions' => [
@@ -732,36 +617,35 @@
 				'Measure LIKE' => $thresMeasure
 				]
 			]
-			]);
-			
-			//if there is no min/max for theshold, set as null
-			if ($threshold->isEmpty()) {
-				$threshold = [['min' => NULL, 'max' => NULL]];
-			}
-			
-			//get data requested
-			$wqmSamples = $this->WaterQualitySamples->find('all', [
-				'fields' => [
-				'site' => 'site_location_id',
-				'date' => 'Date',
-				'value' => $measure
-				],
-				'conditions' => [
-				'and' => [
-					'site_location_id IN ' => $sites,
-					[
-					'WaterQualitySamples.Date >=' => $startdate,
-					'WaterQualitySamples.Date <= ' => $enddate
-					]
-				]
-				]
-			])->order(['Date' => 'ASC']);
-
-			$response = $this->response;
-			$response->type('json');
-			$response->body(json_encode([$wqmSamples, $threshold]));
-			return $response;
+		]);
+		
+		//If there is no min/max for theshold, set as null
+		if ($threshold->isEmpty()) {
+			$threshold = [['min' => NULL, 'max' => NULL]];
 		}
+		
+		//Get data requested
+		$samples = $this->$model->find('all', [
+			'fields' => [
+			'site' => 'site_location_id',
+			'date' => 'Date',
+			'value' => $measure
+			],
+			'conditions' => [
+			'and' => [
+				'site_location_id IN ' => $sites,
+				[
+				$model . '.Date >=' => $startdate,
+				$model . '.Date <= ' => $enddate
+				]
+			]
+			]
+		])->order(['Date' => 'ASC']);
+		
+		$this->response = $this->response->withStringBody(json_encode([$samples, $threshold]));
+		$this->response = $this->response->withType('json');
+		
+		return $this->response;
 	}
 
 	public function daterange() {
