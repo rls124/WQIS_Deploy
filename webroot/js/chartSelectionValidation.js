@@ -51,7 +51,6 @@ function populateMeasurementSelect(categoryData) {
         option.text = categoryData[i];
         document.getElementById('measurementSelect').appendChild(option);
     }
-
 }
 
 function initMap() {

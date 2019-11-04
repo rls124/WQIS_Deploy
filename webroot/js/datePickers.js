@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    //document.getElementById('categorySelect').addEventListener("change", changeMeasures);
     $(".date-picker").datepicker({
         trigger: "focus",
         format: 'mm/dd/yyyy',
