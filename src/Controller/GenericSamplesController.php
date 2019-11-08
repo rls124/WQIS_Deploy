@@ -295,15 +295,22 @@
 		    }
 			
 			//create the entity to save
-			$entity = $modelBare->patchEntity($modelBare->newEntity(), $uploadData);
+			try {
+				$entity = $modelBare->patchEntity($modelBare->newEntity(), $uploadData);
 			
-			if ($modelBare->save($entity)) {
-				//success! For output we don't care about successful rows at all, just increment the number of successes
-				$countSuccesses++;
+				if ($modelBare->save($entity)) {
+					//success! For output we don't care about successful rows at all, just increment the number of successes
+					$countSuccesses++;
+				}
+				else {
+					//failure
+					$currentRow[] = $entity->getErrors();
+					$log[] = $currentRow;
+					$countFails++;
+				}
 			}
-			else {
-				//failure
-				$currentRow[] = $entity->getErrors();
+			catch (\PDOException $e) {
+				$currentRow[] = "<span class=\"error\">Referenced site number does not exist, add it</span>";
 				$log[] = $currentRow;
 				$countFails++;
 			}
