@@ -47,7 +47,7 @@
 					'conductivity' => 'Conductivity (mS/cm)',
 					'do' => 'Dissolved Oxygen (mg/L)',
 					'ph' => 'pH',
-					'bridge_to_water_height' => 'Bridge to Water Height (m)',
+					'bridge_to_water_height' => 'Bridge to Water Height (in)',
 					'water_temp' => 'Water Temperature (°C)',
 					'tds' => 'Total Dissolved Solids (g/L)',
 					'turbidity' => 'Turbidity (NTU)',
