@@ -17,8 +17,8 @@
 			<?php
 			if ($countFails > 0) {
 				$totalCount = $countFails + $countSuccesses;
-				echo "<span class='error'>There were problems with your file upload. " . $countSuccesses . " out of " . $totalCount . " rows successfully uploaded</span><br>";
-				echo "Rows with problems are displayed below";
+				echo "<span class='error'>There were problems with your file upload. " . $countSuccesses . " out of " . $totalCount . " rows successfully uploaded.</span><br>";
+				echo "Rows with problems are displayed below.";
 			?>
             <table class="table">
                 <thead>
