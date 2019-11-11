@@ -15,7 +15,7 @@ function changeMeasures() {
     var physProp = {'select': ['Select a measure'],
         'conductivity': ['Conductivity (mS/cm)'],
         'do': ['Dissolved Oxygen (mg/L'],
-		'bridge_to_water_height': ['Bridge to Water Height (m)'],
+		'bridge_to_water_height': ['Bridge to Water Height (in)'],
         'ph': ['pH'],
         'water_temp': ['Water Temperature (°C)'],
         'tds': ['Total Dissolved Solids (g/L)'],

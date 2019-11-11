@@ -4,7 +4,7 @@
                 <th>Sample<br>Number</th>
                 <th>Conductivity<br>(mS/cm)</th>
                 <th>Dissolved Oxygen<br>(mg/L)</th>
-				<th>Bridge to Water Height<br>(m)</th>
+				<th>Bridge to Water Height<br>(in)</th>
                 <th>pH</th>
                 <th>Temperature<br>(°C)</th>
                 <th>Total Dissolved Solids<br>(g/L)</th>
