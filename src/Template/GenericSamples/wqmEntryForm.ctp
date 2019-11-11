@@ -53,7 +53,7 @@
                             <th>Site</th>
                             <th>Sample<br>Number</th>
 							<th>Time<br></th>
-							<th>Bridge to Water Height<br>(in)</th>
+							<th>Bridge to Water Height<br>(m)</th>
                             <th>pH</th>
                             <th>Water Temp<br>(°C)</th>
                             <th>Conductivity<br>(mS/cm)</th>
