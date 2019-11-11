@@ -6,7 +6,6 @@
 }
 </style>
 
-<div class="container roundGreyBox" style="min-height:500px">
 	<div class="row" style="margin:10px;">
 		<div class="col-xs">
 			<h1>File Upload Report</h1>
@@ -101,7 +100,6 @@
 		?>
         </tbody>
     </table>
-</div>
 
 <?php
 $time = microtime();

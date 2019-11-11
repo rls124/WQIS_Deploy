@@ -3,59 +3,58 @@
 <?= $this->Html->css('entryForm.css') ?>
 <?= $this->Html->script('siteEntryForm.js') ?>
 
-<div class="container-fluid roundGreyBox">
-    <?=
-	$this->Form->create($siteLocation, [
-	    'id' => 'siteEntryForm'
-	])
-    ?>
-    <fieldset>
+<?=
+$this->Form->create($siteLocation, [
+	'id' => 'siteEntryForm'
+])
+?>
+<fieldset>
 
-        <p class="centeredText" style="font-size: 2.5rem; margin-bottom: 0px;"><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Add Site Form</p>
-        <h6 class="centeredText">This form is used to add a new water quality measurement site.</h6>
-        <h6 class="requiredText centeredText">*All fields are required.</h6>
-        <hr>
-        <div class="container-fluid">
-	    <div class="form-group row">
-		<?=
-		    $this->Form->input('Site Number', [
+<p class="centeredText" style="font-size: 2.5rem; margin-bottom: 0px;"><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Add Site Form</p>
+	<h6 class="centeredText">This form is used to add a new water quality measurement site.</h6>
+	<h6 class="requiredText centeredText">*All fields are required.</h6>
+	<hr>
+	<div class="container-fluid">
+	<div class="form-group row">
+	<?=
+		$this->Form->input('Site Number', [
+		'label' => [
+			'class' => 'col-lg-2 label-reg text-right centerLabel'
+		],
+		'templates' => [
+			'inputContainer' => '{{content}}'
+		],
+		'class' => "form-control col-lg-10 textinput",
+		'oninput' => "ensureInput();",
+		'name' => "Site_Number",
+		'id' => "Site_Number"
+		]);
+	?>
+	</div>
+	<div class="form-group row">
+	<?=
+		$this->Form->input('Site Name', [
 			'label' => [
-			    'class' => 'col-lg-2 label-reg text-right centerLabel'
+				'class' => 'col-lg-2 label-reg text-right centerLabel'
 			],
 			'templates' => [
-			    'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control col-lg-10 textinput",
-			'oninput' => "ensureInput();",
-			'name' => "Site_Number",
-			'id' => "Site_Number"
-		    ]);
-		?>
-	    </div>
-	    <div class="form-group row">
-		<?=
-		    $this->Form->input('Site Name', [
-			'label' => [
-			    'class' => 'col-lg-2 label-reg text-right centerLabel'
-			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
+				'inputContainer' => '{{content}}'
 			],
 			'class' => "form-control col-lg-10 textinput",
 			'oninput' => "ensureInput();",
 			'name' => "Site_Name",
 			'id' => "Site_Name"
-		    ]);
-		?>
-	    </div>
-	    <div class="form-group row">
+		]);
+	?>
+	</div>
+	<div class="form-group row">
 		<?=
-		    $this->Form->input('Site Location', [
+			$this->Form->input('Site Location', [
 			'label' => [
-			    'class' => 'col-lg-2 label-reg text-right centerLabel'
+				'class' => 'col-lg-2 label-reg text-right centerLabel'
 			],
 			'templates' => [
-			    'inputContainer' => '{{content}}'
+				'inputContainer' => '{{content}}'
 			],
 			'class' => "form-control col-lg-10 textinput",
 			'oninput' => "ensureInput();",
@@ -63,8 +62,8 @@
 			'id' => "Site_Location"
 		    ]);
 		?>
-	    </div>
-	    <div class="form-group row">
+	</div>
+	<div class="form-group row">
 		<?=
 		    $this->Form->input('Longitude', [
 			'label' => [
@@ -79,8 +78,8 @@
 			'id' => "Longitude"
 		    ]);
 		?>
-	    </div>
-	    <div class="form-group row">
+	</div>
+	<div class="form-group row">
 		<?=
 		    $this->Form->input('Latitude', [
 			'label' => [
@@ -95,30 +94,20 @@
 			'id' => "Latitude"
 		    ]);
 		?>
-	    </div>
+	</div>
 
-	    <?=
+	<?=
 		$this->Form->button('Add New Site', [
-		    'class' => 'btn btn-basic mb-3',
-		    'id' => 'siteAddBtn',
-		    'disabled' => "true",
-                    'style' => 'float: right;'
+			'class' => 'btn btn-basic mb-3',
+			'id' => 'siteAddBtn',
+			'disabled' => "true",
+			'style' => 'float: right;'
 		])
-	    ?>
-            <!--
-	    <?=
-		$this->Html->link(__('Cancel'), [
-		    'controller' => 'Pages',
-		    'action' => 'administratorpanel'
-		    ], [
-		    'class' => 'btn btn-primary mb-3'
-		])
-	    ?>
-            -->
-        </div>
-    </fieldset>
-    <?= $this->Form->end() ?>
+	?>
 </div>
+</fieldset>
+<?= $this->Form->end() ?>
+
 
 <?= $this->Html->script('entryForm.js') ?>
 

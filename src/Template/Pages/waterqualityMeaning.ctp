@@ -2,7 +2,6 @@
 
 <?= $this->Html->css('waterQualityMeaning.css') ?>
 
-<div class="container roundGreyBox">
     <div class="row">
         <div class="col-lg-12 box" id="accordian" role="tablist" aria-multiselectable="true">
            <h1>Water Quality Parameters</h1>
@@ -141,4 +140,3 @@
             </div>
         </div>
     </div>
-</div>

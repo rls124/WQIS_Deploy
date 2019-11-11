@@ -1,4 +1,3 @@
-<div class = "container roundGreyBox">
     <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-stats" style="font-size: 20pt;"></span>  Bacteria Charting
         <a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
 			<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
@@ -123,4 +122,3 @@
             <svg class="chart"></svg>
         </div>
     </div>
-</div>

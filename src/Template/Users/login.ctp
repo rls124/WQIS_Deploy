@@ -1,7 +1,5 @@
-
 <?= $this->Html->css('login_register.css') ?>
 <?= $this->Html->script('loginValidation.js') ?>
-<div class="container roundGreyBox">
 
     <div class="mt-3">
         <h1 class="centeredText" id="wqisHeading">Water Quality Information Service</h1>
@@ -106,10 +104,6 @@
     </div>
 </div>
 
-<!-- style="float: left; margin-right:10px;" -->
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src=""></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>

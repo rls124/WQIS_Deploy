@@ -5,18 +5,16 @@
 
 <div id ='message' class="message hidden"></div>
 
-<div class="container roundGreyBox">
-    
-    <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-user" style="font-size: 20pt;"></span>  User Management
-        <a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-	    <span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
-	</a></p>
+<p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-user" style="font-size: 20pt;"></span>  User Management
+	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
+		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
+	</a>
+</p>
 
-    <hr>
-    <div class="collapse" id="collapseInfo">
-        <div class="card card-body">
-	    <!--<div>-->
-            <p> This page is used to add, edit, or delete users. </p>
+<hr>
+<div class="collapse" id="collapseInfo">
+	<div class="card card-body">
+		<p> This page is used to add, edit, or delete users. </p>
             <ul>
                 <li>To add a user, click the 'Add User' button.</li>
                 <li>To delete a user, click the delete icon in the row containing the user to delete.</li>
@@ -242,32 +240,6 @@
                 <h4 class="modal-title">Add New User</h4>
             </div>
             <div class="modal-body">
-                <div class="csscssload-load-frame loadingspinner-add">
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                    <div class="cssload-dot"></div>
-                </div>
 		<?=
 		    $this->Form->input('firstname', [
 			'label' => [
@@ -409,31 +381,4 @@
         </div>
 	<?= $this->Form->end() ?>
     </div>
-</div>
-
-<div class="csscssload-load-frame loadingspinnermain">
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
-    <div class="cssload-dot"></div>
 </div>

@@ -4,95 +4,93 @@
 <?= $this->Html->css('loading.css') ?>
 
 <div id ='message' class="message hidden"></div>
-
-<div class="container roundGreyBox">
     
-    <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Site Management
-        <a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-	    <span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
-	</a></p>
+<p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Site Management
+	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
+		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
+	</a>
+</p>
 
-    <hr>
-    <div class="collapse" id="collapseInfo">
-        <div class="card card-body">
-            <p> This page is used to add, edit, or delete sites. </p>
-            <ul>
-                <li>To add a site, click the 'Add Site' button.</li>
-                <li>To delete a site, click the delete icon in the row containing the site to delete.</li>
-                <li>To edit a site, click the edit icon in the row containing the site to edit.</li>
-            </ul>
-        </div>
-    </div>
-    <input type='button' class='addSitebtn btn-basic btn mt-2 mb-2 btn-md' value='Add Site' id='addSiteBtn' name='addSiteBtn' data-toggle="modal" data-target="#addSiteModal"/>
-    <table id='tableView'  class="table table-striped table-responsive">
-        <thead>
-            <tr>
-                <th>Site<br>Number</th>
-                <th>Monitored</th>
-                <th>Longitude</th>
-                <th>Latitude</th>
-                <th>Site<br>Location</th>
-                <th>Site<br>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="siteTable">
-	    <?php
+<hr>
+<div class="collapse" id="collapseInfo">
+	<div class="card card-body">
+		<p> This page is used to add, edit, or delete sites. </p>
+		<ul>
+			<li>To add a site, click the 'Add Site' button.</li>
+			<li>To delete a site, click the delete icon in the row containing the site to delete.</li>
+			<li>To edit a site, click the edit icon in the row containing the site to edit.</li>
+		</ul>
+	</div>
+</div>
+<input type='button' class='addSitebtn btn-basic btn mt-2 mb-2 btn-md' value='Add Site' id='addSiteBtn' name='addSiteBtn' data-toggle="modal" data-target="#addSiteModal"/>
+<table id='tableView'  class="table table-striped table-responsive">
+	<thead>
+		<tr>
+			<th>Site<br>Number</th>
+			<th>Monitored</th>
+			<th>Longitude</th>
+			<th>Latitude</th>
+			<th>Site<br>Location</th>
+			<th>Site<br>Name</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody id="siteTable">
+	<?php
 		$row = 0;
 		foreach ($SiteLocations as $siteData):
 		    ?>
 		    <tr id='tr-<?= $siteData->ID ?>'>
 			<td class='sitenum' id='<?php echo 'td-' . $siteData->ID . '-siteNum'; ?>'><?= $siteData->Site_Number ?></td>
-                        <td id='<?php echo 'td-' . $siteData->ID . '-monitored'; ?>'>
-                        <?=
-                                $this->Form->create(false, [
-                                    'id' => 'checkboxForm'
-                                    ]
-                                )
-                           ?>
-                        <?=
-                            $this->Form->checkbox('monitored-' . $siteData->ID, [
-                                'class' => "form-control checkbox",
-                                'checked' => $siteData->Monitored,
-                                'value' => $siteData->Monitored,
-                                'id' => 'td-' . $siteData->ID . '-monitoredcheckbox'
-                            ]);
-                        ?>
-
-                            </td>
+			<td id='<?php echo 'td-' . $siteData->ID . '-monitored'; ?>'>
+			<?=
+				$this->Form->create(false, [
+					'id' => 'checkboxForm'
+				]);
+			?>
+			<?=
+				$this->Form->checkbox('monitored-' . $siteData->ID, [
+					'class' => "form-control checkbox",
+					'checked' => $siteData->Monitored,
+					'value' => $siteData->Monitored,
+					'id' => 'td-' . $siteData->ID . '-monitoredcheckbox'
+				]);
+			?>
+			</td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-longitude'; ?>'><?= $siteData->Longitude ?></td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-latitude'; ?>'><?= $siteData->Latitude ?></td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-siteLoc'; ?>'><?= $siteData->Site_Location ?></td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-siteName'; ?>'><?= $siteData->Site_Name ?></td>
-                        <td><a id="edit-tooltip" data-toggle="tooltip" title="Edit Site">
+			<td>
+				<a id="edit-tooltip" data-toggle="tooltip" title="Edit Site">
 			    <?=
 			    $this->Html->tag('span', "", [
-				'class' => "edit glyphicon glyphicon-pencil",
-				'id' => 'edit-' . $siteData->ID,
-				'name' => 'edit-' . $siteData->ID,
-				'data-toggle' => "modal",
-				'data-target' => "#editSiteModal"
-			    ])
+					'class' => "edit glyphicon glyphicon-pencil",
+					'id' => 'edit-' . $siteData->ID,
+					'name' => 'edit-' . $siteData->ID,
+					'data-toggle' => "modal",
+					'data-target' => "#editSiteModal"
+			    ]);
 			    ?>
-                            </a><a id="delete-tooltip" data-toggle="tooltip" title="Delete Site">
+				</a>
+				<a id="delete-tooltip" data-toggle="tooltip" title="Delete Site">
 			    <?=
 			    $this->Html->tag('span', "", [
-				'class' => "delete glyphicon glyphicon-trash",
-				'id' => 'delete-' . $siteData->ID,
-				'name' => 'delete-' . $siteData->ID
-			    ])
-			    ?>
-                            </a>
+					'class' => "delete glyphicon glyphicon-trash",
+					'id' => 'delete-' . $siteData->ID,
+					'name' => 'delete-' . $siteData->ID
+			    ]);
+				?>
+				</a>
 			</td>
 			<?php
 			$row++;
 			?>
-		    </tr>
-		<?php endforeach; ?>
-        </tbody>
-    </table>
-    <input type='button' class='addSitebtn btn-basic btn mb-3 btn-md' value='Add Site' id='addSiteBtn' name='addSiteBtn' style='float: right;' data-toggle="modal" data-target="#addSiteModal"/>
-</div>
+		</tr>
+	<?php endforeach; ?>
+	</tbody>
+</table>
+<input type='button' class='addSitebtn btn-basic btn mb-3 btn-md' value='Add Site' id='addSiteBtn' name='addSiteBtn' style='float: right;' data-toggle="modal" data-target="#addSiteModal"/>
 
 <!-- Modal Stuff for edit button -->
 <div id="editSiteModal" class="modal fade" role="dialog">

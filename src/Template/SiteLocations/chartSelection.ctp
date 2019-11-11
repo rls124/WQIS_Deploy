@@ -7,7 +7,7 @@
 
 <?= $this->Html->css('chartSelection.css') ?>
 
-<div class="container roundGreyBox">
+
     <?= $this->Form->create('chartselection', ['url' => ['controller' => 'GenericSamples', 'action' => 'tableview'], 'id' => 'chartSelect']) ?>
     <fieldset>
         <h3 class="pt-3 centeredText">Collection Site</h3>
@@ -131,7 +131,9 @@
     </div>
 
     <?= $this->Form->end() ?>
-</div>
+	
+	
+	
 <script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwcJIWDoWbEgt7mX_j5CXGevgWvQPh6bc&callback=initMap' type="text/javascript"></script>
 <script>
     $('#viewChartBtn').click(function () {

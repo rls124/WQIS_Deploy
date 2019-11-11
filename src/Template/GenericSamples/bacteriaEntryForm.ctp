@@ -1,4 +1,3 @@
-<div class="container-fluid roundGreyBox">
 	<?= $this->Form->create($sample) ?>
     <fieldset>
 
@@ -175,4 +174,3 @@
         </div>
     </fieldset>
 	<?= $this->Form->end() ?>
-</div>

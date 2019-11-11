@@ -4,19 +4,17 @@
 
 <div id ='message' class="message hidden"></div>
 
-<div class="container roundGreyBox">
-
-    <div class="mt-3">
-        <h1 class="centeredText" id="wqisHeading">Forgot Password</h1>
-    </div>
-    <hr>
-    <?=
-        $this->Form->create(false, [
-            'id' => 'forgotUserPassForm',
-            'url' => ['controller' => 'Users', 'action' => 'edituserinfo']
-            ]
-        )
-    ?>
+<div class="mt-3">
+	<h1 class="centeredText" id="wqisHeading">Forgot Password</h1>
+</div>
+<hr>
+<?=
+	$this->Form->create(false, [
+		'id' => 'forgotUserPassForm',
+		'url' => ['controller' => 'Users', 'action' => 'edituserinfo']
+		]
+	)
+?>
             <?=
                 $this->Form->control('Username', [
                     'label' => [
@@ -42,5 +40,3 @@
 		</div>
     </div>
     <?= $this->Form->end() ?>
-        
-</div>

@@ -1,11 +1,11 @@
-<div class="container-fluid roundGreyBox">
-	<?= $this->Form->create($nutrientSample) ?>
-    <fieldset>
-        <p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  Nutrient Entry Form
-            <a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-                <span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
-            </a></p>
-        <hr>
+<?= $this->Form->create($nutrientSample) ?>
+<fieldset>
+	<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  Nutrient Entry Form
+		<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
+			<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
+		</a>
+	</p>
+	<hr>
 
         <div class="collapse" id="collapseInfo">
             <div class="card card-body">
@@ -180,4 +180,3 @@
         </div>
     </fieldset>
 	<?= $this->Form->end() ?>
-</div>

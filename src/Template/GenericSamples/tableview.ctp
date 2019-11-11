@@ -18,7 +18,6 @@
     }
 ?>
 
-<div class = "container roundGreyBox">
     <h3><?php echo $sampleType; ?> Measurements for
 	<?php
 	    $siteNumber = $this->Number->format($siteLocation->Site_Number);
@@ -63,7 +62,6 @@
         </ul>
         <p class="row"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
     </div>
-</div>
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">

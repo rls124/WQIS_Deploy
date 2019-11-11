@@ -1,14 +1,11 @@
-<!--Import DatePicker-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
-<!--import css-->
 <?= $this->Html->css("export.css") ?>
 
 <?= $this->Html->script("export.js") ?>
 <?= $this->Html->script('datePickers.js') ?>
 
-<div class = "container roundGreyBox">
     <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'>
         <span class="glyphicon glyphicon-download-alt" style="font-size: 20pt;"></span>  Export
     </p>
@@ -133,4 +130,3 @@
             </div>
         </div>
     </fieldset>
-</div>

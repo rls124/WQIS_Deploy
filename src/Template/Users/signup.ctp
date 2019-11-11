@@ -8,8 +8,6 @@
     )
 ?>
 <div id ='message' class="message hidden"></div>
-<div class="container roundGreyBox mb-3">
-   
     <div class="container">
         <!-- Headers and server-side error message -->
         <h1 class="mt-3 centeredText" id="accountCreationHeader">Account Creation</h1>
@@ -189,8 +187,6 @@
             <button type="button" disabled="false" class="btn mb-3 btn-basic" id="registerMeBtn">Next</button>
         </div>
     </div>
-    
-</div>
 
 <!-- Modal Stuff for Add User button -->
 <div id="registerUserModal" class="modal fade" role="dialog">

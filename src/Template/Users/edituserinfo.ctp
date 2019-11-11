@@ -3,8 +3,6 @@
 
 <div id ='message' class="message hidden"></div>
 
-<div class="container roundGreyBox">
-
     <div class="mt-3">
         <h1 class="centeredText" id="wqisHeading"><span class="glyphicon glyphicon-user" style="font-size: 20pt;"></span>  Edit User Info</h1>
     </div>
@@ -272,7 +270,6 @@
     <input type="submit" class="btn mb-3 btn-basic" id="changePass-btn" value="Submit Changes" style="float: right">
 
     <?= $this->Form->end() ?>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
