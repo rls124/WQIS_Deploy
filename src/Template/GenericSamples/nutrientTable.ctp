@@ -1,15 +1,3 @@
-<thead>
-            <tr>
-                <th>Date</th>
-                <th>Sample<br>Number</th>
-                <th>Nitrate/Nitrite (mg/L)</th>
-                <th>Total Phosphorus (mg/L)</th>
-                <th>Dissolved Reactive Phosphorus (mg/L)</th>
-				<th>Ammonia (mg/L)</th>
-				<th>Comments</th>
-				<th>Actions</th>
-            </tr>
-        </thead>
         <tbody>
 	    <?php
 		$row = 0;

@@ -1,15 +1,3 @@
-<thead>
-            <tr>
-				<th>Date</th>
-				<th>Sample<br>Number</th>
-				<th>Ecoli<br>Raw Count</th>
-				<th>Ecoli<br> (CFU/100 ml)</th>
-				<th>Total Coliform<br>Raw Count</th>
-				<th>Total Coliform<br>(CFU/100)</th>
-				<th>Comments</th>
-				<th>Actions</th>
-            </tr>
-        </thead>
         <tbody>
 	    <?php
 		$row = 0;

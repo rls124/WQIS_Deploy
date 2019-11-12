@@ -1,14 +1,3 @@
-<thead>
-            <tr>
-                <th>Date</th>
-                <th>Sample<br>Number</th>
-                <th>Atrazine (µg/L)</th>
-                <th>Alachlor (µg/L)</th>
-                <th>Metolachlor (µg/L)</th>
-				<th>Comments</th>
-				<th>Actions</th>
-            </tr>
-        </thead>
         <tbody>
 	    <?php
 		$row = 0;
