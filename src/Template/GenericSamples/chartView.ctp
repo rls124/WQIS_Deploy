@@ -23,3 +23,12 @@ elseif ($chartType == "wqm") {
 	include "wqmChart.ctp";
 }
 ?>
+
+
+    <hr/>
+    <div class="row">
+        <div class="col-md-12 mb-3 chartBox" id="dashboard">
+            <p class="centeredText chartTitle" id="chartTitle">If you're seeing this, you goofed.</p>
+            <svg class="chart" id="chart"></svg>
+        </div>
+    </div>

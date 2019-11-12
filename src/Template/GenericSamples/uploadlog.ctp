@@ -27,7 +27,7 @@
 				?>
 				
 			<p style="color: red;">
-				There were problems with your file upload. 0 out of <?php echo $totalCount;?> rows successfully uploaded. Rows with problems are displayed below.
+				There were problems with your file upload. <?php echo $countSuccesses;?> out of <?php echo $totalCount;?> rows successfully uploaded. Rows with problems are displayed below.
 			</p>
 			
             <table class="table">
