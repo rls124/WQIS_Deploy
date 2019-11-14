@@ -12,17 +12,72 @@
         <?= $this->fetch('css') ?>
         <?= $this->fetch('script') ?>
 
-        <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <?= $this->Html->css('bootstrap-glyphicons.min.css') ?>
-        <!-- JQuery JS import -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <?= $this->Html->script('jquery.msgbox.min.js') ?>
-        <!-- Project css -->
         <?= $this->Html->css('styling.css') ?>
-
         <?= $this->Html->css('cakemessages.css') ?>
         <?= $this->Html->script('ajaxlooks.js') ?>
+		
+	<script>
+function browserDetect() {
+	var ua = navigator.userAgent;
+	
+	try {
+		if (ua.includes("Edge")) {
+			var verNum = parseFloat(ua.split("Edge/")[1]);
+			if (verNum < 18.17763) { //version Mackenzie has tested on, seems to work properly that far back at least
+				showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of Edge, or a different browser");
+			}
+		}
+		else if (ua.includes("Firefox")) {
+			var verNum = parseFloat(ua.split("Firefox/")[1]);
+			
+			if (verNum < 65) {
+				showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of Firefox, or a different browser");
+			}
+		}
+		else if (ua.includes("Chrome")) {
+			var verNum = parseFloat(ua.split("Chrome/")[1].split(" ")[0]);
+		
+			if (verNum < 75) {
+				showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of Chrome, or a different browser");
+			}
+		}
+		else if (ua.includes("Safari")) {
+			var verNum = parseFloat(ua.split("Safari/")[1]);
+			
+			if (verNum < 604) {
+				showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of Safari, or a different browser");
+			}
+		}
+	}
+	catch (e) {
+		//if it failed, its almost certainly internet explorer, which doesn't support "includes". In any case, its a browser so ancient it we can't hope to support it
+		showError("Internet Explorer is no longer supported. We cannot guarantee that all website functionality will work as expected. Please continue switching to Microsoft Edge, Firefox, or Chrome.");
+	}
+}
+
+function showError(text) {
+	var errorNotice = document.createElement("div");
+	errorNotice.setAttribute("id", "browserCompatibilityMessage");
+	errorNotice.setAttribute("style", "bottom:0; position:fixed; z-index:150; _position:absolute; _top:expression(eval(document.documentElement.scrollTop+(document.documentElement.clientHeight-this.offsetHeight))); background-color:yellow;");
+	errorNotice.innerHTML = text;
+	
+	var okButton = document.createElement("button");
+	okButton.innerHTML = "OK";
+	okButton.setAttribute("onclick", "hideBrowserCompatibilityMessage()");
+	
+	errorNotice.appendChild(okButton);
+	
+	document.body.appendChild(errorNotice);
+}
+
+function hideBrowserCompatibilityMessage() {
+	document.getElementById("browserCompatibilityMessage").style.display = "none";
+}
+	</script>
     </head>
     <body class="h-100">
         <nav class="navbar fixed-top navbar-expand-lg navbar-light">
@@ -119,5 +174,6 @@
 				}
 			?>
 		</div>
+		<script>browserDetect();</script>
     </body>
 </html>
