@@ -112,7 +112,7 @@
                 ->allowEmpty('DO_Exception');
 
             $validator
-                ->integer('Turbidity')
+                ->decimal('Turbidity')
                 ->allowEmpty('Turbidity');
 
             $validator

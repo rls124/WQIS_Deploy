@@ -23,7 +23,7 @@
      * @property int $TDS_Exception
      * @property float $DO
      * @property int $DO_Exception
-     * @property int $Turbidity
+     * @property float $Turbidity
      * @property int $Turbidity_Exception
      * @property int $Turbidity_Scale_Value
      * @property string $WaterQualityComments
