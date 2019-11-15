@@ -144,7 +144,7 @@
 			else if ($fileType == 4) {
 				//wqm
 				$model = "WaterQualitySamples";
- 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_To_Water_Height', 'Water_Temp', 'Water_Temp_Exception', 'pH', 'pH_Exception','Conductivity', 'Conductivity_Exception', 'TDS', 'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+ 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'Water_Temp_Exception', 'pH', 'pH_Exception','Conductivity', 'Conductivity_Exception', 'TDS', 'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 				$columnText = array("Site Number", "Date", "Sample number", "Time", "Bridge to Water Height", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time", "Requires Checking");
 				
 				$this->set("fileTypeName", "Water Quality Samples");
@@ -398,7 +398,7 @@
 			
 			$name = "waterQualitySample";
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time',
-				'Bridge_To_Water_Height', 'Water_Temp',
+				'Bridge_to_Water_Height', 'Water_Temp',
 				'Water_Temp_Exception', 'pH', 'pH_Exception', 'Conductivity', 'Conductivity_Exception', 'TDS',
 				'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value',
 				'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
@@ -492,7 +492,7 @@
 			$this->loadModel('PesticideSamples');
 			$modelBare = $this->PesticideSamples;
 		}
-		elseif ($parameter == "conductivity" || $parameter == "do" || $parameter == "ph" || $parameter == "water_temp" || $parameter == "tds" || $parameter == "turbidity" || $parameter == "bridge_to_water_height" || $parameter == "waterqualitycomments") { //water quality meter
+		elseif ($parameter == "conductivity" || $parameter == "do" || $parameter == "bridge_to_water_height" || $parameter == "ph" || $parameter == "water_temp" || $parameter == "tds" || $parameter == "turbidity" || $parameter == "waterqualitycomments") { //water quality meter
 			$this->loadModel('WaterQualitySamples');
 			$modelBare = $this->WaterQualitySamples;
 		}

@@ -206,7 +206,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "sitenumber",
 			'id' => "add-sitenumber",
-			'placeholder' => "Site Number...",
+			'placeholder' => "Site Number..."
 		    ]);
 		?>
 		<?=
@@ -221,7 +221,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "longitude",
 			'id' => "add-longitude",
-			'placeholder' => "Longitude...",
+			'placeholder' => "Longitude..."
 		    ]);
 		?>
 		<?=
@@ -236,7 +236,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "latitude",
 			'id' => "add-latitude",
-			'placeholder' => "Latitude...",
+			'placeholder' => "Latitude..."
 		    ]);
 		?>
 		<?=
@@ -251,7 +251,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "sitelocation",
 			'id' => "add-sitelocation",
-			'placeholder' => "Site Location...",
+			'placeholder' => "Site Location..."
 		    ]);
 		?>
 		<?=
@@ -266,7 +266,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "sitename",
 			'id' => "add-sitename",
-			'placeholder' => "Site Name...",
+			'placeholder' => "Site Name..."
 		    ]);
 		?>
             </div>

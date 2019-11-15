@@ -59,7 +59,7 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "firstname",
                     'id' => "firstname",
-                    'placeholder' => "Your First Name...",
+                    'placeholder' => "Your First Name..."
                 ]);
             ?>
             <p class="errorMessage" id="firstnameError"></p>
@@ -78,7 +78,7 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "lastname",
                     'id' => "lastname",
-                    'placeholder' => "Your Last Name...",
+                    'placeholder' => "Your Last Name..."
                 ]);
             ?>
             <p class="errorMessage" id="lastnameError"></p>
@@ -97,7 +97,7 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "organization",
                     'id' => "organization",
-                    'placeholder' => "Your Organization...",
+                    'placeholder' => "Your Organization..."
                 ]);
             ?>
             <p class="errorMessage" id="organizationError"></p>
@@ -116,7 +116,7 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "position",
                     'id' => "position",
-                    'placeholder' => "Your Position...",
+                    'placeholder' => "Your Position..."
                 ]);
             ?>
             <p class="errorMessage" id="positionError"></p>

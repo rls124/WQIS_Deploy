@@ -108,7 +108,7 @@
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control entryControl',
+									'class' => 'form-control entryControl'
 								])
 							?>
 							<?=
@@ -118,7 +118,7 @@
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control entryControl',
+									'class' => 'form-control entryControl'
 								])
 							?>
 							<?=
@@ -128,7 +128,7 @@
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control entryControl',
+									'class' => 'form-control entryControl'
 								])
 							?>
 							<?=
@@ -138,7 +138,7 @@
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control entryControl',
+									'class' => 'form-control entryControl'
 								])
 							?>
 							<?=
@@ -148,7 +148,7 @@
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control entryControl',
+									'class' => 'form-control entryControl'
 								])
 							?>
 							<?=
@@ -158,7 +158,7 @@
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control entryControl',
+									'class' => 'form-control entryControl'
 								])
 							?>
 							<?=
@@ -168,7 +168,7 @@
 										'label' => false
 									],
 									'type' => 'number',
-									'class' => 'form-control entryControl',
+									'class' => 'form-control entryControl'
 								])
 							?>
 							<?=

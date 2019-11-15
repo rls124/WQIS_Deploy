@@ -111,7 +111,7 @@
 			'class' => "form-control textinput",
 			'name' => "firstname",
 			'id' => "edit-firstname",
-			'placeholder' => "Your First Name...",
+			'placeholder' => "Your First Name..."
 		    ]);
 		?>
 		<?=
@@ -126,7 +126,7 @@
 			'class' => "form-control textinput",
 			'name' => "lastname",
 			'id' => "edit-lastname",
-			'placeholder' => "Your Last Name...",
+			'placeholder' => "Your Last Name..."
 		    ]);
 		?>
 		<?=
@@ -141,7 +141,7 @@
 			'class' => "form-control textinput",
 			'name' => "email",
 			'id' => "edit-email",
-			'placeholder' => "Your Email...",
+			'placeholder' => "Your Email..."
 		    ]);
 		?>
 		<?=
@@ -156,7 +156,7 @@
 			'class' => "form-control textinput",
 			'name' => "organization",
 			'id' => "edit-organization",
-			'placeholder' => "Your Organization...",
+			'placeholder' => "Your Organization..."
 		    ]);
 		?>
 		<?=
@@ -171,7 +171,7 @@
 			'class' => "form-control textinput",
 			'name' => "position",
 			'id' => "edit-position",
-			'placeholder' => "Your Position...",
+			'placeholder' => "Your Position..."
 		    ]);
 		?>
                 <label for='#edit-adminChk'>Set as administrator: </label>
@@ -196,7 +196,7 @@
 			'class' => "form-control textinput",
 			'name' => "userpw",
 			'id' => "edit-userpw",
-			'placeholder' => "Your Password...",
+			'placeholder' => "Your Password..."
 		    ]);
 		?>
 		<?=
@@ -211,7 +211,7 @@
 			'class' => "form-control textinput",
 			'name' => "passConfirm",
 			'id' => "edit-passConfirm",
-			'placeholder' => "Your Password...",
+			'placeholder' => "Your Password..."
 		    ]);
 		?>
             </div>
@@ -252,7 +252,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "firstname",
 			'id' => "add-firstname",
-			'placeholder' => "Your First Name...",
+			'placeholder' => "Your First Name..."
 		    ]);
 		?>
 		<?=
@@ -267,7 +267,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "lastname",
 			'id' => "add-lastname",
-			'placeholder' => "Your Last Name...",
+			'placeholder' => "Your Last Name..."
 		    ]);
 		?>
 		<?=
@@ -282,7 +282,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "email",
 			'id' => "add-email",
-			'placeholder' => "Your Email...",
+			'placeholder' => "Your Email..."
 		    ]);
 		?>
 		<?=
@@ -297,7 +297,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "organization",
 			'id' => "add-organization",
-			'placeholder' => "Your Organization...",
+			'placeholder' => "Your Organization..."
 		    ]);
 		?>
 		<?=
@@ -312,7 +312,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "position",
 			'id' => "add-position",
-			'placeholder' => "Your Position...",
+			'placeholder' => "Your Position..."
 		    ]);
 		?>
 		<?=
@@ -327,7 +327,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "username",
 			'id' => "add-username",
-			'placeholder' => "Your Username...",
+			'placeholder' => "Your Username..."
 		    ]);
 		?>
                 <label for='#add-adminChk'>Set as administrator: </label>
@@ -355,7 +355,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => "userpw",
 			'id' => "add-userpw",
-			'placeholder' => "Your Password...",
+			'placeholder' => "Your Password..."
 		    ]);
 		?>
 		<?=
@@ -370,7 +370,7 @@
 			'class' => "form-control textinput addinput",
 			'name' => 'passConfirm',
 			'id' => "add-passConfirm",
-			'placeholder' => "Your Password...",
+			'placeholder' => "Your Password..."
 		    ]);
 		?>
             </div>

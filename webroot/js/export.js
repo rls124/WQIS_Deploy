@@ -143,17 +143,16 @@ $(document).ready(function () {
 				measures['ammonia'] = 'Ammonia (mg/L)';
 				break;
 			case 'pesticide':
-
 				measures['alachlor'] = 'Alachlor (µg/L)';
 				measures['atrazine'] = 'Atrazine (µg/L)';
 				measures['metolachlor'] = 'Metolachlor (µg/L)';
 				break;
 			case 'wqm':
-
 				measures['conductivity'] = 'Conductivity (mS/cm)';
 				measures['do'] = 'Dissolved Oxygen (mg/L)';
 				measures['ph'] = 'pH';
 				measures['water_temp'] = 'Water Temperature (°C)';
+				measures['bridge_to_water_height'] = 'Bridge to Water Height (in)';
 				measures['tds'] = 'Total Dissolved Solids (g/L)';
 				measures['turbidity'] = 'Turbidity (NTU)';
 				break;
