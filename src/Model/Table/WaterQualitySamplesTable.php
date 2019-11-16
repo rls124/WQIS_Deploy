@@ -6,6 +6,8 @@
     use Cake\ORM\RulesChecker;
     use Cake\ORM\Table;
     use Cake\Validation\Validator;
+	use Cake\Event\Event;
+	use ArrayObject;
 
     /**
      * WaterQualitySamples Model
@@ -65,14 +67,14 @@
             $validator
                 ->time('Time')
                 ->requirePresence('Time', 'create')
-                ->notEmpty('Time');
+                ->allowEmpty('Time');
 
             $validator
                 ->decimal('Bridge_to_Water_Height')
                 ->allowEmpty('Bridge_to_Water_Height');
 
             $validator
-                ->integer('Water_Temp')
+                ->decimal('Water_Temp')
                 ->allowEmpty('Water_Temp');
 
             $validator
@@ -156,4 +158,13 @@
 
             return $rules;
         }
+		
+		//format times before we attempt to load them into the database. Necessary because otherwise, single-digit hour times would fail
+		public function beforeMarshal(Event $event, \ArrayObject $data, \ArrayObject $options) {
+			foreach (['Time', 'Import_Time'] as $key) {
+				if (isset($data[$key]) && is_string($data[$key])) {
+					$data[$key] = \Cake\I18n\Time::parseTime($data[$key], 'HH:mm');
+				}
+			}
+		}
     }

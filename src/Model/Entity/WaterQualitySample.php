@@ -11,9 +11,9 @@
      * @property int $site_location_id
      * @property \Cake\I18n\FrozenDate $Date
      * @property int $Sample_Number
-     * @property \Cake\I18n\FrozenTime $Time
+     * @property \Cake\I18n\Time $Time
      * @property float $Bridge_to_Water_Height
-     * @property int $Water_Temp
+     * @property float $Water_Temp
      * @property int $Water_Temp_Exception
      * @property float $pH
      * @property int $pH_Exception
@@ -27,8 +27,8 @@
      * @property int $Turbidity_Exception
      * @property int $Turbidity_Scale_Value
      * @property string $WaterQualityComments
-     * @property \Cake\I18n\FrozenDate $Import_Date
-     * @property \Cake\I18n\FrozenTime $Import_Time
+     * @property \Cake\I18n\Time $Import_Date
+     * @property \Cake\I18n\Time $Import_Time
      * @property string $Requires_Checking
      *
      * @property \App\Model\Entity\SiteLocation $site_location
