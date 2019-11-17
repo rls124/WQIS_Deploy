@@ -54,6 +54,10 @@ function populateMeasurementSelect(categoryData) {
 }
 
 function initMap() {
+	var currentBactRow = 0;
+	const BACTERIA_DATA = 'BacteriaData';
+	const SITE_DATA = 'SiteData';
+	
 	var request = new XMLHttpRequest();
 	request.open('POST', './fetchSites', false); //false makes the request synchronous
 	request.send(null);
@@ -75,10 +79,31 @@ function initMap() {
 	var features = [];
 	
 	for (var i=0; i<json_sampleData_1["SiteData"].length; i++) {
+		var response = json_sampleData_1;
+		
 		var latitude = json_sampleData_1["SiteData"][i]["Latitude"];
 		var longitude = json_sampleData_1["SiteData"][i]["Longitude"];
 		var siteLocation = json_sampleData_1["SiteData"][i]["Site_Location"];
 		var siteName = json_sampleData_1["SiteData"][i]["Site_Name"];
+		//var test = json_sampleData_1["SiteData"][i]["test"];
+		
+		var siteNumber = response[SITE_DATA][i]['Site_Number'];
+		
+		
+		var ecoli = "Ecoli: no data";
+		
+		// Check to see if the current site has bacteria data associated with it
+		if (response[BACTERIA_DATA][currentBactRow]) {
+			var bactSiteNumber = response[BACTERIA_DATA][currentBactRow]['site_location_id'];
+			if (siteNumber == bactSiteNumber) {
+				bactLatestDate = response[BACTERIA_DATA][currentBactRow]['Date'].split('T')[0];
+				if (response[BACTERIA_DATA][currentBactRow]['Ecoli'] !== null) {
+					ecoli = "Ecoli: " + response[BACTERIA_DATA][currentBactRow]['Ecoli'];
+				}
+				currentBactRow++;
+			}
+		}
+		
 		
 		var thisFeature = {};
 		thisFeature.type = "Feature";
@@ -87,6 +112,7 @@ function initMap() {
 		properties.longitude = longitude;
 		properties.siteLocation = siteLocation;
 		properties.siteName = siteName;
+		properties.ecoli = ecoli;
 		
 		thisFeature.properties = properties;
 		

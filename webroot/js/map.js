@@ -241,6 +241,7 @@ var onSingleClick = function(evt) {
                 if (doPopup) {
                     for(var n=0; n<clusteredFeatures.length; n++) {
                         clusterFeature = clusteredFeatures[n];
+						console.log(clusterFeature);
                         currentFeatureKeys = clusterFeature.getKeys();
                         popupText += '<li><table>'
                         for (var i=0; i<currentFeatureKeys.length; i++) {
@@ -272,6 +273,7 @@ var onSingleClick = function(evt) {
             }
 			else {
                 currentFeatureKeys = currentFeature.getKeys();
+				console.log(currentFeature);
                 if (doPopup) {
                     popupText += '<li><table>';
                     for (var i=0; i<currentFeatureKeys.length; i++) {
