@@ -1,3 +1,8 @@
+<link rel="stylesheet" href="../css/ol.css">
+<link rel="stylesheet" href="../css/fontawesome-all.min.css">
+<link rel="stylesheet" href="../css/ol3-layerswitcher.css">
+<link rel="stylesheet" href="../css/map.css">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
@@ -103,7 +108,59 @@
         <br>
         <!--<img class="mb-3" src="../img/SampleMap.jpg" alt="This is where the map would go" style="height:400px; width:100%; border: solid thin black;">-->
         <!--<iframe id='map' src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d385168.20958135213!2d-85.09480212578119!3d41.0443596614833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1523901620332" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>    </fieldset>-->
-        <div class='mb-3' id='map' style='width:100%; height:500px; border: solid black thin'></div>
+        
+		<div class="container">
+			<div class="row display-flex">
+				<div id="map" class="col-lg-10">
+					<div id="popup" class="ol-popup">
+						<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+						<div id="popup-content"></div>
+					</div>
+				</div>
+				<div class="col-lg-2 panel panel-primary">
+					<div class="panel-body" style="overflow-y: scroll; height: 430px;">
+					<ul class="list-group">
+					<?php
+					//populate the site list box
+					foreach ($siteLocations as $siteLocation) {
+						$siteNumber = $this->Number->format($siteLocation->Site_Number);
+						$siteName = h($siteLocation->Site_Name);
+						$siteLocation = h($siteLocation->Site_Location);
+						echo "<li class=\"list-group-item\" id=\"$siteLocation\" onclick=\"clickedLocationButton(this.id)\">$siteName - $siteLocation</li>";
+					}
+					?>
+					</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			function clickedLocationButton(id) {
+				var el = document.getElementById(id);
+				if (el.style.backgroundColor == "grey") {
+					el.style.backgroundColor = "white";
+				}
+				else {
+					el.style.backgroundColor = "grey";
+				}
+			}
+		</script>
+		
+        <script src="../js/map_expressions.js"></script>
+        <script src="../js/polyfills.js"></script>
+        <script src="../js/functions.js"></script>
+        <script src="../js/ol.js"></script>
+        <script src="http://cdn.polyfill.io/v2/polyfill.min.js?features=Element.prototype.classList,URL"></script>
+        <script src="../js/ol3-layerswitcher.js"></script>
+		
+		<script>
+			json_sampleData_1 = initMap();
+		</script>
+		
+        <script src="../js/map.js"></script>
+		<script src="../js/Autolinker.min.js"></script>
+		
     <div class="container text-center">
         <?=
             $this->Form->button('View Chart', [
