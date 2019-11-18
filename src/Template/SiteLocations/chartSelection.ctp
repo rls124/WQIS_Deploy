@@ -100,6 +100,39 @@
                 </div>
             </div>
         </div>
+		
+		<h3 class="centeredText card-title" id="Search">Search (Optional)</h3>
+		<div class="card-deck">
+		<div class ="card mb-3">
+				<h5 class="centeredText card-title"> Over/Under</h5>
+				<!--Over or Under Select -->
+				 <?=
+                            $this->Form->select('overUnderSelect', [
+                                'over' => 'Over',
+                                'under' => 'Under',
+                                'equal' => 'Equal To'
+                                ], [
+                                'label' => 'Search',
+                                'id' => 'overUnderSelect',
+                                'class' => 'form-control select'
+                                ]
+                            )
+                        ?>
+			</div>
+			
+			<div class="card mb-3">
+                        <h5 class="centeredText card-title">Amount</h5>
+                        <?=
+                            $this->Form->control('amountEnter', [
+                                'label' => false,
+                                'type' => 'text',
+                                'class' => 'form-control input col-lg-12',
+                                'id' => 'amountEnter',
+                                'placeholder' => 'Get Benchmark'
+                            ])
+                        ?>
+            </div>
+		</div>
         <br>
         <!--<img class="mb-3" src="../img/SampleMap.jpg" alt="This is where the map would go" style="height:400px; width:100%; border: solid thin black;">-->
         <!--<iframe id='map' src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d385168.20958135213!2d-85.09480212578119!3d41.0443596614833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1523901620332" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>    </fieldset>-->
