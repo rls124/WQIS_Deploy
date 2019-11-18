@@ -206,23 +206,28 @@
 				$this->loadModel('PesticideSamples');
 
 				$connection = ConnectionManager::get('default');
-				$bactQuery = "SELECT max(Date) as 'Date', Ecoli, site_location_id " .
-					"FROM bacteria_samples " .
-					"group by site_location_id " .
-					"order by site_location_id";
+				
+				//returns the most recent value for each site location
+				$bactQuery = "select f.Date as 'Date', f.site_location_id as 'site_location_id', f.Ecoli as 'Ecoli'" .
+					" from (" .
+					"select site_location_id, max(Date) as maxdate" .
+					" from bacteria_samples group by site_location_id" .
+					") as x inner join bacteria_samples as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
 				$bactDateAndData = $connection->execute($bactQuery)->fetchAll('assoc');
 
-				$nutrientQuery = "SELECT max(Date) as 'Date', site_location_id, Phosphorus, NitrateNitrite, DRP, Ammonia " .
-					"FROM nutrient_samples " .
-					"group by site_location_id " .
-					"order by site_location_id";
+				$nutrientQuery = "SELECT f.Date as 'Date', f.site_location_id as 'site_location_id', f.Phosphorus as 'Phosphorus', f.NitrateNitrite as 'NitrateNitrite', f.DRP as 'DRP', f.Ammonia as 'Ammonia'" .
+					" from (" .
+					"select site_location_id, max(Date) as maxdate" .
+					" from nutrient_samples group by site_location_id" .
+					") as x inner join nutrient_samples as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
 				$nutrientDateAndData = $connection->execute($nutrientQuery)->fetchAll('assoc');
 
-				$pestQuery = "SELECT max(Date) as 'Date', site_location_id, Atrazine, Alachlor, Metolachlor " . 
-					"FROM pesticide_samples " .
-					"group by site_location_id " .
-					"order by site_location_id";
-				$pestDateAndData = $connection->execute($pestQuery)->fetchAll('assoc');
+				$pesticideQuery = "SELECT f.Date as 'Date', f.site_location_id as 'site_location_id', f.Atrazine as 'Atrazine', f.Alachlor as 'Alachlor', f.Metolachlor as 'Metolachlor'" .
+					" from (" .
+					"select site_location_id, max(Date) as maxdate" .
+					" from pesticide_samples group by site_location_id" .
+					") as x inner join pesticide_samples as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
+				$pestDateAndData = $connection->execute($pesticideQuery)->fetchAll('assoc');
                                 
 				$json = json_encode([
 					'SiteData' => $sites, 

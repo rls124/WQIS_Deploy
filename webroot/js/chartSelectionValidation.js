@@ -84,6 +84,7 @@ function initMap() {
 		url: 'fetchSites',
 		datatype: 'JSON',
 		success: function(response) {
+			console.log(response[BACTERIA_DATA][0]);
 			//response = JSON.parse(response); //server is returning that as text for... some reason?
             
 			// Adds markers to the Google Map at each sites longitude and latitude.
@@ -121,9 +122,13 @@ function initMap() {
 					if (siteNumber == bactSiteNumber) {
 						bactLatestDate = response[BACTERIA_DATA][currentBactRow]['Date'].split('T')[0];
 						if (response[BACTERIA_DATA][currentBactRow]['Ecoli'] !== null) {
+							console.log("hit");
 							ecoli = response[BACTERIA_DATA][currentBactRow]['Ecoli'];
 						}
 						currentBactRow++;
+					}
+					else {
+						//console.log(siteNumber + " did not equal " + bactSiteNumber);
 					}
 				}
 
