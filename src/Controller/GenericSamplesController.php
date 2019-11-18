@@ -22,14 +22,30 @@
 			$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
 			$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
 			$site = $this->request->getData('site');
+			$amount = $_POST["amountEnter"];
+			$searchRange = $_POST["overUnderSelect"];
+			$measurementSelect = $_POST["measurementSelect"];
+
 		}
 		else {
 			$type = $_SESSION["tableType"];
-			
 			//set all relevant SESSION data to variables
+			
 			$startdate = date('Ymd', strtotime($_SESSION['startdate']));
 			$enddate = date('Ymd', strtotime($_SESSION['enddate']));
 			$site = $_SESSION["site"];
+			$amount = $_SESSION["amountEnter"];
+			$searchRange = $_SESSION["overUnderSelect"];
+			$measurementSelect = $SESSION["measurementSelect"];
+		
+		}
+		
+		if($searchRange == "over"){
+			$searchDirection = ' >=';
+		}else if($searchRange == "under"){
+			$searchDirection = ' <=';
+		}else if($searchRange == "equals"){
+			$searchDirection = ' ==';
 		}
 		
 		if ($type == "bacteria") {
@@ -37,39 +53,93 @@
 			
 			$modelName = "BacteriaSamples";
 			$modelBare = $this->BacteriaSamples;
+			$measureType='Ecoli';
 		}
 		else if ($type == "nutrient") {
 			$this->loadModel('NutrientSamples');
 			
 			$modelName = "NutrientSamples";
 			$modelBare = $this->NutrientSamples;
+			
+			if($measurementSelect == 'nitrateNitrite'){
+				$measureType='NitrateNitrite';
+			}else if($measurementSelect == 'phosphorus'){
+				$measureType='Phosphorus';
+			}else if($measurementSelect == 'drp'){
+				$measureType='DRP';
+			}else if($measurementSelect == 'ammonia'){
+				$measureType='Ammonia';
+			}
 		}
 		else if ($type == "pesticide") {
 			$this->loadModel('PesticideSamples');
 			
 			$modelName = "PesticideSamples";
 			$modelBare = $this->PesticideSamples;
+			
+			if($measurementSelect == "alachlor"){
+				$measureType='Alachlor';
+			}else if($measurementSelect == "atrazine"){
+				$measureType='Atrazine';
+			}else if($measurementSelect == "metolachlor"){
+				$measureType='Metolachlor';
+			}
 		}
 		elseif ($type == "wqm") {
 			$this->loadModel('WaterQualitySamples');
 			
 			$modelName = "WaterQualitySamples";
 			$modelBare = $this->WaterQualitySamples;
+			
+			if($measurementSelect == 'conductivity'){
+				$measureType='Conductivity';
+			}else if($measurementSelect == 'do'){
+				$measureType='DO';
+			}else if($measurementSelect == 'bridge_to_water_height'){
+				$measureType='Bridge_to_Water_Height';
+			}else if($measurementSelect == 'ph'){
+				$measureType='pH';
+			}else if($measurementSelect == 'water_temp'){
+				$measureType='Water_Temp';
+			}else if($measurementSelect == 'tds'){
+				$measureType='TDS';
+			}else if($measurementSelect == 'turbidity'){
+				$measureType='Turbidity';
+			}
 		}
-		
+	
+		if($amount!=''){
 		$samples = $this->paginate(
 		$modelBare->find('all', [
 			'conditions' => [
+			
 			'and' => [
-				'site_location_id' => $site,
-				[
+				'site_location_id' => $site,				
 				$modelName . '.Date >=' => $startdate,
-				$modelName . '.Date <= ' => $enddate
-				]
+				$modelName . '.Date <= ' => $enddate,
+				$modelName . '.' . $measureType . $searchDirection => $amount
 			]
+				
+	
 			]
 		])->order(['Date' => 'Desc'])
 		);
+		}else{
+		$samples = $this->paginate(
+		$modelBare->find('all', [
+			'conditions' => [
+			
+			'and' => [
+				'site_location_id' => $site,
+				$modelName == "BacteriaSamples",					
+				$modelName . '.Date >=' => $startdate,
+				$modelName . '.Date <= ' => $enddate,
+			]
+				
+			]
+		])->order(['Date' => 'Desc'])
+		);
+		}
 		
 		//get the info about the site number
 		$siteLocation = $modelBare->SiteLocations->find('all', [
@@ -79,6 +149,7 @@
 		])->first();
 		
 		//write data into session
+	
 		$this->request->getSession()->write([
 			'startdate' => $startdate,
 			'enddate' => $enddate,
