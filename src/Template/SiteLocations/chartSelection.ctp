@@ -134,8 +134,6 @@
             </div>
 		</div>
         <br>
-        <!--<img class="mb-3" src="../img/SampleMap.jpg" alt="This is where the map would go" style="height:400px; width:100%; border: solid thin black;">-->
-        <!--<iframe id='map' src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d385168.20958135213!2d-85.09480212578119!3d41.0443596614833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1523901620332" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>    </fieldset>-->
         <div class='mb-3' id='map' style='width:100%; height:500px; border: solid black thin'></div>
     <div class="container text-center">
         <?=
@@ -164,8 +162,6 @@
     </div>
 
     <?= $this->Form->end() ?>
-	
-	
 	
 <script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwcJIWDoWbEgt7mX_j5CXGevgWvQPh6bc&callback=initMap' type="text/javascript"></script>
 <script>
@@ -201,6 +197,3 @@
         $("#chartSelect").attr("action", location);
     }
 </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>

@@ -1,7 +1,4 @@
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
 <?= $this->Html->css('waterQualityMeaning.css') ?>
-
     <div class="row">
         <div class="col-lg-12 box" id="accordian" role="tablist" aria-multiselectable="true">
            <h1>Water Quality Parameters</h1>
