@@ -36,7 +36,7 @@
 			$site = $_SESSION["site"];
 			$amount = $_SESSION["amountEnter"];
 			$searchRange = $_SESSION["overUnderSelect"];
-			$measurementSelect = $SESSION["measurementSelect"];
+			$measurementSelect = $_SESSION["measurementSelect"];
 		
 		}
 		
