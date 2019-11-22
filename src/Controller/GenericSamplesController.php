@@ -541,8 +541,11 @@
 	public function updatefield() {
 		$this->render(false);
 		
+		$this->log("request: " . print_r($_POST, true), 'debug');
+		
 		//Ensure sample number data was included
 		if (!$this->request->getData('sampleNumber')) {
+			$this->log("failed", 'debug');
 			return;
 		}
 		$sampleNumber = $this->request->getData('sampleNumber');
@@ -568,9 +571,9 @@
 			$modelBare = $this->WaterQualitySamples;
 		}
 		
-		else {
+		//else {
 			$this->log("request: " . print_r($_POST, true), 'debug');
-		}
+		//}
 		
 		//Get the sample we are editing
 		$sample = $modelBare

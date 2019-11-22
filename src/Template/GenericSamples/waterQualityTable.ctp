@@ -64,19 +64,10 @@
 				?>
 	    		</td>
 				<td>
-				<?=
-				$this->Form->control('Bridge_to_Water_Height-' . $row, ['maxlength' => '5',
-				    'size' => '5',
-				    'class' => 'inputfields tableInput',
-				    'value' => $wqmSample->Bridge_to_Water_Height,
-				    'style' => 'display: none',
-				    'label' => [
-					'style' => 'display: in-line; cursor: pointer',
-					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->Bridge_to_Water_Height . ' '
-				    ]
-				])
-				?>
+					<div class="input text">
+						<label style="display: in-line; cursor: pointer" class="btn btn-thin inputHide" for="bridge_to_water_height-<?php echo $row;?>"><?php echo $wqmSample->Bridge_to_Water_Height;?> </label>
+						<input type="text" name="Bridge_to_Water_Height-<?php echo $row;?>" maxlength="5" size="5" class="inputfields tableInput" style="display: none" id="bridge_to_water_height-<?php echo $row;?>" value="<?php echo $wqmSample->Bridge_to_Water_Height;?>"/>
+					</div>
 	    		</td>
 	    		<td>
 				<?=
