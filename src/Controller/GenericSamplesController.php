@@ -191,7 +191,7 @@
 			if ($fileType == 1) {
 				//bacteria
 				$model = "BacteriaSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'EcoliException', 'TotalColiformRawCount', 'TotalColiform', 'ColiformException', 'Comments');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'Comments');
 				$columnText = array("Site Number", "Date", "Sample Number", "Ecoli Raw Count", "Ecoli", "Total Coliform Raw Count", "Total Coliform", "Comments");
 				
 				$this->set("fileTypeName", "Bacteria Samples");
@@ -199,7 +199,7 @@
 			else if ($fileType == 2) {
 				//nutrient
 				$model = "NutrientSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Ammonia', 'Comments');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'Comments');
 				$columnText = array("Site Number", "Date", "Sample number", "Phosphorus (mg/L)", "Nitrate/Nitrite (mg/L)", "Dissolved Reactive Phosphorus", "Ammonia", "Comments");
 				
 				$this->set("fileTypeName", "Nutrient Samples");
@@ -207,7 +207,7 @@
 			else if ($fileType == 3) {
 				//pesticide
 				$model = "PesticideSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'AltrazineException', 'Alachlor', 'AlachlorException', 'Metolachlor', 'MetolachlorException', 'Comments');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'Alachlor', 'Metolachlor', 'Comments');
 				$columnText = array("Site Number", "Date", "Sample number", "Atrazine", "Alachlor", "Metolachlor", "Comments");
 				
 				$this->set("fileTypeName", "Pesticide Samples");
@@ -215,7 +215,7 @@
 			else if ($fileType == 4) {
 				//wqm
 				$model = "WaterQualitySamples";
- 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'Water_Temp_Exception', 'pH', 'pH_Exception','Conductivity', 'Conductivity_Exception', 'TDS', 'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+ 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 				$columnText = array("Site Number", "Date", "Sample number", "Time", "Bridge to Water Height", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time", "Requires Checking");
 				
 				$this->set("fileTypeName", "Water Quality Samples");
@@ -303,10 +303,8 @@
 			array("sample number", "sample_number", "samplenumber"),
 			array("ecoliraw", "ecolirawcount", "ecoli raw", "ecoli_raw", "ecoli raw count", "ecoli_raw_count"),
 			array("ecoli"),
-			array("ecoli exception", "ecoli_exception", "ecoliexception"),
 			array("total coliform raw", "total_coliform_raw", "totalcoliformraw", "total coliform raw count", "total_coliform_raw_count", "totalcoliformrawcount"),
 			array("total coliform", "total_coliform", "totalcoliform"),
-			array("coliform exception", "coliform_exception", "coliformexception", "total coliform exception", "total_coliform_exception", "totalcoliformexception"),
 			array("comments"),
 		);
 		
@@ -315,9 +313,7 @@
 			array("date"),
 			array("sample number", "sample_number", "samplenumber"),
 			array("phosphorus"),
-			array("phosphorus exception", "phosphorus_exception", "phosphorusexception"),
 			array("nh3-n", "nitrate nitrite", "nitrate_nitrite", "nitratenitrite"),
-			array("nh3-n exception", "nh3-n_exception", "nh3-nexception", "nitrate nitrite exception", "nitrate_nitrite_exception", "nitratenitriteexception"),
 			array("drp"),
 			array("ammonia"),
 			array("comments"),
@@ -328,11 +324,8 @@
 			array("date"),
 			array("sample number", "sample_number", "samplenumber"),
 			array("atrazine"),
-			array("atrazine exception", "atrazine_exception", "atrazineexception"),
 			array("alachlor"),
-			array("alachor exception", "alachor_exception", "alachlorexception"),
 			array("metolachlor"),
-			array("metolachor exception", "metolachor_exception", "metolachlorexception"),
 			array("comments"),
 		);
 		
@@ -343,17 +336,11 @@
 			array("time"),
 			array("bridge_to_water_height", "bridge to water height"),
 			array("water temp", "water_temp", "watertemp", "water temperature", "water_temperature", "watertemperature"),
-			array("water temp exception", "water_temp_exception", "watertempexception", "water temperature exception", "water_temperature_exception", "watertemperatureexception"),
 			array("ph"),
-			array("ph exception", "ph_exception", "phexception"),
 			array("conductivity"),
-			array("conductivity exception", "conductivity_exception", "conductivityexception"),
 			array("tds"),
-			array("tds exception", "tds_exception", "tdsexception"),
 			array("do"),
-			array("do exception", "do_exception", "doexception"),
 			array("turbidity (meter reading)"),
-			array("turbidity exception", "turbidity_exception", "turbidityexception"),
 			array("turbidity (scale value)"),
 			array("comments"),
 			array("import date", "import_date", "importdate"),
@@ -442,7 +429,7 @@
 			
 			$name = "bacteria";
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount',
-				'Ecoli', 'EcoliException', 'TotalColiformRawCount', 'TotalColiform', 'ColiformException', 'Comments');
+				'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'Comments');
 			
 			$modelBare = $this->BacteriaSamples;
 		}
@@ -450,8 +437,7 @@
 			$this->loadModel('NutrientSamples');
 			
 			$name = "nutrient";
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus',
-				'PhosphorusException', 'NitrateNitrite', 'NitrateNitriteException', 'DRP', 'Ammonia', 'Comments');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'Comments');
 			
 			$modelBare = $this->NutrientSamples;
 		}
@@ -459,8 +445,7 @@
 			$this->loadModel('PesticideSamples');
 			
 			$name = "pesticide";
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine',
-				'AltrazineException', 'Alachlor', 'AlachlorException', 'Metolachlor', 'MetolachlorException', 'Comments');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'Alachlor', 'Metolachlor', 'Comments');
 			
 			$modelBare = $this->PesticideSamples;
 		}
@@ -469,9 +454,7 @@
 			
 			$name = "waterQualitySample";
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time',
-				'Bridge_to_Water_Height', 'Water_Temp',
-				'Water_Temp_Exception', 'pH', 'pH_Exception', 'Conductivity', 'Conductivity_Exception', 'TDS',
-				'TDS_Exception', 'DO', 'DO_Exception', 'Turbidity', 'Turbidity_Exception', 'Turbidity_Scale_Value',
+				'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value',
 				'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 			
 			$modelBare = $this->WaterQualitySamples;

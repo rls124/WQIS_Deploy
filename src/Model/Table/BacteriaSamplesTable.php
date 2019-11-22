@@ -71,20 +71,12 @@
                 ->allowEmpty('Ecoli');
 
             $validator
-                ->integer('EcoliException')
-                ->allowEmpty('EcoliException');
-
-            $validator
                 ->integer('TotalColiformRawCount')
                 ->allowEmpty('TotalColiformRawCount');
 
             $validator
                 ->integer('TotalColiform')
                 ->allowEmpty('TotalColiform');
-
-            $validator
-                ->integer('ColiformException')
-                ->allowEmpty('ColiformException');
 
             $validator
                 ->scalar('BacteriaComments')

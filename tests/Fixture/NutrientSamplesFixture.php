@@ -22,9 +22,7 @@ class NutrientSamplesFixture extends TestFixture
         'Date' => ['type' => 'date', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'Sample_Number' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'Phosphorus' => ['type' => 'decimal', 'length' => 5, 'precision' => 3, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
-        'PhosphorusException' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'NH3-N' => ['type' => 'decimal', 'length' => 5, 'precision' => 3, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
-        'NH3-NException' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'DRP' => ['type' => 'decimal', 'length' => 5, 'precision' => 3, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
         'Comments' => ['type' => 'string', 'length' => 200, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_indexes' => [
@@ -54,9 +52,7 @@ class NutrientSamplesFixture extends TestFixture
             'Date' => '2017-12-01',
             'Sample_Number' => 1,
             'Phosphorus' => 1.5,
-            'PhosphorusException' => 1,
             'NH3-N' => 1.5,
-            'NH3-NException' => 1,
             'DRP' => 1.5,
             'Comments' => 'Lorem ipsum dolor sit amet'
         ],

@@ -67,16 +67,8 @@
                 ->allowEmpty('Phosphorus');
 
             $validator
-                ->integer('PhosphorusException')
-                ->allowEmpty('PhosphorusException');
-
-            $validator
                 ->decimal('NitrateNitrite')
                 ->allowEmpty('NitrateNitrite');
-
-            $validator
-                ->integer('NitrateNitriteException')
-                ->allowEmpty('NitrateNitriteException');
 
             $validator
                 ->decimal('DRP')

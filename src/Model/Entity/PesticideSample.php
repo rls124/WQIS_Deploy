@@ -12,11 +12,8 @@
      * @property \Cake\I18n\FrozenDate $Date
      * @property int $Sample_Number
      * @property float $Atrazine
-     * @property int $AtrazineException
      * @property float $Alachlor
-     * @property int $AlachlorException
      * @property float $Metolachlor
-     * @property int $MetolachlorException
      * @property string $PesticideComments
      *
      * @property \App\Model\Entity\SiteLocation $site_location
@@ -37,11 +34,8 @@
             'Date' => true,
             'Sample_Number' => true,
             'Atrazine' => true,
-            'AtrazineException' => true,
             'Alachlor' => true,
-            'AlachlorException' => true,
             'Metolachlor' => true,
-            'MetolachlorException' => true,
             'PesticideComments' => true,
             'site_location' => true
         ];

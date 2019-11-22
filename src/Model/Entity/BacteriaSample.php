@@ -13,10 +13,8 @@
      * @property int $Sample_Number
      * @property int $EcoliRawCount
      * @property int $Ecoli
-     * @property int $EcoliException
      * @property int $TotalColiformRawCount
      * @property int $TotalColiform
-     * @property int $ColiformException
      * @property string $BacteriaComments
      *
      * @property \App\Model\Entity\SiteLocation $site_location
@@ -38,10 +36,8 @@
             'Sample_Number' => true,
             'EcoliRawCount' => true,
             'Ecoli' => true,
-            'EcoliException' => true,
             'TotalColiformRawCount' => true,
             'TotalColiform' => true,
-            'ColiformException' => true,
             'BacteriaComments' => true,
             'site_location' => true
         ];

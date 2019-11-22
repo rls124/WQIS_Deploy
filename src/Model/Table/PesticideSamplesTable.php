@@ -67,24 +67,12 @@
                 ->allowEmpty('Atrazine');
 
             $validator
-                ->integer('AtrazineException')
-                ->allowEmpty('AtrazineException');
-
-            $validator
                 ->decimal('Alachlor')
                 ->allowEmpty('Alachlor');
 
             $validator
-                ->integer('AlachlorException')
-                ->allowEmpty('AlachlorException');
-
-            $validator
                 ->decimal('Metolachlor')
                 ->allowEmpty('Metolachlor');
-
-            $validator
-                ->integer('MetolachlorException')
-                ->allowEmpty('MetolachlorException');
 
             $validator
                 ->scalar('PesticideComments')

@@ -78,48 +78,24 @@
                 ->allowEmpty('Water_Temp');
 
             $validator
-                ->integer('Water_Temp_Exception')
-                ->allowEmpty('Water_Temp_Exception');
-
-            $validator
                 ->decimal('pH')
                 ->allowEmpty('pH');
-
-            $validator
-                ->integer('pH_Exception')
-                ->allowEmpty('pH_Exception');
 
             $validator
                 ->decimal('Conductivity')
                 ->allowEmpty('Conductivity');
 
             $validator
-                ->integer('Conductivity_Exception')
-                ->allowEmpty('Conductivity_Exception');
-
-            $validator
                 ->decimal('TDS')
                 ->allowEmpty('TDS');
-
-            $validator
-                ->integer('TDS_Exception')
-                ->allowEmpty('TDS_Exception');
 
             $validator
                 ->decimal('DO')
                 ->allowEmpty('DO');
 
             $validator
-                ->integer('DO_Exception')
-                ->allowEmpty('DO_Exception');
-
-            $validator
                 ->decimal('Turbidity')
                 ->allowEmpty('Turbidity');
-
-            $validator
-                ->integer('Turbidity_Exception')
-                ->allowEmpty('Turbidity_Exception');
 
             $validator
                 ->integer('Turbidity_Scale_Value')

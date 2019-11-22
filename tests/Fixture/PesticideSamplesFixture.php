@@ -22,11 +22,8 @@ class PesticideSamplesFixture extends TestFixture
         'Date' => ['type' => 'date', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'Sample_Number' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'Atrazine' => ['type' => 'decimal', 'length' => 4, 'precision' => 0, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
-        'AtrazineException' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'Alachlor' => ['type' => 'decimal', 'length' => 4, 'precision' => 3, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
-        'AlachlorException' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'Metolachlor' => ['type' => 'decimal', 'length' => 4, 'precision' => 3, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
-        'MetolachlorException' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'Comments' => ['type' => 'string', 'length' => 200, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_indexes' => [
             'fk_site_location_id4' => ['type' => 'index', 'columns' => ['site_location_id'], 'length' => []],
@@ -55,11 +52,8 @@ class PesticideSamplesFixture extends TestFixture
             'Date' => '2017-12-01',
             'Sample_Number' => 1,
             'Atrazine' => 1.5,
-            'AtrazineException' => 1,
             'Alachlor' => 1.5,
-            'AlachlorException' => 1,
             'Metolachlor' => 1.5,
-            'MetolachlorException' => 1,
             'Comments' => 'Lorem ipsum dolor sit amet'
         ],
     ];

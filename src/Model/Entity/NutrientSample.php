@@ -12,9 +12,7 @@
      * @property \Cake\I18n\FrozenDate $Date
      * @property int $Sample_Number
      * @property float $Phosphorus
-     * @property int $PhosphorusException
      * @property float $NitrateNitrite
-     * @property int $NitrateNitriteException
      * @property float $DRP
 	 * @property float $Ammonia
      * @property string $NutrientComments
@@ -37,9 +35,7 @@
             'Date' => true,
             'Sample_Number' => true,
             'Phosphorus' => true,
-            'PhosphorusException' => true,
             'NitrateNitrite' => true,
-            'NitrateNitriteException' => true,
             'DRP' => true,
 			'Ammonia' => true,
             'NutrientComments' => true,

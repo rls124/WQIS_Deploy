@@ -14,17 +14,11 @@
      * @property \Cake\I18n\Time $Time
      * @property float $Bridge_to_Water_Height
      * @property float $Water_Temp
-     * @property int $Water_Temp_Exception
      * @property float $pH
-     * @property int $pH_Exception
      * @property float $Conductivity
-     * @property int $Conductivity_Exception
      * @property float $TDS
-     * @property int $TDS_Exception
      * @property float $DO
-     * @property int $DO_Exception
      * @property float $Turbidity
-     * @property int $Turbidity_Exception
      * @property int $Turbidity_Scale_Value
      * @property string $WaterQualityComments
      * @property \Cake\I18n\Time $Import_Date
@@ -51,17 +45,11 @@
             'Time' => true,
             'Bridge_to_Water_Height' => true,
             'Water_Temp' => true,
-            'Water_Temp_Exception' => true,
             'pH' => true,
-            'pH_Exception' => true,
             'Conductivity' => true,
-            'Conductivity_Exception' => true,
             'TDS' => true,
-            'TDS_Exception' => true,
             'DO' => true,
-            'DO_Exception' => true,
             'Turbidity' => true,
-            'Turbidity_Exception' => true,
             'Turbidity_Scale_Value' => true,
             'WaterQualityComments' => true,
             'Import_Date' => true,
