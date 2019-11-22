@@ -22,9 +22,8 @@ $(document).ready(function() {
 					'sites': sites
 				},
 				success: function(response) {
-					var data = JSON.parse(response);
-					var startDateData = data[0];
-					var endDateData = data[1];
+					var startDateData = response[0];
+					var endDateData = response[1];
 					$('#startdate').val(startDateData);
 					$('#enddate').val(endDateData);
 					$("#startdate").datepicker('update', startDateData);
