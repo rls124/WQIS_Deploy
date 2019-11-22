@@ -98,8 +98,6 @@ $(document).ready(function () {
             return;
         }
 
-		alert(input.attr('id'));
-
         var rowNumber = (input.attr('id')).split("-")[1];
         var sampleNumber = $('#samplenumber-' + rowNumber).val();
 		
