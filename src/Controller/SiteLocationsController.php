@@ -163,8 +163,6 @@
 			if ($this->request->is('post')) {
 				$SiteLocation = $this->SiteLocations->patchEntity($SiteLocation, $this->request->getData());
 
-//				$this->log($this->request, 'debug');
-
 				$Site_Number = $this->request->getData('Site_Number');
 
 				if ($this->SiteLocations->save($SiteLocation)) {
@@ -177,9 +175,6 @@
 					$json = json_encode(['siteid' => $site->ID]);
 					$this->response->body($json);
 					return;
-				}
-				else {
-					$this->log("error", 'debug');
 				}
 			}
 		}

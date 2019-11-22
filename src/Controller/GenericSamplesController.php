@@ -36,7 +36,7 @@
 			$site = $_SESSION["site"];
 			$amount = $_SESSION["amountEnter"];
 			$searchRange = $_SESSION["overUnderSelect"];
-			$measurementSelect = $SESSION["measurementSelect"];
+			$measurementSelect = $_SESSION["measurementSelect"];
 		
 		}
 		
@@ -833,15 +833,10 @@
 		
 		$dateRange = [$minDate, $maxDate];
 		
-		
-		
 		$this->response = $this->response->withStringBody(json_encode([$minDate, $maxDate]));
 		$this->response = $this->response->withType('json');
 				
 		return $this->response;
-		
-		//$this->response->body(json_encode($dateRange));
-		//return $this->response;
 	}
 
 	public function getmonitoredsites() {
