@@ -91,7 +91,7 @@
 						Ensure that the file is a valid CSV (comma separated values) file
 					</li>
 					<li>
-						Check that the column headers are present, and match the format shown in the appropriate <a href="/WQIS/webroot/files/All_Sample_Files.zip">example file</a>
+						Check that the column headers are present, and match the format shown in the appropriate <a href="/WQIS/webroot/files/exampleFiles.zip">example file</a>
 					</li>
 				</ul>
 			</p>

@@ -113,7 +113,7 @@
 		
 
                 <div class="row center mb-0">
-                    <a type="submit" href="..\webroot\files\All_Sample_Files.zip"  class="mb-0 mt-1 btn btn-basic col-sm sampleFile" id="sampleFileDisabled" name="sampleFile" style="height: 43px;">Download Sample File</a>
+                    <a type="submit" href="..\webroot\files\exampleFiles.zip"  class="mb-0 mt-1 btn btn-basic col-sm sampleFile" id="sampleFileDisabled" name="sampleFile" style="height: 43px;">Download Sample File</a>
 					
                     <input type="submit" class="mb-0 ml-4 mt-1 btn btn-basic col-sm" value="Import Data" id="submitFile" name="submitFile" style="height: 43px;" disabled >
 					<img id="loadingIcon" src="..\webroot\img\loading.gif" style="display: block; margin-top: 12px; margin-left: 6px; auto; width: 32px; height: 32px; visibility: hidden;">
