@@ -247,11 +247,8 @@
 				for ($column = 0; $column < sizeof($columnIDs); $column++) {
 					$currentElement = $csv[$row][$column];
 					$currentColumn = $columnIDs[$column];
-					//Check if the current column name does not contain exception
-					if (strpos($currentColumn, "Exception") === false) {
-						$currentRow[] = $currentElement;
-					}
-
+					
+					$currentRow[] = $currentElement;
 					$uploadData[$currentColumn] = $currentElement;
 				}
 			
@@ -303,10 +300,8 @@
 			array("sample number", "sample_number", "samplenumber"),
 			array("ecoliraw", "ecolirawcount", "ecoli raw", "ecoli_raw", "ecoli raw count", "ecoli_raw_count"),
 			array("ecoli"),
-			array("ecoli exception", "ecoli_exception", "ecoliexception"),
 			array("total coliform raw", "total_coliform_raw", "totalcoliformraw", "total coliform raw count", "total_coliform_raw_count", "totalcoliformrawcount"),
 			array("total coliform", "total_coliform", "totalcoliform"),
-			array("coliform exception", "coliform_exception", "coliformexception", "total coliform exception", "total_coliform_exception", "totalcoliformexception"),
 			array("comments"),
 		);
 		
@@ -315,9 +310,7 @@
 			array("date"),
 			array("sample number", "sample_number", "samplenumber"),
 			array("phosphorus"),
-			array("phosphorus exception", "phosphorus_exception", "phosphorusexception"),
 			array("nh3-n", "nitrate nitrite", "nitrate_nitrite", "nitratenitrite"),
-			array("nh3-n exception", "nh3-n_exception", "nh3-nexception", "nitrate nitrite exception", "nitrate_nitrite_exception", "nitratenitriteexception"),
 			array("drp"),
 			array("ammonia"),
 			array("comments"),
@@ -328,11 +321,8 @@
 			array("date"),
 			array("sample number", "sample_number", "samplenumber"),
 			array("atrazine"),
-			array("atrazine exception", "atrazine_exception", "atrazineexception"),
 			array("alachlor"),
-			array("alachor exception", "alachor_exception", "alachlorexception"),
 			array("metolachlor"),
-			array("metolachor exception", "metolachor_exception", "metolachlorexception"),
 			array("comments"),
 		);
 		
@@ -343,17 +333,11 @@
 			array("time"),
 			array("bridge_to_water_height", "bridge to water height"),
 			array("water temp", "water_temp", "watertemp", "water temperature", "water_temperature", "watertemperature"),
-			array("water temp exception", "water_temp_exception", "watertempexception", "water temperature exception", "water_temperature_exception", "watertemperatureexception"),
 			array("ph"),
-			array("ph exception", "ph_exception", "phexception"),
 			array("conductivity"),
-			array("conductivity exception", "conductivity_exception", "conductivityexception"),
 			array("tds"),
-			array("tds exception", "tds_exception", "tdsexception"),
 			array("do"),
-			array("do exception", "do_exception", "doexception"),
 			array("turbidity (meter reading)"),
-			array("turbidity exception", "turbidity_exception", "turbidityexception"),
 			array("turbidity (scale value)"),
 			array("comments"),
 			array("import date", "import_date", "importdate"),
