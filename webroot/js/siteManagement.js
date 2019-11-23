@@ -182,6 +182,7 @@ $(document).ready(function () {
 			datatype: 'JSON',
 			data: {
 				'Site_Number': sitenumber,
+				'Monitored': 0,
 				'Longitude': longitude,
 				'Latitude': latitude,
 				'Site_Location': location,
@@ -191,6 +192,7 @@ $(document).ready(function () {
 				var siteid = result['siteid'];
 				$('#tableView').append('<tr id="tr-' + siteid + '"></tr>');
 				$('#tr-' + siteid).append('<td id="td-' + siteid + '-siteNum">' + sitenumber + '</td>');
+				$('#tr-' + siteid).append('<td id="td-' + siteid + '-monitoredcheckbox"><input type="checkbox" class="form-control checkbox"></td>');
 				$('#tr-' + siteid).append('<td id="td-' + siteid + '-longitude">' + longitude + '</td>');
 				$('#tr-' + siteid).append('<td id="td-' + siteid + '-latitude">' + latitude + '</td>');
 				$('#tr-' + siteid).append('<td id="td-' + siteid + '-siteLoc">' + location + '</td>');
@@ -204,6 +206,7 @@ $(document).ready(function () {
 				$('#add-latitude').val('');
 				$('#add-sitelocation').val('');
 				$('#add-sitename').val('');
+				$('#add-monitored').val('');
 				$('.message').html('Site: <strong>' + sitenumber + '</strong> has been added');
 				$('.message').removeClass('error');
 				$('.message').removeClass('hidden');
