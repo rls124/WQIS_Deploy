@@ -1,19 +1,19 @@
         <tbody>
 	    <?php
 		$row = 0;
-		foreach ($samples as $wqmSample):
+		foreach ($samples as $physicalSample):
 		    ?>
 		    <tr>
 	    		<td>
 				<?=
 				$this->Form->control('Date-' . $row, ['maxlength' => '11',
 				    'size' => '11',
-				    'value' => $wqmSample->Date,
+				    'value' => $physicalSample->Date,
 				    'style' => 'display: none',
 				    'label' => [
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->Date . ' '
+					'text' => $physicalSample->Date . ' '
 				    ]
 				])
 				?>
@@ -23,12 +23,12 @@
 				$this->Form->control('samplenumber-' . $row, ['maxlength' => '11',
 				    'size' => '11',
 				    'class' => 'inputfields tableInput',
-				    'value' => $wqmSample->Sample_Number,
+				    'value' => $physicalSample->Sample_Number,
 				    'style' => 'display: none',
 				    'label' => [
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->Sample_Number . ' '
+					'text' => $physicalSample->Sample_Number . ' '
 				    ]
 				])
 				?>
@@ -38,12 +38,12 @@
 				$this->Form->control('Conductivity-' . $row, ['maxlength' => '5',
 				    'size' => '5',
 				    'class' => 'inputfields tableInput',
-				    'value' => $wqmSample->Conductivity,
+				    'value' => $physicalSample->Conductivity,
 				    'style' => 'display: none',
 				    'label' => [
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->Conductivity . ' '
+					'text' => $physicalSample->Conductivity . ' '
 				    ]
 				])
 				?>
@@ -53,20 +53,20 @@
 				$this->Form->control('DO-' . $row, ['maxlength' => '5',
 				    'size' => '5',
 				    'class' => 'inputfields tableInput',
-				    'value' => $wqmSample->DO,
+				    'value' => $physicalSample->DO,
 				    'style' => 'display: none',
 				    'label' => [
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->DO . ' '
+					'text' => $physicalSample->DO . ' '
 				    ]
 				])
 				?>
 	    		</td>
 				<td>
 					<div class="input text">
-						<label style="display: in-line; cursor: pointer" class="btn btn-thin inputHide" for="bridge_to_water_height-<?php echo $row;?>"><?php echo $wqmSample->Bridge_to_Water_Height;?> </label>
-						<input type="text" name="Bridge_to_Water_Height-<?php echo $row;?>" maxlength="5" size="5" class="inputfields tableInput" style="display: none" id="bridge_to_water_height-<?php echo $row;?>" value="<?php echo $wqmSample->Bridge_to_Water_Height;?>"/>
+						<label style="display: in-line; cursor: pointer" class="btn btn-thin inputHide" for="bridge_to_water_height-<?php echo $row;?>"><?php echo $physicalSample->Bridge_to_Water_Height;?> </label>
+						<input type="text" name="Bridge_to_Water_Height-<?php echo $row;?>" maxlength="5" size="5" class="inputfields tableInput" style="display: none" id="bridge_to_water_height-<?php echo $row;?>" value="<?php echo $physicalSample->Bridge_to_Water_Height;?>"/>
 					</div>
 	    		</td>
 	    		<td>
@@ -74,12 +74,12 @@
 				$this->Form->control('pH-' . $row, ['maxlength' => '54',
 				    'size' => '4',
 				    'class' => 'inputfields tableInput',
-				    'value' => $wqmSample->pH,
+				    'value' => $physicalSample->pH,
 				    'style' => 'display: none',
 				    'label' => [
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->pH . ' '
+					'text' => $physicalSample->pH . ' '
 				    ]
 				])
 				?>
@@ -89,13 +89,13 @@
 				$this->Form->control('Water_Temp-' . $row, ['maxlength' => '11',
 				    'size' => '11',
 				    'class' => 'inputfields tableInput',
-				    'value' => $wqmSample->Water_Temp,
+				    'value' => $physicalSample->Water_Temp,
 				    'style' => 'display: none',
 				    'id' => 'Water_Temp-' . $row,
 				    'label' => [
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->Water_Temp . ' '
+					'text' => $physicalSample->Water_Temp . ' '
 				    ]
 				])
 				?>
@@ -105,12 +105,12 @@
 				$this->Form->control('TDS-' . $row, ['maxlength' => '4',
 				    'size' => '4',
 				    'class' => 'inputfields tableInput',
-				    'value' => $wqmSample->TDS,
+				    'value' => $physicalSample->TDS,
 				    'style' => 'display: none',
 				    'label' => [
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->TDS . ' '
+					'text' => $physicalSample->TDS . ' '
 				    ]
 				])
 				?>
@@ -120,12 +120,12 @@
 				$this->Form->control('Turbidity-' . $row, ['maxlength' => '4',
 				    'size' => '4',
 				    'class' => 'inputfields tableInput',
-				    'value' => $wqmSample->Turbidity,
+				    'value' => $physicalSample->Turbidity,
 				    'style' => 'display: none',
 				    'label' => [
 					'style' => 'display: in-line; cursor: pointer',
 					'class' => 'btn btn-thin inputHide',
-					'text' => $wqmSample->Turbidity . ' '
+					'text' => $physicalSample->Turbidity . ' '
 				    ]
 				])
 				?>
@@ -145,9 +145,9 @@
 				
 	    		<td class="actions">
 				<?=
-				$this->Html->tag('span', $wqmSample->WaterQualityComments, [
-				    'id' => 'WaterQualityComments-' . $row,
-				    'class' => 'WaterQualityComments-' . $row,
+				$this->Html->tag('span', $physicalSample->PhysicalComments, [
+				    'id' => 'PhysicalComments-' . $row,
+				    'class' => 'PhysicalComments-' . $row,
 				    'hidden'
 				])
 				?>

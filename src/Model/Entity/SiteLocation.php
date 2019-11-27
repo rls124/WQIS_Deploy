@@ -17,7 +17,7 @@
      * @property \App\Model\Entity\HydrolabSample[] $hydrolab_samples
      * @property \App\Model\Entity\NutrientSample[] $nutrient_samples
      * @property \App\Model\Entity\PesticideSample[] $pesticide_samples
-     * @property \App\Model\Entity\WaterQualitySample[] $water_quality_samples
+     * @property \App\Model\Entity\PhysicalSample[] $physical_samples
      */
     class SiteLocation extends Entity {
 
@@ -41,6 +41,6 @@
             'hydrolab_samples' => true,
             'nutrient_samples' => true,
             'pesticide_samples' => true,
-            'water_quality_samples' => true
+            'physical_samples' => true
         ];
     }

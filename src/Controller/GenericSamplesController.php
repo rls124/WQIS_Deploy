@@ -85,11 +85,11 @@
 				$measureType='Metolachlor';
 			}
 		}
-		elseif ($type == "wqm") {
-			$this->loadModel('WaterQualitySamples');
+		elseif ($type == "physical") {
+			$this->loadModel('PhysicalSamples');
 			
-			$modelName = "WaterQualitySamples";
-			$modelBare = $this->WaterQualitySamples;
+			$modelName = "PhysicalSamples";
+			$modelBare = $this->PhysicalSamples;
 			
 			if($measurementSelect == 'conductivity'){
 				$measureType='Conductivity';
@@ -213,12 +213,12 @@
 				$this->set("fileTypeName", "Pesticide Samples");
 			}
 			else if ($fileType == 4) {
-				//wqm
-				$model = "WaterQualitySamples";
+				//physical properties
+				$model = "PhysicalSamples";
  				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 				$columnText = array("Site Number", "Date", "Sample number", "Time", "Bridge to Water Height", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time", "Requires Checking");
 				
-				$this->set("fileTypeName", "Water Quality Samples");
+				$this->set("fileTypeName", "Physical Property Samples");
 			}
 			else if ($fileType == 5) {
 				//site information
@@ -326,7 +326,7 @@
 			array("comments"),
 		);
 		
-		$WQMHeader = array(
+		$physicalHeader = array(
 			array("site number", "site_number", "sitenumber"),
 			array("date"),
 			array("sample number", "sample_number", "sample_number"),
@@ -353,7 +353,7 @@
 			array("site name", "site_name", "sitename"),
 		);
 		
-		$validHeaders = array($bacteriaHeader, $nutrientHeader, $pesticideHeader, $WQMHeader, $siteInfoHeader);
+		$validHeaders = array($bacteriaHeader, $nutrientHeader, $pesticideHeader, $physicalHeader, $siteInfoHeader);
 		
 		for ($typeNumber=0; $typeNumber<sizeof($validHeaders); $typeNumber++) {
 			$correctType = true;
@@ -405,9 +405,9 @@
 			$this->loadModel('PesticideSamples');
 			$modelBare = $this->PesticideSamples;
 		}
-		elseif ($_POST["type"] == "wqm") {
-			$this->loadModel('WaterQualitySamples');
-			$modelBare = $this->WaterQualitySamples;
+		elseif ($_POST["type"] == "physical") {
+			$this->loadModel('PhysicalSamples');
+			$modelBare = $this->PhysicalSamples;
 		}
 		
 		//Get the sample we are deleting
@@ -446,15 +446,15 @@
 			
 			$modelBare = $this->PesticideSamples;
 		}
-		elseif (isset($_POST["ph-0"]) || $_POST["entryType"] == "wqm") { //water quality form or form submission
-			$this->loadModel('WaterQualitySamples');
+		elseif (isset($_POST["ph-0"]) || $_POST["entryType"] == "physical") { //water quality form or form submission
+			$this->loadModel('PhysicalSamples');
 			
-			$name = "waterQualitySample";
+			$name = "physicalSample";
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time',
 				'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value',
 				'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 			
-			$modelBare = $this->WaterQualitySamples;
+			$modelBare = $this->PhysicalSamples;
 		}
 		
 		$rows = $this->request->getData('totalrows');
@@ -546,14 +546,10 @@
 			$this->loadModel('PesticideSamples');
 			$modelBare = $this->PesticideSamples;
 		}
-		elseif ($parameter == "conductivity" || $parameter == "do" || $parameter == "bridge_to_water_height" || $parameter == "ph" || $parameter == "water_temp" || $parameter == "tds" || $parameter == "turbidity" || $parameter == "waterqualitycomments") { //water quality meter
-			$this->loadModel('WaterQualitySamples');
-			$modelBare = $this->WaterQualitySamples;
+		elseif ($parameter == "conductivity" || $parameter == "do" || $parameter == "bridge_to_water_height" || $parameter == "ph" || $parameter == "water_temp" || $parameter == "tds" || $parameter == "turbidity" || $parameter == "physicalcomments") { //water quality meter
+			$this->loadModel('PhysicalSamples');
+			$modelBare = $this->PhysicalSamples;
 		}
-		
-		//else {
-			$this->log("request: " . print_r($_POST, true), 'debug');
-		//}
 		
 		//Get the sample we are editing
 		$sample = $modelBare
@@ -641,7 +637,7 @@
 			}
 		}
 		elseif (in_array($measure, ["conductivity", "do", "ph", "water_temp", "tds", "turbidity", "bridge_to_water_height"])) { //water quality meter
-			$model = "WaterQualitySamples";
+			$model = "PhysicalSamples";
 
 			//Set the name of the measure
 			switch ($measure . "") {
@@ -724,7 +720,7 @@
 		$this->loadModel("BacteriaSamples");
 		$this->loadModel("NutrientSamples");
 		$this->loadModel("PesticideSamples");
-		$this->loadModel("WaterQualitySamples");
+		$this->loadModel("PhysicalSamples");
 		
 		//ensure that sites is in POST data
 		if (!$this->request->getData('sites')) {
@@ -782,8 +778,8 @@
 		$pesticideMaxDate = date('m/d/Y', strtotime($measureQuery['maxdate']));
 		
 		
-		//WQM
-		$measureQuery = $this->WaterQualitySamples
+		//physical properties
+		$measureQuery = $this->PhysicalSamples
 				->find('all', [
 				'conditions' => [
 					'site_location_id IN ' => $sites
@@ -794,12 +790,12 @@
 				]
 				])->first();
 				
-		$wqmMinDate = date('m/d/Y', strtotime($measureQuery['mindate']));
-		$wqmMaxDate = date('m/d/Y', strtotime($measureQuery['maxdate']));	
+		$physicalMinDate = date('m/d/Y', strtotime($measureQuery['mindate']));
+		$physicalMaxDate = date('m/d/Y', strtotime($measureQuery['maxdate']));	
 		
 		//find the overall min and max
-		$mins = array($bacteriaMinDate, $nutrientMinDate, $pesticideMinDate, $wqmMinDate);
-		$maxes = array($bacteriaMaxDate, $nutrientMaxDate, $pesticideMaxDate, $wqmMaxDate);
+		$mins = array($bacteriaMinDate, $nutrientMinDate, $pesticideMinDate, $physicalMinDate);
+		$maxes = array($bacteriaMaxDate, $nutrientMaxDate, $pesticideMaxDate, $physicalMaxDate);
 		
 		$minDate = $mins[0];
 		$maxDate = $maxes[0];

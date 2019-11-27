@@ -1,4 +1,4 @@
-<?= $this->Form->create($waterQualitySample) ?>
+<?= $this->Form->create($physicalSample) ?>
 <fieldset>
 	<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  Water Quality Meter Data Entry Form
 		<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
@@ -206,7 +206,7 @@
 			?>
 
 			<?=
-				$this->Form->button('Submit Water Quality Measurements', [
+				$this->Form->button('Submit Physical Property Measurements', [
 					'class' => 'btn btn-basic mb-3',
 					'style' => 'float: right;'
 				])

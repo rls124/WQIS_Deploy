@@ -10,19 +10,19 @@
 	use ArrayObject;
 
     /**
-     * WaterQualitySamples Model
+     * PhysicalSamples Model
      *
      * @property \App\Model\Table\SiteLocationsTable|\Cake\ORM\Association\BelongsTo $SiteLocations
      *
-     * @method \App\Model\Entity\WaterQualitySample get($primaryKey, $options = [])
-     * @method \App\Model\Entity\WaterQualitySample newEntity($data = null, array $options = [])
-     * @method \App\Model\Entity\WaterQualitySample[] newEntities(array $data, array $options = [])
-     * @method \App\Model\Entity\WaterQualitySample|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
-     * @method \App\Model\Entity\WaterQualitySample patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
-     * @method \App\Model\Entity\WaterQualitySample[] patchEntities($entities, array $data, array $options = [])
-     * @method \App\Model\Entity\WaterQualitySample findOrCreate($search, callable $callback = null, $options = [])
+     * @method \App\Model\Entity\PhysicalSample get($primaryKey, $options = [])
+     * @method \App\Model\Entity\PhysicalSample newEntity($data = null, array $options = [])
+     * @method \App\Model\Entity\PhysicalSample[] newEntities(array $data, array $options = [])
+     * @method \App\Model\Entity\PhysicalSample|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+     * @method \App\Model\Entity\PhysicalSample patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+     * @method \App\Model\Entity\PhysicalSample[] patchEntities($entities, array $data, array $options = [])
+     * @method \App\Model\Entity\PhysicalSample findOrCreate($search, callable $callback = null, $options = [])
      */
-    class WaterQualitySamplesTable extends Table {
+    class PhysicalSamplesTable extends Table {
 
         /**
          * Initialize method
@@ -33,7 +33,7 @@
         public function initialize(array $config) {
             parent::initialize($config);
 
-            $this->setTable('water_quality_samples');
+            $this->setTable('physical_samples');
             $this->setDisplayField('Sample_Number');
             $this->setPrimaryKey('Sample_Number');
 
@@ -102,9 +102,9 @@
                 ->allowEmpty('Turbidity_Scale_Value');
 
             $validator
-                ->scalar('WaterQualityComments')
-                ->maxLength('WaterQualityComments', 200)
-                ->allowEmpty('WaterQualityComments');
+                ->scalar('PhysicalComments')
+                ->maxLength('PhysicalComments', 200)
+                ->allowEmpty('PhysicalComments');
 
             $validator
                 ->date('Import_Date')

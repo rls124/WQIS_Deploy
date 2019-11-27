@@ -43,7 +43,7 @@
                                 'bacteria' => 'Bacteria',
                                 'nutrient' => 'Nutrient',
                                 'pesticide' => 'Pesticide',
-                                'wqm' => 'Physical Properties'
+                                'physical' => 'Physical Properties'
                                 ], [
                                 'label' => 'Category',
                                 'id' => 'categorySelect',

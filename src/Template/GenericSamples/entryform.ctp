@@ -14,7 +14,7 @@ elseif ($formType == "nutrient") {
 elseif ($formType == "pesticide") {
 	include "pesticideEntryForm.ctp";
 }
-elseif ($formType == "wqm") {
-	include "wqmEntryForm.ctp";
+elseif ($formType == "physical") {
+	include "physicalPropertiesEntryForm.ctp";
 }
 ?>

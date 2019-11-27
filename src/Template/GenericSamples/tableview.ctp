@@ -37,7 +37,7 @@
 	elseif ($sampleType == "pesticide") {
 		$tableHeaders = array("Date", "Sample number", "Atrazine (µg/L)", "Alachlor (µg/L)", "Metolachlor (µg/L)", "Comments", "Actions");
 	}
-	elseif ($sampleType == "wqm") {
+	elseif ($sampleType == "physical") {
 		$tableHeaders = array("Date", "Sample number", "Conductivity (mS/cm)", "Dissolved Oxygen (mg/L)", "Bridge to Water Height (in)", "pH", "Temperature (°C)", "Total Dissolved Solids (g/L)", "Turbidity (NTU)", "Comments", "Actions");
 	}
 	
@@ -61,8 +61,8 @@
 	elseif ($sampleType == "pesticide") {
 		include "pesticideTable.ctp";
 	}
-	elseif ($sampleType == "wqm") {
-		include "waterQualityTable.ctp";
+	elseif ($sampleType == "physical") {
+		include "physicalPropertiesTable.ctp";
 	}
 	?>
         

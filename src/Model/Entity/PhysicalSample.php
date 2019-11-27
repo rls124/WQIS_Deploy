@@ -5,7 +5,7 @@
     use Cake\ORM\Entity;
 
     /**
-     * WaterQualitySample Entity
+     * PhysicalSample Entity
      *
      * @property int $ID
      * @property int $site_location_id
@@ -20,14 +20,14 @@
      * @property float $DO
      * @property float $Turbidity
      * @property int $Turbidity_Scale_Value
-     * @property string $WaterQualityComments
+     * @property string $PhysicalComments
      * @property \Cake\I18n\Time $Import_Date
      * @property \Cake\I18n\Time $Import_Time
      * @property string $Requires_Checking
      *
      * @property \App\Model\Entity\SiteLocation $site_location
      */
-    class WaterQualitySample extends Entity {
+    class PhysicalSample extends Entity {
 
         /**
          * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -51,7 +51,7 @@
             'DO' => true,
             'Turbidity' => true,
             'Turbidity_Scale_Value' => true,
-            'WaterQualityComments' => true,
+            'PhysicalComments' => true,
             'Import_Date' => true,
             'Import_Time' => true,
             'Requires_Checking' => true,

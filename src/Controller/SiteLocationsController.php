@@ -60,9 +60,9 @@
 					$this->loadModel('PesticideSamples');
 					$model = $this->PesticideSamples;
 					break;
-				case "wqm":
-					$this->loadModel('WaterQualitySamples');
-					$model = $this->WaterQualitySamples;
+				case "physical":
+					$this->loadModel('PhysicalSamples');
+					$model = $this->PhysicalSamples;
 					break;
 				default:
 					$this->response->body(json_encode(['', '']));

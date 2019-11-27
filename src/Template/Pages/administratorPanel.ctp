@@ -62,7 +62,7 @@
 			    'bacteria' => 'Bacteria Entry Form',
 			    'nutrient' => 'Nutrient Entry Form',
 			    'pesticide' => 'Pesticide Entry Form',
-			    'wqm' => 'WQM Entry Form'
+			    'physical' => 'Physical Properties Entry Form'
 			    ], [
 			    'class' => 'ml-3 mr-3 mb-3 btn btn-default col-sm',
 			    'empty' => 'Select Entry Form...',

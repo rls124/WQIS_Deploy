@@ -19,8 +19,8 @@ elseif ($chartType == "nutrient") {
 elseif ($chartType == "pesticide") {
 	include "pesticideChart.ctp";
 }
-elseif ($chartType == "wqm") {
-	include "wqmChart.ctp";
+elseif ($chartType == "physical") {
+	include "physicalPropertiesChart.ctp";
 }
 ?>
 

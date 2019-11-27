@@ -31,7 +31,7 @@ function changeMeasures() {
         case 'pesticide':
             populateMeasurementSelect(pesticideData);
             break;
-        case 'wqm':
+        case 'physical':
             populateMeasurementSelect(physProp);
             break;
     }

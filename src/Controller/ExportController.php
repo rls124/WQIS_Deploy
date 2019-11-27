@@ -38,9 +38,9 @@
 					$this->loadModel("PesticideSamples");
 					$sampleQuery = $this->PesticideSamples;
 					break;
-				case 'wqm':
-					$this->loadModel("WaterQualitySamples");
-					$sampleQuery = $this->WaterQualitySamples;
+				case 'physical':
+					$this->loadModel("PhysicalSamples");
+					$sampleQuery = $this->PhysicalSamples;
 					break;
 				default:
 					$sampleQuery = "";
