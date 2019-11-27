@@ -521,11 +521,8 @@
 	public function updatefield() {
 		$this->render(false);
 		
-		$this->log("request: " . print_r($_POST, true), 'debug');
-		
 		//Ensure sample number data was included
 		if (!$this->request->getData('sampleNumber')) {
-			$this->log("failed", 'debug');
 			return;
 		}
 		$sampleNumber = $this->request->getData('sampleNumber');

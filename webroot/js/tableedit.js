@@ -41,8 +41,8 @@ $(document).ready(function () {
 		else if (sampleType == "pesticide") {
 			elementPrefix = "PesticideComments";
 		}
-		else {
-			elementPrefix = "WaterQualityComments";
+		else if (sampleType == "physical") {
+			elementPrefix = "PhysicalComments";
 		}
 		
 		var commentText = document.getElementById(elementPrefix + "-" + rowNumber).innerHTML;
@@ -70,8 +70,8 @@ $(document).ready(function () {
 		else if (sampleType == "pesticide") {
 			parameter = "PesticideComments";
 		}
-		else {
-			parameter = "WaterQualityComments";
+		else if (sampleType == "physical") {
+			parameter = "PhysicalComments";
 		}
 		
         var value = input.val();
