@@ -1,5 +1,4 @@
 <link href="../css/tableView.css" rel="stylesheet" type="text/css"/>
-
 <?= $this->Html->css('loading.css') ?>
 
 <?php
@@ -13,20 +12,7 @@
 	if ($admin) {
 		echo $this->Html->script('tableedit.js');
     }
-?>
-
-<h3>
-<?php
-	$siteNumber = $this->Number->format($siteLocation->Site_Number);
-	$siteName = h($siteLocation->Site_Name);
-	$siteLocation = h($siteLocation->Site_Location);
-	echo "$sampleType Measurements for $siteNumber $siteName - $siteLocation";
-?>
-</h3>
-<table id='tableView' class="table table-striped table-responsive">
-	<thead>
-		<tr>
-<?php
+	
 	if ($sampleType == "bacteria") {
 		$tableHeaders = array("Date", "Sample number", "Ecoli raw count", "Ecoli (CFU/100 ml)", "Total Coliform Raw Count", "Total Coliform (CFU/100)", "Comments", "Actions");
 		
@@ -67,7 +53,16 @@
 		$commentName = "PhysicalComments";
 		$commentPrototype = function($sample) {return $sample->PhysicalComments;};
 	}
-	
+
+	$siteNumber = $this->Number->format($siteLocation->Site_Number);
+	$siteName = h($siteLocation->Site_Name);
+	$siteLocation = h($siteLocation->Site_Location);
+	echo "<h3>$sampleType Measurements for $siteNumber $siteName - $siteLocation</h3>";
+?>
+<table id='tableView' class="table table-striped table-responsive">
+	<thead>
+		<tr>
+<?php
 	for ($i=0; $i<count($tableHeaders); $i++) {
 		$colHeader = $tableHeaders[$i];
 		echo "<th>$colHeader</th>";
