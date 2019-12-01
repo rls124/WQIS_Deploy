@@ -207,7 +207,7 @@
 			else if ($fileType == 3) {
 				//pesticide
 				$model = "PesticideSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'Alachlor', 'Metolachlor', 'Comments');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Atrazine', 'Alachlor', 'Metolachlor', 'Comments');
 				$columnText = array("Site Number", "Date", "Sample number", "Atrazine", "Alachlor", "Metolachlor", "Comments");
 				
 				$this->set("fileTypeName", "Pesticide Samples");

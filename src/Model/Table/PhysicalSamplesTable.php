@@ -1,5 +1,4 @@
 <?php
-
     namespace App\Model\Table;
 
     use Cake\ORM\Query;
@@ -7,7 +6,6 @@
     use Cake\ORM\Table;
     use Cake\Validation\Validator;
 	use Cake\Event\Event;
-	use ArrayObject;
 
     /**
      * PhysicalSamples Model
@@ -23,7 +21,6 @@
      * @method \App\Model\Entity\PhysicalSample findOrCreate($search, callable $callback = null, $options = [])
      */
     class PhysicalSamplesTable extends Table {
-
         /**
          * Initialize method
          *
@@ -56,7 +53,25 @@
             $validator
                 ->date('Date', 'mdy')
                 ->requirePresence('Date', 'create')
-                ->notEmpty('Date');
+                ->notEmpty('Date')
+				->add('Date', 'custom', [
+					'rule' => function ($value, $context) {
+						//validate that the row actually has some sample data associated with it
+						$data = $context["data"];
+						
+						$allNull = true;
+						
+						foreach (['Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments'] as $key) {
+							if (isset($data[$key]) && $data[$key] != null && $data[$key] != "") {
+								$allNull = false;
+								break;
+							}
+						}
+						
+						return !$allNull;
+					},
+					'message' => 'null row'
+				]);
 
             $validator
                 ->integer('Sample_Number')
@@ -120,7 +135,8 @@
                 ->allowEmpty('Requires_Checking');
 
             return $validator;
-        }
+		}
+		
 
         /**
          * Returns a rules checker object that will be used for validating
@@ -135,11 +151,20 @@
             return $rules;
         }
 		
-		//format times before we attempt to load them into the database. Necessary because otherwise, single-digit hour times would fail
 		public function beforeMarshal(Event $event, \ArrayObject $data, \ArrayObject $options) {
+			//format times before we attempt to load them into the database. Necessary because otherwise, single-digit hour times would fail
 			foreach (['Time', 'Import_Time'] as $key) {
 				if (isset($data[$key]) && is_string($data[$key])) {
 					$data[$key] = \Cake\I18n\Time::parseTime($data[$key], 'HH:mm');
+				}
+			}
+			
+			//treat values like "n/a" or "no data" as null fields (they'll still show as the original values if theres other errors though, to help the user figure out what went wrong)
+			foreach (['Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value'] as $key) {
+				if (isset($data[$key]) && is_string($data[$key])) {
+					if (in_array(strtolower($data[$key]), ["n/a", "na", "nd", "no data"])) {
+						$data[$key] = null;
+					}
 				}
 			}
 		}

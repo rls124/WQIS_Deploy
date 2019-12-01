@@ -1,11 +1,11 @@
 <?php
-
     namespace App\Model\Table;
 
     use Cake\ORM\Query;
     use Cake\ORM\RulesChecker;
     use Cake\ORM\Table;
     use Cake\Validation\Validator;
+	use Cake\Event\Event;
 
     /**
      * BacteriaSamples Model
@@ -54,7 +54,25 @@
             $validator
                 ->date('Date', 'mdy')
                 ->requirePresence('Date', 'create')
-                ->notEmpty('Date');
+                ->notEmpty('Date')
+				->add('Date', 'custom', [
+					'rule' => function ($value, $context) {
+						//validate that the row actually has some sample data associated with it
+						$data = $context["data"];
+						
+						$allNull = true;
+						
+						foreach (['EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'BacteriaComments'] as $key) {
+							if (isset($data[$key]) && $data[$key] != null && $data[$key] != "") {
+								$allNull = false;
+								break;
+							}
+						}
+						
+						return !$allNull;
+					},
+					'message' => 'null row'
+				]);
 
             $validator
                 ->integer('Sample_Number')
@@ -98,4 +116,15 @@
 
             return $rules;
         }
+		
+		public function beforeMarshal(Event $event, \ArrayObject $data, \ArrayObject $options) {
+			//treat values like "n/a" or "no data" as null fields (they'll still show as the original values if theres other errors though, to help the user figure out what went wrong)
+			foreach (['EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform'] as $key) {
+				if (isset($data[$key]) && is_string($data[$key])) {
+					if (in_array(strtolower($data[$key]), ["n/a", "na", "nd", "no data"])) {
+						$data[$key] = null;
+					}
+				}
+			}
+		}
     }
