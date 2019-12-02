@@ -14,44 +14,32 @@
     }
 	
 	if ($sampleType == "bacteria") {
-		$tableHeaders = array("Date", "Sample number", "Ecoli raw count", "Ecoli (CFU/100 ml)", "Total Coliform Raw Count", "Total Coliform (CFU/100)", "Comments", "Actions");
+		$tableHeaders = array("Date", "Sample number", "Ecoli raw count", "Ecoli (CFU/100 ml)", "Total Coliform Raw Count", "Total Coliform (CFU/100)", "Comments");
 		
-		$fieldsPrototype = function($bacteriaSample) {return array($bacteriaSample->Date, $bacteriaSample->Sample_Number, $bacteriaSample->EcoliRawCount, $bacteriaSample->Ecoli, $bacteriaSample->TotalColiformRawCount, $bacteriaSample->TotalColiform);};
-		$controlNames = array("Date", "samplenumber", "EcoliRawCount", "Ecoli", "TotalColiformRawCount", "TotalColiform");
-		$lengths = array('11', '11', '5', '5', '5', '5');
-		
-		$commentName = "BacteriaComments";
-		$commentPrototype = function($sample) {return $sample->BacteriaComments;};
+		$fieldsPrototype = function($bacteriaSample) {return array($bacteriaSample->Date, $bacteriaSample->Sample_Number, $bacteriaSample->EcoliRawCount, $bacteriaSample->Ecoli, $bacteriaSample->TotalColiformRawCount, $bacteriaSample->TotalColiform, $bacteriaSample->BacteriaComments);};
+		$controlNames = array("Date", "samplenumber", "EcoliRawCount", "Ecoli", "TotalColiformRawCount", "TotalColiform", "BacteriaComments");
+		$lengths = array('11', '11', '5', '5', '5', '5', '200');
 	}
 	elseif ($sampleType == "nutrient") {
-		$tableHeaders = array("Date", "Sample number", "Nitrate/Nitrite (mg/L)", "Total Phosphorus (mg/L)", "Dissolved Reactive Phosphorus (mg/L)", "Ammonia (mg/L)", "Comments", "Actions");
+		$tableHeaders = array("Date", "Sample number", "Nitrate/Nitrite (mg/L)", "Total Phosphorus (mg/L)", "Dissolved Reactive Phosphorus (mg/L)", "Ammonia (mg/L)", "Comments");
 		
-		$fieldsPrototype = function($nutrientSample) {return array($nutrientSample->Date, $nutrientSample->Sample_Number, $nutrientSample->NitrateNitrite, $nutrientSample->Phosphorus, $nutrientSample->DRP, $nutrientSample->Ammonia);};
-		$controlNames = array("Date", "samplenumber", "NitrateNitrite", "Phosphorus", "DRP", "Ammonia");
-		$lengths = array('11', '11', '5', '5', '5', '5');
-		
-		$commentName = "NutrientComments";
-		$commentPrototype = function($sample) {return $sample->NutrientComments;};
+		$fieldsPrototype = function($nutrientSample) {return array($nutrientSample->Date, $nutrientSample->Sample_Number, $nutrientSample->NitrateNitrite, $nutrientSample->Phosphorus, $nutrientSample->DRP, $nutrientSample->Ammonia, $nutrientSample->NutrientComments);};
+		$controlNames = array("Date", "samplenumber", "NitrateNitrite", "Phosphorus", "DRP", "Ammonia", "NutrientComments");
+		$lengths = array('11', '11', '5', '5', '5', '5', '200');
 	}
 	elseif ($sampleType == "pesticide") {
-		$tableHeaders = array("Date", "Sample number", "Atrazine (µg/L)", "Alachlor (µg/L)", "Metolachlor (µg/L)", "Comments", "Actions");
+		$tableHeaders = array("Date", "Sample number", "Atrazine (µg/L)", "Alachlor (µg/L)", "Metolachlor (µg/L)", "Comments");
 		
-		$fieldsPrototype = function($pesticideSample) {return array($pesticideSample->Date, $pesticideSample->Sample_Number, $pesticideSample->Atrazine, $pesticideSample->Alachlor, $pesticideSample->Metolachlor);};
-		$controlNames = array("Date", "samplenumber", "Atrazine", "Alachlor", "Metolachlor");
-		$lengths = array('11', '11', '5', '5', '5');
-		
-		$commentName = "PesticideComments";
-		$commentPrototype = function($sample) {return $sample->PesticideComments;};
+		$fieldsPrototype = function($pesticideSample) {return array($pesticideSample->Date, $pesticideSample->Sample_Number, $pesticideSample->Atrazine, $pesticideSample->Alachlor, $pesticideSample->Metolachlor, $pesticideSample->PesticideComments);};
+		$controlNames = array("Date", "samplenumber", "Atrazine", "Alachlor", "Metolachlor", "PesticideComments");
+		$lengths = array('11', '11', '5', '5', '5', '200');
 	}
 	elseif ($sampleType == "physical") {
-		$tableHeaders = array("Date", "Sample number", "Conductivity (mS/cm)", "Dissolved Oxygen (mg/L)", "Bridge to Water Height (in)", "pH", "Temperature (°C)", "Total Dissolved Solids (g/L)", "Turbidity (NTU)", "Comments", "Actions");
+		$tableHeaders = array("Date", "Sample number", "Conductivity (mS/cm)", "Dissolved Oxygen (mg/L)", "Bridge to Water Height (in)", "pH", "Temperature (°C)", "Total Dissolved Solids (g/L)", "Turbidity (NTU)", "Comments");
 		
-		$fieldsPrototype = function($physicalSample) {return array($physicalSample->Date, $physicalSample->Sample_Number, $physicalSample->Conductivity, $physicalSample->DO, $physicalSample->Bridge_to_Water_Height, $physicalSample->pH, $physicalSample->Water_Temp, $physicalSample->TDS, $physicalSample->Turbidity);};
-		$controlNames = array("Date", "samplenumber", "Conductivity", "DO", "Bridge_to_Water_Height", "pH", "Water_Temp", "TDS", "Turbidity");
-		$lengths = array('11', '11', '5', '5', '5', '4', '11', '4', '4');
-		
-		$commentName = "PhysicalComments";
-		$commentPrototype = function($sample) {return $sample->PhysicalComments;};
+		$fieldsPrototype = function($physicalSample) {return array($physicalSample->Date, $physicalSample->Sample_Number, $physicalSample->Conductivity, $physicalSample->DO, $physicalSample->Bridge_to_Water_Height, $physicalSample->pH, $physicalSample->Water_Temp, $physicalSample->TDS, $physicalSample->Turbidity, $physicalSample->PesticideComments);};
+		$controlNames = array("Date", "samplenumber", "Conductivity", "DO", "Bridge_to_Water_Height", "pH", "Water_Temp", "TDS", "Turbidity", "PhysicalComments");
+		$lengths = array('11', '11', '5', '5', '5', '4', '11', '4', '4', '200');
 	}
 
 	$siteNumber = $this->Number->format($siteLocation->Site_Number);
@@ -67,6 +55,10 @@
 		$colHeader = $tableHeaders[$i];
 		echo "<th>$colHeader</th>";
 	}
+	
+	if ($admin) {
+		echo "<th>Actions</th>";
+	}
 ?>
 		</tr>
 	</thead>
@@ -81,35 +73,25 @@
 				for ($i=0; $i<count($fields); $i++) {
 					?>
 					<td>
-					<div class="input text">
-						<label style="display: in-line; cursor: pointer" class="btn btn-thin inputHide" for="<?php echo $controlNames[$i] . '-' . $row;?>"><?php echo $fields[$i];?> </label>
-						<input type="text" name="<?php echo $controlNames[$i];?>-<?php echo $row;?>" maxlength=<?php echo $lengths[$i];?> size=<?php echo $lengths[$i];?> class="inputfields tableInput" style="display: none" id="<?php echo $controlNames[$i];?>-<?php echo $row;?>" value="<?php echo $fields[$i];?>"/>
-					</div>
+						<div class="input text">
+						<?php if ($admin) { ?>
+							<label style="display: table-cell; cursor: pointer; white-space:normal !important;" class="btn btn-thin inputHide" for="<?php echo $controlNames[$i] . '-' . $row;?>"><?php echo $fields[$i];?> </label>
+							<textarea rows="4" cols="50" class="tableInput" name="<?php echo $controlNames[$i];?>-<?php echo $row;?>" style="display: none" id="<?php echo $controlNames[$i];?>-<?php echo $row;?>"><?php echo $fields[$i];?></textarea>
+						<?php
+						}
+						else {
+						?>
+						<span style="display: table-cell; white-space: normal !important;"><?php echo $fields[$i];?> </span>
+						<?php } ?>
+						</div>
 					</td>
 					<?php
 				}
 				?>
 				
-				<td>
-				<?=
-				$this->Html->tag('span', "", [
-				    'data-toggle' => 'modal',
-				    'data-target' => '#myModal',
-				    'class' => "comment glyphicon glyphicon-comment",
-				    'id' => 'CommentIcon-' . $row,
-				    'name' => 'CommentIcon-' . $row
-				])
-				?>
-	    		</td>
-				
 	    		<td>
-				<?=
-				$this->Html->tag('span', $commentPrototype($sample), [
-				    'id' => $commentName . '-' . $row,
-				    'class' => $commentName . '-' . $row,
-				    'hidden'
-				])
-				?>
+				<?php
+				if ($admin) { ?>
 				<?=
 				$this->Html->tag('span', "", [
 				    'class' => "delete glyphicon glyphicon-trash",
@@ -117,6 +99,7 @@
 				    'name' => 'Delete-' . $row
 				])
 				?>
+				<?php } ?>
 	    		</td>
 			    <?php $row++; ?>
 		    </tr>
@@ -139,37 +122,4 @@
 		</div>
 	</ul>
 	<p class="row"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-</div>
-
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Comments</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body">
-				<?=
-					$this->Form->control('CommentInfo', ['maxlength' => '200',
-					'templates' => [
-						'inputContainer' => '{{content}}'
-					],
-					'data-row-number' => '',
-					'class' => 'CommentInput',
-					'id' => 'commentinfo',
-					'name' => 'commentinfo',
-					'value' => "",
-					'type' => 'textarea',
-					'label' => false
-					])
-				?>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default btn-basic" data-dismiss="modal" id="saveBtn">Save</button>
-				<button type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-    </div>
 </div>
