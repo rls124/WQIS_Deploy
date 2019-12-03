@@ -1,4 +1,4 @@
-<?= $this->Form->create($physicalSample) ?>
+<?= $this->Form->create($sample) ?>
 <fieldset>
 	<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  Water Quality Meter Data Entry Form
 		<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
@@ -6,9 +6,8 @@
 		</a>
 	</p>
 	<hr>
-
-        <div class="collapse" id="collapseInfo">
-            <div class="card card-body">
+	<div class="collapse" id="collapseInfo">
+		<div class="card card-body">
                 <p>This form is used to enter bacteria levels (E. Coli raw count) for one or more sites taken on a particular date.</p>
                 <ol>
                     <li>Select or enter a date.</li>

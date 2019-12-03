@@ -421,46 +421,52 @@
 	}
 
 	public function entryform() {
-		if (isset($_POST["ecolirawcount-0"]) || $_POST["entryType"] == "bacteria") { //should return true either if we're trying to go to the entry form, or already submitted from it. Need to clean this up later
-			$this->loadModel('BacteriaSamples');
-			
-			$name = "bacteria";
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount',
-				'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'Comments');
-			
-			$modelBare = $this->BacteriaSamples;
+		if (!isset($_POST["entryType"])) {
+			//already submitted from entry form
+			if (isset($_POST["ecolirawcount-0"])) { //bacteria
+				$name = "bacteria";
+			}
+			elseif (isset($_POST["phosphorus-0"])) { //nutrient
+				$name = "nutrient";
+			}
+			elseif (isset($_POST["atrazine-0"])) { //pesticide
+				$name = "pesticide";
+			}
+			elseif (isset($_POST["ph-0"])) { //physical
+				$name = "physical";
+			}
 		}
-		elseif (isset($_POST["phosphorus-0"]) || $_POST["entryType"] == "nutrient") { //nutrient form or form submission
-			$this->loadModel('NutrientSamples');
-			
-			$name = "nutrient";
+		else {	
+			//trying to go to the entry form
+			$name = $_POST["entryType"];
+		}
+		
+		if (!isset($name)) {
+			//not valid, just return and let the template handle it
+			return;
+		}
+		
+		$modelName = ucfirst($name) . "Samples";
+		if ($name == "bacteria") {
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'Comments');
+		}
+		elseif ($name == "nutrient") {
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'Comments');
-			
-			$modelBare = $this->NutrientSamples;
 		}
-		elseif (isset($_POST["atrazine-0"]) || $_POST["entryType"] == "pesticide") { //pesticide form or form submission
-			$this->loadModel('PesticideSamples');
-			
-			$name = "pesticide";
+		elseif ($name == "pesticide") {
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'Alachlor', 'Metolachlor', 'Comments');
-			
-			$modelBare = $this->PesticideSamples;
 		}
-		elseif (isset($_POST["ph-0"]) || $_POST["entryType"] == "physical") { //water quality form or form submission
-			$this->loadModel('PhysicalSamples');
-			
-			$name = "physicalSample";
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time',
-				'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value',
-				'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
-			
-			$modelBare = $this->PhysicalSamples;
+		elseif ($name == "physical") {
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 		}
+		
+		$this->loadModel($modelName);
+		$model = $this->$modelName;
 		
 		$rows = $this->request->getData('totalrows');
 		$request = $this->request;
 		
-		$sample = $modelBare->newEntity();
+		$sample = $model->newEntity();
 		
 		//check if the request is post, and the request has at least one sample
 		if ($request->is('post') && $request->getData('site_location_id-0')) {
@@ -503,7 +509,7 @@
 			}
 		}
 		
-		$siteLocations = $modelBare->SiteLocations->find('all');
+		$siteLocations = $model->SiteLocations->find('all');
 		$this->set(compact('sample', 'siteLocations'));
 		$this->set('_serialize', ['sample']);
 
@@ -514,7 +520,7 @@
 		$this->set(compact('rawCount'));
 		
 		if (isset($_POST["entryType"])) {
-			$this->set('formType', $_POST["entryType"]);
+			$this->set('formType', $name);
 		}
 	}
 

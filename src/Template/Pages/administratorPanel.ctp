@@ -1,3 +1,5 @@
+<?php
+if ($admin) { ?>
 <link href="../css/administratorPanel.css" rel="stylesheet" type="text/css"/>
 
 <p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-home" style="font-size:20pt;"></span>  Administrator Panel
@@ -206,3 +208,13 @@ $(function(){
 	});
 });
 </script>
+
+<?php
+}
+else {
+	?>
+	<h3>You must be an administrator to access this page</h3>
+	<a href="javascript:history.back()">Go Back</a>
+	<?php
+}
+?>
