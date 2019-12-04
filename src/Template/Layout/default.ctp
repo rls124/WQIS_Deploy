@@ -3,9 +3,7 @@
     <head>
         <?= $this->Html->charset() ?>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>
-            Water Quality Information System
-        </title>
+        <title>Water Quality Information System</title>
         <?= $this->Html->meta('icon') ?>
 
         <?= $this->fetch('meta') ?>
@@ -19,54 +17,54 @@
         <?= $this->Html->css('styling.css') ?>
         <?= $this->Html->css('cakemessages.css') ?>
         <?= $this->Html->script('ajaxlooks.js') ?>
+
+<?php
+	if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session
+	?>
 	<script>
 function browserDetect() {
 	var ua = navigator.userAgent;
+	var upToDate = true;
 	
-	try {
-		if (ua.includes("Edge")) {
-			var verNum = parseFloat(ua.split("Edge/")[1]);
-			if (verNum < 18.17763) { //version Mackenzie has tested on, seems to work properly that far back at least
-				showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of Edge, or a different browser");
-			}
-		}
-		else if (ua.includes("Firefox")) {
-			var verNum = parseFloat(ua.split("Firefox/")[1]);
+	try {		
+		var browsers = [['Edge', 18.17763], ['Firefox', 65], ['Chrome', 75], ['OPR', 60]]; //browser name, lowest supported version number
+
+		for (var i=0; i<browsers.length; i++) {
+			var browser = browsers[i];
 			
-			if (verNum < 65) {
-				showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of Firefox, or a different browser");
-			}
-		}
-		else if (ua.includes("Chrome")) {
-			var verNum = parseFloat(ua.split("Chrome/")[1].split(" ")[0]);
-		
-			if (verNum < 75) {
-				showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of Chrome, or a different browser");
-			}
-		}
-		else if (ua.includes("Safari")) {
-			var verNum = parseFloat(ua.split("Safari/")[1]);
-			
-			if (verNum < 604) {
-				showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of Safari, or a different browser");
+			if (ua.includes(browser[0])) {
+				var verNum = parseFloat(ua.split(browser[0] + "/")[1].split(" ")[0]);
+				if (verNum < browser[1]) {
+					showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of " + browser[0] + ", or a different browser.");
+					upToDate = false;
+					break;
+				}
 			}
 		}
 	}
 	catch (e) {
-		//if it failed, its almost certainly internet explorer, which doesn't support "includes". In any case, its a browser so ancient it we can't hope to support it
-		showError("Internet Explorer is no longer supported. We cannot guarantee that all website functionality will work as expected. Please continue switching to Microsoft Edge, Firefox, or Chrome.");
+		//if it failed, its a browser so ancient it we can't hope to support it
+		showError("Your browser is not supported and we cannot guarantee that all website functionality will work as expected. Please consider switching to Microsoft Edge, Firefox, or Chrome.");
+		upToDate = false;
+	}
+	
+	if (upToDate) {
+		//we know that this browser is compatible now, so set the cookie anyway just so this code doesn't have to be loaded subsequently. Very minor performance gain, but nonzero. Cookie is specific to 1 browser and cleared on exit, so no risk
+		document.cookie = "ignoreBrowserCompatibility";
 	}
 }
 
 function showError(text) {
+	//build and display a footer div with the error message and ok button
 	var errorNotice = document.createElement("div");
 	errorNotice.setAttribute("id", "browserCompatibilityMessage");
-	errorNotice.setAttribute("style", "bottom:0; position:fixed; z-index:150; _position:absolute; _top:expression(eval(document.documentElement.scrollTop+(document.documentElement.clientHeight-this.offsetHeight))); background-color:yellow;");
+	errorNotice.setAttribute("style", "padding: 5px; bottom:0; position:fixed; z-index:150; width:100%; _position:absolute; _top:expression(eval(document.documentElement.scrollTop+(document.documentElement.clientHeight-this.offsetHeight))); background-color:yellow;");
 	errorNotice.innerHTML = text;
 	
 	var okButton = document.createElement("button");
 	okButton.innerHTML = "OK";
 	okButton.setAttribute("onclick", "hideBrowserCompatibilityMessage()");
+	okButton.setAttribute("style", "float:right;");
 	
 	errorNotice.appendChild(okButton);
 	
@@ -74,9 +72,14 @@ function showError(text) {
 }
 
 function hideBrowserCompatibilityMessage() {
+	//close the message
 	document.getElementById("browserCompatibilityMessage").style.display = "none";
+	
+	//set a cookie so we don't keep annoying the user about this
+	document.cookie = "ignoreBrowserCompatibility";
 }
 	</script>
+	<?php } ?>
     </head>
     <body class="h-100">
         <nav class="navbar fixed-top navbar-expand-lg navbar-light">
@@ -173,7 +176,7 @@ function hideBrowserCompatibilityMessage() {
 				}
 			?>
 		</div>
-		<script>browserDetect();</script>
+		<?php if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { ?><script>browserDetect();</script><?php } ?>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
