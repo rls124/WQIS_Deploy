@@ -26,7 +26,7 @@ function browserDetect() {
 	var ua = navigator.userAgent;
 	var upToDate = true;
 	
-	try {		
+	try {
 		var browsers = [['Edge', 18.17763], ['Firefox', 65], ['Chrome', 75], ['OPR', 60]]; //browser name, lowest supported version number
 
 		for (var i=0; i<browsers.length; i++) {
