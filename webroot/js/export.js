@@ -1,9 +1,8 @@
 $(document).ready(function () {
-
 	$("#exportBtn").click(function () {
 		var type = $('select[name=typeInput]').val();
-		var startDate = $('#startdate').val();
-		var endDate = $('#enddate').val();
+		var startDate = $('#startDate').val();
+		var endDate = $('#endDate').val();
 		if (Date.parse(startDate) > Date.parse(endDate)) {
 			$.alert('Start date cannot be greater than end date');
 			return;
@@ -46,8 +45,8 @@ $(document).ready(function () {
 			datatype: 'JSON',
 			data: {
 				'type': type,
-				'startdate': startDate,
-				'enddate': endDate,
+				'startDate': startDate,
+				'endDate': endDate,
 				'sites': sites,
 				'measures': measures
 			},
@@ -85,8 +84,6 @@ $(document).ready(function () {
 		// add header column
 		csv.unshift(fields.join(','));
 
-
-
 		csvContent += csv.join('\r\n');
 		var encodedUri = encodeURI(csvContent);
 		var link = document.createElement("a");
@@ -95,8 +92,8 @@ $(document).ready(function () {
 		link.setAttribute("download", name);
 		document.body.appendChild(link);
 		link.click();
-
 	}
+	
 	$(document).on('change', 'input[type="checkbox"]', (function () {
 		var clicked = $(this);
 		var clickedType = clicked.attr('id').split("-")[0];
@@ -113,19 +110,18 @@ $(document).ready(function () {
 					$(this).prop('checked', false);
 				});
 				allCheck.prop('checked', true);
-			} else if (allCheck.is(':checked')) {
-				allCheck.prop('checked', false);
-
 			}
-
-		} else {
-
+			else if (allCheck.is(':checked')) {
+				allCheck.prop('checked', false);
+			}
+		}
+		else {
 			if (checkedList.length === 0) {
 				allCheck.prop('checked', true);
 			}
 		}
-
 	}));
+	
 	$("select[name=typeInput]").change(function () {
 		var newType = $('select[name=typeInput]').val();
 		var allMeasures = "<label for='measure-all'><input checked type='checkbox' name='measure[]' value='all' id='measure-all'>All Measures</label>";
@@ -157,7 +153,6 @@ $(document).ready(function () {
 				measures['turbidity'] = 'Turbidity (NTU)';
 				break;
 			default:
-
 				break;
 		}
 
@@ -168,12 +163,14 @@ $(document).ready(function () {
 		}
 
 	});
-	$("#startdate, #enddate").change(function () {
+	
+	$("#startDate, #endDate").change(function () {
 		var btn = $("#exportBtn");
 
-		if ($("#startdate").val() === "" || $("#enddate").val() === "") {
+		if ($("#startDate").val() === "" || $("#endDate").val() === "") {
 			btn.prop("disabled", true);
-		} else {
+		}
+		else {
 			btn.prop("disabled", false);
 		}
 	});

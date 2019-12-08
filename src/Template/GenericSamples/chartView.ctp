@@ -115,11 +115,11 @@ elseif ($chartType == "physical") {
             </div>
             <div class="col-md-4 mSelect">
 				<?=
-					$this->Form->control('startdate', [
+					$this->Form->control('startDate', [
 						'label' => false,
 						'type' => 'text',
 						'class' => 'form-control date-picker col-lg-12',
-						'id' => 'startdate',
+						'id' => 'startDate',
 						'placeholder' => 'mm/dd/yyyy'
 					])
 				?>
@@ -129,11 +129,11 @@ elseif ($chartType == "physical") {
             </div>
             <div class="mb-3 col-md-4 mSelect">
 				<?=
-					$this->Form->control('enddate', [
+					$this->Form->control('endDate', [
 						'label' => false,
 						'type' => 'text',
 						'class' => 'form-control date-picker col-lg-12',
-						'id' => 'enddate',
+						'id' => 'endDate',
 						'placeholder' => 'mm/dd/yyyy'
 					])
 				?>

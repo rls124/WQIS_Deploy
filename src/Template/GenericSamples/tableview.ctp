@@ -5,14 +5,88 @@
 	//load variables from SESSION
 	$sampleType = $_SESSION["tableType"];
 	$siteLocation = $_SESSION["siteLocation"];
+	
+	$siteNumber = $this->Number->format($siteLocation->Site_Number);
+	$siteName = h($siteLocation->Site_Name);
+	$siteLocation = h($siteLocation->Site_Location);
 
-	//need to set a javascript variable listing the type of measurement
-	echo "<script>var sampleType = \"" . $sampleType . "\";</script>";
+	//need to set javascript variables for some of these values
+	echo "<script>";
+	echo "var sampleType = \"" . $sampleType . "\";";
+	echo "var siteNumber = \"" . $siteNumber . "\";";
+	echo "</script>";
     
 	if ($admin) {
 		echo $this->Html->script('tableedit.js');
     }
+?>
+
+<script>
+$(document).ready(function () {
+	$("#exportBtn").click(function () {
+		var startDate = <?php echo "\"$startDate\""; ?>;
+		var endDate = <?php echo "\"$endDate\""; ?>;
+		var sites = [siteNumber];
+		var measures = ['all'];
+
+		$.ajax({
+			type: "POST",
+			url: "/WQIS/export/exportData",
+			datatype: 'JSON',
+			data: {
+				'type': sampleType,
+				'startdate': startDate,
+				'enddate': endDate,
+				'sites': sites,
+				'measures': measures
+			},
+			success: function (response) {
+				downloadFile(response, sampleType);
+			}
+		});	
+	});
 	
+	function downloadFile(fileData, type) {
+		if (fileData.length < 1) {
+			return;
+		}
+		var csvContent = "data:text/csv;charset=utf-8,";
+		var fields = Object.keys(fileData[0]);
+		for (var i = 0; i < fileData.length; i++) {
+			fileData[i]['Date'] = fileData[i]['Date'].substring(0, 10);
+		}
+
+		//If ID field exists, remove it
+		if (fields[0] === "ID") {
+			fields = fields.splice(1, fields.length);
+		}
+		//Make null values not have text
+		var replacer = function (key, value) {
+			return value === null ? '' : value;
+		};
+
+		var csv = fileData.map(function (row) {
+			return fields.map(function (fieldName) {
+				return JSON.stringify(row[fieldName], replacer);
+			}).join(',');
+		});
+		fields[fields.indexOf('site_location_id')] = 'Site Number';
+		// add header column
+		csv.unshift(fields.join(','));
+
+		csvContent += csv.join('\r\n');
+		var encodedUri = encodeURI(csvContent);
+		var link = document.createElement("a");
+		link.setAttribute("href", encodedUri);
+		var name = type + '_export.csv';
+		link.setAttribute("download", name);
+		document.body.appendChild(link);
+		link.click();
+	}
+});
+</script>
+
+<?php	
 	if ($sampleType == "bacteria") {
 		$tableHeaders = array("Date", "Sample number", "Ecoli raw count", "Ecoli (CFU/100 ml)", "Total Coliform Raw Count", "Total Coliform (CFU/100)", "Comments");
 		
@@ -42,9 +116,6 @@
 		$lengths = array('11', '11', '5', '5', '5', '4', '11', '4', '4', '200');
 	}
 
-	$siteNumber = $this->Number->format($siteLocation->Site_Number);
-	$siteName = h($siteLocation->Site_Name);
-	$siteLocation = h($siteLocation->Site_Location);
 	echo "<h3>$sampleType Measurements for $siteNumber $siteName - $siteLocation</h3>";
 ?>
 <table id='tableView' class="table table-striped table-responsive">
@@ -106,6 +177,16 @@
 		<?php endforeach;?>
 	</tbody>
 </table>
+
+<?=
+	$this->Form->button('Export', [
+	'label' => false,
+	'type' => 'submit',
+	'class' => 'btn btn-basic btn-lg mb-3 mt-3 col-md-4 float-right',
+	'id' => 'exportBtn'
+	])
+?>
+
 <hr>
 <div class="container paginator">
 	<ul class="row pagination">

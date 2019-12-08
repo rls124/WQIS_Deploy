@@ -21,10 +21,10 @@ $(function () {
                 success: function (data) {
                     var startDateData = data[0];
                     var endDateData = data[1];
-                    $('#startdate').val(startDateData);
-                    $('#enddate').val(endDateData);
-                    $("#startdate").datepicker('update', startDateData);
-                    $("#enddate").datepicker('update', endDateData);
+                    $('#startDate').val(startDateData);
+                    $('#endDate').val(endDateData);
+                    $("#startDate").datepicker('update', startDateData);
+                    $("#endDate").datepicker('update', endDateData);
                 }
             });
         }

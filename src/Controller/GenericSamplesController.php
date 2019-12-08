@@ -19,32 +19,32 @@
 			$type = $_POST["categorySelect"];
 			
 			//set all relevant POST data to variables
-			$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
-			$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
+			$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
+			$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
 			$site = $this->request->getData('site');
 			$amount = $_POST["amountEnter"];
 			$searchRange = $_POST["overUnderSelect"];
 			$measurementSelect = $_POST["measurementSelect"];
-
 		}
 		else {
 			$type = $_SESSION["tableType"];
-			//set all relevant SESSION data to variables
 			
-			$startdate = date('Ymd', strtotime($_SESSION['startdate']));
-			$enddate = date('Ymd', strtotime($_SESSION['enddate']));
+			//set all relevant SESSION data to variables
+			$startDate = date('Ymd', strtotime($_SESSION['startDate']));
+			$endDate = date('Ymd', strtotime($_SESSION['endDate']));
 			$site = $_SESSION["site"];
 			$amount = $_SESSION["amountEnter"];
 			$searchRange = $_SESSION["overUnderSelect"];
-			$measurementSelect = $_SESSION["measurementSelect"];
-		
+			$measurementSelect = $_SESSION["measurementSelect"];		
 		}
 		
-		if($searchRange == "over"){
+		if ($searchRange == "over") {
 			$searchDirection = ' >=';
-		}else if($searchRange == "under"){
+		}
+		else if($searchRange == "under") {
 			$searchDirection = ' <=';
-		}else if($searchRange == "equals"){
+		}
+		else if($searchRange == "equals") {
 			$searchDirection = ' ==';
 		}
 		
@@ -61,13 +61,16 @@
 			$modelName = "NutrientSamples";
 			$modelBare = $this->NutrientSamples;
 			
-			if($measurementSelect == 'nitrateNitrite'){
+			if ($measurementSelect == 'nitrateNitrite') {
 				$measureType='NitrateNitrite';
-			}else if($measurementSelect == 'phosphorus'){
+			}
+			else if ($measurementSelect == 'phosphorus') {
 				$measureType='Phosphorus';
-			}else if($measurementSelect == 'drp'){
+			}
+			else if ($measurementSelect == 'drp') {
 				$measureType='DRP';
-			}else if($measurementSelect == 'ammonia'){
+			}
+			else if ($measurementSelect == 'ammonia') {
 				$measureType='Ammonia';
 			}
 		}
@@ -77,11 +80,13 @@
 			$modelName = "PesticideSamples";
 			$modelBare = $this->PesticideSamples;
 			
-			if($measurementSelect == "alachlor"){
+			if ($measurementSelect == "alachlor") {
 				$measureType='Alachlor';
-			}else if($measurementSelect == "atrazine"){
+			}
+			else if ($measurementSelect == "atrazine") {
 				$measureType='Atrazine';
-			}else if($measurementSelect == "metolachlor"){
+			}
+			else if ($measurementSelect == "metolachlor") {
 				$measureType='Metolachlor';
 			}
 		}
@@ -91,73 +96,76 @@
 			$modelName = "PhysicalSamples";
 			$modelBare = $this->PhysicalSamples;
 			
-			if($measurementSelect == 'conductivity'){
+			if ($measurementSelect == 'conductivity') {
 				$measureType='Conductivity';
-			}else if($measurementSelect == 'do'){
+			}
+			else if ($measurementSelect == 'do') {
 				$measureType='DO';
-			}else if($measurementSelect == 'bridge_to_water_height'){
+			}
+			else if ($measurementSelect == 'bridge_to_water_height') {
 				$measureType='Bridge_to_Water_Height';
-			}else if($measurementSelect == 'ph'){
+			}
+			else if ($measurementSelect == 'ph') {
 				$measureType='pH';
-			}else if($measurementSelect == 'water_temp'){
+			}
+			else if ($measurementSelect == 'water_temp') {
 				$measureType='Water_Temp';
-			}else if($measurementSelect == 'tds'){
+			}
+			else if ($measurementSelect == 'tds') {
 				$measureType='TDS';
-			}else if($measurementSelect == 'turbidity'){
+			}
+			else if($measurementSelect == 'turbidity') {
 				$measureType='Turbidity';
 			}
 		}
 	
-		if($amount!=''){
-		$samples = $this->paginate(
-		$modelBare->find('all', [
-			'conditions' => [
-			
-			'and' => [
-				'site_location_id' => $site,				
-				$modelName . '.Date >=' => $startdate,
-				$modelName . '.Date <= ' => $enddate,
-				$modelName . '.' . $measureType . $searchDirection => $amount
-			]
-				
-	
-			]
-		])->order(['Date' => 'Desc'])
-		);
-		}else{
-		$samples = $this->paginate(
-		$modelBare->find('all', [
-			'conditions' => [
-			
-			'and' => [
-				'site_location_id' => $site,
-				$modelName == "BacteriaSamples",					
-				$modelName . '.Date >=' => $startdate,
-				$modelName . '.Date <= ' => $enddate,
-			]
-				
-			]
-		])->order(['Date' => 'Desc'])
-		);
+		if ($amount!='') {
+			$samples = $this->paginate(
+				$modelBare->find('all', [
+					'conditions' => [			
+						'and' => [
+							'site_location_id' => $site,				
+							$modelName . '.Date >=' => $startDate,
+							$modelName . '.Date <= ' => $endDate,
+							$modelName . '.' . $measureType . $searchDirection => $amount
+						]
+					]
+				])->order(['Date' => 'Desc'])
+			);
+		}
+		else {
+			$samples = $this->paginate(
+				$modelBare->find('all', [
+					'conditions' => [
+						'and' => [
+							'site_location_id' => $site,
+							$modelName == "BacteriaSamples",					
+							$modelName . '.Date >=' => $startDate,
+							$modelName . '.Date <= ' => $endDate,
+						]
+					]
+				])->order(['Date' => 'Desc'])
+			);
 		}
 		
 		//get the info about the site number
 		$siteLocation = $modelBare->SiteLocations->find('all', [
 			'conditions' => [
-			'Site_number' => $site
+				'Site_number' => $site
 			]
 		])->first();
 		
 		//write data into session
-	
 		$this->request->getSession()->write([
-			'startdate' => $startdate,
-			'enddate' => $enddate,
+			'startDate' => $startDate,
+			'endDate' => $endDate,
 			'site' => $site,
 			'tableType' => $type,
 			'siteLocation' => $siteLocation
 		]);
 		
+		$this->set('startDate', $startDate);
+		$this->set('endDate', $endDate);
 		$this->set(compact('siteLocation'));
 		$this->set(compact('samples'));
 		$this->set('_serialize', ['samples']);
@@ -580,8 +588,8 @@
 		$this->loadModel("Benchmarks");
 		
 		//get request data
-		$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
-		$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
+		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
+		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
 		$sites = $this->request->getData('sites');
 		$measure = $this->request->getData('measure');
 		
@@ -702,8 +710,8 @@
 			'and' => [
 				'site_location_id IN ' => $sites,
 				[
-				$model . '.Date >=' => $startdate,
-				$model . '.Date <= ' => $enddate
+				$model . '.Date >=' => $startDate,
+				$model . '.Date <= ' => $endDate
 				]
 			]
 			]

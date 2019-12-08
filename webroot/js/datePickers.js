@@ -6,11 +6,11 @@ $(document).ready(function () {
         todayBtn: "linked"
     });
 
-    $("#startdate").datepicker().on('changeDate', function (selected) {
+    $("#startDate").datepicker().on('changeDate', function (selected) {
         var minDate = new Date(selected.date.valueOf());
         $('#endDate').datepicker('setStartDate', minDate);
     });
-    $("#enddate").datepicker().on('changeDate', function (selected) {
+    $("#endDate").datepicker().on('changeDate', function (selected) {
         var maxDate = new Date(selected.date.valueOf());
         $('#startDate').datepicker('setEndDate', maxDate);
     });

@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 	//run the first instance of the chart
 	$('#chartTitle').html('<strong style="font-size:14pt;">' + $('#measurementSelect option:selected').text() + " Histogram</strong>");
-	getGraphData($('#startdate').val(), $('#enddate').val(), $('#measurementSelect').val(), "bar");
+	getGraphData($('#startDate').val(), $('#endDate').val(), $('#measurementSelect').val(), "bar");
 
 	//change the date range based off of what sites are checked
 	$(document).on('change', 'input[type="checkbox"][name="sites\\[\\]"]', (function() {
@@ -24,10 +24,10 @@ $(document).ready(function() {
 				success: function(response) {
 					var startDateData = response[0];
 					var endDateData = response[1];
-					$('#startdate').val(startDateData);
-					$('#enddate').val(endDateData);
-					$("#startdate").datepicker('update', startDateData);
-					$("#enddate").datepicker('update', endDateData);
+					$('#startDate').val(startDateData);
+					$('#endDate').val(endDateData);
+					$("#startDate").datepicker('update', startDateData);
+					$("#endDate").datepicker('update', endDateData);
 				}
 			});
 		}
@@ -43,7 +43,7 @@ $(document).ready(function() {
 		//update chart label
 		$('#chartTitle').html('<strong style="font-size:14pt;">' + $('#measurementSelect option:selected').text() + " Histogram</strong>");
 		resetCharts();
-		getGraphData($('#startdate').val(), $('#enddate').val(), $('#measurementSelect').val(), "bar");
+		getGraphData($('#startDate').val(), $('#endDate').val(), $('#measurementSelect').val(), "bar");
 	});
 
 	//Line Graph stuff
@@ -56,7 +56,7 @@ $(document).ready(function() {
 		//update chart label
 		$('#chartTitle').html('<strong style="font-size:14pt;">' + $('#measurementSelect option:selected').text() + " Line graph</strong>");
 		resetCharts();
-		getGraphData($('#startdate').val(), $('#enddate').val(), $('#measurementSelect').val(), "line");
+		getGraphData($('#startDate').val(), $('#endDate').val(), $('#measurementSelect').val(), "line");
 	});
 
 	//Table stuff
@@ -69,7 +69,7 @@ $(document).ready(function() {
 		//update chart label
 		$('#chartTitle').html('<strong style="font-size:14pt;">' + $('#measurementSelect option:selected').text() + " Table</strong>");
 		resetCharts();
-		getGraphData($('#startdate').val(), $('#enddate').val(), $('#measurementSelect').val(), "table");
+		getGraphData($('#startDate').val(), $('#endDate').val(), $('#measurementSelect').val(), "table");
 	});
 
 	function resetCharts() {
@@ -81,7 +81,7 @@ $(document).ready(function() {
 		}
 	}
 
-	function getGraphData(startdate, enddate, measure, graphType) {
+	function getGraphData(startDate, endDate, measure, graphType) {
 		//get all of the checked checkboxes
 		var siteDoms = $('input[type="checkbox"][name="sites\\[\\]"]:checked');
 
@@ -100,8 +100,8 @@ $(document).ready(function() {
 			datatype: 'JSON',
 			data: {
 				'sites': sites,
-				'startdate': startdate,
-				'enddate': enddate,
+				'startDate': startDate,
+				'endDate': endDate,
 				'measure': measure
 			},
 			success: function(response) {
@@ -169,8 +169,8 @@ $(document).ready(function() {
 			//pre-parsing data by site
 
 			//grab the time bounds
-			var beginDate = new Date($('#startdate').val().split("/"));
-			var endDate = new Date($('#enddate').val().split("/"));
+			var beginDate = new Date($('#startDate').val().split("/"));
+			var endDate = new Date($('#endDate').val().split("/"));
 
 			//if the date selected is before the last date, insert blank values to represent weeks without data
 			var firstDate;

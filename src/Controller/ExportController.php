@@ -1,11 +1,9 @@
 <?php
-
 	namespace App\Controller;
 
 	use App\Controller\AppController;
 
 	class ExportController extends AppController {
-
 		public function export() {
 			$this->loadModel("SiteLocations");
 			$siteLocations = $this->SiteLocations->find('all');
@@ -16,12 +14,17 @@
 
 		public function exportData() {
 			//Get POST data
-			$startdate = date('Ymd', strtotime($this->request->getData('startdate')));
-			$enddate = date('Ymd', strtotime($this->request->getData('enddate')));
+			$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
+			$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
 			$sites = $this->request->getData('sites');
 
 			$measures = $this->request->getData('measures');
 			$inputType = $this->request->getData('type');
+			
+			if ($measures == "") {
+				$this->log("measures was nothing", 'debug');
+				$measures = 'all';
+			}
 			
 			$data = "";
 			//Load appropriate model and set the appropriate queryable object
@@ -50,8 +53,8 @@
 				//All the conditions that must be true go here
 				$andConditions = [];
 				array_push($andConditions, [
-					'Date  >=' => $startdate,
-					'Date  <= ' => $enddate
+					'Date  >=' => $startDate,
+					'Date  <= ' => $endDate
 				]);
 
 				if (!in_array('all', $sites)) {
