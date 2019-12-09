@@ -360,8 +360,26 @@
 			array("site location", "site_location", "sitelocation"),
 			array("site name", "site_name", "sitename"),
 		);
+		$nutrientHeaderAmmonia = array(
+			array("site number", "site_number", "sitenumber"),
+			array("date"),
+			array("sample number", "sample_number", "samplenumber"),
+			array("phosphorus"),
+			array("drp"),
+			array("ammonia"),
+			array("comments"),
+		);
+		$nutrientHeaderNN = array(
+			array("site number", "site_number", "sitenumber"),
+			array("date"),
+			array("sample number", "sample_number", "samplenumber"),
+			array("phosphorus"),
+			array("nh3-n", "nitrate nitrite", "nitrate_nitrite", "nitratenitrite"),
+			array("drp"),
+			array("comments"),
+		);
 		
-		$validHeaders = array($bacteriaHeader, $nutrientHeader, $pesticideHeader, $physicalHeader, $siteInfoHeader);
+		$validHeaders = array($bacteriaHeader, $nutrientHeader, $pesticideHeader, $physicalHeader, $siteInfoHeader, $nutrientHeaderNN, $nutrientHeaderAmmonia);
 		
 		for ($typeNumber=0; $typeNumber<sizeof($validHeaders); $typeNumber++) {
 			$correctType = true;
