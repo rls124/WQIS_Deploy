@@ -21,23 +21,6 @@
 			$this->set('_serialize', ['siteLocations']);
 		}
 
-		public function entryform() {
-			$siteLocation = $this->SiteLocations->newEntity();
-			//Check if the request is post
-			if ($this->request->is('post')) {
-				$siteLocation = $this->SiteLocations->patchEntity($siteLocation, $this->request->getData());
-				//Save new entity
-				if ($this->SiteLocations->save($siteLocation)) {
-					$this->Flash->success(__('The site location has been saved.'));
-
-					return $this->redirect(['action' => 'entryform']);
-				}
-				$this->Flash->error(__('The site location could not be saved. Please, try again.'));
-			}
-			$this->set(compact('siteLocation'));
-			$this->set('_serialize', ['siteLocation']);
-		}
-
 		public function daterange() {
 			$this->render(false);
 			//Ensure that site is in POST data

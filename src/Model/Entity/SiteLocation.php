@@ -8,14 +8,13 @@
      * SiteLocation Entity
      *
      * @property int $Site_Number
-     * @property int $Monitored
+     * @property boolean $Monitored
      * @property float $Longitude
      * @property float $Latitude
      * @property string $Site_Location
      * @property string $Site_Name
      *
      * @property \App\Model\Entity\BacteriaSample[] $bacteria_samples
-     * @property \App\Model\Entity\HydrolabSample[] $hydrolab_samples
      * @property \App\Model\Entity\NutrientSample[] $nutrient_samples
      * @property \App\Model\Entity\PesticideSample[] $pesticide_samples
      * @property \App\Model\Entity\PhysicalSample[] $physical_samples
@@ -39,7 +38,6 @@
             'Site_Location' => true,
             'Site_Name' => true,
             'bacteria_samples' => true,
-            'hydrolab_samples' => true,
             'nutrient_samples' => true,
             'pesticide_samples' => true,
             'physical_samples' => true
