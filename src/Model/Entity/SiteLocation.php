@@ -8,6 +8,7 @@
      * SiteLocation Entity
      *
      * @property int $Site_Number
+     * @property int $Monitored
      * @property float $Longitude
      * @property float $Latitude
      * @property string $Site_Location

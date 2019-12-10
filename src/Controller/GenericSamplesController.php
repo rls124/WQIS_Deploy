@@ -518,8 +518,8 @@
 				}
 			
 				//create the entity to save
-				$sample = $modelBare->patchEntity($modelBare->newEntity(), $rowData);
-				if ($modelBare->save($sample)) {
+				$sample = $model->patchEntity($model->newEntity(), $rowData);
+				if ($model->save($sample)) {
 					$successes++;
 				}
 				else {
