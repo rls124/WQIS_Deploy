@@ -121,7 +121,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('comments-0', [
+								$this->Form->control('nutrientcomments-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false

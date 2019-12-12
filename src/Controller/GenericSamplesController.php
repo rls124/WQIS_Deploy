@@ -178,7 +178,7 @@
 		$time = explode(' ', $time);
 		$time = $time[1] + $time[0];
 		$startTime = $time;
-		
+
 		//get the data from the file
 		$file = $_FILES['file'];
 		$fileName = $_FILES['file']['name']; // store the name of the file like upload.png
@@ -199,7 +199,7 @@
 			if ($fileType == 1) {
 				//bacteria
 				$model = "BacteriaSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'Comments');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'BacteriaComments');
 				$columnText = array("Site Number", "Date", "Sample Number", "Ecoli Raw Count", "Ecoli", "Total Coliform Raw Count", "Total Coliform", "Comments");
 				
 				$this->set("fileTypeName", "Bacteria Samples");
@@ -207,15 +207,15 @@
 			else if ($fileType == 2) {
 				//nutrient
 				$model = "NutrientSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'Comments');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'NutrientComments');
 				$columnText = array("Site Number", "Date", "Sample number", "Phosphorus (mg/L)", "Nitrate/Nitrite (mg/L)", "Dissolved Reactive Phosphorus", "Ammonia", "Comments");
-				
+
 				$this->set("fileTypeName", "Nutrient Samples");
 			}
 			else if ($fileType == 3) {
 				//pesticide
 				$model = "PesticideSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Atrazine', 'Alachlor', 'Metolachlor', 'Comments');
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Atrazine', 'Alachlor', 'Metolachlor', 'PesticideComments');
 				$columnText = array("Site Number", "Date", "Sample number", "Atrazine", "Alachlor", "Metolachlor", "Comments");
 				
 				$this->set("fileTypeName", "Pesticide Samples");
@@ -223,7 +223,7 @@
 			else if ($fileType == 4) {
 				//physical properties
 				$model = "PhysicalSamples";
- 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+ 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 				$columnText = array("Site Number", "Date", "Sample number", "Time", "Bridge to Water Height", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time", "Requires Checking");
 				
 				$this->set("fileTypeName", "Physical Property Samples");
@@ -474,16 +474,16 @@
 		
 		$modelName = ucfirst($name) . "Samples";
 		if ($name == "bacteria") {
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'Comments');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'BacteriaComments');
 		}
 		elseif ($name == "nutrient") {
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'Comments');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'NutrientComments');
 		}
 		elseif ($name == "pesticide") {
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'Alachlor', 'Metolachlor', 'Comments');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'Alachlor', 'Metolachlor', 'PesticideComments');
 		}
 		elseif ($name == "physical") {
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'Comments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time', 'Requires_Checking');
 		}
 		
 		$this->loadModel($modelName);

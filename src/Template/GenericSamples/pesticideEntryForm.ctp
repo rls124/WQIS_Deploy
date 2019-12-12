@@ -111,7 +111,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('comments-0', [
+								$this->Form->control('pesticidecomments-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
