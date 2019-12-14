@@ -166,6 +166,8 @@
 		
 		$this->set('startDate', $startDate);
 		$this->set('endDate', $endDate);
+		$this->set('amountEnter', $amount);
+		$this->set('overUnderSelect', $searchRange);
 		$this->set(compact('siteLocation'));
 		$this->set(compact('samples'));
 		$this->set('_serialize', ['samples']);

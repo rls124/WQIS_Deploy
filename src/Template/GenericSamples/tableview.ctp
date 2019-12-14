@@ -14,6 +14,8 @@
 	echo "<script>";
 	echo "var sampleType = \"" . $sampleType . "\";";
 	echo "var siteNumber = \"" . $siteNumber . "\";";
+	echo "var amountEnter = \"" . $amountEnter . "\";";
+	echo "var overUnderSelect = \"" . $overUnderSelect . "\";";
 	echo "</script>";
     
 	if ($admin) {
@@ -38,7 +40,9 @@ $(document).ready(function () {
 				'startDate': startDate,
 				'endDate': endDate,
 				'sites': sites,
-				'measures': measures
+				'measures': measures,
+				'amountEnter': amountEnter,
+				'overUnderSelect': overUnderSelect
 			},
 			success: function (response) {
 				downloadFile(response, sampleType);

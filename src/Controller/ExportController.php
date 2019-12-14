@@ -21,9 +21,93 @@
 			$measures = $this->request->getData('measures');
 			$inputType = $this->request->getData('type');
 			
+			$amount = $_POST["amountEnter"];
+			$searchRange = $_POST["overUnderSelect"];
+			
 			if ($measures == "") {
 				$this->log("measures was nothing", 'debug');
 				$measures = 'all';
+			}
+			
+			if ($searchRange == "over") {
+				$searchDirection = ' >=';
+			}
+			else if($searchRange == "under") {
+				$searchDirection = ' <=';
+			}
+			else if($searchRange == "equals") {
+				$searchDirection = ' ==';
+			}
+			
+			if ($inputType == "bacteria") {
+				$this->loadModel('BacteriaSamples');
+			
+				$modelName = "BacteriaSamples";
+				$modelBare = $this->BacteriaSamples;
+				$measureType='Ecoli';
+			}
+			else if ($inputType == "nutrient") {
+				$this->loadModel('NutrientSamples');
+				
+				$modelName = "NutrientSamples";
+				$modelBare = $this->NutrientSamples;
+			
+				if ($measurementSelect == 'nitrateNitrite') {
+					$measureType='NitrateNitrite';
+				}
+				else if ($measurementSelect == 'phosphorus') {
+					$measureType='Phosphorus';
+				}
+				else if ($measurementSelect == 'drp') {
+					$measureType='DRP';
+				}
+				else if ($measurementSelect == 'ammonia') {
+					$measureType='Ammonia';
+				}
+			}	
+			else if ($inputType == "pesticide") {
+				$this->loadModel('PesticideSamples');
+			
+				$modelName = "PesticideSamples";
+				$modelBare = $this->PesticideSamples;
+			
+				if ($measurementSelect == "alachlor") {
+					$measureType='Alachlor';
+				}
+				else if ($measurementSelect == "atrazine") {
+					$measureType='Atrazine';
+				}
+				else if ($measurementSelect == "metolachlor") {
+					$measureType='Metolachlor';
+				}
+			}
+			elseif ($inputType == "physical") {
+				$this->loadModel('PhysicalSamples');
+				
+				$modelName = "PhysicalSamples";
+				$modelBare = $this->PhysicalSamples;
+				
+				if ($measurementSelect == 'conductivity') {
+					$measureType='Conductivity';
+				}
+				else if ($measurementSelect == 'do') {
+					$measureType='DO';
+				}
+				else if ($measurementSelect == 'bridge_to_water_height') {
+					$measureType='Bridge_to_Water_Height';
+				}
+				else if ($measurementSelect == 'ph') {
+					$measureType='pH';
+				}
+				else if ($measurementSelect == 'water_temp') {
+					$measureType='Water_Temp';
+				}
+				else if ($measurementSelect == 'tds') {
+					$measureType='TDS';
+				}
+				else if($measurementSelect == 'turbidity') {
+					$measureType='Turbidity';
+				}
 			}
 			
 			$data = "";
@@ -54,7 +138,8 @@
 				$andConditions = [];
 				array_push($andConditions, [
 					'Date  >=' => $startDate,
-					'Date  <= ' => $endDate
+					'Date  <= ' => $endDate,
+					$measureType . $searchDirection => $amount
 				]);
 
 				if (!in_array('all', $sites)) {
@@ -76,7 +161,10 @@
 					'fields' => $fields,
 					'conditions' => [
 						'and' => [
-							$andConditions
+							'site_location_id' => $sites[0],
+							$modelName . '.Date >=' => $startDate,
+							$modelName . '.Date <= ' => $endDate,
+							$modelName . '.' . $measureType . $searchDirection => $amount
 						]
 					]
 				]);
