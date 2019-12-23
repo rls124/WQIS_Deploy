@@ -157,17 +157,31 @@
 					}
 				}
 
-				$data = $sampleQuery->find('all', [
-					'fields' => $fields,
-					'conditions' => [
-						'and' => [
-							'site_location_id' => $sites[0],
-							$modelName . '.Date >=' => $startDate,
-							$modelName . '.Date <= ' => $endDate,
-							$modelName . '.' . $measureType . $searchDirection => $amount
+				if (isset($searchDirection)) {
+					$data = $sampleQuery->find('all', [
+						'fields' => $fields,
+						'conditions' => [
+							'and' => [
+								'site_location_id' => $sites[0],
+								$modelName . '.Date >=' => $startDate,
+								$modelName . '.Date <= ' => $endDate,
+								$modelName . '.' . $measureType . $searchDirection => $amount
+							]
 						]
-					]
-				]);
+					]);
+				}
+				else {
+					$data = $sampleQuery->find('all', [
+						'fields' => $fields,
+						'conditions' => [
+							'and' => [
+								'site_location_id' => $sites[0],
+								$modelName . '.Date >=' => $startDate,
+								$modelName . '.Date <= ' => $endDate
+							]
+						]
+					]);
+				}
 			}
 			else {
 				$data = ['error' => 'input type not found', 'listType' => $inputType];

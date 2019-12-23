@@ -164,7 +164,7 @@ function hideBrowserCompatibilityMessage() {
         <br>
         <br>
         <?= $this->Flash->render() ?>
-		<div class="container roundGreyBox col-md-10" style="min-height:500px">
+		<div class="container roundGreyBox col-lg-12" style="min-height:500px">
 		<?= $this->fetch('content') ?>
 		</div>
 	

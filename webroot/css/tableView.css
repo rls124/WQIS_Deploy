@@ -1,15 +1,4 @@
-/*Default tag css*/
-body{
-    background-image: url("../img/stripes.svg");
-    background-color:grey;
-    background-size:100% 100%;
-    background-repeat: no-repeat;
-    color:#373737;/*default text color to charcoal*/
-    background-attachment: fixed;
-}
-
 /*Custom CSS*/
-
 table{
     border: thin solid #FFF;
 }

@@ -45,12 +45,35 @@ function dropMeasures() {
 }
 
 function populateMeasurementSelect(categoryData) {
+	//first, clear out the existing checkboxes
+	var checkboxList = document.getElementById('checkboxList');
+	checkboxList.innerHTML = "";
+	
     for (var i in categoryData) {
         var option = document.createElement('option');
         option.value = i;
         option.text = categoryData[i];
         document.getElementById('measurementSelect').appendChild(option);
-    }
+		
+		//now create the checkboxes as well
+		if (i != 'select') {
+			var listItem = document.createElement('li');
+		
+			var box = document.createElement('input');
+			box.value = i;
+			box.id = i + "Checkbox";
+			box.type = "checkbox";
+		
+			var boxLabel = document.createElement('label');
+			boxLabel.innerText = i;
+			boxLabel.for = i + "Checkbox";
+		
+			listItem.appendChild(box);
+			listItem.appendChild(boxLabel);
+		
+			checkboxList.appendChild(listItem);
+		}
+	}
 }
 
 function initMap() {
@@ -59,13 +82,13 @@ function initMap() {
     const NUTRIENT_DATA = 'NutrientData';
     const PEST_DATA = 'PestData';
     
-    var map; // represents the soon to be created google map
-    var previnfowindow = false; // holds the previously opened info window
+    var map; //represents the soon to be created google map
+    var previnfowindow = false; //holds the previously opened info window
     var currentBactRow = 0;
     var currentNutrientRow = 0;
     var currentPestRow = 0;
     
-	// Initializes the google map with a focus on fort wayne.
+	//initializes the google map with a focus on Fort Wayne
 	map = new google.maps.Map(document.getElementById('map'), {
 		//zoom: 1, // Note Zoom level does not work
 		center: new google.maps.LatLng(41.0793, -85.1394),
@@ -78,13 +101,13 @@ function initMap() {
 		map: map
 	});
         
-	// Fetches site information from the database.
+	//fetches site information from the database
 	$.ajax({
 		type: 'Post',
 		url: 'fetchSites',
 		datatype: 'JSON',
 		success: function(response) {            
-			// Adds markers to the Google Map at each sites longitude and latitude.
+			//add markers to the Google Map at each sites longitude and latitude
 			for (var i = 0; i < response[SITE_DATA].length; i++){
 				var latLng = new google.maps.LatLng(response[SITE_DATA][i]['Latitude'], response[SITE_DATA][i]['Longitude']);
 				var siteNumber = response[SITE_DATA][i]['Site_Number'];
@@ -222,11 +245,11 @@ function GetMarkerColor(siteNumber) {
 
 function CreateMarker(latLng, markercolor, map, siteName) {
     return new google.maps.Marker({
-                        position: latLng,
-                        icon: markercolor,
-                        map: map,
-                        title: siteName
-                    });
+		position: latLng,
+		icon: markercolor,
+		map: map,
+		title: siteName
+	});
 }
 
 $(document).ready(function () {

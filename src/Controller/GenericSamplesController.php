@@ -11,7 +11,112 @@
 			$str=substr($str, 3);
 		}
 		return $str;
-	}	
+	}
+
+	public function tableRawData() {
+		$this->render(false);
+		$this->loadModel("Benchmarks");
+		
+		//get request data
+		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
+		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
+		$sites = $this->request->getData('sites');
+		
+		$amount = $_POST["amountEnter"];
+		$searchRange = $_POST["overUnderSelect"];
+		$measurementSelect = $_POST["measurementSelect"];
+		
+		$category = $this->request->getData('category');
+		
+		$model = ucfirst($category) . "Samples";
+		
+		$this->loadModel($model);
+		
+		if ($searchRange == "over") {
+			$searchDirection = ' >=';
+		}
+		else if($searchRange == "under") {
+			$searchDirection = ' <=';
+		}
+		else if($searchRange == "equals") {
+			$searchDirection = ' ==';
+		}
+		
+		if ($measurementSelect == "ecoli") {
+			$measureType='Ecoli';
+		}
+		else if ($measurementSelect == 'nitrateNitrite') {
+			$measureType='NitrateNitrite';
+		}
+		else if ($measurementSelect == 'phosphorus') {
+			$measureType='Phosphorus';
+		}
+		else if ($measurementSelect == 'drp') {
+			$measureType='DRP';
+		}
+		else if ($measurementSelect == 'ammonia') {
+			$measureType='Ammonia';
+		}
+		else if ($measurementSelect == "alachlor") {
+			$measureType='Alachlor';
+		}
+		else if ($measurementSelect == "atrazine") {
+			$measureType='Atrazine';
+		}
+		else if ($measurementSelect == "metolachlor") {
+			$measureType='Metolachlor';
+		}
+		else if ($measurementSelect == 'conductivity') {
+			$measureType='Conductivity';
+		}
+		else if ($measurementSelect == 'do') {
+			$measureType='DO';
+		}
+		else if ($measurementSelect == 'bridge_to_water_height') {
+			$measureType='Bridge_to_Water_Height';
+		}
+		else if ($measurementSelect == 'ph') {
+			$measureType='pH';
+		}
+		else if ($measurementSelect == 'water_temp') {
+			$measureType='Water_Temp';
+		}
+		else if ($measurementSelect == 'tds') {
+			$measureType='TDS';
+		}
+		else if($measurementSelect == 'turbidity') {
+			$measureType='Turbidity';
+		}
+		
+		if ($amount != '') {
+			$samples = $this->$model->find('all', [
+			'conditions' => [
+				'and' => [
+					'site_location_id' => $sites[0],
+					$model . '.Date >=' => $startDate,
+					$model . '.Date <= ' => $endDate,
+					$model . '.' . $measureType . $searchDirection => $amount
+				]
+			]
+		])->order(['Date' => 'Desc']);
+		}
+		else {
+			$samples = $this->$model->find('all', [
+			'conditions' => [
+				'and' => [
+					'site_location_id' => $sites[0],
+					$model . '.Date >=' => $startDate,
+					$model . '.Date <= ' => $endDate
+				]
+			]
+			])->order(['Date' => 'Desc']);
+		}
+		
+		$this->response = $this->response->withStringBody(json_encode([$samples]));
+		$this->response = $this->response->withType('json');
+		
+		return $this->response;
+	}
 	
 	public function tableview() {
 		//check if there is post data
@@ -554,6 +659,8 @@
 
 	public function updatefield() {
 		$this->render(false);
+		
+		$this->log("test", "debug");
 		
 		//Ensure sample number data was included
 		if (!$this->request->getData('sampleNumber')) {

@@ -15,6 +15,8 @@
 	class SiteLocationsController extends AppController {
 
 		public function chartselection() {
+			$this->loadModel("SiteLocations");
+			
 			$siteLocations = $this->SiteLocations->find('all');
 
 			$this->set(compact('siteLocations'));
