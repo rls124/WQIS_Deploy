@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+
 <?= $this->Html->script('dateautofill.js') ?>
 <?= $this->Html->css('chartSelection.css') ?>
 <?= $this->Html->css("visualization.css") ?>
@@ -50,8 +53,8 @@
 	
 		<fieldset>
 			<h5>Sites:</h5>
-			<select class="form-control select" id="site" name="site">
-				<option value="select" selected="selected">Select Collection Site</option>
+			<!--<select class="form-control select" id="site" name="site">-->
+			<select class="js-example-placeholder-multiple form-control" id="site" name="site[]" multiple="multiple" style="width: 100%">
 				<?php
 					//populate the site drop down box
 					foreach ($siteLocations as $siteLocation) {
@@ -197,7 +200,7 @@
 		</div>
 		<hr/>
 
-		<div id="chartDiv"></div>
+		<div id="chartDiv" style="text-align: center;"></div>
 		
 		<?=
 		$this->Form->button('Export', [
@@ -223,9 +226,7 @@ function toggleSidebar() {
 		document.getElementById("main").style.marginLeft = "450px";
 	}
 }
-</script>
 
-<script>
 $(document).ready(function () {
 	$("#exportBtn").click(function () {
 		var sampleType = $('#categorySelect').val();		
@@ -261,17 +262,19 @@ $(document).ready(function () {
 		if (fileData.length < 1) {
 			return;
 		}
+		
 		var csvContent = "data:text/csv;charset=utf-8,";
 		var fields = Object.keys(fileData[0]);
 		for (var i = 0; i < fileData.length; i++) {
 			fileData[i]['Date'] = fileData[i]['Date'].substring(0, 10);
 		}
 
-		//If ID field exists, remove it
+		//if ID field exists, remove it
 		if (fields[0] === "ID") {
 			fields = fields.splice(1, fields.length);
 		}
-		//Make null values not have text
+		
+		//make null values not have text
 		var replacer = function (key, value) {
 			return value === null ? '' : value;
 		};
@@ -294,6 +297,12 @@ $(document).ready(function () {
 		document.body.appendChild(link);
 		link.click();
 	}
+});
+
+$('#site').select2({
+	closeOnSelect: false,
+	placeholder: "Select sites",
+	width: 'resolve'
 });
 </script>
 

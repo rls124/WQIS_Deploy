@@ -723,7 +723,6 @@
 		//we cant get the category directly from POST data, so determine it from the measures we get. Not efficient, not pretty, good enough
 		if ($measure == "ecoli") { //bacteria category
 			$model = "BacteriaSamples";
-
 			//Set the name of the measure
 			switch ($measure . "") {
 			case 'ecoli':
@@ -736,7 +735,6 @@
 		}
 		elseif (in_array($measure, ["nitrateNitrite", "phosphorus", "drp", "ammonia"])) { //nutrient
 			$model = "NutrientSamples";
-
 			//Set the name of the measure
 			switch ($measure . "") {
 			case 'phosphorus':
@@ -757,7 +755,6 @@
 		}
 		elseif (in_array($measure, ["alachlor", "atrazine", "metolachlor"])) { //pesticide
 			$model = "PesticideSamples";
-
 			//set the name of the measure
 			switch ($measure . "") {
 			case 'alachlor':
@@ -776,7 +773,6 @@
 		}
 		elseif (in_array($measure, ["conductivity", "do", "ph", "water_temp", "tds", "turbidity", "bridge_to_water_height"])) { //water quality meter
 			$model = "PhysicalSamples";
-
 			//Set the name of the measure
 			switch ($measure . "") {
 			case 'conductivity':
@@ -825,6 +821,8 @@
 		if ($threshold->isEmpty()) {
 			$threshold = [['min' => NULL, 'max' => NULL]];
 		}
+		
+		$this->log($sites, 'debug');
 		
 		//Get data requested
 		$samples = $this->$model->find('all', [
