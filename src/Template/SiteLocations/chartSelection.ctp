@@ -12,8 +12,76 @@
 <?= $this->Html->script("charting.js") ?>
 <?= $this->Html->script('chartSelectionValidation.js') ?>
 <?= $this->Html->script('tableedit.js') ?>
+<?= $this->Html->script('konami.js') ?>
 
 <style>
+.collapsible {
+	background-color: #777;
+	cursor: pointer;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+}
+
+.collapsible:hover {
+	background-color: #555;
+}
+
+#tetris {
+	margin: 1em auto;
+	padding: 1em;
+	border: 4px solid black;
+	border-radius: 10px;
+	background-color: #F8F8F8;
+}
+#canvas {
+	display: inline-block;
+	vertical-align: top;
+	box-shadow: 10px 10px 10px #999;
+	border: 2px solid #333;
+}
+#menu {
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+}
+#menu p {
+	margin: 0.5em 0;
+	text-align: center;
+}
+#menu p a {
+	text-decoration: none;
+	color: black;
+}
+#upcoming {
+	display: block;
+	margin: 0 auto;
+	background-color: #E0E0E0;
+}
+#score {
+	color: red;
+	font-weight: bold;
+	vertical-align: middle;
+}
+#rows {
+	color: blue;
+	font-weight: bold;
+	vertical-align: middle;
+}
+#menu {
+	width: 200px;
+	height: 400px;
+}
+#upcoming {
+	width: 100px;
+	height: 100px;
+}
+#canvas {
+	width: 200px;
+	height: 400px;
+}
+	
 .sidebar {
 	height: 100%; /* 100% Full-height */
 	width: 0; /* 0 width - change this with JavaScript */
@@ -53,7 +121,6 @@
 	
 		<fieldset>
 			<h5>Sites:</h5>
-			<!--<select class="form-control select" id="site" name="site">-->
 			<select class="js-example-placeholder-multiple form-control" id="site" name="site[]" multiple="multiple" style="width: 100%">
 				<?php
 					//populate the site drop down box
@@ -169,14 +236,28 @@
 	</div>
 
 	<div class="col-lg-12" id="main">
-		<button class="toggleButton" onclick="toggleSidebar()">&#9776; Open Sidebar</button> 
+		<button class="toggleButton" onclick="toggleSidebar()">&#9776; Search</button> 
 	
-		<h3 class="pt-3 centeredText">Collection Site</h3>
-	
-		<br>
-		<div class='mb-3' id='map' style='width:100%; height:500px; border: solid black thin'></div>
+		<button type="button" class="collapsible"><h3 class="pt-3">Map</h3></button>
+		<div id="mapContainer">
+		
+		
+		<div class='mb-3' id='map' style='width:100%; height:500px; border: solid black thin;'></div>
+		<div class='mb-3' id='easteregg' style='width:100%; border: solid black thin; display: none;'>
+			<div id="menu">
+				<p id="start"><a href="javascript:play();">Press Space to Play</a></p>
+				<p><canvas id="upcoming"></canvas></p>
+				<p>score <span id="score">00000</span></p>
+				<p>rows <span id="rows">0</span></p>
+				<p>Level <span id="level">1</span></p>
+			</div>
+			<canvas id="canvas"></canvas>
+		</div>
+		</div>
 
 		<?= $this->Form->end() ?>
+
+		<button type="button" class="collapsible"><h3 class="pt-3">Charts</h3></button>
 
 		<div class="row buttongroup">
 			<span class="col-md-1"></span>
@@ -201,6 +282,7 @@
 		<hr/>
 
 		<div id="chartDiv" style="text-align: center;"></div>
+		</div>
 		
 		<?=
 		$this->Form->button('Export', [
@@ -255,7 +337,7 @@ $(document).ready(function () {
 			failure: function (response) {
 				alert("Failed");
 			}
-		});	
+		});
 	});
 	
 	function downloadFile(fileData, type) {
@@ -285,7 +367,8 @@ $(document).ready(function () {
 			}).join(',');
 		});
 		fields[fields.indexOf('site_location_id')] = 'Site Number';
-		// add header column
+		
+		//add header column
 		csv.unshift(fields.join(','));
 
 		csvContent += csv.join('\r\n');
@@ -304,6 +387,22 @@ $('#site').select2({
 	placeholder: "Select sites",
 	width: 'resolve'
 });
+
+//collapse or expand all collapsible divs when the appropriate button is clicked
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    }
+	else {
+      content.style.display = "block";
+    }
+  });
+}
 </script>
 
 <script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwcJIWDoWbEgt7mX_j5CXGevgWvQPh6bc&callback=initMap' type="text/javascript"></script>

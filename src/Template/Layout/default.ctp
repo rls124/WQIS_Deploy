@@ -82,7 +82,7 @@ function hideBrowserCompatibilityMessage() {
 	<?php } ?>
     </head>
     <body class="h-100">
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
             <?php if ($userinfo !== NULL) { ?>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -159,10 +159,7 @@ function hideBrowserCompatibilityMessage() {
                 }
             ?>
         </nav>
-        <br>
-        <br>
-        <br>
-        <br>
+        
         <?= $this->Flash->render() ?>
 		<div class="container roundGreyBox col-lg-12" style="min-height:500px">
 		<?= $this->fetch('content') ?>

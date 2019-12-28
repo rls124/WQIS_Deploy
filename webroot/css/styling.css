@@ -1,20 +1,3 @@
-/*
-Prototype Color Scheme
-    Charcoal - #373737
-    Gravel - #CFCFCF
-    lightGreen - #a3e8a6
-    grass - #6ac56d
-    robinEgg - #3ab7cb
-
-
-Ben Color Scheme
-    Alabaster - #f4f6fa
-    Anakiwa - #8eceff
-    Cornflower Blue - #638de2
-    Waterloo - #6e7393
-    Astronaut - #2a5171
-*/
-
 @import url(https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js);
 
 /*Default CSS Overrides*/
@@ -31,21 +14,10 @@ body{
     color:#a3e8a6;
 }
 
-.whiteBackground{
-    background-image:URL("")!important;
-    background-color:#FFFFFF!important;
-}
-
 /*Custom CSS*/
-.roundGreyBox{
-    /*background-color:#CFCFCF;/*Initial background color*/
-    /*background-color: #D7D6C2;/*Alternate background color #1*/
-    /*background-color: #C1E4E9;/*Alternate background color #2*/
-    background-color: #dddddd;
+.roundGreyBox { /*todo: rename this, no longer round*/
+    background-color: #DDDDDD;
     background-size: 100% 100%;
-    border: solid thick #6e7393;
-    border-radius:6px;
-    margin-top:15px;
     margin-bottom: 10%;
     overflow-x: auto;
     box-shadow:3px 3px 3px black;
