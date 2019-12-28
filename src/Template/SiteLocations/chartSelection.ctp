@@ -13,6 +13,7 @@
 <?= $this->Html->script('chartSelectionValidation.js') ?>
 <?= $this->Html->script('tableedit.js') ?>
 <?= $this->Html->script('konami.js') ?>
+<?= $this->Html->script('EEGS.js') ?>
 
 <style>
 .collapsible {
