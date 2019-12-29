@@ -1,4 +1,18 @@
-$(document).ready(function() {	
+$(document).ready(function() {
+	var easter_egg = new Konami(function() {
+		var map = document.getElementById("map");
+		map.style.display = "none";
+		
+		var easterEggDiv = document.getElementById("easteregg");
+		easterEggDiv.style.display = "block";
+		
+		//dynamically download the needed code so we don't bog down the 99.9% of users who won't even see this
+		import('/WQIS/js/EEGS.js')
+			.then((module) => {
+				module.start();
+			});
+	});
+
 	//line graph stuff
 	$("#lineBtn").click(function() {
 		$('#injectedInfo').remove();

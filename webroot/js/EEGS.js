@@ -1,14 +1,4 @@
-$(document).ready(function() {
-	var easter_egg = new Konami(function() {
-		var map = document.getElementById("map");
-		map.style.display = "none";
-		
-		var easterEggDiv = document.getElementById("easteregg");
-		easterEggDiv.style.display = "block";
-		
-		run();
-	});
-	
+export function start() {
 	function hide(id) {
 		document.getElementById(id).style.visibility = 'hidden';
 	}
@@ -27,10 +17,6 @@ $(document).ready(function() {
 	
 	function random(min, max) {
 		return (min + (Math.random() * (max - min)));
-	}
-	
-	function randomChoice(choices) {
-		return choices[Math.round(random(0, choices.length-1))];
 	}
 
 	if (!window.requestAnimationFrame) {
@@ -104,7 +90,7 @@ $(document).ready(function() {
 				++row;
 			}
 		}
-	};
+	}
 
 	//check if a piece can fit into a position in the grid
 	function occupied(type, x, y, dir) {
@@ -114,11 +100,11 @@ $(document).ready(function() {
 			result = true;
 		});
 		return result;
-	};
+	}
 
 	function unoccupied(type, x, y, dir) {
 		return !occupied(type, x, y, dir);
-	};
+	}
 
 	//start with 4 instances of each piece and pick randomly until the 'bag is empty'
 	var pieces = [];
@@ -129,13 +115,14 @@ $(document).ready(function() {
 		
 		var type = pieces.splice(random(0, pieces.length-1), 1)[0];
 		return { type: type, dir: DIR.UP, x: Math.round(random(0, nx - type.size)), y: 0 };
-	};
+	}
 
 	//game loop
 	function run() {
-		addEvents(); // attach keydown and resize events
+		addEvents(); //attach keydown and resize events
 
-	var last = now = timestamp();
+		var last = timestamp();
+		var now = timestamp();
 		function frame() {
 			now = timestamp();
 			update(Math.min(1, (now - last) / 1000.0)); // using requestAnimationFrame have to be able to handle large deltas caused when it hibernates in a background or non-visible tab
@@ -144,15 +131,15 @@ $(document).ready(function() {
 			requestAnimationFrame(frame, canvas);
 		}
 
-		resize(); // setup all our sizing information
-		reset();  // reset the per-game variables
-		frame();  // start the first frame
-	};
+		resize(); //setup all our sizing information
+		reset();  //reset the per-game variables
+		frame();  //start the first frame
+	}
 
 	function addEvents() {
 		document.addEventListener('keydown', keydown, false);
 		window.addEventListener('resize', resize, false);
-	};
+	}
 
 	function resize(event) {
 		//set canvas logical size equal to its physical size
@@ -166,7 +153,7 @@ $(document).ready(function() {
 		dy = canvas.height / ny;
 		invalidate();
 		invalidateNext();
-	};
+	}
 
 	function keydown(ev) {
 		var handled = false;
@@ -186,9 +173,9 @@ $(document).ready(function() {
 		}
 		
 		if (handled) {
-			ev.preventDefault(); // prevent arrow keys from scrolling the page (supported in IE9+ and all other browsers)
+			ev.preventDefault(); //prevent arrow keys from scrolling the page (supported in IE9+ and all other browsers)
 		}
-	};
+	}
 
 	//game logic
 	function play() { hide('start'); reset();          playing = true;  };
@@ -216,7 +203,7 @@ $(document).ready(function() {
 		clearScore();
 		setCurrentPiece(next);
 		setNextPiece();
-	};
+	}
 
 	function update(idt) {
 		if (playing) {
@@ -231,7 +218,7 @@ $(document).ready(function() {
 				drop();
 			} 
 		}
-	};
+	}
 
 	function handle(action) {
 		switch(action) {
@@ -240,7 +227,7 @@ $(document).ready(function() {
 			case DIR.UP:    rotate();        break;
 			case DIR.DOWN:  drop();          break;
 		}
-	};
+	}
 
 	function move(dir) {
 		var x = current.x, y = current.y;
@@ -258,7 +245,7 @@ $(document).ready(function() {
 		else {
 			return false;
 		}
-	};
+	}
 
 	function rotate(dir) {
 		var newdir = (current.dir == DIR.MAX ? DIR.MIN : current.dir + 1);
@@ -266,7 +253,7 @@ $(document).ready(function() {
 			current.dir = newdir;
 			invalidate();
 		}
-	};
+	}
 
 	function drop() {
 		if (!move(DIR.DOWN)) {
@@ -280,13 +267,13 @@ $(document).ready(function() {
 				lose();
 			}
 		}
-	};
+	}
 
 	function dropPiece() {
 		eachblock(current.type, current.x, current.y, current.dir, function(x, y) {
 			setBlock(x, y, current.type);
 		});
-	};
+	}
 
 	function removeLines() {
 		var x, y, complete, n = 0;
@@ -308,7 +295,7 @@ $(document).ready(function() {
 			addRows(n);
 			addScore(100*Math.pow(2,n-1)); // 1: 100, 2: 200, 3: 400, 4: 800
 		}
-	};
+	}
 
 	function removeLine(n) {
 		var x, y;
@@ -317,7 +304,7 @@ $(document).ready(function() {
 				setBlock(x, y, (y == 0) ? null : getBlock(x, y-1));
 			}
 		}
-	};
+	}
 
 	//rendering
 	var invalid = {};
@@ -336,7 +323,7 @@ $(document).ready(function() {
 		drawScore();
 		drawRows();
 		ctx.restore();
-	};
+	}
 
 	function drawCourt() {
 		if (invalid.court) {
@@ -354,7 +341,7 @@ $(document).ready(function() {
 			ctx.strokeRect(0, 0, nx*dx - 1, ny*dy - 1); // court boundary
 			invalid.court = false;
 		}
-	};
+	}
 
 	function drawNext() {
 		if (invalid.next) {
@@ -368,27 +355,27 @@ $(document).ready(function() {
 			uctx.restore();
 			invalid.next = false;
 		}
-	};
+	}
 
 	function drawScore() {
 		if (invalid.score) {
 			html('score', ("00000" + Math.floor(vscore)).slice(-5));
 			invalid.score = false;
 		}
-	};
+	}
 
 	function drawRows() {
 		if (invalid.rows) {
 			html('rows', rows);
 			invalid.rows = false;
 		}
-	};
+	}
 
 	function drawPiece(ctx, type, x, y, dir) {
 		eachblock(type, x, y, dir, function(x, y) {
 			drawBlock(ctx, x, y, type.color);
 		});
-	};
+	}
 
 	function drawBlock(ctx, x, y, color) {
 		var grad1 = ctx.createRadialGradient(x*dx, y*dy, 0, x*dx, y*dy, dx);
@@ -398,5 +385,7 @@ $(document).ready(function() {
 		ctx.fillStyle = grad1;
 		ctx.fillRect(x*dx, y*dy, dx, dy);
 		ctx.strokeRect(x*dx, y*dy, dx, dy)
-	};
-});
+	}
+	
+	run();
+}
