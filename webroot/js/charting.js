@@ -12,32 +12,21 @@ $(document).ready(function() {
 				module.start();
 			});
 	});
-
-	//line graph stuff
-	$("#lineBtn").click(function() {
-		$('#injectedInfo').remove();
-		var input = $(this);
-		if (!input.attr('id')) {
-			return;
-		}
+	
+	$("#updateButton").click(function() {
 		resetCharts();
+		//line graph stuff
 		getGraphData($('#startDate').val(), $('#endDate').val(), $('#measurementSelect').val(), "line");
-	});
-
-	//table stuff
-	$("#tableBtn").click(function() {
-		$('#injectedInfo').remove();
-		var input = $(this);
-		if (!input.attr('id')) {
-			return;
-		}
-		resetCharts();
+		
+		//table stuff
 		getTableData($('#startDate').val(), $('#endDate').val(), $('#measurementSelect').val());
 	});
 
 	function resetCharts() {
 		//remove the old chart and table
 		document.getElementById("chartDiv").innerHTML = "";
+		document.getElementById("tableDiv").innerHTML = "";
+		
 		var sampleTable = document.getElementById("tableView");
 		if (sampleTable != null) {
 			sampleTable.parentNode.removeChild(sampleTable);
@@ -165,7 +154,7 @@ $(document).ready(function() {
 				});
 				}
 	
-				document.getElementById("chartDiv").append(table);
+				document.getElementById("tableDiv").append(table);
 			},
 			fail: function(response) {
 				alert("failed");

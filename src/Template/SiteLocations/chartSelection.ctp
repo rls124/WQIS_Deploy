@@ -134,6 +134,8 @@
 					</li>
 				</ul>
 			</div>
+			
+			<input type="button" id="updateButton">Update</input>
 		</fieldset>
 	</div>
 
@@ -159,31 +161,13 @@
 
 		<?= $this->Form->end() ?>
 
-		<button type="button" class="collapsible"><h3 class="pt-3">Charts</h3></button>
-
-		<div class="row buttongroup">
-			<span class="col-md-1"></span>
-			<?=
-			$this->Form->button('Line Chart', [
-				'label' => false,
-				'type' => 'button',
-				'class' => 'btn btn-basic btn-lg mb-3 mt-3 col-md-3',
-				'id' => 'lineBtn'
-			])
-			?>
-			<span class="col-md-1"></span>
-			<?=
-			$this->Form->button('View Table', [
-				'label' => false,
-				'type' => 'submit',
-				'class' => 'btn btn-basic btn-lg mb-3 mt-3 col-md-3',
-				'id' => 'tableBtn'
-			])
-			?>
-		</div>
-		<hr/>
-
+		<button type="button" class="collapsible"><h3 class="pt-3">Line graph</h3></button>
 		<div id="chartDiv" style="text-align: center;"></div>
+		
+		
+		<button type="button" class="collapsible"><h3 class="pt-3">Table</h3></button>
+		<div id="tableDiv" style="text-align: center;"></div>
+		
 		</div>
 		
 		<?=
