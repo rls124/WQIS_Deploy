@@ -7,6 +7,7 @@
 <?= $this->Html->script('dateautofill.js') ?>
 <?= $this->Html->css('chartSelection.css') ?>
 <?= $this->Html->css("visualization.css") ?>
+<?= $this->Html->css("loading.css") ?>
 <?= $this->Html->css("chartview.css") ?>
 <?= $this->Html->script("lib/d3/d3.js") ?>
 <?= $this->Html->script("charting.js") ?>

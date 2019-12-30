@@ -1,3 +1,17 @@
+var spinnerInhibited = true; //inhibit this initially so basic setup tasks that are done through AJAX, like loading the map, can be done without showing this. Can also inhibit as needed for minor things that aren't expected to take much time
+
+//loading graphic
+$(document).ajaxStart(function () {
+	//check if loading spinner is inhibited first
+	if (!spinnerInhibited) {
+		$('.loadingspinnermain').css('visibility', 'visible');
+		$('body').css('cursor', 'wait');
+	}
+}).ajaxStop(function () {
+    $('.loadingspinnermain').css('visibility', 'hidden');
+    $('body').css('cursor', 'default');
+});
+
 $(document).ready(function() {
 	var easter_egg = new Konami(function() {
 		var map = document.getElementById("map");
@@ -61,8 +75,8 @@ $(document).ready(function() {
 				table.setAttribute("class", "table table-striped table-responsive");
 				table.id = "tableView";
 				
+				//build the header row first
 				var tableHeader = table.insertRow();
-				
 				Object.keys(response[0][0]).forEach(function(key) {
 					if (!(key.includes("Exception") || key == "ID")) {
 						var newCell = tableHeader.insertCell();
@@ -70,88 +84,135 @@ $(document).ready(function() {
 					}
 				});
 				
+				var actionCell = tableHeader.insertCell();
+				actionCell.innerText = "Actions";
+				
 				//fill in each row
 				for (var i=0; i<response[0].length; i++) {
 					var newRow = table.insertRow();
 					
 					Object.keys(response[0][i]).forEach(function(key) {
-					if (!(key.includes("Exception") || key == "ID")) {
-						var newCell = newRow.insertCell();
+						if (!(key.includes("Exception") || key == "ID")) {
+							var newCell = newRow.insertCell();
 						
-						var textDiv = document.createElement('div');
-						textDiv.setAttribute("class", "input text");
-						newCell.appendChild(textDiv);
+							var textDiv = document.createElement('div');
+							textDiv.setAttribute("class", "input text");
+							newCell.appendChild(textDiv);
 						
-						var label = document.createElement('label');
-						label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
-						label.setAttribute("class", "btn btn-thin inputHide");
-						label.setAttribute("for", key + "-" + i);
-						label.innerText = response[0][i][key];
+							var label = document.createElement('label');
+							label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
+							label.setAttribute("class", "btn btn-thin inputHide");
+							label.setAttribute("for", key + "-" + i);
+							label.innerText = response[0][i][key];
 						
-						label.onclick = function () {
-							var label = $(this);
-							var input = $('#' + label.attr('for'));
-							input.trigger('click');
-							label.attr('style', 'display: none');
-							input.attr('style', 'display: in-line');
-						};
+							label.onclick = function () {
+								var label = $(this);
+								var input = $('#' + label.attr('for'));
+								input.trigger('click');
+								label.attr('style', 'display: none');
+								input.attr('style', 'display: in-line');
+							};
 						
-						textDiv.appendChild(label);
+							textDiv.appendChild(label);
+							
+							var cellInput = document.createElement("input");
+							cellInput.type = "text";
+							cellInput.name = key + "-" + i;
+							cellInput.setAttribute("maxlength", 20);
+							cellInput.size = 20;
+							cellInput.setAttribute("class", "inputfields tableInput");
+							cellInput.style = "display: none";
+							cellInput.id = key + "-" + i;
+							cellInput.setAttribute("value", response[0][i][key]);
 						
-						var cellInput = document.createElement("input");
-						cellInput.type = "text";
-						cellInput.name = key + "-" + i;
-						cellInput.setAttribute("maxlength", 20);
-						cellInput.size = 20;
-						cellInput.setAttribute("class", "inputfields tableInput");
-						cellInput.style = "display: none";
-						cellInput.id = key + "-" + i;
-						cellInput.setAttribute("value", response[0][i][key]);
-						
-						cellInput.onfocusout = (function () {
-							var input = $(this);
+							cellInput.onfocusout = (function () {
+								var input = $(this);
 
-							if (!input.attr('id')) {
-								return;
-							}
-
-							var rowNumber = (input.attr('id')).split("-")[1];
-							var sampleNumber = $('#Sample_Number-' + rowNumber).val();
-	
-							var parameter = (input.attr('name')).split("-")[0];
-							var value = input.val();
-
-							$.ajax({
-								type: "POST",
-								url: "/WQIS/generic-samples/updatefield",
-								datatype: 'JSON',
-								data: {
-									'sampleNumber': sampleNumber,
-									'parameter': parameter,
-									'value': value
-								},
-								success: function () {
-									var label = $('label[for="' + input.attr('id') + '"');
-
-									input.attr('style', 'display: none');
-									label.attr('style', 'display: in-line; cursor: pointer');
-
-									if (value === '') {
-										label.text('  ');
-									}
-									else {
-										label.text(value);
-									}
-								},
-								failure: function() {
-									alert("failed");
+								if (!input.attr('id')) {
+									return;
 								}
+	
+								var rowNumber = (input.attr('id')).split("-")[1];
+								var sampleNumber = $('#Sample_Number-' + rowNumber).val();
+	
+								var parameter = (input.attr('name')).split("-")[0];
+								var value = input.val();
+
+								$.ajax({
+									type: "POST",
+									url: "/WQIS/generic-samples/updatefield",
+									datatype: 'JSON',
+									data: {
+										'sampleNumber': sampleNumber,
+										'parameter': parameter,
+										'value': value
+									},
+									success: function () {
+										var label = $('label[for="' + input.attr('id') + '"');
+
+										input.attr('style', 'display: none');
+										label.attr('style', 'display: in-line; cursor: pointer');
+
+										if (value === '') {
+											label.text('  ');
+										}
+										else {
+											label.text(value);
+										}
+									},
+									failure: function() {
+										alert("failed");
+									}
+								});
 							});
-						});
 						
-						textDiv.appendChild(cellInput);
+							textDiv.appendChild(cellInput);
+						}
+					});
+					
+					//add the deletion button
+					var newCell = newRow.insertCell();
+					var delButton = document.createElement("span");
+					delButton.setAttribute("class", "delete glyphicon glyphicon-trash");
+					delButton.setAttribute("id", "Delete-" + i);
+					delButton.setAttribute("name", "Delete-" + i);
+					delButton.onclick = function() {
+						var rowDiv = this;
+		
+						if (!$(rowDiv).attr('id')) {
+							return;
+						}
+		
+						$.confirm("Are you sure you want to delete this record?", function (bool) {
+							if (bool) {
+								var rowNumber = ($(rowDiv).attr('id')).split("-")[1];
+								var sampleNumber = $('#Sample_Number-' + rowNumber).val();
+				
+								alert(sampleNumber);
+				
+								//Now send ajax data to a delete script
+								$.ajax({
+									type: "POST",
+									url: "/WQIS/generic-samples/deleteRecord",
+									datatype: 'JSON',
+									data: {
+										'sampleNumber': sampleNumber,
+										'type': categorySelect
+									},
+									success: function () {
+										//remove the row from view
+										rowDiv.parentNode.parentNode.style.display = "none";
+						
+										//future work: build a new table, to still maintain 20 total rows and have correct black/white/black sequencing after deletions
+									},
+									fail: function () {
+										alert("Deletion failed");
+									}
+								});
+							}
+						});
 					}
-				});
+					newCell.append(delButton);
 				}
 	
 				document.getElementById("tableDiv").append(table);
@@ -268,4 +329,6 @@ $(document).ready(function() {
 			});
 		}
 	}
+	
+	spinnerInhibited = false;
 });
