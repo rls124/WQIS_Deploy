@@ -135,39 +135,55 @@
 				</ul>
 			</div>
 			
-			<input type="button" id="updateButton">Update</input>
+			<button type="button" id="updateButton">Update</button>
 		</fieldset>
+		<?= $this->Form->end() ?>
 	</div>
 
 	<div class="col-lg-12" id="main">
-		<button class="toggleButton" onclick="toggleSidebar()">&#9776; Search</button> 
-	
-		<button type="button" class="collapsible"><h3 class="pt-3">Map</h3></button>
-		<div id="mapContainer">
-		
-		
-		<div class='mb-3' id='map' style='width:100%; height:500px; border: solid black thin;'></div>
-		<div class='mb-3' id='easteregg' style='width:100%; border: solid black thin; display: none;'>
-			<div id="menu">
-				<p id="start"><a href="javascript:play();">Press Space to Play</a></p>
-				<p><canvas id="upcoming"></canvas></p>
-				<p>score <span id="score">00000</span></p>
-				<p>rows <span id="rows">0</span></p>
-				<p>Level <span id="level">1</span></p>
+		<button class="btn btn-basic btn-lg mb-3 mt-3" onclick="toggleSidebar()">&#9776; Search</button> 
+
+		<div class="card">
+			<div class="card-header">
+				<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseOne">Map</a></h4>
 			</div>
-			<canvas id="canvas"></canvas>
+			<div id="collapseOne" class="panel-collapse collapse show">
+				<div class="panel-body">
+					<div class='mb-3' id='map' style='width:100%; height:500px; border: solid black thin;'></div>
+					<div class='mb-3' id='easteregg' style='width:100%; border: solid black thin; display: none;'>
+						<div id="menu">
+							<p id="start"><a href="javascript:play();">Press Space to Play</a></p>
+							<p><canvas id="upcoming"></canvas></p>
+							<p>score <span id="score">00000</span></p>
+							<p>rows <span id="rows">0</span></p>
+							<p>Level <span id="level">1</span></p>
+						</div>
+						<canvas id="canvas"></canvas>
+					</div>
+				</div>
+			</div>
 		</div>
+		
+		<div class="card">
+			<div class="card-header">
+				<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseTwo">Line Graph</a></h4>
+			</div>
+			<div id="collapseTwo" class="panel-collapse collapse show">
+				<div class="panel-body">
+					<div id="chartDiv" style="text-align: center;"></div>
+				</div>
+			</div>
 		</div>
-
-		<?= $this->Form->end() ?>
-
-		<button type="button" class="collapsible"><h3 class="pt-3">Line graph</h3></button>
-		<div id="chartDiv" style="text-align: center;"></div>
 		
-		
-		<button type="button" class="collapsible"><h3 class="pt-3">Table</h3></button>
-		<div id="tableDiv" style="text-align: center;"></div>
-		
+		<div class="card">
+			<div class="card-header">
+				<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseThree">Table</a></h4>
+			</div>
+			<div id="collapseThree" class="panel-collapse collapse show">
+				<div class="panel-body">
+					<div id="tableDiv" style="text-align: center;"></div>
+				</div>
+			</div>
 		</div>
 		
 		<?=
@@ -178,6 +194,7 @@
 			'id' => 'exportBtn'
 		])
 		?>
+	</div>
 	</div>
 </div>
 
@@ -273,22 +290,6 @@ $('#site').select2({
 	placeholder: "Select sites",
 	width: 'resolve'
 });
-
-//collapse or expand all collapsible divs when the appropriate button is clicked
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    }
-	else {
-      content.style.display = "block";
-    }
-  });
-}
 </script>
 
 <script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwcJIWDoWbEgt7mX_j5CXGevgWvQPh6bc&callback=initMap' type="text/javascript"></script>

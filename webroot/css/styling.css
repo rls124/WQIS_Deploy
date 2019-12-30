@@ -34,8 +34,7 @@ body{
 }
 
 .navbar{
-    background-color:#dddddd;
-    border-bottom: solid thick #6e7393;
+    background-color:lightgrey;
 }
 
 .transparentContainer{
@@ -82,7 +81,7 @@ body{
 }
 
 .btn-basic:hover{
-    background-color: #8eceff;
+    /*background-color: #8eceff;*/
     text-shadow: 1px 1px 3px black;
     color:black;
 }
