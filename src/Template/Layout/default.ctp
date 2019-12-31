@@ -16,6 +16,7 @@
         <?= $this->Html->script('jquery.msgbox.min.js') ?>
         <?= $this->Html->css('styling.css') ?>
         <?= $this->Html->css('cakemessages.css') ?>
+		<?= $this->Html->css("loading.css") ?>
 
 <?php
 	if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session

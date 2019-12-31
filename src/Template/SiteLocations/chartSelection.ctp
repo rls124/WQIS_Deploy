@@ -7,15 +7,14 @@
 <?= $this->Html->script('dateautofill.js') ?>
 <?= $this->Html->css('chartSelection.css') ?>
 <?= $this->Html->css("visualization.css") ?>
-<?= $this->Html->css("loading.css") ?>
 <?= $this->Html->css("chartview.css") ?>
-<?= $this->Html->script("lib/d3/d3.js") ?>
 <?= $this->Html->script("charting.js") ?>
 <?= $this->Html->script('chartSelectionValidation.js') ?>
-<?= $this->Html->script('tableedit.js') ?>
 <?= $this->Html->script('konami.js') ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
+<?= $this->Html->script('chartjs-plugin-annotation.js') ?>
+
 <link href="../css/tableView.css" rel="stylesheet" type="text/css"/>
 
 <div>
@@ -167,7 +166,7 @@
 		
 		<div class="card">
 			<div class="card-header">
-				<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseTwo">Line Graph</a></h4>
+				<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseTwo">Timeline</a></h4>
 			</div>
 			<div id="collapseTwo" class="panel-collapse collapse show">
 				<div class="panel-body">

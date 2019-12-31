@@ -1,13 +1,13 @@
 var spinnerInhibited = true; //inhibit this initially so basic setup tasks that are done through AJAX, like loading the map, can be done without showing this. Can also inhibit as needed for minor things that aren't expected to take much time
 
 //loading graphic
-$(document).ajaxStart(function () {
+$(document).ajaxStart(function() {
 	//check if loading spinner is inhibited first
 	if (!spinnerInhibited) {
 		$('.loadingspinnermain').css('visibility', 'visible');
 		$('body').css('cursor', 'wait');
 	}
-}).ajaxStop(function () {
+}).ajaxStop(function() {
     $('.loadingspinnermain').css('visibility', 'hidden');
     $('body').css('cursor', 'default');
 });
@@ -30,10 +30,10 @@ $(document).ready(function() {
 	$("#updateButton").click(function() {
 		resetCharts();
 		//line graph stuff
-		getGraphData($('#startDate').val(), $('#endDate').val(), $('#measurementSelect').val(), "line");
+		getGraphData($('#startDate').val(), $('#endDate').val());
 		
 		//table stuff
-		getTableData($('#startDate').val(), $('#endDate').val(), $('#measurementSelect').val());
+		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 
 	function resetCharts() {
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		}
 	}
 	
-	function getTableData(startDate, endDate, measure) {
+	function getTableData(startDate, endDate) {
 		var sites = $("#site").val();
 		
 		var categorySelect = document.getElementById("categorySelect").value;
@@ -224,7 +224,7 @@ $(document).ready(function() {
 		});
 	}
 
-	function getGraphData(startDate, endDate, measure, graphType) {
+	function getGraphData(startDate, endDate) {
 		var sites = $("#site").val();
 		
 		//get all the selected checkboxes
@@ -317,11 +317,58 @@ $(document).ready(function() {
 					
 					var ctx = document.getElementById("chart-" + k).getContext("2d");
 
+					//add benchmark lines
+					var benchmarks = response[1][0]; //max and min
+					console.log("Max: " + benchmarks["max"] + ", min: " + benchmarks["min"]);
+					
+					var benchmarkLines = [];
+					if (benchmarks["max"] != null) {
+						benchmarkLines.push({
+							type: 'line',
+							mode: 'horizontal',
+							scaleID: 'y-axis-0',
+							value: benchmarks["max"],
+							borderColor: 'red',
+							borderWidth: 1,
+							label: {
+								enabled: false,
+								content: "max"
+							}
+						});
+					}
+					if (benchmarks["min"] != null) {
+						benchmarkLines.push({
+							type: 'line',
+							mode: 'horizontal',
+							scaleID: 'y-axis-0',
+							value: benchmarks["min"],
+							borderColor: 'blue',
+							borderWidth: 1,
+							label: {
+								enabled: false,
+								content: "min"
+							}
+						});
+					}
+
 					var myChart = new Chart(ctx, {
 						type: 'line',
 						data: {
 							labels: labels,
 							datasets: datasets
+						},
+						options: {
+							annotation: {
+								annotations: benchmarkLines
+							},
+							scales: {
+								yAxes: [{
+									scaleLabel: {
+										display: true,
+										labelString: measuresAll[k]
+									}
+								}]
+							}
 						}
 					});
 				},
