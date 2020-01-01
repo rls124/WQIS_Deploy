@@ -148,18 +148,8 @@
 				<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseOne">Map</a></h4>
 			</div>
 			<div id="collapseOne" class="panel-collapse collapse show">
-				<div class="panel-body">
-					<div class='mb-3' id='map' style='width:100%; height:500px; border: solid black thin;'></div>
-					<div class='mb-3' id='easteregg' style='width:100%; border: solid black thin; display: none;'>
-						<div id="menu">
-							<p id="start"><a href="javascript:play();">Press Space to Play</a></p>
-							<p><canvas id="upcoming"></canvas></p>
-							<p>score <span id="score">00000</span></p>
-							<p>rows <span id="rows">0</span></p>
-							<p>Level <span id="level">1</span></p>
-						</div>
-						<canvas id="canvas"></canvas>
-					</div>
+				<div class="panel-body" id="mapContainer">
+					<div class="mb-3" id="map" style="width:100%; height:500px; border: solid black thin;"></div>
 				</div>
 			</div>
 		</div>

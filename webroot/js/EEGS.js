@@ -19,65 +19,6 @@ export function start() {
 		return (min + (Math.random() * (max - min)));
 	}
 
-	if (!window.requestAnimationFrame) {
-		window.requestAnimationFrame = window.webkitRequestAnimationFrame || 
-			window.mozRequestAnimationFrame    || 
-			window.oRequestAnimationFrame      || 
-			window.msRequestAnimationFrame     || 
-			function(callback, element) {
-				window.setTimeout(callback, 1000 / 60);
-			}
-	}
-
-	//game constants
-	var KEY     = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
-		DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, MIN: 0, MAX: 3 },
-		canvas  = document.getElementById('canvas'),
-		ctx     = canvas.getContext('2d'),
-		ucanvas = document.getElementById('upcoming'),
-		uctx    = ucanvas.getContext('2d'),
-		speed   = { start: 0.6, decrement: 0.005, min: 0.1 }, // how long before piece drops by 1 row (seconds)
-		nx      = 10, //width of tetris court (in blocks)
-		ny      = 20, //height of tetris court (in blocks)
-		nu      = 5;  //width/height of upcoming preview (in blocks)
-
-	//game variables (initialized during reset)
-	var dx, dy,        //pixel size of a single tetris block
-		blocks,        //2 dimensional array (nx*ny) representing tetris court - either empty block or occupied by a 'piece'
-		actions,       //queue of user actions (inputs)
-		playing,       //true|false - game is in progress
-		dt,            //time since starting this game
-		current,       //the current piece
-		next,          //the next piece
-		score,         //the current score
-		vscore,        //the currently displayed score (it catches up to score in small chunks - like a spinning slot machine)
-		rows,          //number of completed rows in the current game
-		level,         //current level number
-		step;          //how long before current piece drops by 1 row
-
-	/*
-	tetris pieces
-
-	blocks: each element represents a rotation of the piece (0, 90, 180, 270)
-			each element is a 16 bit integer where the 16 bits represent
-			a 4x4 set of blocks, e.g. j.blocks[0] = 0x44C0
-    
-				0100 = 0x4 << 3 = 0x4000
-				0100 = 0x4 << 2 = 0x0400
-				1100 = 0xC << 1 = 0x00C0
-				0000 = 0x0 << 0 = 0x0000
-								  ------
-								  0x44C0  
-	*/
-
-	var i = { size: 4, blocks: [0x0F00, 0x2222, 0x00F0, 0x4444], color: 'cyan'   };
-	var j = { size: 3, blocks: [0x44C0, 0x8E00, 0x6440, 0x0E20], color: 'blue'   };
-	var l = { size: 3, blocks: [0x4460, 0x0E80, 0xC440, 0x2E00], color: 'orange' };
-	var o = { size: 2, blocks: [0xCC00, 0xCC00, 0xCC00, 0xCC00], color: 'yellow' };
-	var s = { size: 3, blocks: [0x06C0, 0x8C40, 0x6C00, 0x4620], color: 'green'  };
-	var t = { size: 3, blocks: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: 'purple' };
-	var z = { size: 3, blocks: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red'    };
-
 	//do the bit manipulation and iterate through each occupied block (x,y) for a given piece
 	function eachblock(type, x, y, dir, fn) {
 		var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
@@ -96,8 +37,9 @@ export function start() {
 	function occupied(type, x, y, dir) {
 		var result = false
 		eachblock(type, x, y, dir, function(x, y) {
-			if ((x < 0) || (x >= nx) || (y < 0) || (y >= ny) || getBlock(x,y))
-			result = true;
+			if ((x < 0) || (x >= nx) || (y < 0) || (y >= ny) || getBlock(x,y)) {
+				result = true;
+			}
 		});
 		return result;
 	}
@@ -125,15 +67,15 @@ export function start() {
 		var now = timestamp();
 		function frame() {
 			now = timestamp();
-			update(Math.min(1, (now - last) / 1000.0)); // using requestAnimationFrame have to be able to handle large deltas caused when it hibernates in a background or non-visible tab
+			update(Math.min(1, (now - last) / 1000.0)); //using requestAnimationFrame have to be able to handle large deltas caused when it hibernates in a background or non-visible tab
 			draw();
 			last = now;
 			requestAnimationFrame(frame, canvas);
 		}
 
 		resize(); //setup all our sizing information
-		reset();  //reset the per-game variables
-		frame();  //start the first frame
+		reset(); //reset the per-game variables
+		frame(); //start the first frame
 	}
 
 	function addEvents() {
@@ -159,12 +101,12 @@ export function start() {
 		var handled = false;
 		if (playing) {
 			switch(ev.keyCode) {
-				case KEY.LEFT:   actions.push(DIR.LEFT);  handled = true; break;
-				case KEY.RIGHT:  actions.push(DIR.RIGHT); handled = true; break;
-				case KEY.UP:     actions.push(DIR.UP);    handled = true; break;
-				case KEY.DOWN:   actions.push(DIR.DOWN);  handled = true; break;
-				//case KEY.SPACE:  actions.push(DIR.SPACE); handled = true; break;
-				case KEY.ESC:    lose();                  handled = true; break;
+				case KEY.LEFT:   actions.push(DIR.LEFT);	handled = true; break;
+				case KEY.RIGHT:  actions.push(DIR.RIGHT);	handled = true; break;
+				case KEY.UP:     actions.push(DIR.UP);		handled = true; break;
+				case KEY.DOWN:   actions.push(DIR.DOWN);	handled = true; break;
+				case KEY.SPACE:  actions.push(DIR.BOTTOM);	handled = true; break;
+				case KEY.ESC:    lose();					handled = true; break;
 			}
 		}
 		else if (ev.keyCode == KEY.SPACE) {
@@ -222,10 +164,11 @@ export function start() {
 
 	function handle(action) {
 		switch(action) {
-			case DIR.LEFT:  move(DIR.LEFT);  break;
-			case DIR.RIGHT: move(DIR.RIGHT); break;
-			case DIR.UP:    rotate();        break;
-			case DIR.DOWN:  drop();          break;
+			case DIR.LEFT:		move(DIR.LEFT);		break;
+			case DIR.RIGHT:		move(DIR.RIGHT);	break;
+			case DIR.UP:		rotate();			break;
+			case DIR.DOWN:		drop();				break;
+			case DIR.BOTTOM:	dropToBottom();		break;
 		}
 	}
 
@@ -252,6 +195,21 @@ export function start() {
 		if (unoccupied(current.type, current.x, current.y, newdir)) {
 			current.dir = newdir;
 			invalidate();
+		}
+	}
+	
+	function dropToBottom() {
+		invalidate();
+		
+		while (true) {
+			var y = current.y;
+			y = y+1;
+			if (unoccupied(current.type, current.x, y, current.dir)) {
+				current.y = y;
+			}
+			else {
+				break;
+			}
 		}
 	}
 
@@ -317,7 +275,7 @@ export function start() {
 	function draw() {
 		ctx.save();
 		ctx.lineWidth = 1;
-		ctx.translate(0.5, 0.5); // for crisp 1px black lines
+		ctx.translate(0.5, 0.5); //for crisp 1px black lines
 		drawCourt();
 		drawNext();
 		drawScore();
@@ -338,14 +296,14 @@ export function start() {
 					drawBlock(ctx, x, y, block.color);
 				}
 			}
-			ctx.strokeRect(0, 0, nx*dx - 1, ny*dy - 1); // court boundary
+			ctx.strokeRect(0, 0, nx*dx - 1, ny*dy - 1); //court boundary
 			invalid.court = false;
 		}
 	}
 
 	function drawNext() {
 		if (invalid.next) {
-			var padding = (nu - next.type.size) / 2; // half-arsed attempt at centering next piece display
+			var padding = (nu - next.type.size) / 2; //center the next piece in the display
 			uctx.save();
 			uctx.translate(0.5, 0.5);
 			uctx.clearRect(0, 0, nu*dx, nu*dy);
@@ -386,6 +344,82 @@ export function start() {
 		ctx.fillRect(x*dx, y*dy, dx, dy);
 		ctx.strokeRect(x*dx, y*dy, dx, dy)
 	}
+	
+	//set up the board
+	var board = document.createElement("div");
+	board.setAttribute("class", "mb-3");
+	board.setAttribute("style", "width:100%; border: solid black thin;");
+	board.id = "easteregg";
+	
+	board.innerHTML = `
+		<div id="menu">
+			<p id="start"><a href="javascript:play();">Press Space to Play</a></p>
+			<p><canvas id="upcoming"></canvas></p>
+			<p>score <span id="score">00000</span></p>
+			<p>rows <span id="rows">0</span></p>
+			<p>Level <span id="level">1</span></p>
+		</div>
+		<canvas id="canvas"></canvas>
+	`;
+	
+	document.getElementById("mapContainer").appendChild(board);
+	
+	if (!window.requestAnimationFrame) {
+		window.requestAnimationFrame = window.webkitRequestAnimationFrame || 
+			window.mozRequestAnimationFrame    || 
+			window.oRequestAnimationFrame      || 
+			window.msRequestAnimationFrame     || 
+			function(callback, element) {
+				window.setTimeout(callback, 1000 / 60);
+			}
+	}
+
+	//game constants
+	var KEY     = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
+		DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, BOTTOM: 4, MIN: 0, MAX: 3 },
+		canvas  = document.getElementById('canvas'),
+		ctx     = canvas.getContext('2d'),
+		ucanvas = document.getElementById('upcoming'),
+		uctx    = ucanvas.getContext('2d'),
+		speed   = { start: 0.6, decrement: 0.005, min: 0.1 }, // how long before piece drops by 1 row (seconds)
+		nx      = 10, //width of tetris court (in blocks)
+		ny      = 20, //height of tetris court (in blocks)
+		nu      = 5;  //width/height of upcoming preview (in blocks)
+
+	//game variables (initialized during reset)
+	var dx, dy,        //pixel size of a single tetris block
+		blocks,        //2 dimensional array (nx*ny) representing tetris court - either empty block or occupied by a 'piece'
+		actions,       //queue of user actions (inputs)
+		playing,       //true|false - game is in progress
+		dt,            //time since starting this game
+		current,       //the current piece
+		next,          //the next piece
+		score,         //the current score
+		vscore,        //the currently displayed score (it catches up to score in small chunks - like a spinning slot machine)
+		rows,          //number of completed rows in the current game
+		level,         //current level number
+		step;          //how long before current piece drops by 1 row
+
+	/*
+	tetris pieces: each element represents a rotation of the piece (0, 90, 180, 270)
+			each element is a 16 bit integer where the 16 bits represent
+			a 4x4 set of blocks, e.g. j.blocks[0] = 0x44C0
+    
+				0100 = 0x4 << 3 = 0x4000
+				0100 = 0x4 << 2 = 0x0400
+				1100 = 0xC << 1 = 0x00C0
+				0000 = 0x0 << 0 = 0x0000
+								  ------
+								  0x44C0  
+	*/
+
+	var i = { size: 4, blocks: [0x0F00, 0x2222, 0x00F0, 0x4444], color: 'cyan'   };
+	var j = { size: 3, blocks: [0x44C0, 0x8E00, 0x6440, 0x0E20], color: 'blue'   };
+	var l = { size: 3, blocks: [0x4460, 0x0E80, 0xC440, 0x2E00], color: 'orange' };
+	var o = { size: 2, blocks: [0xCC00, 0xCC00, 0xCC00, 0xCC00], color: 'yellow' };
+	var s = { size: 3, blocks: [0x06C0, 0x8C40, 0x6C00, 0x4620], color: 'green'  };
+	var t = { size: 3, blocks: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: 'purple' };
+	var z = { size: 3, blocks: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red'    };
 	
 	run();
 }
