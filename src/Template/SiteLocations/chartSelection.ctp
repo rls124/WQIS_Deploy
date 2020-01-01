@@ -202,17 +202,29 @@
 //set the width of the sidebar to 250px and the left margin of the page content to 250px
 function toggleSidebar() {
 	if (document.getElementById("mySidebar").style.width == "450px") {
-		document.getElementById("mySidebar").style.width = "0";
-		document.getElementById("main").style.marginLeft = "0";
+		sidebarSize("0")
 	}
 	else {
-		//open the sidebar
-		document.getElementById("mySidebar").style.width = "450px";
-		document.getElementById("main").style.marginLeft = "450px";
+		sidebarSize("450px");
 	}
 }
 
+function sidebarSize(width) {
+	document.getElementById("mySidebar").style.width = width;
+	document.getElementById("main").style.marginLeft = width;
+	document.getElementById("navbar").style.marginLeft = width;
+}
+
 $(document).ready(function () {
+	document.addEventListener('keydown', keydown, false);
+	
+	function keydown(e) {
+		if (e.keyCode == 27) {
+			//escape key
+			sidebarSize("0");
+		}
+	}
+	
 	$("#exportBtn").click(function () {
 		var sampleType = $('#categorySelect').val();		
 		var startDate = $('#startDate').val();
