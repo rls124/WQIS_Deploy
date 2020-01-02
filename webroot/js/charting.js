@@ -12,14 +12,51 @@ $(document).ajaxStart(function() {
     $('body').css('cursor', 'default');
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
+	var bacteriaData = {'select': ['Select a measure'],
+		'ecoli': ['E. Coli (CFU/100 mil)']};
+	var nutrientData = {'select': ['Select a measure'],
+		'nitrateNitrite': ['Nitrate/Nitrite (mg/L)'],
+		'phosphorus': ['Total Phosphorus (mg/L)'],
+		'drp': ['Dissolved Reactive Phosphorus (mg/L)'],
+		'ammonia': ['Ammonia (mg/L)']};
+	var pesticideData = {'select': ['Select a measure'],
+		'alachlor': ['Alachlor (µg/L)'],
+		'atrazine': ['Atrazine (µg/L)'],
+		'metolachlor': ['Metolachlor (µg/L)']};
+	var physProp = {'select': ['Select a measure'],
+		'conductivity': ['Conductivity (mS/cm)'],
+		'do': ['Dissolved Oxygen (mg/L'],
+		'bridge_to_water_height': ['Bridge to Water Height (in)'],
+		'ph': ['pH'],
+		'water_temp': ['Water Temperature (°C)'],
+		'tds': ['Total Dissolved Solids (g/L)'],
+		'turbidity': ['Turbidity (NTU)']};
+	
+    document.getElementById('categorySelect').addEventListener("change", changeMeasures);
+    $(".date-picker").datepicker({
+        trigger: "focus",
+        format: 'mm/dd/yyyy',
+        todayHighlight: true,
+        todayBtn: "linked"
+    });
+
+    $("#startDate").datepicker().on('changeDate', function (selected) {
+        var minDate = new Date(selected.date.valueOf());
+        $('#endDate').datepicker('setStartDate', minDate);
+    });
+    $("#endDate").datepicker().on('changeDate', function (selected) {
+        var maxDate = new Date(selected.date.valueOf());
+        $('#startDate').datepicker('setEndDate', maxDate);
+    });
+
+	$('#sites').select2({
+		closeOnSelect: false,
+		placeholder: "Select sites",
+		width: 'resolve'
+	});
+	
 	var easter_egg = new Konami(function() {
-		var map = document.getElementById("map");
-		map.style.display = "none";
-		
-		//var easterEggDiv = document.getElementById("easteregg");
-		//easterEggDiv.style.display = "block";
-		
 		//dynamically download the needed code so we don't bog down the 99.9% of users who won't even see this
 		import('/WQIS/js/EEGS.js')
 			.then((module) => {
@@ -27,14 +64,176 @@ $(document).ready(function() {
 			});
 	});
 	
+	document.addEventListener('keydown', function(e) {
+		if (e.keyCode == 27) {
+			//escape key
+			sidebarSize("0");
+		}
+	}, false);
+	
+	$("#exportBtn").click(function () {
+		var sampleType = $('#categorySelect').val();		
+		var startDate = $('#startDate').val();
+		var endDate = $('#endDate').val();
+		var sites = [$('#sites').val()];
+		
+		var measures = ['all'];
+
+		$.ajax({
+			type: "POST",
+			url: "/WQIS/export/exportData",
+			datatype: 'JSON',
+			data: {
+				'type': sampleType,
+				'startDate': startDate,
+				'endDate': endDate,
+				'sites': sites,
+				'measures': measures
+				//'amountEnter': amountEnter,
+				//'overUnderSelect': overUnderSelect
+			},
+			success: function (response) {
+				downloadFile(response, sampleType);
+			},
+			failure: function (response) {
+				alert("Failed");
+			}
+		});
+	});
+	
+	function populateMeasurementSelect(categoryData) {
+		//first, clear out the existing checkboxes
+		var checkboxList = document.getElementById('checkboxList');
+		checkboxList.innerHTML = "";
+	
+		for (var i in categoryData) {
+			var option = document.createElement('option');
+			option.value = i;
+			option.text = categoryData[i];
+			document.getElementById('measurementSelect').appendChild(option);
+		
+			//now create the checkboxes as well
+			if (i != 'select') {
+				var listItem = document.createElement('li');
+			
+				var box = document.createElement('input');
+				box.value = i;
+				box.id = i + "Checkbox";
+				box.type = "checkbox";
+		
+				var boxLabel = document.createElement('label');
+				boxLabel.innerText = i;
+				boxLabel.for = i + "Checkbox";
+		
+				listItem.appendChild(box);
+				listItem.appendChild(boxLabel);
+		
+				checkboxList.appendChild(listItem);
+			}
+		}
+	}
+	
+	function changeMeasures() {
+		dropMeasures();
+		var chosenMeasure = document.getElementById('categorySelect');
+
+		switch (chosenMeasure.value) {
+			case 'bacteria':
+				populateMeasurementSelect(bacteriaData);
+				break;
+			case 'nutrient':
+				populateMeasurementSelect(nutrientData);
+				break;
+			case 'pesticide':
+				populateMeasurementSelect(pesticideData);
+				break;
+			case 'physical':
+				populateMeasurementSelect(physProp);
+				break;
+		}
+	}
+
+	function dropMeasures() {
+		var measureSelect = document.getElementById('measurementSelect');
+		while (measureSelect.options.length > 0) {
+			measureSelect.remove(0);
+		}
+	}
+	
+	function downloadFile(fileData, type) {
+		if (fileData.length < 1) {
+			return;
+		}
+		
+		var csvContent = "data:text/csv;charset=utf-8,";
+		var fields = Object.keys(fileData[0]);
+		for (var i = 0; i < fileData.length; i++) {
+			fileData[i]['Date'] = fileData[i]['Date'].substring(0, 10);
+		}
+
+		//if ID field exists, remove it
+		if (fields[0] === "ID") {
+			fields = fields.splice(1, fields.length);
+		}
+		
+		//make null values not have text
+		var replacer = function (key, value) {
+			return value === null ? '' : value;
+		};
+
+		var csv = fileData.map(function (row) {
+			return fields.map(function (fieldName) {
+				return JSON.stringify(row[fieldName], replacer);
+			}).join(',');
+		});
+		fields[fields.indexOf('site_location_id')] = 'Site Number';
+		
+		//add header column
+		csv.unshift(fields.join(','));
+
+		csvContent += csv.join('\r\n');
+		var encodedUri = encodeURI(csvContent);
+		var link = document.createElement("a");
+		link.setAttribute("href", encodedUri);
+		var name = type + '_export.csv';
+		link.setAttribute("download", name);
+		document.body.appendChild(link);
+		link.click();
+	}
+	
 	$("#updateButton").click(function() {
 		resetCharts();
-		//line graph stuff
 		getGraphData($('#startDate').val(), $('#endDate').val());
-		
-		//table stuff
 		getTableData($('#startDate').val(), $('#endDate').val());
 	});
+	
+	$("#resetButton").click(function() {
+		//clear all parameters to default values, and clear the chart/table view
+		resetCharts();
+		$("#sites").val(null).trigger("change");
+		$("#categorySelect").val("bacteria");
+		changeMeasures();
+	});
+	
+	$("#searchButton").click(function () {
+		toggleSidebar();
+	});
+	
+	function toggleSidebar() {
+		//expand the search sidebar and shift the rest of the page over, or the opposite
+		if (document.getElementById("mySidebar").style.width == "450px") {
+			sidebarSize("0")
+		}
+		else {
+			sidebarSize("450px");
+		}
+	}
+
+	function sidebarSize(width) {
+		document.getElementById("mySidebar").style.width = width;
+		document.getElementById("main").style.marginLeft = width;
+		document.getElementById("navbar").style.marginLeft = width;
+	}
 
 	function resetCharts() {
 		//remove the old chart and table
@@ -48,7 +247,7 @@ $(document).ready(function() {
 	}
 	
 	function getTableData(startDate, endDate) {
-		var sites = $("#site").val();
+		var sites = $("#sites").val();
 		
 		var categorySelect = document.getElementById("categorySelect").value;
 		
@@ -225,7 +424,7 @@ $(document).ready(function() {
 	}
 
 	function getGraphData(startDate, endDate) {
-		var sites = $("#site").val();
+		var sites = $("#sites").val();
 		
 		//get all the selected checkboxes
 		var measuresAll = [];
@@ -319,7 +518,6 @@ $(document).ready(function() {
 
 					//add benchmark lines
 					var benchmarks = response[1][0]; //max and min
-					console.log("Max: " + benchmarks["max"] + ", min: " + benchmarks["min"]);
 					
 					var benchmarkLines = [];
 					if (benchmarks["max"] != null) {

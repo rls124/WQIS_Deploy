@@ -345,6 +345,9 @@ export function start() {
 		ctx.strokeRect(x*dx, y*dy, dx, dy)
 	}
 	
+	//clear the map
+	document.getElementById("map").style.display = "none";
+	
 	//set up the board
 	var board = document.createElement("div");
 	board.setAttribute("class", "mb-3");

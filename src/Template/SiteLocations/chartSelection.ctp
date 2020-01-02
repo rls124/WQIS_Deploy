@@ -1,21 +1,14 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
-
+<?= $this->Html->script("charting.js") ?>
 <?= $this->Html->script('dateautofill.js') ?>
 <?= $this->Html->css('chartSelection.css') ?>
-<?= $this->Html->css("visualization.css") ?>
-<?= $this->Html->css("chartview.css") ?>
-<?= $this->Html->script("charting.js") ?>
-<?= $this->Html->script('chartSelectionValidation.js') ?>
+<?= $this->Html->script('mapping.js') ?>
 <?= $this->Html->script('konami.js') ?>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
-
-<link href="../css/tableView.css" rel="stylesheet" type="text/css"/>
 
 <div>
 	<div id="mySidebar" class="sidebar">
@@ -23,7 +16,7 @@
 	
 		<fieldset>
 			<h5>Sites:</h5>
-			<select class="js-example-placeholder-multiple form-control" id="site" name="site[]" multiple="multiple" style="width: 100%">
+			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%">
 				<?php
 					//populate the site drop down box
 					foreach ($siteLocations as $siteLocation) {
@@ -136,12 +129,13 @@
 			</div>
 			
 			<button type="button" id="updateButton">Update</button>
+			<button type="button" id="resetButton">Reset</button>
 		</fieldset>
 		<?= $this->Form->end() ?>
 	</div>
 
 	<div class="col-lg-12" id="main">
-		<button class="btn btn-basic btn-lg mb-3 mt-3" onclick="toggleSidebar()">&#9776; Search</button> 
+		<button class="btn btn-basic btn-lg mb-3 mt-3" id="searchButton">&#9776; Search</button> 
 
 		<div class="card">
 			<div class="card-header">
@@ -187,111 +181,5 @@
 	</div>
 	</div>
 </div>
-
-<script>
-//set the width of the sidebar to 250px and the left margin of the page content to 250px
-function toggleSidebar() {
-	if (document.getElementById("mySidebar").style.width == "450px") {
-		sidebarSize("0")
-	}
-	else {
-		sidebarSize("450px");
-	}
-}
-
-function sidebarSize(width) {
-	document.getElementById("mySidebar").style.width = width;
-	document.getElementById("main").style.marginLeft = width;
-	document.getElementById("navbar").style.marginLeft = width;
-}
-
-$(document).ready(function () {
-	document.addEventListener('keydown', keydown, false);
-	
-	function keydown(e) {
-		if (e.keyCode == 27) {
-			//escape key
-			sidebarSize("0");
-		}
-	}
-	
-	$("#exportBtn").click(function () {
-		var sampleType = $('#categorySelect').val();		
-		var startDate = $('#startDate').val();
-		var endDate = $('#endDate').val();
-		var sites = [$('#site').val()];
-		
-		var measures = ['all'];
-
-		$.ajax({
-			type: "POST",
-			url: "/WQIS/export/exportData",
-			datatype: 'JSON',
-			data: {
-				'type': sampleType,
-				'startDate': startDate,
-				'endDate': endDate,
-				'sites': sites,
-				'measures': measures
-				//'amountEnter': amountEnter,
-				//'overUnderSelect': overUnderSelect
-			},
-			success: function (response) {
-				downloadFile(response, sampleType);
-			},
-			failure: function (response) {
-				alert("Failed");
-			}
-		});
-	});
-	
-	function downloadFile(fileData, type) {
-		if (fileData.length < 1) {
-			return;
-		}
-		
-		var csvContent = "data:text/csv;charset=utf-8,";
-		var fields = Object.keys(fileData[0]);
-		for (var i = 0; i < fileData.length; i++) {
-			fileData[i]['Date'] = fileData[i]['Date'].substring(0, 10);
-		}
-
-		//if ID field exists, remove it
-		if (fields[0] === "ID") {
-			fields = fields.splice(1, fields.length);
-		}
-		
-		//make null values not have text
-		var replacer = function (key, value) {
-			return value === null ? '' : value;
-		};
-
-		var csv = fileData.map(function (row) {
-			return fields.map(function (fieldName) {
-				return JSON.stringify(row[fieldName], replacer);
-			}).join(',');
-		});
-		fields[fields.indexOf('site_location_id')] = 'Site Number';
-		
-		//add header column
-		csv.unshift(fields.join(','));
-
-		csvContent += csv.join('\r\n');
-		var encodedUri = encodeURI(csvContent);
-		var link = document.createElement("a");
-		link.setAttribute("href", encodedUri);
-		var name = type + '_export.csv';
-		link.setAttribute("download", name);
-		document.body.appendChild(link);
-		link.click();
-	}
-});
-
-$('#site').select2({
-	closeOnSelect: false,
-	placeholder: "Select sites",
-	width: 'resolve'
-});
-</script>
 
 <script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwcJIWDoWbEgt7mX_j5CXGevgWvQPh6bc&callback=initMap' type="text/javascript"></script>

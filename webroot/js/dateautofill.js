@@ -1,13 +1,13 @@
 $(function () {
-    $("#site").change(function () {
+    $("#sites").change(function () {
         getRange();
     });
     $("#categorySelect").change(function () {
         getRange();
     });
     function getRange() {
-		//If both variables are not null, then we may submit an sql request.
-        var siteData = document.querySelector('#site').value;
+		//if both variables are not null, then we may submit an sql request
+        var siteData = document.querySelector('#sites').value;
         var categoryData = $('#categorySelect').val();
         if ((siteData !== null && siteData !== 'select') && categoryData !== null) {
             $.ajax({
