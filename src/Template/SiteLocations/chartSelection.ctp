@@ -157,6 +157,7 @@
 					<div id="chartsLayoutSelect" style="display: none;">
 						<button type="button" id="chartsInlineButton">In-line</button>
 						<button type="button" id="chartsGridButton">Grid</button>
+						<input type="checkbox" id="showBenchmarks" value="showBenchmarks" checked>Show benchmark lines
 					</div>
 					<div id="chartDiv" style="text-align: center;"></div>
 				</div>

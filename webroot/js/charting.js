@@ -222,10 +222,14 @@ $(document).ready(function () {
 	
 	$("#chartsInlineButton").click(function() {
 		chartsDisplayMode = "in-line";
+		document.getElementById("chartDiv").innerHTML = "";
+		getGraphData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#chartsGridButton").click(function() {
 		chartsDisplayMode = "grid";
+		document.getElementById("chartDiv").innerHTML = "";
+		getGraphData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#searchButton").click(function () {
@@ -566,37 +570,42 @@ $(document).ready(function () {
 					
 					var ctx = document.getElementById("chart-" + k).getContext("2d");
 
-					//add benchmark lines
-					var benchmarks = response[1][0]; //max and min
-					
-					var benchmarkLines = [];
-					if (benchmarks["max"] != null) {
-						benchmarkLines.push({
-							type: 'line',
-							mode: 'horizontal',
-							scaleID: 'y-axis-0',
-							value: benchmarks["max"],
-							borderColor: 'red',
-							borderWidth: 1,
-							label: {
-								enabled: false,
-								content: "max"
-							}
-						});
+					if (document.getElementById("showBenchmarks").checked) {
+						//add benchmark lines
+						var benchmarks = response[1][0]; //max and min
+						
+						var benchmarkLines = [];
+						if (benchmarks["max"] != null) {
+							benchmarkLines.push({
+								type: 'line',
+								mode: 'horizontal',
+								scaleID: 'y-axis-0',
+								value: benchmarks["max"],
+								borderColor: 'red',
+								borderWidth: 1,
+								label: {
+									enabled: false,
+									content: "max"
+								}
+							});
+						}
+						if (benchmarks["min"] != null) {
+							benchmarkLines.push({
+								type: 'line',
+								mode: 'horizontal',
+								scaleID: 'y-axis-0',
+								value: benchmarks["min"],
+								borderColor: 'blue',
+								borderWidth: 1,
+								label: {
+									enabled: false,
+									content: "min"
+								}
+							});
+						}
 					}
-					if (benchmarks["min"] != null) {
-						benchmarkLines.push({
-							type: 'line',
-							mode: 'horizontal',
-							scaleID: 'y-axis-0',
-							value: benchmarks["min"],
-							borderColor: 'blue',
-							borderWidth: 1,
-							label: {
-								enabled: false,
-								content: "min"
-							}
-						});
+					else {
+						var benchmarkLines = [{}]; //effectively null
 					}
 
 					var myChart = new Chart(ctx, {
