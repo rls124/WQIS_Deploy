@@ -3,8 +3,6 @@
 <?= $this->Html->css('cakemessages.css') ?>
 
 <div class="message hidden" id='message hidden'></div>
-
-<div class="container roundGreyBox">
     <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-flag" style="font-size: 20pt;"></span>  Detection Limits for Data Validation
     <a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
       <span class="glyphicon glyphicon-question-sign info" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
@@ -39,7 +37,6 @@
 		    <tr id='tr-<?= $limit->Measure?>'>
 	    		<td id="<?php echo 'measure-' . $row;?>"><?= $limit->Measure ?></td>
 	    		<td id='<?php echo 'td-' . $limit->Measure . '-min';?>'><?php
-                            
                             $min = $limit->Lowest_Acceptable_Value;
                             if($min != 0.0){
                                 $min = number_format((float)$min, 3, '.', '');
@@ -56,7 +53,6 @@
                                     'text' => $min . ' '
                                 ]
                             ]);
-                            
                         ?>
                         </td>
                         <td id='<?php echo 'td-' . $limit->Measure . '-max'; ?>'><?php
@@ -83,4 +79,3 @@
 		<?php endforeach; ?>
         </tbody>
     </table>
-</div>

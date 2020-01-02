@@ -149,7 +149,7 @@ function hideBrowserCompatibilityMessage() {
         </nav>
         
         <?= $this->Flash->render() ?>
-		<div class="container roundGreyBox col-lg-12" style="min-height:500px">
+		<div class="container content col-lg-12" style="min-height:500px">
 		<?= $this->fetch('content') ?>
 		</div>
 	
