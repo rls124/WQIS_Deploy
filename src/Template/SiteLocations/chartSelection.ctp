@@ -154,6 +154,10 @@
 			</div>
 			<div id="collapseTwo" class="panel-collapse collapse show">
 				<div class="panel-body">
+					<div id="chartsLayoutSelect" style="display: none;">
+						<button type="button" id="chartsInlineButton">In-line</button>
+						<button type="button" id="chartsGridButton">Grid</button>
+					</div>
 					<div id="chartDiv" style="text-align: center;"></div>
 				</div>
 			</div>

@@ -13,6 +13,8 @@ $(document).ajaxStart(function() {
 });
 
 $(document).ready(function () {
+	var chartsDisplayMode = "in-line";
+	
 	var bacteriaData = {'select': ['Select a measure'],
 		'ecoli': ['E. Coli (CFU/100 mil)']};
 	var nutrientData = {'select': ['Select a measure'],
@@ -107,6 +109,7 @@ $(document).ready(function () {
 		checkboxList.innerHTML = "";
 	
 		for (var i in categoryData) {
+			//fill in the measurementSelect dropdown
 			var option = document.createElement('option');
 			option.value = i;
 			option.text = categoryData[i];
@@ -205,6 +208,7 @@ $(document).ready(function () {
 		resetCharts();
 		getGraphData($('#startDate').val(), $('#endDate').val());
 		getTableData($('#startDate').val(), $('#endDate').val());
+		$("#chartsLayoutSelect").show();
 	});
 	
 	$("#resetButton").click(function() {
@@ -213,6 +217,15 @@ $(document).ready(function () {
 		$("#sites").val(null).trigger("change");
 		$("#categorySelect").val("bacteria");
 		changeMeasures();
+		$("#chartsLayoutSelect").hide();
+	});
+	
+	$("#chartsInlineButton").click(function() {
+		chartsDisplayMode = "in-line";
+	});
+	
+	$("#chartsGridButton").click(function() {
+		chartsDisplayMode = "grid";
 	});
 	
 	$("#searchButton").click(function () {
@@ -439,14 +452,51 @@ $(document).ready(function () {
 		
 		//build the necessary canvases
 		var chartDiv = document.getElementById("chartDiv");
-		for (var k=0; k<measuresAll.length; k++) {
-			var newCanvasContainer = document.createElement("div");
-			newCanvasContainer.style = "width: 80%; text-align: center; margin: auto;";
+		var nMeasures = measuresAll.length;
+		
+		if (chartsDisplayMode == "in-line") {
+			for (var k=0; k<nMeasures; k++) {
+				var newCanvasContainer = document.createElement("div");
+				newCanvasContainer.style = "width: 80%; text-align: center; margin: auto;";
 			
-			var newCanvas = document.createElement("canvas");
-			newCanvas.id = "chart-" + k;
-			newCanvasContainer.appendChild(newCanvas);
-			chartDiv.appendChild(newCanvasContainer);
+				var newCanvas = document.createElement("canvas");
+				newCanvas.id = "chart-" + k;
+				newCanvasContainer.appendChild(newCanvas);
+				chartDiv.appendChild(newCanvasContainer);
+			}
+		}
+		else {
+			//grid view
+			var chartsGrid = document.createElement("div");
+			chartsGrid.setAttribute("class", "container");
+			
+			//figure out the number of rows, assuming 2 columns each
+			var nx = 2;
+			var ny = Math.ceil(nMeasures/nx);
+			for (y=0; y<ny; y++) {
+				var row = document.createElement("div");
+				row.setAttribute("class", "row");
+				
+				for (x=0; x<nx; x++) {
+					var chartNum = (y*x + x);
+					if (chartNum < nMeasures) {
+						var cell = document.createElement("div");
+						cell.setAttribute("class", "col-sm");
+					
+						var newCanvasContainer = document.createElement("div");
+						newCanvasContainer.style = "width: 100%; text-align: center; margin: auto;";
+					
+						var newCanvas = document.createElement("canvas");
+						newCanvas.id = "chart-" + chartNum;
+						newCanvasContainer.appendChild(newCanvas);
+					
+						cell.appendChild(newCanvasContainer);
+						row.appendChild(cell);
+					}
+				}
+				chartsGrid.appendChild(row);
+			}
+			chartDiv.appendChild(chartsGrid);
 		}
 		
 		//get data and fill the charts in
