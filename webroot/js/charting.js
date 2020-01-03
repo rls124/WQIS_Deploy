@@ -15,17 +15,19 @@ $(document).ajaxStart(function() {
 $(document).ready(function () {
 	var chartsDisplayMode = "in-line";
 	
+	//list measurement names/database names available for each category
 	var bacteriaData = {'select': ['Select a measure'],
-		'ecoli': ['E. Coli (CFU/100 mil)']};
+		'ecoli': ['E. Coli (CFU/100 mil)'],
+		'totalcoliform': ['Coliform (CFU/100 mil)']};
 	var nutrientData = {'select': ['Select a measure'],
 		'nitrateNitrite': ['Nitrate/Nitrite (mg/L)'],
 		'phosphorus': ['Total Phosphorus (mg/L)'],
 		'drp': ['Dissolved Reactive Phosphorus (mg/L)'],
 		'ammonia': ['Ammonia (mg/L)']};
 	var pesticideData = {'select': ['Select a measure'],
-		'alachlor': ['Alachlor (µg/L)'],
-		'atrazine': ['Atrazine (µg/L)'],
-		'metolachlor': ['Metolachlor (µg/L)']};
+		'Alachlor': ['Alachlor (µg/L)'],
+		'Atrazine': ['Atrazine (µg/L)'],
+		'Metolachlor': ['Metolachlor (µg/L)']};
 	var physProp = {'select': ['Select a measure'],
 		'conductivity': ['Conductivity (mS/cm)'],
 		'do': ['Dissolved Oxygen (mg/L'],
@@ -68,7 +70,7 @@ $(document).ready(function () {
 	
 	document.addEventListener('keydown', function(e) {
 		if (e.keyCode == 27) {
-			//escape key
+			//when user hits escape key, close the sidebar
 			sidebarSize("0");
 		}
 	}, false);
@@ -103,17 +105,39 @@ $(document).ready(function () {
 		});
 	});
 	
-	function populateMeasurementSelect(categoryData) {
-		//first, clear out the existing checkboxes
+	function changeMeasures() {
+		//when the measurement category is changed, change both lists of available measurements to match
+		var measureSelect = document.getElementById('measurementSelect');
 		var checkboxList = document.getElementById('checkboxList');
+		var categoryData;
+		
+		//first clear all the measures currently listed
+		while (measureSelect.options.length > 0) {
+			measureSelect.remove(0);
+		}
 		checkboxList.innerHTML = "";
+
+		switch (document.getElementById('categorySelect').value) {
+			case 'bacteria':
+				categoryData = bacteriaData;
+				break;
+			case 'nutrient':
+				categoryData = nutrientData;
+				break;
+			case 'pesticide':
+				categoryData = pesticideData;
+				break;
+			case 'physical':
+				categoryData = physProp;
+				break;
+		}
 	
 		for (var i in categoryData) {
 			//fill in the measurementSelect dropdown
 			var option = document.createElement('option');
 			option.value = i;
 			option.text = categoryData[i];
-			document.getElementById('measurementSelect').appendChild(option);
+			measureSelect.appendChild(option);
 		
 			//now create the checkboxes as well
 			if (i != 'select') {
@@ -133,33 +157,6 @@ $(document).ready(function () {
 		
 				checkboxList.appendChild(listItem);
 			}
-		}
-	}
-	
-	function changeMeasures() {
-		dropMeasures();
-		var chosenMeasure = document.getElementById('categorySelect');
-
-		switch (chosenMeasure.value) {
-			case 'bacteria':
-				populateMeasurementSelect(bacteriaData);
-				break;
-			case 'nutrient':
-				populateMeasurementSelect(nutrientData);
-				break;
-			case 'pesticide':
-				populateMeasurementSelect(pesticideData);
-				break;
-			case 'physical':
-				populateMeasurementSelect(physProp);
-				break;
-		}
-	}
-
-	function dropMeasures() {
-		var measureSelect = document.getElementById('measurementSelect');
-		while (measureSelect.options.length > 0) {
-			measureSelect.remove(0);
 		}
 	}
 	
@@ -294,7 +291,7 @@ $(document).ready(function () {
 				//build the header row first
 				var tableHeader = table.insertRow();
 				Object.keys(response[0][0]).forEach(function(key) {
-					if (!(key.includes("Exception") || key == "ID")) {
+					if (!(key == "ID")) {
 						var newCell = tableHeader.insertCell();
 						newCell.innerText = key;
 					}
@@ -308,8 +305,14 @@ $(document).ready(function () {
 					var newRow = table.insertRow();
 					
 					Object.keys(response[0][i]).forEach(function(key) {
-						if (!(key.includes("Exception") || key == "ID")) {
+						if (!(key == "ID")) {
 							var newCell = newRow.insertCell();
+							var value = response[0][i][key];
+							
+							if (key == "Date") {
+								//we get the date in a weird format, parse it to something more appropriate
+								value = value.split("T")[0];
+							}
 						
 							var textDiv = document.createElement('div');
 							textDiv.setAttribute("class", "input text");
@@ -319,7 +322,7 @@ $(document).ready(function () {
 							label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
 							label.setAttribute("class", "btn btn-thin inputHide");
 							label.setAttribute("for", key + "-" + i);
-							label.innerText = response[0][i][key];
+							label.innerText = value;
 						
 							label.onclick = function () {
 								var label = $(this);
@@ -339,7 +342,7 @@ $(document).ready(function () {
 							cellInput.setAttribute("class", "inputfields tableInput");
 							cellInput.style = "display: none";
 							cellInput.id = key + "-" + i;
-							cellInput.setAttribute("value", response[0][i][key]);
+							cellInput.setAttribute("value", value);
 						
 							cellInput.onfocusout = (function () {
 								var input = $(this);
@@ -516,8 +519,6 @@ $(document).ready(function () {
 					'measure': measuresAll[k]
 				},
 				success: function(response) {
-					//format that response
-					
 					function selectColor(colorIndex, palleteSize) {
 						//returns color at an index of an evenly-distributed color pallete of arbitrary size
 						if (palleteSize < 1) {

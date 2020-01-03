@@ -113,6 +113,10 @@ export function start() {
 			play();
 			handled = true;
 		}
+		else if (ev.keyCode == KEY.ESC) {
+			exitTetris();
+			handled = true;
+		}
 		
 		if (handled) {
 			ev.preventDefault(); //prevent arrow keys from scrolling the page (supported in IE9+ and all other browsers)
@@ -343,6 +347,12 @@ export function start() {
 		ctx.fillStyle = grad1;
 		ctx.fillRect(x*dx, y*dy, dx, dy);
 		ctx.strokeRect(x*dx, y*dy, dx, dy)
+	}
+	
+	function exitTetris() {
+		board.parentNode.removeChild(board);
+		
+		document.getElementById("map").style.display = "block";
 	}
 	
 	//clear the map

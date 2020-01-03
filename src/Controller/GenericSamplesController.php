@@ -57,13 +57,13 @@
 		else if ($measurementSelect == 'ammonia') {
 			$measureType='Ammonia';
 		}
-		else if ($measurementSelect == "alachlor") {
+		else if ($measurementSelect == "Alachlor") {
 			$measureType='Alachlor';
 		}
-		else if ($measurementSelect == "atrazine") {
+		else if ($measurementSelect == "Atrazine") {
 			$measureType='Atrazine';
 		}
-		else if ($measurementSelect == "metolachlor") {
+		else if ($measurementSelect == "Metolachlor") {
 			$measureType='Metolachlor';
 		}
 		else if ($measurementSelect == 'conductivity') {
@@ -274,9 +274,9 @@
 			array("site number", "site_number", "sitenumber"),
 			array("date"),
 			array("sample number", "sample_number", "samplenumber"),
-			array("atrazine"),
-			array("alachlor"),
-			array("metolachlor"),
+			array("Atrazine"),
+			array("Alachlor"),
+			array("Metolachlor"),
 			array("comments"),
 		);
 		
@@ -549,12 +549,15 @@
 		$measure = $this->request->getData('measure');
 		
 		//we cant get the category directly from POST data, so determine it from the measures we get. Not efficient, not pretty, good enough
-		if ($measure == "ecoli") { //bacteria category
+		if ($measure == "ecoli" || $measure == "totalcoliform") { //bacteria category
 			$model = "BacteriaSamples";
 			//Set the name of the measure
 			switch ($measure . "") {
 			case 'ecoli':
 				$thresMeasure = 'E. coli. (CFU/100 ml)';
+				break;
+			case 'totalcoliform':
+				$thresMeasure = 'Coliform (CFU/100 ml)';
 				break;
 			default:
 				$thresMeasure = $measure;
@@ -581,17 +584,17 @@
 				break;
 			}
 		}
-		elseif (in_array($measure, ["alachlor", "atrazine", "metolachlor"])) { //pesticide
+		elseif (in_array($measure, ["Alachlor", "Atrazine", "Metolachlor"])) { //pesticide
 			$model = "PesticideSamples";
 			//set the name of the measure
 			switch ($measure . "") {
-			case 'alachlor':
+			case 'Alachlor':
 				$thresMeasure = 'Alachlor (µg/L)';
 				break;
-			case 'atrazine':
+			case 'Atrazine':
 				$thresMeasure = 'Atrazine (µg/L)';
 				break;
-			case 'metolachlor':
+			case 'Metolachlor':
 				$thresMeasure = 'Metolachlor (µg/L)';
 				break;
 			default:
