@@ -79,9 +79,14 @@ $(document).ready(function () {
 		var sampleType = $('#categorySelect').val();		
 		var startDate = $('#startDate').val();
 		var endDate = $('#endDate').val();
-		var sites = [$('#sites').val()];
+		var sites = $('#sites').val();
+		
+		var amountEnter = $("#amountEnter").val();
+		var overUnderSelect = $("#overUnderSelect").val();
 		
 		var measures = ['all'];
+		
+		var measurementSelect = $("#measurementSelect").val();
 
 		$.ajax({
 			type: "POST",
@@ -92,9 +97,10 @@ $(document).ready(function () {
 				'startDate': startDate,
 				'endDate': endDate,
 				'sites': sites,
-				'measures': measures
-				//'amountEnter': amountEnter,
-				//'overUnderSelect': overUnderSelect
+				'measures': measures,
+				'amountEnter': amountEnter,
+				'overUnderSelect': overUnderSelect,
+				'measurementSelect': measurementSelect
 			},
 			success: function (response) {
 				downloadFile(response, sampleType);
