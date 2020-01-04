@@ -17,25 +17,25 @@ $(document).ready(function () {
 	
 	//list measurement names/database names available for each category
 	var bacteriaData = {'select': ['Select a measure'],
-		'ecoli': ['E. Coli (CFU/100 mil)'],
-		'totalcoliform': ['Coliform (CFU/100 mil)']};
+		'Ecoli': ['E. Coli (CFU/100 mil)'],
+		'TotalColiform': ['Coliform (CFU/100 mil)']};
 	var nutrientData = {'select': ['Select a measure'],
-		'nitrateNitrite': ['Nitrate/Nitrite (mg/L)'],
-		'phosphorus': ['Total Phosphorus (mg/L)'],
-		'drp': ['Dissolved Reactive Phosphorus (mg/L)'],
-		'ammonia': ['Ammonia (mg/L)']};
+		'NitrateNitrite': ['Nitrate/Nitrite (mg/L)'],
+		'Phosphorus': ['Total Phosphorus (mg/L)'],
+		'DRP': ['Dissolved Reactive Phosphorus (mg/L)'],
+		'Ammonia': ['Ammonia (mg/L)']};
 	var pesticideData = {'select': ['Select a measure'],
 		'Alachlor': ['Alachlor (µg/L)'],
 		'Atrazine': ['Atrazine (µg/L)'],
 		'Metolachlor': ['Metolachlor (µg/L)']};
 	var physProp = {'select': ['Select a measure'],
-		'conductivity': ['Conductivity (mS/cm)'],
-		'do': ['Dissolved Oxygen (mg/L'],
-		'bridge_to_water_height': ['Bridge to Water Height (in)'],
-		'ph': ['pH'],
-		'water_temp': ['Water Temperature (°C)'],
-		'tds': ['Total Dissolved Solids (g/L)'],
-		'turbidity': ['Turbidity (NTU)']};
+		'Conductivity': ['Conductivity (mS/cm)'],
+		'DO': ['Dissolved Oxygen (mg/L'],
+		'Bridge_to_Water_Height': ['Bridge to Water Height (in)'],
+		'pH': ['pH'],
+		'Water_Temp': ['Water Temperature (°C)'],
+		'TDS': ['Total Dissolved Solids (g/L)'],
+		'Turbidity': ['Turbidity (NTU)']};
 	
     document.getElementById('categorySelect').addEventListener("change", changeMeasures);
     $(".date-picker").datepicker({

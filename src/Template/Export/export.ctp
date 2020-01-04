@@ -79,7 +79,7 @@
                                 All Measures
                             </label>
                             <label for='measure-ecoli'>
-                                <input type='checkbox' name='measure[]' value='ecoli' id='measure-ecoli'>
+                                <input type='checkbox' name='measure[]' value='Ecoli' id='measure-ecoli'>
                                 E. Coli (CFU/100 mil)
                             </label>
                         </div>

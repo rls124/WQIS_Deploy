@@ -80,7 +80,7 @@
 				<?=
 				$this->Form->select('measurementSelect', [
 					'select' => 'Select a measure',
-					'ecoli' => 'E. Coli (CFU/100 mil)'
+					'Ecoli' => 'E. Coli (CFU/100 mil)'
 					], [
 					'label' => 'Measurement',
 					'id' => 'measurementSelect',
@@ -121,7 +121,7 @@
 				<h5>Display fields:</h5>
 				<ul id="checkboxList">
 					<li>
-						<input type="checkbox" value="ecoli">
+						<input type="checkbox" value="Ecoli">
 							Ecoli
 						</input>
 					</li>

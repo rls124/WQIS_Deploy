@@ -41,50 +41,6 @@
 				$searchDirection = ' ==';
 			}
 			
-			if ($category == "bacteria") {
-				$measureType='Ecoli';
-			}
-			else if ($category == "nutrient") {
-				if ($measurementSelect == 'nitrateNitrite') {
-					$measureType='NitrateNitrite';
-				}
-				else if ($measurementSelect == 'phosphorus') {
-					$measureType='Phosphorus';
-				}
-				else if ($measurementSelect == 'drp') {
-					$measureType='DRP';
-				}
-				else if ($measurementSelect == 'ammonia') {
-					$measureType='Ammonia';
-				}
-			}	
-			else if ($category == "pesticide") {
-				$measureType = $measurementSelect;
-			}
-			elseif ($category == "physical") {
-				if ($measurementSelect == 'conductivity') {
-					$measureType='Conductivity';
-				}
-				else if ($measurementSelect == 'do') {
-					$measureType='DO';
-				}
-				else if ($measurementSelect == 'bridge_to_water_height') {
-					$measureType='Bridge_to_Water_Height';
-				}
-				else if ($measurementSelect == 'ph') {
-					$measureType='pH';
-				}
-				else if ($measurementSelect == 'water_temp') {
-					$measureType='Water_Temp';
-				}
-				else if ($measurementSelect == 'tds') {
-					$measureType='TDS';
-				}
-				else if($measurementSelect == 'turbidity') {
-					$measureType='Turbidity';
-				}
-			}
-			
 			$data = "";
 			$sampleQuery = $modelBare;
 			
@@ -93,7 +49,7 @@
 			array_push($andConditions, [
 				'Date  >=' => $startDate,
 				'Date  <= ' => $endDate,
-				$measureType . $searchDirection => $amount
+				$measurementSelect . $searchDirection => $amount
 			]);
 
 			if (!in_array('all', $sites)) {
@@ -121,7 +77,7 @@
 							'site_location_id IN ' => $sites,
 							$modelName . '.Date >=' => $startDate,
 							$modelName . '.Date <= ' => $endDate,
-							$modelName . '.' . $measureType . $searchDirection => $amount
+							$modelName . '.' . $measurementSelect . $searchDirection => $amount
 						]
 					]
 				]);

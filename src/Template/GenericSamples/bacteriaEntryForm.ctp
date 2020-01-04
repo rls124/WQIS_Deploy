@@ -79,15 +79,15 @@
 							?>
                             <td>
 								<?=
-									$this->Form->select('ecolirawcount-0', $rawCount, [
-										'id' => 'ecolirawcount-0',
+									$this->Form->select('EcoliRawCount-0', $rawCount, [
+										'id' => 'EcoliRawCount-0',
 										'empty' => 'ND',
 										'class' => 'form-control entryControl entryDropDown'
 									])
 								?>
                             </td>
 							<?=
-								$this->Form->control('ecoli-0', [
+								$this->Form->control('Ecoli-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -99,7 +99,7 @@
 							?>
                             <td>
 								<?=
-									$this->Form->select('totalcoliformrawcount-0', $rawCount, [
+									$this->Form->select('TotalColiformRawCount-0', $rawCount, [
 										'id' => 'totalcoliformrawcount-0',
 										'empty' => 'ND',
 										'class' => 'form-control entryControl entryDropDown'
@@ -107,7 +107,7 @@
 								?>
                             </td>
 							<?=
-								$this->Form->control('totalcoliform-0', [
+								$this->Form->control('TotalColiform-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -118,7 +118,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('bacteriacomments-0', [
+								$this->Form->control('BacteriaComments-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false

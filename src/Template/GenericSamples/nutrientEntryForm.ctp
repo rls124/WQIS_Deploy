@@ -81,7 +81,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('phosphorus-0', [
+								$this->Form->control('Phosphorus-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -91,7 +91,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('nitratenitrite-0', [
+								$this->Form->control('NitrateNitrite-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -101,7 +101,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('drp-0', [
+								$this->Form->control('DRP-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -111,7 +111,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('ammonia-0', [
+								$this->Form->control('Ammonia-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -121,7 +121,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('nutrientcomments-0', [
+								$this->Form->control('NutrientComments-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false

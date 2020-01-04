@@ -81,7 +81,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('atrazine-0', [
+								$this->Form->control('Atrazine-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -91,7 +91,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('alachlor-0', [
+								$this->Form->control('Alachlor-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -101,7 +101,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('metolachlor-0', [
+								$this->Form->control('Metolachlor-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -111,7 +111,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('pesticidecomments-0', [
+								$this->Form->control('PesticideComments-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false

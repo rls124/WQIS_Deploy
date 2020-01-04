@@ -21,15 +21,13 @@
 		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
 		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
 		$sites = $this->request->getData('sites');
-		
 		$amount = $_POST["amountEnter"];
 		$searchRange = $_POST["overUnderSelect"];
 		$measurementSelect = $_POST["measurementSelect"];
-		
 		$category = $this->request->getData('category');
 		
+		//set model
 		$model = ucfirst($category) . "Samples";
-		
 		$this->loadModel($model);
 		
 		if ($searchRange == "over") {
@@ -42,52 +40,6 @@
 			$searchDirection = ' ==';
 		}
 		
-		if ($measurementSelect == "ecoli") {
-			$measureType='Ecoli';
-		}
-		else if ($measurementSelect == 'nitrateNitrite') {
-			$measureType='NitrateNitrite';
-		}
-		else if ($measurementSelect == 'phosphorus') {
-			$measureType='Phosphorus';
-		}
-		else if ($measurementSelect == 'drp') {
-			$measureType='DRP';
-		}
-		else if ($measurementSelect == 'ammonia') {
-			$measureType='Ammonia';
-		}
-		else if ($measurementSelect == "Alachlor") {
-			$measureType='Alachlor';
-		}
-		else if ($measurementSelect == "Atrazine") {
-			$measureType='Atrazine';
-		}
-		else if ($measurementSelect == "Metolachlor") {
-			$measureType='Metolachlor';
-		}
-		else if ($measurementSelect == 'conductivity') {
-			$measureType='Conductivity';
-		}
-		else if ($measurementSelect == 'do') {
-			$measureType='DO';
-		}
-		else if ($measurementSelect == 'bridge_to_water_height') {
-			$measureType='Bridge_to_Water_Height';
-		}
-		else if ($measurementSelect == 'ph') {
-			$measureType='pH';
-		}
-		else if ($measurementSelect == 'water_temp') {
-			$measureType='Water_Temp';
-		}
-		else if ($measurementSelect == 'tds') {
-			$measureType='TDS';
-		}
-		else if($measurementSelect == 'turbidity') {
-			$measureType='Turbidity';
-		}
-		
 		if ($amount != '') {
 			$samples = $this->$model->find('all', [
 			'conditions' => [
@@ -95,7 +47,7 @@
 					'site_location_id IN' => $sites,
 					$model . '.Date >=' => $startDate,
 					$model . '.Date <= ' => $endDate,
-					$model . '.' . $measureType . $searchDirection => $amount
+					$model . '.' . $measurementSelect . $searchDirection => $amount
 				]
 			]
 		])->order(['Date' => 'Desc']);
@@ -395,16 +347,16 @@
 	public function entryform() {
 		if (!isset($_POST["entryType"])) {
 			//already submitted from entry form
-			if (isset($_POST["ecolirawcount-0"])) { //bacteria
+			if (isset($_POST["EcoliRawCount-0"])) { //bacteria
 				$name = "bacteria";
 			}
-			elseif (isset($_POST["phosphorus-0"])) { //nutrient
+			elseif (isset($_POST["Phosphorus-0"])) { //nutrient
 				$name = "nutrient";
 			}
-			elseif (isset($_POST["atrazine-0"])) { //pesticide
+			elseif (isset($_POST["Atrazine-0"])) { //pesticide
 				$name = "pesticide";
 			}
-			elseif (isset($_POST["ph-0"])) { //physical
+			elseif (isset($_POST["pH-0"])) { //physical
 				$name = "physical";
 			}
 		}
@@ -549,14 +501,14 @@
 		$measure = $this->request->getData('measure');
 		
 		//we cant get the category directly from POST data, so determine it from the measures we get. Not efficient, not pretty, good enough
-		if ($measure == "ecoli" || $measure == "totalcoliform") { //bacteria category
+		if ($measure == "Ecoli" || $measure == "TotalColiform") { //bacteria category
 			$model = "BacteriaSamples";
 			//Set the name of the measure
 			switch ($measure . "") {
-			case 'ecoli':
+			case 'Ecoli':
 				$thresMeasure = 'E. coli. (CFU/100 ml)';
 				break;
-			case 'totalcoliform':
+			case 'TotalColiform':
 				$thresMeasure = 'Coliform (CFU/100 ml)';
 				break;
 			default:
@@ -564,20 +516,20 @@
 				break;
 			}
 		}
-		elseif (in_array($measure, ["nitrateNitrite", "phosphorus", "drp", "ammonia"])) { //nutrient
+		elseif (in_array($measure, ["NitrateNitrite", "Phosphorus", "DRP", "Ammonia"])) { //nutrient
 			$model = "NutrientSamples";
 			//Set the name of the measure
 			switch ($measure . "") {
-			case 'phosphorus':
+			case 'Phosphorus':
 				$thresMeasure = 'Total Phosphorus (mg/L)';
 				break;
-			case 'nitrateNitrite':
+			case 'NitrateNitrite':
 				$thresMeasure = 'Nitrate/Nitrite (mg/L)';
 				break;
-			case 'drp':
+			case 'DRP':
 				$thresMeasure = 'Dissolved Reactive Phosphorus (mg/L)';
 				break;
-			case 'ammonia':
+			case 'Ammonia':
 				$thresMeasure = 'Ammonia (mg/L)';
 			default:
 				$thresMeasure = $measure;
@@ -602,29 +554,29 @@
 				break;
 			}
 		}
-		elseif (in_array($measure, ["conductivity", "do", "ph", "water_temp", "tds", "turbidity", "bridge_to_water_height"])) { //water quality meter
+		elseif (in_array($measure, ["Conductivity", "DO", "pH", "Water_Temp", "TDS", "Turbidity", "Bridge_to_Water_Height"])) { //water quality meter
 			$model = "PhysicalSamples";
 			//Set the name of the measure
 			switch ($measure . "") {
-			case 'conductivity':
+			case 'Conductivity':
 				$thresMeasure = 'Conductivity (mS/cm)';
 				break;
-			case 'do':
+			case 'DO':
 				$thresMeasure = 'Dissolved Oxygen (mg/L)';
 				break;
-			case 'ph':
+			case 'pH':
 				$thresMeasure = 'pH';
 				break;
-			case 'water_temp':
+			case 'Water_Temp':
 				$thresMeasure = 'Water Temperature%';
 				break;
-			case 'bridge_to_water_height':
+			case 'Bridge_to_Water_Height':
 				$thresMeasure = 'Bridge to Water Height';
 				break;
-			case 'tds':
+			case 'TDS':
 				$thresMeasure = 'Total Dissolved Solids (g/L)';
 				break;
-			case 'turbidity':
+			case 'Turbidity':
 				$thresMeasure = 'Turbidity (NTU)';
 				break;
 			default:

@@ -101,7 +101,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('bridge_to_water_height-0', [
+								$this->Form->control('Bridge_to_Water_Height-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -111,7 +111,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('ph-0', [
+								$this->Form->control('pH-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -121,7 +121,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('water_temp-0', [
+								$this->Form->control('Water_Temp-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -131,7 +131,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('conductivity-0', [
+								$this->Form->control('Conductivity-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -141,7 +141,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('tds-0', [
+								$this->Form->control('TDS-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -151,7 +151,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('do-0', [
+								$this->Form->control('DO-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -161,7 +161,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('turbidity-0', [
+								$this->Form->control('Turbidity-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
@@ -171,7 +171,7 @@
 								])
 							?>
 							<?=
-								$this->Form->control('physicalcomments-0', [
+								$this->Form->control('PhysicalComments-0', [
 									'templates' => [
 										'inputContainer' => '<td>{{content}}</td>',
 										'label' => false
