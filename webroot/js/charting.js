@@ -36,6 +36,39 @@ $(document).ready(function () {
 		'Water_Temp': ['Water Temperature (°C)'],
 		'TDS': ['Total Dissolved Solids (g/L)'],
 		'Turbidity': ['Turbidity (NTU)']};
+		
+	$("#sites").change(function () {
+        getRange();
+    });
+
+    function getRange() {
+		spinnerInhibited = true;
+		
+		//if both variables are not null, then we may submit an sql request
+        var siteData = document.querySelector('#sites').value;
+        var categoryData = $('#categorySelect').val();
+        if ((siteData !== null && siteData !== 'select') && categoryData !== null) {
+            $.ajax({
+                type: "POST",
+                url: "daterange",
+                data: {
+                    'site': siteData,
+                    'category': categoryData
+                },
+                datatype: 'JSON',
+                success: function (data) {
+                    var startDateData = data[0];
+                    var endDateData = data[1];
+                    $('#startDate').val(startDateData);
+                    $('#endDate').val(endDateData);
+                    $("#startDate").datepicker('update', startDateData);
+                    $("#endDate").datepicker('update', endDateData);
+                }
+            });
+        }
+		
+		spinnerInhibited = false;
+    }
 	
     document.getElementById('categorySelect').addEventListener("change", changeMeasures);
     $(".date-picker").datepicker({
@@ -164,6 +197,8 @@ $(document).ready(function () {
 				checkboxList.appendChild(listItem);
 			}
 		}
+		
+        getRange(); //recalculate date range
 	}
 	
 	function downloadFile(fileData, type) {
