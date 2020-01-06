@@ -40,6 +40,13 @@ $(document).ready(function () {
 	$("#sites").change(function () {
         getRange();
     });
+	
+	$("#allCheckbox").change(function () {
+		var checkboxList = document.getElementsByClassName("measurementCheckbox");
+		for (i=0; i<checkboxList.length; i++) {
+			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
+		}
+	});
 
     function getRange() {
 		spinnerInhibited = true;
@@ -148,13 +155,17 @@ $(document).ready(function () {
 		//when the measurement category is changed, change both lists of available measurements to match
 		var measureSelect = document.getElementById('measurementSelect');
 		var checkboxList = document.getElementById('checkboxList');
+		var measurementCheckboxes = document.getElementsByClassName("measurementCheckbox");
 		var categoryData;
 		
 		//first clear all the measures currently listed
 		while (measureSelect.options.length > 0) {
 			measureSelect.remove(0);
 		}
-		checkboxList.innerHTML = "";
+		
+		for (i=measurementCheckboxes.length-1; i>=0; i--) {
+			checkboxList.removeChild(measurementCheckboxes[i].parentNode);
+		}
 
 		switch (document.getElementById('categorySelect').value) {
 			case 'bacteria':
@@ -186,10 +197,11 @@ $(document).ready(function () {
 				box.value = i;
 				box.id = i + "Checkbox";
 				box.type = "checkbox";
+				box.setAttribute("class", "measurementCheckbox");
 		
 				var boxLabel = document.createElement('label');
 				boxLabel.innerText = i;
-				boxLabel.for = i + "Checkbox";
+				boxLabel.setAttribute("for", i + "Checkbox");
 		
 				listItem.appendChild(box);
 				listItem.appendChild(boxLabel);
@@ -448,8 +460,6 @@ $(document).ready(function () {
 								var rowNumber = ($(rowDiv).attr('id')).split("-")[1];
 								var sampleNumber = $('#Sample_Number-' + rowNumber).val();
 				
-								alert(sampleNumber);
-				
 								//Now send ajax data to a delete script
 								$.ajax({
 									type: "POST",
@@ -483,24 +493,28 @@ $(document).ready(function () {
 			async: false
 		});
 	}
-
-	function getGraphData(startDate, endDate) {
-		var sites = $("#sites").val();
+	
+	function getSelectedMeasures() {
+		var measures = [];
 		
-		//get all the selected checkboxes
-		var measuresAll = [];
+		var checkboxList = document.getElementsByClassName('measurementCheckbox');
 		
-		var checkboxList = document.getElementById('checkboxList').getElementsByTagName('input');
-		
-		for (var k=0; k<checkboxList.length; k++) {
-			if (checkboxList[k].checked == true) {
-				measuresAll.push(checkboxList[k].value);
+		for (var i=0; i<checkboxList.length; i++) {
+			if (checkboxList[i].checked) {
+				measures.push(checkboxList[i].value);
 			}
 		}
 		
+		return measures;
+	}
+
+	function getGraphData(startDate, endDate) {
+		var sites = $("#sites").val();
+		var measures = getSelectedMeasures();
+		
 		//build the necessary canvases
 		var chartDiv = document.getElementById("chartDiv");
-		var nMeasures = measuresAll.length;
+		var nMeasures = measures.length;
 		
 		if (chartsDisplayMode == "in-line") {
 			for (var k=0; k<nMeasures; k++) {
@@ -548,7 +562,7 @@ $(document).ready(function () {
 		}
 		
 		//get data and fill the charts in
-		for (var k=0; k<measuresAll.length; k++) {
+		for (var k=0; k<measures.length; k++) {
 			$.ajax({
 				type: "POST",
 				url: "/WQIS/generic-samples/graphdata",
@@ -557,7 +571,7 @@ $(document).ready(function () {
 					'sites': sites,
 					'startDate': startDate,
 					'endDate': endDate,
-					'measure': measuresAll[k]
+					'measure': measures[k]
 				},
 				success: function(response) {
 					function selectColor(colorIndex, palleteSize) {
@@ -664,7 +678,7 @@ $(document).ready(function () {
 								yAxes: [{
 									scaleLabel: {
 										display: true,
-										labelString: measuresAll[k]
+										labelString: measures[k]
 									}
 								}]
 							}

@@ -1,5 +1,4 @@
 <?= $this->Html->script("charting.js") ?>
-<?= $this->Html->script('dateautofill.js') ?>
 <?= $this->Html->css('chartSelection.css') ?>
 <?= $this->Html->script('mapping.js') ?>
 <?= $this->Html->script('konami.js') ?>
@@ -119,11 +118,15 @@
 			
 			<div>
 				<h5>Display fields:</h5>
-				<ul id="checkboxList">
+				<ul id="checkboxList" style="list-style-type:none;">
 					<li>
-						<input type="checkbox" value="Ecoli">
-							Ecoli
-						</input>
+						<input type="checkbox" value="all" id="allCheckbox"><label for="allCheckbox">All</label>
+					</li>
+					<li>
+						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli"><label for="Ecoli">Ecoli</label>
+					</li>
+					<li>
+						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform"><label for="TotalColiformCheckbox">TotalColiform</label>
 					</li>
 				</ul>
 			</div>
