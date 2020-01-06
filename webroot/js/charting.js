@@ -562,7 +562,7 @@ $(document).ready(function () {
 		}
 		
 		//get data and fill the charts in
-		for (var k=0; k<measures.length; k++) {
+		for (var k=0; k<nMeasures; k++) {
 			$.ajax({
 				type: "POST",
 				url: "/WQIS/generic-samples/graphdata",
@@ -580,7 +580,7 @@ $(document).ready(function () {
 							palleteSize = 1; //defaults to one color, can't divide by zero or the universe implodes
 						}
 						
-						return "hsl(" + (colorIndex * (360 / palleteSize) % 360) + ",100%,50%)";
+						return "hsl(" + (colorIndex * (360 / palleteSize) % 360) + ",70%,50%)";
 					}
 					
 					var datasets = [];
@@ -625,46 +625,33 @@ $(document).ready(function () {
 					}
 					
 					var ctx = document.getElementById("chart-" + k).getContext("2d");
+					var benchmarkLines = [];
 
 					if (document.getElementById("showBenchmarks").checked) {
 						//add benchmark lines
 						var benchmarks = response[1][0]; //max and min
 						
-						var benchmarkLines = [];
-						if (benchmarks["max"] != null) {
-							benchmarkLines.push({
+						function bench(val, color) {
+							return {
 								type: 'line',
 								mode: 'horizontal',
 								scaleID: 'y-axis-0',
-								value: benchmarks["max"],
-								borderColor: 'red',
-								borderWidth: 1,
-								label: {
-									enabled: false,
-									content: "max"
-								}
-							});
+								value: val,
+								borderColor: color,
+								borderWidth: 3,
+								drawTime: 'afterDatasetsDraw',
+							};
+						}
+						
+						if (benchmarks["max"] != null) {
+							benchmarkLines.push(bench(benchmarks["max"], "red"));
 						}
 						if (benchmarks["min"] != null) {
-							benchmarkLines.push({
-								type: 'line',
-								mode: 'horizontal',
-								scaleID: 'y-axis-0',
-								value: benchmarks["min"],
-								borderColor: 'blue',
-								borderWidth: 1,
-								label: {
-									enabled: false,
-									content: "min"
-								}
-							});
+							benchmarkLines.push(bench(benchmarks["min"], "blue"));
 						}
 					}
-					else {
-						var benchmarkLines = [{}]; //effectively null
-					}
 
-					var myChart = new Chart(ctx, {
+					new Chart(ctx, {
 						type: 'line',
 						data: {
 							labels: labels,
