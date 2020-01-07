@@ -226,9 +226,9 @@
 			array("site number", "site_number", "sitenumber"),
 			array("date"),
 			array("sample number", "sample_number", "samplenumber"),
-			array("Atrazine"),
-			array("Alachlor"),
-			array("Metolachlor"),
+			array("atrazine"),
+			array("alachlor"),
+			array("metolachlor"),
 			array("comments"),
 		);
 		
@@ -345,27 +345,32 @@
 	}
 
 	public function entryform() {
+		$this->log($_POST, 'debug');
+		
 		if (!isset($_POST["entryType"])) {
+			$mode = "submit";
 			//already submitted from entry form
-			if (isset($_POST["EcoliRawCount-0"])) { //bacteria
+			if (isset($_POST["ecolirawcount-0"])) { //bacteria
 				$name = "bacteria";
 			}
-			elseif (isset($_POST["Phosphorus-0"])) { //nutrient
+			elseif (isset($_POST["phosphorus-0"])) { //nutrient
 				$name = "nutrient";
 			}
-			elseif (isset($_POST["Atrazine-0"])) { //pesticide
+			elseif (isset($_POST["atrazine-0"])) { //pesticide
 				$name = "pesticide";
 			}
-			elseif (isset($_POST["pH-0"])) { //physical
+			elseif (isset($_POST["ph-0"])) { //physical
 				$name = "physical";
 			}
 		}
-		else {	
+		else {
+			$mode = "entry";
 			//trying to go to the entry form
 			$name = $_POST["entryType"];
 		}
 		
 		if (!isset($name)) {
+			$this->set("mode", "invalid");
 			//not valid, just return and let the template handle it
 			return;
 		}
@@ -436,6 +441,7 @@
 		$siteLocations = $model->SiteLocations->find('all');
 		$this->set(compact('sample', 'siteLocations'));
 		$this->set('_serialize', ['sample']);
+		$this->set('mode', $mode);
 
 		$rawCount = [];
 		for ($i = 0; $i <= 51; $i++) {
