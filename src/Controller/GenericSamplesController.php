@@ -345,8 +345,6 @@
 	}
 
 	public function entryform() {
-		$this->log($_POST, 'debug');
-		
 		if (!isset($_POST["entryType"])) {
 			$mode = "submit";
 			//already submitted from entry form

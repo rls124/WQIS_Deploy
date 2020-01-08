@@ -38,43 +38,85 @@ else if ($mode == "entry") {?>
                 <table class="table table-responsive">
                     <thead>
                         <tr>
-                            <th>Site</th>
-                            <th>Sample Number</th>
-	<?php
-	if ($formType == "bacteria") {
-		include "bacteriaEntryForm.ctp";
-	}
-	elseif ($formType == "nutrient") {
-		include "nutrientEntryForm.ctp";
-	}
-	elseif ($formType == "pesticide") {
-		include "pesticideEntryForm.ctp";
-	}
-	elseif ($formType == "physical") {
-		include "physicalPropertiesEntryForm.ctp";
-	}
-	else {
-		?>
-		<h3>You need to specify a form type</h3>
-		<a href="javascript:history.back()">Go Back</a>
-		<?php
-	}
-	?>
-	
-						<td>
+						<?php
+						if ($formType == "bacteria") {
+							$colHeaders = ["Site", "Sample Number", "Ecoli Raw Count", "Ecoli<br>(CFU/100 ml)", "Total Coliform<br>Raw Count", "Total Coliform<br>(CFU/100 ml)", "Comments", "Actions"];
+							$controlNames = ["ecolirawcount-0", "ecoli-0", "totalcoliformrawcount-0", "totalcoliform-0", "bacteriacomments-0"];
+						}
+						elseif ($formType == "nutrient") {
+							$colHeaders = ["Site", "Sample Number", "Nitrate/Nitrite<br>(mg/L)", "Total Phosphorus<br>(mg/L)", "Dissolved Reactive Phosphorus<br>(mg/L)", "Ammonia<br>(mg/L)", "Comments", "Actions"];
+							$controlNames = ["phosphorus-0", "nitratenitrite-0", "drp-0", "ammonia-0", "nutrientcomments-0"];
+						}
+						elseif ($formType == "pesticide") {
+							$colHeaders = ["Site", "Sample Number", "Atrazine<br>(µg/L)", "Alachlor<br>(µg/L)", "Metochlor<br>(µg/L)", "Comments", "Actions"];
+							$controlNames = ["atrazine-0", "alachlor-0", "metolachlor-0", "pesticidecomments-0"];
+						}
+						elseif ($formType == "physical") {
+							$colHeaders = ["Site", "Sample Number", "Time", "Bridge to Water Height<br>(in)", "pH", "Water Temp<br>(°C)", "Conductivity<br>(mS/cm)", "TDS<br>(g/L)", "DO<br>(mg/L)", "Turbidity<br>(NTU)", "Comments", "Actions"];
+							$controlNames = ["time-0", "bridge_to_water_height-0", "ph-0", "water_temp-0", "conductivity-0", "tds-0", "do-0", "turbidity-0", "physicalcomments-0"];
+						}
+
+						for ($i=0; $i<sizeof($colHeaders); $i++) {
+							echo "<th>" . $colHeaders[$i] . "</th>";
+						}
+						?>	
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr id="row-0">
+                            <td>
+                                <select class="form-control entryControl siteselect" id="site_location_id-0" name="site_location_id-0">
+                                    <option value="" selected="selected">Site</option>
+									<?php
+										foreach ($siteLocations as $siteLocation) {
+											$siteNumber = $this->Number->format($siteLocation->Site_Number);
+											$siteName = h($siteLocation->Site_Name);
+											$siteLocation = h($siteLocation->Site_Location);
+											echo "<option value=$siteNumber>$siteNumber $siteName - $siteLocation</option>";
+										}
+									?>
+                                </select>
+                            </td>
 							<?=
-							$this->Html->tag('span', "", [
-								'class' => "delete glyphicon glyphicon-trash",
-								'id' => 'Delete-0',
-								'name' => 'Delete-0',
-								'hidden'
-							])
+								$this->Form->control('sample_number-0', [
+									'templates' => [
+										'inputContainer' => '<td>{{content}}</td>',
+										'label' => false
+									],
+									'type' => 'number',
+									'id' => 'sample_number-0',
+									'class' => 'form-control entryControl samplenumber',
+									'readonly' => true
+								])
 							?>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+	
+							<?php
+							for ($i=0; $i<sizeof($controlNames); $i++) {
+								echo $this->Form->control($controlNames[$i], [
+									'templates' => [
+										'inputContainer' => '<td>{{content}}</td>',
+										'label' => false
+									],
+									'type' => 'text',
+									'class' => 'form-control entryControl'
+								]);
+							}
+							?>
+	
+							<td>
+								<?=
+								$this->Html->tag('span', "", [
+									'class' => "delete glyphicon glyphicon-trash",
+									'id' => 'Delete-0',
+									'name' => 'Delete-0',
+									'hidden'
+								])
+								?>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 	
 			<?=
 				$this->Form->hidden('totalrows', [
