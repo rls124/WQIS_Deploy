@@ -511,6 +511,7 @@ $(document).ready(function () {
 	function getGraphData(startDate, endDate) {
 		var sites = $("#sites").val();
 		var measures = getSelectedMeasures();
+		var category = $('#categorySelect').val();
 		
 		//build the necessary canvases
 		var chartDiv = document.getElementById("chartDiv");
@@ -571,7 +572,8 @@ $(document).ready(function () {
 					'sites': sites,
 					'startDate': startDate,
 					'endDate': endDate,
-					'measure': measures[k]
+					'measure': measures[k],
+					"category": category
 				},
 				success: function(response) {
 					function selectColor(colorIndex, palleteSize) {

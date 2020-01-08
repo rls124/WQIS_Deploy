@@ -501,93 +501,10 @@
 		//get request data
 		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
 		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
-		$sites = $this->request->getData('sites');
-		$measure = $this->request->getData('measure');
-		
-		//we cant get the category directly from POST data, so determine it from the measures we get. Not efficient, not pretty, good enough
-		if ($measure == "Ecoli" || $measure == "TotalColiform") { //bacteria category
-			$model = "BacteriaSamples";
-			//Set the name of the measure
-			switch ($measure . "") {
-			case 'Ecoli':
-				$thresMeasure = 'E. coli. (CFU/100 ml)';
-				break;
-			case 'TotalColiform':
-				$thresMeasure = 'Coliform (CFU/100 ml)';
-				break;
-			default:
-				$thresMeasure = $measure;
-				break;
-			}
-		}
-		elseif (in_array($measure, ["NitrateNitrite", "Phosphorus", "DRP", "Ammonia"])) { //nutrient
-			$model = "NutrientSamples";
-			//Set the name of the measure
-			switch ($measure . "") {
-			case 'Phosphorus':
-				$thresMeasure = 'Total Phosphorus (mg/L)';
-				break;
-			case 'NitrateNitrite':
-				$thresMeasure = 'Nitrate/Nitrite (mg/L)';
-				break;
-			case 'DRP':
-				$thresMeasure = 'Dissolved Reactive Phosphorus (mg/L)';
-				break;
-			case 'Ammonia':
-				$thresMeasure = 'Ammonia (mg/L)';
-			default:
-				$thresMeasure = $measure;
-				break;
-			}
-		}
-		elseif (in_array($measure, ["Alachlor", "Atrazine", "Metolachlor"])) { //pesticide
-			$model = "PesticideSamples";
-			//set the name of the measure
-			switch ($measure . "") {
-			case 'Alachlor':
-				$thresMeasure = 'Alachlor (µg/L)';
-				break;
-			case 'Atrazine':
-				$thresMeasure = 'Atrazine (µg/L)';
-				break;
-			case 'Metolachlor':
-				$thresMeasure = 'Metolachlor (µg/L)';
-				break;
-			default:
-				$thresMeasure = $measure;
-				break;
-			}
-		}
-		elseif (in_array($measure, ["Conductivity", "DO", "pH", "Water_Temp", "TDS", "Turbidity", "Bridge_to_Water_Height"])) { //water quality meter
-			$model = "PhysicalSamples";
-			//Set the name of the measure
-			switch ($measure . "") {
-			case 'Conductivity':
-				$thresMeasure = 'Conductivity (mS/cm)';
-				break;
-			case 'DO':
-				$thresMeasure = 'Dissolved Oxygen (mg/L)';
-				break;
-			case 'pH':
-				$thresMeasure = 'pH';
-				break;
-			case 'Water_Temp':
-				$thresMeasure = 'Water Temperature%';
-				break;
-			case 'Bridge_to_Water_Height':
-				$thresMeasure = 'Bridge to Water Height';
-				break;
-			case 'TDS':
-				$thresMeasure = 'Total Dissolved Solids (g/L)';
-				break;
-			case 'Turbidity':
-				$thresMeasure = 'Turbidity (NTU)';
-				break;
-			default:
-				$thresMeasure = $measure;
-				break;
-			}
-		}
+		$sites = $this->request->getData("sites");
+		$measure = $this->request->getData("measure");
+		$category = $this->request->getData("category");
+		$model = ucfirst($category) . "Samples";
 		
 		$this->loadModel($model);
 		
@@ -599,17 +516,17 @@
 			],
 			'conditions' => [
 				'and' => [
-				'Measure LIKE' => $thresMeasure
+				'Measure LIKE' => $measure
 				]
 			]
 		]);
 		
-		//If there is no min/max for theshold, set as null
+		//if there is no min/max for theshold, set as null
 		if ($threshold->isEmpty()) {
 			$threshold = [['min' => NULL, 'max' => NULL]];
 		}
 		
-		//Get data requested
+		//get data requested
 		$samples = $this->$model->find('all', [
 			'fields' => [
 			'site' => 'site_location_id',
