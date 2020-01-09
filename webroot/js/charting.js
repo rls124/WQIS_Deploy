@@ -16,26 +16,34 @@ $(document).ready(function () {
 	var chartsDisplayMode = "in-line";
 	
 	//list measurement names/database names available for each category
-	var bacteriaData = {'select': ['Select a measure'],
-		'Ecoli': ['E. Coli (CFU/100 mil)'],
-		'TotalColiform': ['Coliform (CFU/100 mil)']};
-	var nutrientData = {'select': ['Select a measure'],
-		'NitrateNitrite': ['Nitrate/Nitrite (mg/L)'],
-		'Phosphorus': ['Total Phosphorus (mg/L)'],
-		'DRP': ['Dissolved Reactive Phosphorus (mg/L)'],
-		'Ammonia': ['Ammonia (mg/L)']};
-	var pesticideData = {'select': ['Select a measure'],
-		'Alachlor': ['Alachlor (µg/L)'],
-		'Atrazine': ['Atrazine (µg/L)'],
-		'Metolachlor': ['Metolachlor (µg/L)']};
-	var physProp = {'select': ['Select a measure'],
-		'Conductivity': ['Conductivity (mS/cm)'],
-		'DO': ['Dissolved Oxygen (mg/L'],
-		'Bridge_to_Water_Height': ['Bridge to Water Height (in)'],
-		'pH': ['pH'],
-		'Water_Temp': ['Water Temperature (°C)'],
-		'TDS': ['Total Dissolved Solids (g/L)'],
-		'Turbidity': ['Turbidity (NTU)']};
+	var categoryMeasures = {
+		'bacteria': {
+			'Ecoli': {text: 'E. Coli (CFU/100 mil)'},
+			'EcoliRawCount': {text: 'E. Coli Raw Count', visible: false}, //if these raw count columns are ever removed, it'll simplify a lot of stuff
+			'TotalColiform': {text: 'Coliform (CFU/100 mil)'},
+			'TotalColiformRawCount': {text: 'Coliform Raw Count', visible: false}
+		},
+		'nutrient': {
+			'NitrateNitrite': {text: 'Nitrate/Nitrite (mg/L)'},
+			'Phosphorus': {text: 'Total Phosphorus (mg/L)'},
+			'DRP': {text: 'Dissolved Reactive Phosphorus (mg/L)'},
+			'Ammonia': {text: 'Ammonia (mg/L)'}
+		},
+		'pesticide': {
+			'Alachlor': {text: 'Alachlor (µg/L)'},
+			'Atrazine': {text: 'Atrazine (µg/L)'},
+			'Metolachlor': {text: 'Metolachlor (µg/L)'}
+		},
+		'physical': {
+			'Conductivity': {text: 'Conductivity (mS/cm)'},
+			'DO': {text: 'Dissolved Oxygen (mg/L'},
+			'Bridge_to_Water_Height': {text: 'Bridge to Water Height (in)'},
+			'pH': {text: 'pH'},
+			'Water_Temp': {text: 'Water Temperature (°C)'},
+			'TDS': {text: 'Total Dissolved Solids (g/L)'},
+			'Turbidity': {text: 'Turbidity (NTU)'}
+		}
+	}
 		
 	$("#sites").change(function () {
         getRange();
@@ -156,7 +164,7 @@ $(document).ready(function () {
 		var measureSelect = document.getElementById('measurementSelect');
 		var checkboxList = document.getElementById('checkboxList');
 		var measurementCheckboxes = document.getElementsByClassName("measurementCheckbox");
-		var categoryData;
+		var categoryData = categoryMeasures[document.getElementById('categorySelect').value];
 		
 		//first clear all the measures currently listed
 		while (measureSelect.options.length > 0) {
@@ -166,46 +174,36 @@ $(document).ready(function () {
 		for (i=measurementCheckboxes.length-1; i>=0; i--) {
 			checkboxList.removeChild(measurementCheckboxes[i].parentNode);
 		}
-
-		switch (document.getElementById('categorySelect').value) {
-			case 'bacteria':
-				categoryData = bacteriaData;
-				break;
-			case 'nutrient':
-				categoryData = nutrientData;
-				break;
-			case 'pesticide':
-				categoryData = pesticideData;
-				break;
-			case 'physical':
-				categoryData = physProp;
-				break;
-		}
 	
+		var option = document.createElement('option');
+		option.value = "select";
+		option.text = "Select a measure";
+		measureSelect.appendChild(option);
+		
 		for (var i in categoryData) {
 			//fill in the measurementSelect dropdown
-			var option = document.createElement('option');
-			option.value = i;
-			option.text = categoryData[i];
-			measureSelect.appendChild(option);
-		
-			//now create the checkboxes as well
-			if (i != 'select') {
-				var listItem = document.createElement('li');
+			if (!(categoryData[i]["visible"] == false)) {
+				var option = document.createElement('option');
+				option.value = i;
+				option.text = categoryData[i]["text"];
+				measureSelect.appendChild(option);
 			
+				//now create the checkboxes as well
+				var listItem = document.createElement('li');
+				
 				var box = document.createElement('input');
 				box.value = i;
 				box.id = i + "Checkbox";
 				box.type = "checkbox";
 				box.setAttribute("class", "measurementCheckbox");
-		
+			
 				var boxLabel = document.createElement('label');
-				boxLabel.innerText = i;
+				boxLabel.innerText = categoryData[i]["text"];
 				boxLabel.setAttribute("for", i + "Checkbox");
-		
+			
 				listItem.appendChild(box);
 				listItem.appendChild(boxLabel);
-		
+			
 				checkboxList.appendChild(listItem);
 			}
 		}
@@ -335,6 +333,7 @@ $(document).ready(function () {
 			}
 		}
 		
+		//now add the queue contents to the selectedMeasures array itself, in the correct locations
 		for (i=0; i<queue.length; i++) {
 			selectedMeasures.splice(queue[i][1] + i, 0, queue[i][0]); //+i to account for the number of columns already inserted
 		}
@@ -361,15 +360,17 @@ $(document).ready(function () {
 				
 				//build the header row first
 				var tableHeader = table.insertRow();
-				Object.keys(response[0][0]).forEach(function(key) {
-					if (!(key == "ID")) {
-						var newCell = tableHeader.insertCell();
-						newCell.innerText = key;
-					}
-				});
-				
-				var actionCell = tableHeader.insertCell();
-				actionCell.innerText = "Actions";
+
+				tableHeader.insertCell().innerText = "Site ID";
+				tableHeader.insertCell().innerText = "Date";
+				tableHeader.insertCell().innerText = "Sample Number";
+				var colNames = categoryMeasures[categorySelect];
+				for (i=0; i<selectedMeasures.length; i++) {
+					var newCell = tableHeader.insertCell();
+					newCell.innerText = colNames[selectedMeasures[i]]["text"];
+				}
+				tableHeader.insertCell().innerText = "Comments";
+				tableHeader.insertCell().innerText = "Actions";
 				
 				//fill in each row
 				for (var i=0; i<response[0].length; i++) {
