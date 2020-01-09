@@ -13,8 +13,8 @@
                 <ol>
                     <li>Select or enter a date.</li>
                     <li>Select a site. Sample Number will automatically be generated.</li>
-                    <li>Select E. coli. raw count. E. coli level will automatically be generated. If no reading is available this field may be left empty.</li>
-                    <li>Select Total coliform raw count. Total coliform level will automatically be generated. If no reading is available this field may be left empty.</li>
+                    <li>Select E. Coli. Raw Count. E. Coli level will automatically be generated. If no reading is available this field may be left empty.</li>
+                    <li>Select Total Coliform Raw Count. Total Coliform level will automatically be generated. If no reading is available this field may be left empty.</li>
                     <li>Enter Comments, if desired.</li>
                 </ol>
                 <p>To record data for another site, press the Add Site button.</p>
@@ -42,8 +42,8 @@
                         <tr>
                             <th>Site</th>
                             <th>Sample_Number</th>
-                            <th>Ecoli Raw Count</th>
-                            <th>Ecoli<br>(CFU/100 ml)</th>
+                            <th>E. Coli Raw Count</th>
+                            <th>E. Coli<br>(CFU/100 ml)</th>
                             <th>Total Coliform<br>Raw Count</th>
                             <th>Total Coliform<br>(CFU/100 ml)</th>
                             <th>Comments</th>

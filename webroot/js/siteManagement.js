@@ -80,7 +80,7 @@ $(document).ready(function () {
 		if (!$('#td-' + siteid + '-monitoredcheckbox').is(":checked")) {
 			monitored = 0;
 		}
-		else if ($('#td-' + siteid + '-monitoredcheckbox').is(":checked")){
+		else {
 			monitored = 1;
 		}
         
@@ -96,7 +96,7 @@ $(document).ready(function () {
 			url: 'updatesitedata',
 			datatype: 'JSON',
 			data: {
-				'siteid' : siteid,
+				'siteid': siteid,
 				'monitored': monitored,
 				'longitude': longitude,
 				'latitude': latitude,

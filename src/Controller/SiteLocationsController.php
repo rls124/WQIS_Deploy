@@ -124,10 +124,10 @@
 			//Update all the fields			
 			$monitored = $this->request->getData('monitored');
 			if ($monitored == "1" || $monitored == "true") {
-				$site->Monitored == true;
+				$site->Monitored = true;
 			}
 			else {
-				$site->Monitored == false;
+				$site->Monitored = false;
 			}
 			
 			$site->Longitude = $this->request->getData('longitude');
