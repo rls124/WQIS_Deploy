@@ -13,7 +13,7 @@
 		return $str;
 	}
 
-	public function tableRawData() {
+	public function tabledata() {
 		$this->render(false);
 		$this->loadModel("Benchmarks");
 		
@@ -23,8 +23,9 @@
 		$sites = $this->request->getData('sites');
 		$amount = $_POST["amountEnter"];
 		$searchRange = $_POST["overUnderSelect"];
-		$measurementSelect = $_POST["measurementSelect"];
+		$measurementSearch = $_POST["measurementSearch"];
 		$category = $this->request->getData('category');
+		$selectedMeasures = $_POST["selectedMeasures"];
 		
 		//set model
 		$model = ucfirst($category) . "Samples";
@@ -40,20 +41,26 @@
 			$searchDirection = ' ==';
 		}
 		
+		$fields = ['site_location_id', 'Date', 'Sample_Number'];
+		$fields = array_merge($fields, $selectedMeasures);
+		array_push($fields, (ucfirst($category) . "Comments"));
+		
 		if ($amount != '') {
 			$samples = $this->$model->find('all', [
+			'fields' => $fields,
 			'conditions' => [
 				'and' => [
 					'site_location_id IN' => $sites,
 					$model . '.Date >=' => $startDate,
 					$model . '.Date <= ' => $endDate,
-					$model . '.' . $measurementSelect . $searchDirection => $amount
+					$model . '.' . $measurementSearch . $searchDirection => $amount
 				]
 			]
-		])->order(['Date' => 'Desc']);
+			])->order(['Date' => 'Desc']);
 		}
 		else {
 			$samples = $this->$model->find('all', [
+			'fields' => $fields,
 			'conditions' => [
 				'and' => [
 					'site_location_id IN ' => $sites,
@@ -516,7 +523,7 @@
 			],
 			'conditions' => [
 				'and' => [
-				'Measure LIKE' => $measure
+					'Measure LIKE' => $measure
 				]
 			]
 		]);
@@ -529,18 +536,18 @@
 		//get data requested
 		$samples = $this->$model->find('all', [
 			'fields' => [
-			'site' => 'site_location_id',
-			'date' => 'Date',
-			'value' => $measure
+				'site' => 'site_location_id',
+				'date' => 'Date',
+				'value' => $measure
 			],
 			'conditions' => [
-			'and' => [
-				'site_location_id IN ' => $sites,
-				[
-				$model . '.Date >=' => $startDate,
-				$model . '.Date <= ' => $endDate
+				'and' => [
+					'site_location_id IN ' => $sites,
+					[
+						$model . '.Date >=' => $startDate,
+						$model . '.Date <= ' => $endDate
+					]
 				]
-			]
 			]
 		])->order(['Date' => 'ASC']);
 		

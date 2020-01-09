@@ -320,11 +320,28 @@ $(document).ready(function () {
 		
 		var amountEnter = document.getElementById("amountEnter").value;
 		var overUnderSelect = document.getElementById("overUnderSelect").value;
-		var measurementSelect = document.getElementById("measurementSelect").value;
+		var measurementSearch = document.getElementById("measurementSelect").value;
 		
+		var selectedMeasures = getSelectedMeasures();
+		
+		//check if there are associated RawCount columns we should include for those selected measures as well
+		var hasRawCount = ["Ecoli", "TotalColiform"];
+		
+		//we want to keep these in order, so we make a queue first containing all the column names and positions that need to be inserted...
+		var queue = [];
+		for (i=0; i<selectedMeasures.length; i++) {
+			if (hasRawCount.includes(selectedMeasures[i])) {
+				queue.push([selectedMeasures[i] + "RawCount", i+1]);
+			}
+		}
+		
+		for (i=0; i<queue.length; i++) {
+			selectedMeasures.splice(queue[i][1] + i, 0, queue[i][0]); //+i to account for the number of columns already inserted
+		}
+				
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/generic-samples/tableRawData",
+			url: "/WQIS/generic-samples/tabledata",
 			datatype: 'JSON',
 			data: {
 				'sites': sites,
@@ -333,7 +350,8 @@ $(document).ready(function () {
 				'category': categorySelect,
 				'amountEnter': amountEnter,
 				'overUnderSelect': overUnderSelect,
-				'measurementSelect': measurementSelect
+				'measurementSearch': measurementSearch,
+				'selectedMeasures': selectedMeasures
 			},
 			success: function(response) {
 				//create the blank table
