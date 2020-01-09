@@ -686,7 +686,7 @@ $(document).ready(function () {
 								yAxes: [{
 									scaleLabel: {
 										display: true,
-										labelString: measures[k]
+										labelString: categoryMeasures[category][measures[k]]["text"]
 									}
 								}]
 							}
