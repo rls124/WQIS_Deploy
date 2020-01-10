@@ -13,7 +13,7 @@
                 <ol>
                     <li>Select or enter a date.</li>
                     <li>Select a site. Sample Number will automatically be generated.</li>
-                    <li>Select E. Coli. Raw Count. E. Coli level will automatically be generated. If no reading is available this field may be left empty.</li>
+                    <li>Select E. Coli Raw Count. E. Coli level will automatically be generated. If no reading is available this field may be left empty.</li>
                     <li>Select Total Coliform Raw Count. Total Coliform level will automatically be generated. If no reading is available this field may be left empty.</li>
                     <li>Enter Comments, if desired.</li>
                 </ol>

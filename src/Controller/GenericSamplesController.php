@@ -546,10 +546,8 @@
 			$rawCount[] = $i;
 		}
 		$this->set(compact('rawCount'));
-		
-		if (isset($_POST["entryType"])) {
-			$this->set('formType', $name);
-		}
+
+		$this->set('formType', $name);
 	}
 
 	public function updatefield() {
