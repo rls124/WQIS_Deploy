@@ -27,6 +27,9 @@
 		$category = $this->request->getData('category');
 		$selectedMeasures = $_POST["selectedMeasures"];
 		
+		$pageNum = $_POST['pageNum'];
+		$numRows = $_POST["numRows"];
+		
 		//set model
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
@@ -47,27 +50,31 @@
 		
 		if ($amount != '') {
 			$samples = $this->$model->find('all', [
-			'fields' => $fields,
-			'conditions' => [
-				'and' => [
-					'site_location_id IN' => $sites,
-					$model . '.Date >=' => $startDate,
-					$model . '.Date <= ' => $endDate,
-					$model . '.' . $measurementSearch . $searchDirection => $amount
-				]
-			]
+				'fields' => $fields,
+				'conditions' => [
+					'and' => [
+						'site_location_id IN' => $sites,
+						$model . '.Date >=' => $startDate,
+						$model . '.Date <= ' => $endDate,
+						$model . '.' . $measurementSearch . $searchDirection => $amount
+					]
+				],
+				'limit' => $numRows,
+				'page' => $pageNum
 			])->order(['Date' => 'Desc']);
 		}
 		else {
 			$samples = $this->$model->find('all', [
-			'fields' => $fields,
-			'conditions' => [
-				'and' => [
-					'site_location_id IN ' => $sites,
-					$model . '.Date >=' => $startDate,
-					$model . '.Date <= ' => $endDate
-				]
-			]
+				'fields' => $fields,
+				'conditions' => [
+					'and' => [
+						'site_location_id IN ' => $sites,
+						$model . '.Date >=' => $startDate,
+						$model . '.Date <= ' => $endDate
+					]
+				],
+				'limit' => $numRows,
+				'page' => $pageNum
 			])->order(['Date' => 'Desc']);
 		}
 		

@@ -14,6 +14,7 @@ $(document).ajaxStart(function() {
 
 $(document).ready(function () {
 	var chartsDisplayMode = "in-line";
+	var tablePage = 1;
 	
 	//list measurement names/database names available for each category
 	var categoryMeasures = {
@@ -280,8 +281,30 @@ $(document).ready(function () {
 		getGraphData($('#startDate').val(), $('#endDate').val());
 	});
 	
-	$("#searchButton").click(function () {
+	$("#searchButton").click(function() {
 		toggleSidebar();
+	});
+	
+	$("#firstPageButton").click(function() {
+		tablePage = 1;
+		document.getElementById("tableDiv").innerHTML = "";
+		getTableData($('#startDate').val(), $('#endDate').val());
+	});
+	
+	$("#prevPageButton").click(function() {
+		tablePage--;
+		document.getElementById("tableDiv").innerHTML = "";
+		getTableData($('#startDate').val(), $('#endDate').val());
+	});
+	
+	$("#nextPageButton").click(function() {
+		tablePage++;
+		document.getElementById("tableDiv").innerHTML = "";
+		getTableData($('#startDate').val(), $('#endDate').val());
+	});
+	
+	$("#lastPageButton").click(function() {
+		alert("operation not yet supported");
 	});
 	
 	function toggleSidebar() {
@@ -313,13 +336,11 @@ $(document).ready(function () {
 	
 	function getTableData(startDate, endDate) {
 		var sites = $("#sites").val();
-		
 		var categorySelect = document.getElementById("categorySelect").value;
-		
 		var amountEnter = document.getElementById("amountEnter").value;
 		var overUnderSelect = document.getElementById("overUnderSelect").value;
 		var measurementSearch = document.getElementById("measurementSelect").value;
-		
+		var numRows = document.getElementById("numRowsDropdown").value;
 		var selectedMeasures = getSelectedMeasures();
 		
 		//check if there are associated RawCount columns we should include for those selected measures as well
@@ -350,7 +371,9 @@ $(document).ready(function () {
 				'amountEnter': amountEnter,
 				'overUnderSelect': overUnderSelect,
 				'measurementSearch': measurementSearch,
-				'selectedMeasures': selectedMeasures
+				'selectedMeasures': selectedMeasures,
+				'numRows': numRows,
+				'pageNum': tablePage
 			},
 			success: function(response) {
 				//create the blank table

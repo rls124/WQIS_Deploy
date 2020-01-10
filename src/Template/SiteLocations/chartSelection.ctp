@@ -173,7 +173,23 @@
 			</div>
 			<div id="collapseThree" class="panel-collapse collapse show">
 				<div class="panel-body">
+					Show 
+					<select id="numRowsDropdown">
+						<option value=10>10</option>
+						<option value=25 selected="selected">25</option>
+						<option value=100>100</option>
+						<option value=500>500</option>
+						<option value=-1>All</option>
+					</select>
+					results
 					<div id="tableDiv" style="text-align: center;"></div>
+					
+					<div>
+						<button type="button" id="firstPageButton">First</button>
+						<button type="button" id="previousPageButton">Previous</button>
+						<button type="button" id="nextPageButton">Next</button>
+						<button type="button" id="lastPageButton">Last</button>
+					</div>
 				</div>
 			</div>
 		</div>
