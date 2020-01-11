@@ -2,6 +2,22 @@
 $pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), '/') + 1);
 ?>
 
+<script>
+var dojoConfig = {
+	//prevents conflicts with jquery
+	async:true,
+	deps:["jquery"],
+	packages: [{
+		name: "jquery",
+		main: "jquery.min"
+	},{
+		name: "dojo",
+		location: "https://js.arcgis.com/4.8/dojo",
+		main: "dojo"
+	}]
+};
+</script>
+
 <!DOCTYPE html>
 <html>
     <head>

@@ -1,6 +1,5 @@
 <?= $this->Html->script("charting.js") ?>
 <?= $this->Html->css('chartSelection.css') ?>
-<?= $this->Html->script('mapping.js') ?>
 <?= $this->Html->script('konami.js') ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
@@ -8,6 +7,10 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
+<?= $this->Html->script('mapping.js') ?>
+<script src="../js/lib/a"></script>
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
 
 <div>
 	<div id="mySidebar" class="sidebar">
@@ -146,7 +149,11 @@
 			</div>
 			<div id="collapseOne" class="panel-collapse collapse show">
 				<div class="panel-body" id="mapContainer">
-					<div class="mb-3" id="map" style="width:100%; height:500px; border: solid black thin;"></div>
+					<!--<div class="mb-3" id="map" style="width:100%; height:500px; border: solid black thin;"></div>-->
+					<div id="viewDiv"></div>
+					<span id="layerToggle" class="esri-widget">
+						<input type="checkbox" id="drainsLayer" checked /> Drains
+					</span>
 				</div>
 			</div>
 		</div>
