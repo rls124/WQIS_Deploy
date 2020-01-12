@@ -204,7 +204,7 @@ $(document).ready(function () {
 				});
 		
 				const view = new MapView({
-					container: "viewDiv",
+					container: "map",
 					center: [-85, 41],
 					zoom: 8,
 					map: map

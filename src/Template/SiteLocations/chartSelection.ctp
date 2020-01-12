@@ -149,8 +149,7 @@
 			</div>
 			<div id="collapseOne" class="panel-collapse collapse show">
 				<div class="panel-body" id="mapContainer">
-					<!--<div class="mb-3" id="map" style="width:100%; height:500px; border: solid black thin;"></div>-->
-					<div id="viewDiv"></div>
+					<div id="map"></div>
 					<span id="layerToggle" class="esri-widget">
 						<input type="checkbox" id="drainsLayer" checked /> Drains
 					</span>
