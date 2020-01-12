@@ -7,8 +7,8 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
-<?= $this->Html->script('mapping.js') ?>
-<script src="../js/lib/a"></script>
+<script defer src="../js/mapping.js"></script>
+<script defer src="../js/lib/a"></script>
 
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
 
