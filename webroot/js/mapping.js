@@ -38,8 +38,9 @@ $(document).ready(function () {
 		"esri/views/MapView",
 		"esri/layers/MapImageLayer",
 		"esri/Graphic",
-		"esri/layers/FeatureLayer"
-	], function(Map, MapView, MapImageLayer, Graphic, FeatureLayer) {
+		"esri/layers/FeatureLayer",
+		"esri/layers/KMLLayer"
+	], function(Map, MapView, MapImageLayer, Graphic, FeatureLayer, KMLLayer) {
 		//fetches site information from the database
 		$.ajax({
 			type: 'POST',
@@ -197,10 +198,15 @@ $(document).ready(function () {
 				
 				var drainsLayer = new MapImageLayer("http://gis1.acimap.us/imapweb/rest/services/Engineering/Drains/MapServer", null);
 
+				var kmlurl = "http://emerald.pfw.edu/wqis.kml";
+				var watershedsLayer = new KMLLayer({
+					url: kmlurl
+				});
+
 				//create the map
 				var map = new Map({
 					basemap: "gray",
-					layers: [sampleSitesLayer, drainsLayer]
+					layers: [sampleSitesLayer, drainsLayer, watershedsLayer]
 				});
 		
 				const view = new MapView({
@@ -216,9 +222,21 @@ $(document).ready(function () {
 				});
 		
 				//handle the checkboxes that toggle layer visibility
+				var watershedsLayerToggle = document.getElementById("watershedsLayer");
+				watershedsLayerToggle.addEventListener("change", function() {
+					watershedsLayer.visible = watershedsLayerToggle.checked;
+				});
+				
+				drainsLayer.visible = false;
 				var drainsLayerToggle = document.getElementById("drainsLayer");
 				drainsLayerToggle.addEventListener("change", function() {
 					drainsLayer.visible = drainsLayerToggle.checked;
+				});
+				
+				//handle the dropdown that allows basemap to be changed
+				var basemapSelect = document.getElementById("selectBasemap");
+				basemapSelect.addEventListener("change", function() {
+					map.basemap = basemapSelect.value;
 				});
 			}
 		});

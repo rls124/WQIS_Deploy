@@ -150,9 +150,22 @@
 			<div id="collapseOne" class="panel-collapse collapse show">
 				<div class="panel-body" id="mapContainer">
 					<div id="map"></div>
-					<span id="layerToggle" class="esri-widget">
-						<input type="checkbox" id="drainsLayer" checked /> Drains
-					</span>
+					<div class="row">
+						<div class="col-sm-2">
+							<input type="checkbox" id="watershedsLayer" checked /> Watersheds
+							<input type="checkbox" id="drainsLayer" /> Drains
+						</div>
+						<div class="col-sm">
+							Use basemap
+							<select id="selectBasemap">
+								<option value="gray">Gray</option>
+								<option value="satellite">Satellite</option>
+								<option value="osm">Streets</option>
+								<option value="hybrid">Hybrid</option>
+								<option value="terrain">Terrain</option>
+							</select>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
