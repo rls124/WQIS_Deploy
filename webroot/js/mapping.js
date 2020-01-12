@@ -198,7 +198,7 @@ $(document).ready(function () {
 				
 				var drainsLayer = new MapImageLayer("http://gis1.acimap.us/imapweb/rest/services/Engineering/Drains/MapServer", null);
 
-				var kmlurl = "http://emerald.pfw.edu/wqis.kml";
+				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
 				var watershedsLayer = new KMLLayer({
 					url: kmlurl
 				});
