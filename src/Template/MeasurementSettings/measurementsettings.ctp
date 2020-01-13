@@ -1,4 +1,4 @@
-<?= $this->Html->script('measurementBenchmarks.js') ?>
+<?= $this->Html->script('measurementSettings.js') ?>
 <?= $this->Html->css('measurementBenchmarks.css') ?>
 <?= $this->Html->css('cakemessages.css') ?>
 
