@@ -98,22 +98,18 @@ if ($admin) { ?>
 			'name' => 'fileupload'
 		    ])
 		?>
-                <div class="row"> </div>	
-
+                <div class="row"></div>
                 <div class="row mb-3">
-				
                     <label class="btn btn-file btn-basic  ml-3 mr-1" style="font-size: 14pt; margin-top: 5px;">Choose File <input type="file" name="file" accept=".csv" id="chooseFileButton"> </label>
 					
                     <div class="col-sm ml-2 mr-3 mb-1 mt-1" id="FileUploadDiv" style="padding-left: 5px;">
                         <label id="FileUploadLabel" style="font-size: 14pt; margin-top: 8px; color: #919191;"> File Name</label>
                     </div>
-					
                 </div>
 				
-				<div class="row mb-3"> </div>
-				<div class="row mb-3"> </div>
+				<div class="row mb-3"></div>
+				<div class="row mb-3"></div>
 		
-
                 <div class="row center mb-0">
                     <a type="submit" href="..\webroot\files\exampleFiles.zip"  class="mb-0 mt-1 btn btn-basic col-sm sampleFile" id="sampleFileDisabled" name="sampleFile" style="height: 43px;">Download Sample File</a>
 					
@@ -127,48 +123,32 @@ if ($admin) { ?>
 
     <hr>
 
-    <div class="card-columns">
-        <div class="card">
-            <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'DetectionLimits', 'action' => 'limits']) ?>';">
+    <div class="col-sm-3">
+        <div class="card" style="width:100%">
+            <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'MeasurementSettings', 'action' => 'measurementsettings']) ?>';">
                 <div class="card-header" style="height: 50px;">
-                    <h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-flag" style="font-size: 14pt;"></span>  Detection Limits</h5>
+                    <h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>  Measurement settings</h5>
                 </div>
             </a>
         </div>
-        <div class="card">
-            <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'export', 'action' => 'export']) ?>';">
-                <div class="card-header" style="height: 50px;">
-                    <h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-download-alt" style="font-size: 14pt;"></span>  Export</h5>
-                </div>
-            </a>
-        </div>
-        <div class="card">
+        <div class="card" style="width:100%">
             <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'users', 'action' => 'usermanagement']) ?>';">
                 <div class="card-header" style="height: 50px;">
                     <h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>  User Management</h5>
                 </div>
             </a>
         </div>
-        
-        <div class="card">
+        <div class="card" style="width:100%">
             <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'SiteLocations', 'action' => 'sitemanagement']) ?>';">
                 <div class="card-header" style="height: 50px;">
                     <h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 14pt;"></span>  Site Management</h5>
                 </div>
             </a>
         </div>
-        <div class="card">
-            <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'benchmarks', 'action' => 'measurementbenchmarks']) ?>';">
-                <div class="card-header" style="height: 50px;">
-                    <h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-scale" style="font-size:14pt;"></span>  Benchmarks</h5>
-                </div>
-            </a>
-        </div>
-        
-         <div class="card">
+        <div class="card" style="width:100%">
             <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'feedback', 'action' => 'adminfeedback']) ?>';">
                 <div class="card-header" style="height: 50px;">
-                    <h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:14pt;"></span>  Feedback</h5>
+                    <h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:14pt;"></span>  View Feedback</h5>
                 </div>
             </a>
         </div>

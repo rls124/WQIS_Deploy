@@ -19,7 +19,7 @@
         <tbody id="benchmarksTable">
 	    <?php
 		$row = 0;
-		foreach ($Benchmarks as $benchmark):
+		foreach ($MeasurementSettings as $benchmark):
 		    ?>
 		    <tr id='tr-<?= $benchmark->measureKey?>'>
 	    		<td id="<?php echo 'measure-' . $row;?>"><?= $benchmark->measureKey ?></td>

@@ -509,7 +509,7 @@
 
 	public function graphdata() {
 		$this->render(false);
-		$this->loadModel("MeasurementMeta");
+		$this->loadModel("MeasurementSettings");
 		
 		//get request data
 		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
@@ -522,7 +522,7 @@
 		$this->loadModel($model);
 		
 		//Get theshold data
-		$threshold = $this->MeasurementMeta->find('all', [
+		$threshold = $this->MeasurementSettings->find('all', [
 			'fields' => [
 				'min' => 'benchmarkMinimum',
 				'max' => 'benchmarkMaximum'

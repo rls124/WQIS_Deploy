@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * MeasurementMeta Entity
+ * MeasurementSettings Entity
  *
  * @property string $measureKey
  * @property string $measureName
@@ -13,7 +13,7 @@ use Cake\ORM\Entity;
  * @property float $detectionMinimum
  * @property float $detectionMaximum
  */
-class MeasurementMeta extends Entity {
+class MeasurementSettings extends Entity {
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

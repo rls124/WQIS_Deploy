@@ -7,17 +7,17 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * MeasurementMeta Model
+ * MeasurementSettings Model
  *
- * @method \App\Model\Entity\MeasurementMeta get($primaryKey, $options = [])
- * @method \App\Model\Entity\MeasurementMeta newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\MeasurementMeta[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\MeasurementMeta|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\MeasurementMeta patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\MeasurementMeta[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\MeasurementMeta findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\MeasurementSettings get($primaryKey, $options = [])
+ * @method \App\Model\Entity\MeasurementSettings newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\MeasurementSettings[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\MeasurementSettings|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\MeasurementSettings patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\MeasurementSettings[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\MeasurementSettings findOrCreate($search, callable $callback = null, $options = [])
  */
-class MeasurementMetaTable extends Table {
+class MeasurementSettingsTable extends Table {
 
     /**
      * Initialize method
@@ -25,11 +25,10 @@ class MeasurementMetaTable extends Table {
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
-        $this->setTable('measurement_meta');
+        $this->setTable('measurement_settings');
         $this->setDisplayField('measureKey');
         $this->setPrimaryKey('measureKey');
     }
