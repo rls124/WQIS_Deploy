@@ -15,7 +15,6 @@
 
 	public function tabledata() {
 		$this->render(false);
-		$this->loadModel("Benchmarks");
 		
 		//get request data
 		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
@@ -510,7 +509,7 @@
 
 	public function graphdata() {
 		$this->render(false);
-		$this->loadModel("Benchmarks");
+		$this->loadModel("MeasurementMeta");
 		
 		//get request data
 		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
@@ -523,14 +522,14 @@
 		$this->loadModel($model);
 		
 		//Get theshold data
-		$threshold = $this->Benchmarks->find('all', [
+		$threshold = $this->MeasurementMeta->find('all', [
 			'fields' => [
-			'min' => 'Minimum_Acceptable_Value',
-				'max' => 'Maximum_Acceptable_Value'
+				'min' => 'benchmarkMinimum',
+				'max' => 'benchmarkMaximum'
 			],
 			'conditions' => [
 				'and' => [
-					'Measure LIKE' => $measure
+					'measureKey LIKE' => $measure
 				]
 			]
 		]);

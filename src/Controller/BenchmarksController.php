@@ -1,5 +1,4 @@
 <?php
-
 	namespace App\Controller;
 
 	use App\Controller\AppController;
@@ -12,14 +11,16 @@
 	 * @method \App\Model\Entity\Benchmark[] paginate($object = null, array $settings = [])
 	 */
 	class BenchmarksController extends AppController {
-
 		public function measurementbenchmarks() {
-			$Benchmarks = $this->Benchmarks->find('all');
+			$this->loadModel("MeasurementMeta");
+			$Benchmarks = $this->MeasurementMeta->find('all');
 			$this->set(compact('Benchmarks'));
 		}
 
 		public function updatefield() {
 			$this->render(false);
+
+			$this->loadModel("MeasurementMeta");
 
 			//Ensure that measure is in POST data
 			if (!$this->request->getData('measure')) {
@@ -28,15 +29,15 @@
 			$measure = $this->request->getData('measure');
 
 			//Get the benchmark we are editing
-			$benchmark = $this->Benchmarks
+			$benchmark = $this->MeasurementMeta
 				->find('all')
-				->where(['Measure = ' => $measure])
+				->where(['measureKey = ' => $measure])
 				->first();
 			$parameter = $this->request->getData('parameter');
 			$value = $this->request->getData('value');
 			//Set the edited field
 			$benchmark->$parameter = $value;
 			//Save changes
-			$this->Benchmarks->save($benchmark);
+			$this->MeasurementMeta->save($benchmark);
 		}
 	}

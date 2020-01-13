@@ -671,9 +671,10 @@ $(document).ready(function () {
 					var ctx = document.getElementById("chart-" + k).getContext("2d");
 					var benchmarkLines = [];
 
-					if (document.getElementById("showBenchmarks").checked) {
+					//if (document.getElementById("showBenchmarks").checked) {
 						//add benchmark lines
 						var benchmarks = response[1][0]; //max and min
+						console.log(response);
 						
 						function bench(val, color) {
 							return {
@@ -693,7 +694,7 @@ $(document).ready(function () {
 						if (benchmarks["min"] != null) {
 							benchmarkLines.push(bench(benchmarks["min"], "blue"));
 						}
-					}
+//					}
 
 					new Chart(ctx, {
 						type: 'line',

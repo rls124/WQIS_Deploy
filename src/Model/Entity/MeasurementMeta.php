@@ -4,13 +4,16 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * DetectionLimit Entity
+ * MeasurementMeta Entity
  *
- * @property string $Measure
- * @property float $Lowest_Acceptable_Value
- * @property float $Highest_Acceptable_Value
+ * @property string $measureKey
+ * @property string $measureName
+ * @property float $benchmarkMinimum
+ * @property float $benchmarkMaximum
+ * @property float $detectionMinimum
+ * @property float $detectionMaximum
  */
-class DetectionLimit extends Entity {
+class MeasurementMeta extends Entity {
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -22,7 +25,11 @@ class DetectionLimit extends Entity {
      * @var array
      */
     protected $_accessible = [
-        'Lowest_Acceptable_Value' => true,
-        'Highest_Acceptable_Value' => true
+        'measureKey' => true,
+        'measureName' => true,
+		'benchmarkMinimum' => true,
+		'benchmarkMaximum' => true,
+		'detectionMinimum' => true,
+		'detectionMaximum' => true
     ];
 }
