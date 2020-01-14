@@ -1,3 +1,23 @@
+<?php
+$pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), '/') + 1);
+?>
+
+<script>
+var dojoConfig = {
+	//prevents conflicts with jquery
+	async:true,
+	deps:["jquery"],
+	packages: [{
+		name: "jquery",
+		main: "jquery.min"
+	},{
+		name: "dojo",
+		location: "https://js.arcgis.com/4.8/dojo",
+		main: "dojo"
+	}]
+};
+</script>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,18 +30,18 @@
         <?= $this->fetch('css') ?>
         <?= $this->fetch('script') ?>
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <?= $this->Html->css('bootstrap-glyphicons.min.css') ?>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <?= $this->Html->script('jquery.msgbox.min.js') ?>
         <?= $this->Html->css('styling.css') ?>
         <?= $this->Html->css('cakemessages.css') ?>
-        <?= $this->Html->script('ajaxlooks.js') ?>
+		<?= $this->Html->css("loading.css") ?>
 
 <?php
-	if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session
-	?>
-	<script>
+if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session
+?>
+<script>
 function browserDetect() {
 	var ua = navigator.userAgent;
 	var upToDate = true;
@@ -78,93 +98,74 @@ function hideBrowserCompatibilityMessage() {
 	//set a cookie so we don't keep annoying the user about this
 	document.cookie = "ignoreBrowserCompatibility";
 }
-	</script>
+</script>
 	<?php } ?>
     </head>
     <body class="h-100">
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light">
+        <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
             <?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
-            <?php if ($userinfo !== NULL) { ?>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse">
-                        <ul class="navbar-nav mr-auto navbar-right">
-                            <li class="nav-item">
-								<?php
-								if ($this->name == "SiteLocations") {
-									echo "<a href=\"/WQIS/site-locations/chartselection\" class=\"nav-link active\">View Water Quality Data</a>";
-								}
-								else {
-									echo "<a href=\"/WQIS/site-locations/chartselection\" class=\"nav-link\">View Water Quality Data</a>";
-								}
-								?>
-                            </li>
-                            <?php if ($admin) { ?>
-                                <li class="nav-item">
-									<?php
-									if ($this->name == "Pages") {
-										//strictly, probably should have a separate value for admin. This organization is fucked, will deal with it later
-										echo "<a href=\"/WQIS/pages/administratorpanel\" class=\"nav-link active\">Admin Panel</a>";
-									}
-									else {
-										echo "<a href=\"/WQIS/pages/administratorpanel\" class=\"nav-link\">Admin Panel</a>";
-									}
-									?>
-                                </li>
-                                <?php
-                            }
-                            ?>
-                            <li class="nav-item">
-								<?php
-								if ($this->name == "Users") {
-									echo "<a href=\"/WQIS/users/edituserinfo\" class=\"nav-link active\">User Profile</a>";
-								}
-								else {
-									echo "<a href=\"/WQIS/users/edituserinfo\" class=\"nav-link\">User Profile</a>";
-								}
-								?>
-                            </li>
-                            <?php if ($admin) { ?>
-                            <li class="nav-item">
-								<?php
-								if ($this->name == "Feedback") {
-									echo "<a href=\"/WQIS/feedback/adminfeedback\" class=\"nav-link active\">Feedback</a>";
-								}
-								else {
-									echo "<a href=\"/WQIS/feedback/adminfeedback\" class=\"nav-link\">Feedback</a>";
-								}
-								?>
-                            </li>
-                            <?php 
-                            } 
-                            else { ?>
-                            <li class="nav-item">
-                                <?php
-								if ($this->name == "Feedback") {
-									echo "<a href=\"/WQIS/feedback/userfeedback\" class=\"nav-link active\">Feedback</a>";
-								}
-								else {
-									echo "<a href=\"/WQIS/feedback/userfeedback\" class=\"nav-link\">Feedback</a>";
-								}
-								?>
-                            </li>
-                            <?php
-                            }
-                            ?>
-                        </ul>
+			
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav mr-auto navbar-right">
+					<li class="nav-item">
+						<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Water Quality Data</a>
+					</li>
+					
+					<li class="nav-item">
+						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>">About</a>
+					</li>
+					
+					<li class="nav-item">
+						<a href="/WQIS/pages/help" class="nav-link <?php if ($pageName == "help") { echo "active"; }?>">Help</a>
+					</li>
+					
+					<?php if ($admin) { ?>
+					<li class="nav-item">
+						<a href="/WQIS/pages/administratorpanel" class="nav-link <?php if ($pageName == "administratorpanel") { echo "active"; }?>">Admin Panel</a>
+					</li>
+					<?php
+					}
+					?>
+					
+					<?php if ($admin) { ?>
+					<li class="nav-item">
+						<a href="/WQIS/feedback/adminfeedback" class="nav-link <?php if ($pageName == "adminfeedback" || $pageName == "userfeedback") { echo "active"; }?>">Feedback</a>
+					</li>
+				<?php
+				} 
+				else { ?>
+					<li class="nav-item">
+						<a href="/WQIS/feedback/userfeedback" class="nav-link <?php if ($pageName == "userfeedback") { echo "active"; }?>">Feedback</a>
+					</li>
+				<?php
+				}
+				?>
+				</ul>
 
-                        <input class="btn btn-outline-primary" type='button' value='Logout' onclick="location.href = '<?php echo $this->Url->build(['controller' => 'users', 'action' => 'logout']); ?>';" />
-                    <?php
-                }
-            ?>
+				<ul class="nav pull-right">
+					<li class="dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<?php
+							echo $userinfo["username"];
+							if ($admin) {
+								echo " (Administrator)";
+							}
+						?>
+						</a>
+						<div class="dropdown-menu" style="right: 0; left: auto;" aria-labelledby="userDropdownMenu">
+							<a class="dropdown-item" href="/WQIS/users/edituserinfo">User profile</a>
+							<a class="dropdown-item" href='<?php echo $this->Url->build(['controller' => 'users', 'action' => 'logout']) ?>'>Log out</a>
+						</div>
+					</li>
+				</ul>
+			</div>
         </nav>
-        <br>
-        <br>
-        <br>
-        <br>
+        
         <?= $this->Flash->render() ?>
-		<div class="container roundGreyBox col-md-10" style="min-height:500px">
+		<div class="container content col-lg-12" style="min-height:500px">
 		<?= $this->fetch('content') ?>
 		</div>
 	

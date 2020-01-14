@@ -1,6 +1,6 @@
 /* Loading Spinner */
 
-.loadingspinner-edit, .loadingspinner-add, .loadingspinnermain {
+.loadingspinnermain {
     visibility: hidden;
     position: fixed;
 }

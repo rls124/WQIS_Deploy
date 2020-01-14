@@ -11,32 +11,27 @@
 			$str=substr($str, 3);
 		}
 		return $str;
-	}	
-	
-	public function tableview() {
-		//check if there is post data
-		if ($this->request->getData()) {
-			$type = $_POST["categorySelect"];
-			
-			//set all relevant POST data to variables
-			$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
-			$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
-			$site = $this->request->getData('site');
-			$amount = $_POST["amountEnter"];
-			$searchRange = $_POST["overUnderSelect"];
-			$measurementSelect = $_POST["measurementSelect"];
-		}
-		else {
-			$type = $_SESSION["tableType"];
-			
-			//set all relevant SESSION data to variables
-			$startDate = date('Ymd', strtotime($_SESSION['startDate']));
-			$endDate = date('Ymd', strtotime($_SESSION['endDate']));
-			$site = $_SESSION["site"];
-			$amount = $_SESSION["amountEnter"];
-			$searchRange = $_SESSION["overUnderSelect"];
-			$measurementSelect = $_SESSION["measurementSelect"];		
-		}
+	}
+
+	public function tabledata() {
+		$this->render(false);
+		
+		//get request data
+		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
+		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
+		$sites = $this->request->getData('sites');
+		$amount = $_POST["amountEnter"];
+		$searchRange = $_POST["overUnderSelect"];
+		$measurementSearch = $_POST["measurementSearch"];
+		$category = $this->request->getData('category');
+		$selectedMeasures = $_POST["selectedMeasures"];
+		
+		$pageNum = $_POST['pageNum'];
+		$numRows = $_POST["numRows"];
+		
+		//set model
+		$model = ucfirst($category) . "Samples";
+		$this->loadModel($model);
 		
 		if ($searchRange == "over") {
 			$searchDirection = ' >=';
@@ -48,130 +43,44 @@
 			$searchDirection = ' ==';
 		}
 		
-		if ($type == "bacteria") {
-			$this->loadModel('BacteriaSamples');
-			
-			$modelName = "BacteriaSamples";
-			$modelBare = $this->BacteriaSamples;
-			$measureType='Ecoli';
-		}
-		else if ($type == "nutrient") {
-			$this->loadModel('NutrientSamples');
-			
-			$modelName = "NutrientSamples";
-			$modelBare = $this->NutrientSamples;
-			
-			if ($measurementSelect == 'nitrateNitrite') {
-				$measureType='NitrateNitrite';
-			}
-			else if ($measurementSelect == 'phosphorus') {
-				$measureType='Phosphorus';
-			}
-			else if ($measurementSelect == 'drp') {
-				$measureType='DRP';
-			}
-			else if ($measurementSelect == 'ammonia') {
-				$measureType='Ammonia';
-			}
-		}
-		else if ($type == "pesticide") {
-			$this->loadModel('PesticideSamples');
-			
-			$modelName = "PesticideSamples";
-			$modelBare = $this->PesticideSamples;
-			
-			if ($measurementSelect == "alachlor") {
-				$measureType='Alachlor';
-			}
-			else if ($measurementSelect == "atrazine") {
-				$measureType='Atrazine';
-			}
-			else if ($measurementSelect == "metolachlor") {
-				$measureType='Metolachlor';
-			}
-		}
-		elseif ($type == "physical") {
-			$this->loadModel('PhysicalSamples');
-			
-			$modelName = "PhysicalSamples";
-			$modelBare = $this->PhysicalSamples;
-			
-			if ($measurementSelect == 'conductivity') {
-				$measureType='Conductivity';
-			}
-			else if ($measurementSelect == 'do') {
-				$measureType='DO';
-			}
-			else if ($measurementSelect == 'bridge_to_water_height') {
-				$measureType='Bridge_to_Water_Height';
-			}
-			else if ($measurementSelect == 'ph') {
-				$measureType='pH';
-			}
-			else if ($measurementSelect == 'water_temp') {
-				$measureType='Water_Temp';
-			}
-			else if ($measurementSelect == 'tds') {
-				$measureType='TDS';
-			}
-			else if($measurementSelect == 'turbidity') {
-				$measureType='Turbidity';
-			}
-		}
-	
-		if ($amount!='') {
-			$samples = $this->paginate(
-				$modelBare->find('all', [
-					'conditions' => [			
-						'and' => [
-							'site_location_id' => $site,				
-							$modelName . '.Date >=' => $startDate,
-							$modelName . '.Date <= ' => $endDate,
-							$modelName . '.' . $measureType . $searchDirection => $amount
-						]
+		$fields = ['site_location_id', 'Date', 'Sample_Number'];
+		$fields = array_merge($fields, $selectedMeasures);
+		array_push($fields, (ucfirst($category) . "Comments"));
+		
+		if ($amount != '') {
+			$samples = $this->$model->find('all', [
+				'fields' => $fields,
+				'conditions' => [
+					'and' => [
+						'site_location_id IN' => $sites,
+						$model . '.Date >=' => $startDate,
+						$model . '.Date <= ' => $endDate,
+						$model . '.' . $measurementSearch . $searchDirection => $amount
 					]
-				])->order(['Date' => 'Desc'])
-			);
+				],
+				'limit' => $numRows,
+				'page' => $pageNum
+			])->order(['Date' => 'Desc']);
 		}
 		else {
-			$samples = $this->paginate(
-				$modelBare->find('all', [
-					'conditions' => [
-						'and' => [
-							'site_location_id' => $site,
-							$modelName == "BacteriaSamples",					
-							$modelName . '.Date >=' => $startDate,
-							$modelName . '.Date <= ' => $endDate,
-						]
+			$samples = $this->$model->find('all', [
+				'fields' => $fields,
+				'conditions' => [
+					'and' => [
+						'site_location_id IN ' => $sites,
+						$model . '.Date >=' => $startDate,
+						$model . '.Date <= ' => $endDate
 					]
-				])->order(['Date' => 'Desc'])
-			);
+				],
+				'limit' => $numRows,
+				'page' => $pageNum
+			])->order(['Date' => 'Desc']);
 		}
 		
-		//get the info about the site number
-		$siteLocation = $modelBare->SiteLocations->find('all', [
-			'conditions' => [
-				'Site_number' => $site
-			]
-		])->first();
+		$this->response = $this->response->withStringBody(json_encode([$samples]));
+		$this->response = $this->response->withType('json');
 		
-		//write data into session
-		$this->request->getSession()->write([
-			'startDate' => $startDate,
-			'endDate' => $endDate,
-			'site' => $site,
-			'tableType' => $type,
-			'siteLocation' => $siteLocation
-		]);
-		
-		$this->set('startDate', $startDate);
-		$this->set('endDate', $endDate);
-		$this->set('amountEnter', $amount);
-		$this->set('overUnderSelect', $searchRange);
-		$this->set(compact('siteLocation'));
-		$this->set(compact('samples'));
-		$this->set('_serialize', ['samples']);
-		$this->set('sampleType', $type);
+		return $this->response;
 	}
 
 	public function uploadlog() {
@@ -450,6 +359,7 @@
 
 	public function entryform() {
 		if (!isset($_POST["entryType"])) {
+			$mode = "submit";
 			//already submitted from entry form
 			if (isset($_POST["ecolirawcount-0"])) { //bacteria
 				$name = "bacteria";
@@ -464,12 +374,14 @@
 				$name = "physical";
 			}
 		}
-		else {	
+		else {
+			$mode = "entry";
 			//trying to go to the entry form
 			$name = $_POST["entryType"];
 		}
 		
 		if (!isset($name)) {
+			$this->set("mode", "invalid");
 			//not valid, just return and let the template handle it
 			return;
 		}
@@ -540,6 +452,7 @@
 		$siteLocations = $model->SiteLocations->find('all');
 		$this->set(compact('sample', 'siteLocations'));
 		$this->set('_serialize', ['sample']);
+		$this->set('mode', $mode);
 
 		$rawCount = [];
 		for ($i = 0; $i <= 51; $i++) {
@@ -592,146 +505,53 @@
 		$modelBare->save($sample);
 	}
 
-	public function chartView() {
-		$this->loadModel("SiteLocations");
-		$siteLocations = $this->SiteLocations->find('all');
-
-		$this->set(compact('siteLocations'));
-		$this->set('_serialize', ['siteLocations']);
-		$this->set('chartType', $_POST["categorySelect"]);
-	}
-
 	public function graphdata() {
 		$this->render(false);
-		$this->loadModel("Benchmarks");
+		$this->loadModel("MeasurementSettings");
 		
 		//get request data
 		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
 		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
-		$sites = $this->request->getData('sites');
-		$measure = $this->request->getData('measure');
-		
-		//we cant get the category directly from POST data, so determine it from the measures we get. Not efficient, not pretty, good enough
-		if ($measure == "ecoli") { //bacteria category
-			$model = "BacteriaSamples";
-
-			//Set the name of the measure
-			switch ($measure . "") {
-			case 'ecoli':
-				$thresMeasure = 'E. coli. (CFU/100 ml)';
-				break;
-			default:
-				$thresMeasure = $measure;
-				break;
-			}
-		}
-		elseif (in_array($measure, ["nitrateNitrite", "phosphorus", "drp", "ammonia"])) { //nutrient
-			$model = "NutrientSamples";
-
-			//Set the name of the measure
-			switch ($measure . "") {
-			case 'phosphorus':
-				$thresMeasure = 'Total Phosphorus (mg/L)';
-				break;
-			case 'nitrateNitrite':
-				$thresMeasure = 'Nitrate/Nitrite (mg/L)';
-				break;
-			case 'drp':
-				$thresMeasure = 'Dissolved Reactive Phosphorus (mg/L)';
-				break;
-			case 'ammonia':
-				$thresMeasure = 'Ammonia (mg/L)';
-			default:
-				$thresMeasure = $measure;
-				break;
-			}
-		}
-		elseif (in_array($measure, ["alachlor", "atrazine", "metolachlor"])) { //pesticide
-			$model = "PesticideSamples";
-
-			//set the name of the measure
-			switch ($measure . "") {
-			case 'alachlor':
-				$thresMeasure = 'Alachlor (µg/L)';
-				break;
-			case 'atrazine':
-				$thresMeasure = 'Atrazine (µg/L)';
-				break;
-			case 'metolachlor':
-				$thresMeasure = 'Metolachlor (µg/L)';
-				break;
-			default:
-				$thresMeasure = $measure;
-				break;
-			}
-		}
-		elseif (in_array($measure, ["conductivity", "do", "ph", "water_temp", "tds", "turbidity", "bridge_to_water_height"])) { //water quality meter
-			$model = "PhysicalSamples";
-
-			//Set the name of the measure
-			switch ($measure . "") {
-			case 'conductivity':
-				$thresMeasure = 'Conductivity (mS/cm)';
-				break;
-			case 'do':
-				$thresMeasure = 'Dissolved Oxygen (mg/L)';
-				break;
-			case 'ph':
-				$thresMeasure = 'pH';
-				break;
-			case 'water_temp':
-				$thresMeasure = 'Water Temperature%';
-				break;
-			case 'bridge_to_water_height':
-				$thresMeasure = 'Bridge to Water Height';
-				break;
-			case 'tds':
-				$thresMeasure = 'Total Dissolved Solids (g/L)';
-				break;
-			case 'turbidity':
-				$thresMeasure = 'Turbidity (NTU)';
-				break;
-			default:
-				$thresMeasure = $measure;
-				break;
-			}
-		}
+		$sites = $this->request->getData("sites");
+		$measure = $this->request->getData("measure");
+		$category = $this->request->getData("category");
+		$model = ucfirst($category) . "Samples";
 		
 		$this->loadModel($model);
 		
 		//Get theshold data
-		$threshold = $this->Benchmarks->find('all', [
+		$threshold = $this->MeasurementSettings->find('all', [
 			'fields' => [
-			'min' => 'Minimum_Acceptable_Value',
-				'max' => 'Maximum_Acceptable_Value'
+				'min' => 'benchmarkMinimum',
+				'max' => 'benchmarkMaximum'
 			],
 			'conditions' => [
 				'and' => [
-				'Measure LIKE' => $thresMeasure
+					'measureKey LIKE' => $measure
 				]
 			]
 		]);
 		
-		//If there is no min/max for theshold, set as null
+		//if there is no min/max for theshold, set as null
 		if ($threshold->isEmpty()) {
 			$threshold = [['min' => NULL, 'max' => NULL]];
 		}
 		
-		//Get data requested
+		//get data requested
 		$samples = $this->$model->find('all', [
 			'fields' => [
-			'site' => 'site_location_id',
-			'date' => 'Date',
-			'value' => $measure
+				'site' => 'site_location_id',
+				'date' => 'Date',
+				'value' => $measure
 			],
 			'conditions' => [
-			'and' => [
-				'site_location_id IN ' => $sites,
-				[
-				$model . '.Date >=' => $startDate,
-				$model . '.Date <= ' => $endDate
+				'and' => [
+					'site_location_id IN ' => $sites,
+					[
+						$model . '.Date >=' => $startDate,
+						$model . '.Date <= ' => $endDate
+					]
 				]
-			]
 			]
 		])->order(['Date' => 'ASC']);
 		

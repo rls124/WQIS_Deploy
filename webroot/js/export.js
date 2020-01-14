@@ -130,27 +130,27 @@ $(document).ready(function () {
 		var measures = [];
 		switch (newType) {
 			case 'bacteria':
-				measures['ecoli'] = 'E. Coli (CFU/100 mil)';
+				measures['Ecoli'] = 'E. Coli (CFU/100 mil)';
 				break;
 			case 'nutrient':
-				measures['nitrateNitrite'] = 'Nitrate/Nitrite (mg/L)';
-				measures['phosphorus'] = 'Total Phosphorus (mg/L)';
-				measures['drp'] = 'Dissolved Reactive Phosphorus (mg/L)';
-				measures['ammonia'] = 'Ammonia (mg/L)';
+				measures['NitrateNitrite'] = 'Nitrate/Nitrite (mg/L)';
+				measures['Phosphorus'] = 'Total Phosphorus (mg/L)';
+				measures['DRP'] = 'Dissolved Reactive Phosphorus (mg/L)';
+				measures['Ammonia'] = 'Ammonia (mg/L)';
 				break;
 			case 'pesticide':
-				measures['alachlor'] = 'Alachlor (µg/L)';
-				measures['atrazine'] = 'Atrazine (µg/L)';
-				measures['metolachlor'] = 'Metolachlor (µg/L)';
+				measures['Alachlor'] = 'Alachlor (µg/L)';
+				measures['Atrazine'] = 'Atrazine (µg/L)';
+				measures['Metolachlor'] = 'Metolachlor (µg/L)';
 				break;
 			case 'wqm':
-				measures['conductivity'] = 'Conductivity (mS/cm)';
-				measures['do'] = 'Dissolved Oxygen (mg/L)';
-				measures['ph'] = 'pH';
-				measures['water_temp'] = 'Water Temperature (°C)';
-				measures['bridge_to_water_height'] = 'Bridge to Water Height (in)';
-				measures['tds'] = 'Total Dissolved Solids (g/L)';
-				measures['turbidity'] = 'Turbidity (NTU)';
+				measures['Conductivity'] = 'Conductivity (mS/cm)';
+				measures['DO'] = 'Dissolved Oxygen (mg/L)';
+				measures['pH'] = 'pH';
+				measures['Water_Temp'] = 'Water Temperature (°C)';
+				measures['Bridge_to_Water_Height'] = 'Bridge to Water Height (in)';
+				measures['TDS'] = 'Total Dissolved Solids (g/L)';
+				measures['Turbidity'] = 'Turbidity (NTU)';
 				break;
 			default:
 				break;

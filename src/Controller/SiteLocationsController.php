@@ -1,10 +1,9 @@
 <?php
-
 	namespace App\Controller;
 
 	use App\Controller\AppController;
 	use Cake\Log\Log;
-        use Cake\Datasource\ConnectionManager;
+	use Cake\Datasource\ConnectionManager;
 	/**
 	 * SiteLocations Controller
 	 *
@@ -13,8 +12,9 @@
 	 * @method \App\Model\Entity\SiteLocation[] paginate($object = null, array $settings = [])
 	 */
 	class SiteLocationsController extends AppController {
-
 		public function chartselection() {
+			$this->loadModel("SiteLocations");
+			
 			$siteLocations = $this->SiteLocations->find('all');
 
 			$this->set(compact('siteLocations'));

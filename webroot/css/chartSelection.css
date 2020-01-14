@@ -1,10 +1,220 @@
-/*
-    For chart selection page
-*/
+html,
+body,
+#map {
+	padding: 0;
+	margin: 0;
+	height: 500px;
+	width: 100%;
+}
 
-.card{
-    background-color:#dddddd;
-    border: none;
+table{
+    border: thin solid #FFF;
+}
+
+textarea{
+    width: 100%;
+    resize: both;
+    overflow: hidden;
+}
+
+.close{
+    color: red;
+}
+
+.btn-basic{
+    background-color: #2a5171;
+    border: medium solid #2a5171;
+    color: white;
+}
+
+.btn-basic:hover{
+    background-color: #8eceff;
+    text-shadow: 1px 1px 3px black;
+    color:black;
+}
+
+.btn-basic:active{
+    background-color: #dddddd;
+    border: medium solid #77b0d9;
+    color: black;
+}
+
+.btn-basic:disabled:hover{
+    background-color: #2a5171;
+    border-color: #2a5171;
+    text-shadow: none;
+    color: white;
+    cursor: auto;
+}
+
+.btn-close{
+    background-color: #868E96;
+    border: medium solid #868E96;
+    color: white;
+}
+
+.btn-close:hover{
+    background-color: #d4d8db;
+    text-shadow: 1px 1px 3px black;
+    color:black;
+}
+
+.btn-close:active{
+    background-color: #dddddd;
+    border: medium solid #77b0d9;
+    color: black;
+}
+
+.btn-close:disabled:hover{
+    background-color: #2a5171;
+    border-color: #2a5171;
+    text-shadow: none;
+    color: white;
+    cursor: auto;
+}
+
+.inputHide{
+    background-color: #bdbdbd;
+    min-width: 90px;
+    white-space: pre;
+}
+
+.btn-thin{
+    margin:0 auto;
+    padding-top:1px;
+    padding-bottom:1px;
+    height:26px;
+}
+
+.btn-thin:hover{
+    border-color: rgb(57, 156, 255);
+}
+
+ul.pagination li.active a {
+    background-color: rgb(0, 0, 0);
+    color: #FFF;
+    font-weight: bold;
+    cursor: default;
+}
+ul.pagination .disabled:hover a {
+    background: none;
+}
+
+.paginator {
+    text-align: center;
+}
+
+.paginator ul.pagination li {
+    float: none;
+    display: inline-block;
+    padding-right: 5px;
+}
+
+.paginator p {
+    text-align: right;
+    color: rgba(0, 0 ,0 , 0.54);
+}
+.comment:hover {
+    color: #00F;
+    cursor: pointer;
+}
+
+.delete:hover {
+    color: #FF0000;
+    cursor: pointer;
+}
+
+.panel-heading .colpsible-panel:after {
+    font-family: 'Glyphicons Halflings'; 
+    content: "\e114";    
+    float: right;        
+    color: #408080;         
+}
+.panel-heading .colpsible-panel.collapsed:after {
+    content: "\e080"; 
+}
+
+#tetris {
+	margin: 1em auto;
+	padding: 1em;
+	border: 4px solid black;
+	border-radius: 10px;
+	background-color: #F8F8F8;
+}
+#canvas {
+	display: inline-block;
+	vertical-align: top;
+	box-shadow: 10px 10px 10px #999;
+	border: 2px solid #333;
+}
+#menu {
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+}
+#menu p {
+	margin: 0.5em 0;
+	text-align: center;
+}
+#menu p a {
+	text-decoration: none;
+	color: black;
+}
+#upcoming {
+	display: block;
+	margin: 0 auto;
+	background-color: #E0E0E0;
+}
+#score {
+	color: red;
+	font-weight: bold;
+	vertical-align: middle;
+}
+#rows {
+	color: blue;
+	font-weight: bold;
+	vertical-align: middle;
+}
+#menu {
+	width: 200px;
+	height: 400px;
+}
+#upcoming {
+	width: 100px;
+	height: 100px;
+}
+#canvas {
+	width: 200px;
+	height: 400px;
+}
+	
+.sidebar {
+	height: 100%; /* 100% Full-height */
+	width: 0; /* 0 width - change this with JavaScript */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Stay on top */
+	top: 0;
+	left: 0;
+	background-color: grey;
+	overflow-x: hidden;
+	padding-top: 60px;
+	transition: 0.5s;
+	border-color: black;
+	border-width: thin;
+	border-style: solid;
+}
+
+.toggleButton {
+	font-size: 20px;
+	cursor: pointer;
+	background-color: #111;
+	color: white;
+	padding: 10px 15px;
+	border: none;
+}
+
+.toggleButton:hover {
+	background-color: #444;
 }
 
 .select{
@@ -15,31 +225,6 @@
 .select:focus, .date-picker:focus{
     transition: .1s;
     outline: solid #2a5171;
-}
-
-#measurementsHeading, #dateRangeHeading{
-    font-size: 20pt;
-}
-
-#wqisMeaning{
-    font-size: 10pt;
-}
-
-#wqisMeaningHeading{
-    font-size: 10pt;
-}
-
-#wqisMeaning{
-    color: #2a5171;
-    font-style: italic;
-    text-decoration: none;
-    text-align: center;
-}
-
-#wqisMeaning:hover{
-    cursor: pointer;
-    color: #638de2;
-    text-decoration: none;
 }
 
 /*
@@ -57,13 +242,6 @@ td{
     vertical-align: top;
 }
 
-.measurements_Table_Heading{
-    background-color: #2a5171;
-    text-shadow: 1px 1px 3px #2a5171;
-    color: white;
-    text-align: center;
-}
-
 #startDate, #endDate{
     font-size: 12pt;
     height: 38px;
@@ -72,14 +250,6 @@ td{
 #startDate:focus, #endDate:focus{
     transition: .1s;
     outline: solid #2a5171;
-}
-
-/*
-    Button Stuff
-*/
-
-.chartselect-btn{
-    width: 170px;
 }
 
 .datepicker{

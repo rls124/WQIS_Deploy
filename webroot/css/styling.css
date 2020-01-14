@@ -1,51 +1,20 @@
-/*
-Prototype Color Scheme
-    Charcoal - #373737
-    Gravel - #CFCFCF
-    lightGreen - #a3e8a6
-    grass - #6ac56d
-    robinEgg - #3ab7cb
-
-
-Ben Color Scheme
-    Alabaster - #f4f6fa
-    Anakiwa - #8eceff
-    Cornflower Blue - #638de2
-    Waterloo - #6e7393
-    Astronaut - #2a5171
-*/
-
 @import url(https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js);
 
-/*Default CSS Overrides*/
 body{
     background-image: url("../img/riverPic.jpg");
     background-size:100% 100%;
     background-repeat: no-repeat;
-    color:#373737;/*default text color to charcoal*/
+    color:#373737;
     background-attachment: fixed;
 }
 
-/*Bootstrap Overrides*/
 .active{
     color:#a3e8a6;
 }
 
-.whiteBackground{
-    background-image:URL("")!important;
-    background-color:#FFFFFF!important;
-}
-
-/*Custom CSS*/
-.roundGreyBox{
-    /*background-color:#CFCFCF;/*Initial background color*/
-    /*background-color: #D7D6C2;/*Alternate background color #1*/
-    /*background-color: #C1E4E9;/*Alternate background color #2*/
-    background-color: #dddddd;
+.content {
+    background-color: #DDDDDD;
     background-size: 100% 100%;
-    border: solid thick #6e7393;
-    border-radius:6px;
-    margin-top:15px;
     margin-bottom: 10%;
     overflow-x: auto;
     box-shadow:3px 3px 3px black;
@@ -56,37 +25,8 @@ body{
     position:relative;
 }
 
-.vericalText{
-    transform: rotate(90deg);
-    transform-origin: left top 0;
-}
-
 .navbar{
-    background-color:#dddddd;
-    border-bottom: solid thick #6e7393;
-}
-
-.transparentContainer{
-    opacity:.85;
-    filter: alpha(opacity=85);/*for IE*/
-}
-
-.behind-50{
-    z-index: -50;
-}
-
-.behind-100{
-    z-index: -100;
-}
-
-.absoluteCenteredParent{
-    position: relative;
-}
-
-.absoluteCentedChild{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    background-color:lightgrey;
 }
 
 .btn{
@@ -98,11 +38,6 @@ body{
     color: black;
 }
 
-::-moz-selection{
-    background: #8eceff;
-    color: black;
-}
-
 .btn-basic{
     background-color: #2a5171;
     border: medium solid #2a5171;
@@ -110,7 +45,6 @@ body{
 }
 
 .btn-basic:hover{
-    background-color: #8eceff;
     text-shadow: 1px 1px 3px black;
     color:black;
 }
