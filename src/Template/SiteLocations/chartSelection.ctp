@@ -1,4 +1,3 @@
-<?= $this->Html->script("charting.js") ?>
 <?= $this->Html->css('chartSelection.css') ?>
 <?= $this->Html->script('konami.js') ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
@@ -7,7 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
-<script defer src="../js/mapping.js"></script>
+<script defer src="../js/charting.js"></script>
 <script defer src="../js/lib/a"></script>
 
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
@@ -202,10 +201,11 @@
 					</select>
 					results
 					<div id="tableDiv" style="text-align: center;"></div>
-					
+
 					<div>
 						<button type="button" id="firstPageButton">First</button>
 						<button type="button" id="previousPageButton">Previous</button>
+						<input type="text" id="pageNumBox" name="pageNumBox" value="1"></input>
 						<button type="button" id="nextPageButton">Next</button>
 						<button type="button" id="lastPageButton">Last</button>
 					</div>
