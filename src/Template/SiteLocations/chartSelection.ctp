@@ -122,13 +122,13 @@
 				<h5>Display fields:</h5>
 				<ul id="checkboxList" style="list-style-type:none;">
 					<li>
-						<input type="checkbox" value="all" id="allCheckbox"><label for="allCheckbox">All</label>
+						<input type="checkbox" value="all" id="allCheckbox" checked><label for="allCheckbox">All</label>
 					</li>
 					<li>
-						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli"><label for="Ecoli">Ecoli</label>
+						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">Ecoli</label>
 					</li>
 					<li>
-						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform"><label for="TotalColiformCheckbox">TotalColiform</label>
+						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">TotalColiform</label>
 					</li>
 				</ul>
 			</div>

@@ -261,15 +261,36 @@ $(document).ready(function () {
 		});
 	});
 		
-	$("#sites").change(function () {
+	$("#sites").change(function() {
         getRange();
     });
 	
-	$("#allCheckbox").change(function () {
+	$("#allCheckbox").change(function() {
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
 		for (i=0; i<checkboxList.length; i++) {
 			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
 		}
+	});
+	
+	function checkboxesChanged() {
+		var checkboxList = document.getElementsByClassName("measurementCheckbox");
+		
+		var allSelected = true;
+		for (i=0; i<checkboxList.length; i++) {
+			if (checkboxList[i].checked == false) {
+				allSelected = false;
+				break;
+			}
+		}
+		
+		if (allSelected == false) {
+			//deselect the All checkbox
+			document.getElementById("allCheckbox").checked = false;
+		}
+	}
+	
+	$(".measurementCheckbox").change(function() {
+		checkboxesChanged();
 	});
 
     function getRange() {
@@ -390,6 +411,8 @@ $(document).ready(function () {
 		for (i=measurementCheckboxes.length-1; i>=0; i--) {
 			checkboxList.removeChild(measurementCheckboxes[i].parentNode);
 		}
+		
+		document.getElementById("allCheckbox").checked = true;
 	
 		var option = document.createElement('option');
 		option.value = "select";
@@ -412,6 +435,7 @@ $(document).ready(function () {
 				box.id = i + "Checkbox";
 				box.type = "checkbox";
 				box.setAttribute("class", "measurementCheckbox");
+				box.checked = true;
 			
 				var boxLabel = document.createElement('label');
 				boxLabel.innerText = categoryData[i]["text"];
@@ -423,6 +447,10 @@ $(document).ready(function () {
 				checkboxList.appendChild(listItem);
 			}
 		}
+		
+		$(".measurementCheckbox").change(function() {
+			checkboxesChanged();
+		});
 		
         getRange(); //recalculate date range
 	}
