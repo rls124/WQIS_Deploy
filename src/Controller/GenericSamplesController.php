@@ -12,6 +12,59 @@
 		}
 		return $str;
 	}
+	
+	public function tablePages() {
+		$this->render(false);
+		
+		//get request data
+		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
+		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
+		$sites = $this->request->getData('sites');
+		$amount = $_POST["amountEnter"];
+		$searchRange = $_POST["overUnderSelect"];
+		$measurementSearch = $_POST["measurementSearch"];
+		$category = $this->request->getData('category');
+		$selectedMeasures = $_POST["selectedMeasures"];
+		
+		//set model
+		$model = ucfirst($category) . "Samples";
+		$this->loadModel($model);
+		
+		if ($searchRange == "over") {
+			$searchDirection = ' >=';
+		}
+		else if($searchRange == "under") {
+			$searchDirection = ' <=';
+		}
+		else if($searchRange == "equals") {
+			$searchDirection = ' ==';
+		}
+		
+		$fields = ['site_location_id', 'Date', 'Sample_Number'];
+		$fields = array_merge($fields, $selectedMeasures);
+		array_push($fields, (ucfirst($category) . "Comments"));
+		
+		$andConditions = [
+			'site_location_id IN ' => $sites,
+			$model . '.Date >=' => $startDate,
+			$model . '.Date <= ' => $endDate
+		];
+		
+		if ($amount != '') {
+			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . $searchDirection => $amount]);
+		}
+		
+		$count = $this->$model->find('all', [
+			'conditions' => [
+				'and' => $andConditions
+			]
+		])->count();
+		
+		$this->response = $this->response->withStringBody(json_encode([$count]));
+		$this->response = $this->response->withType('json');
+		
+		return $this->response;
+	}
 
 	public function tabledata() {
 		$this->render(false);

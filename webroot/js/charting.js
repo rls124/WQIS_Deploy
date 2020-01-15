@@ -19,6 +19,7 @@ const PEST_DATA = 'PestData';
 
 var chartsDisplayMode = "in-line";
 var tablePage = 1;
+var numPages = -1;
 
 //measurement names/database names available for each category
 var categoryMeasures = {
@@ -534,13 +535,18 @@ $(document).ready(function () {
 		document.getElementById("pageNumBox").value = tablePage;
 		getTableData($('#startDate').val(), $('#endDate').val());
 		
+		$("#firstPageButton").attr("disabled", false);
+		$("#previousPageButton").attr("disabled", false);
+		$("#lastPageButton").attr("disabled", false);
+		$("#nextPageButton").attr("disabled", false);
+		
 		if (tablePage == 1) {
+			$("#previousPageButton").attr("disabled", true);
 			$("#firstPageButton").attr("disabled", true);
-			$("#prevPageButton").attr("disabled", true);
 		}
-		else {
-			$("#firstPageButton").attr("disabled", false);
-			$("#prevPageButton").attr("disabled", false);
+		else if (tablePage == numPages) {
+			$("#nextPageButton").attr("disabled", true);
+			$("#lastPageButton").attr("disabled", true);
 		}
 	}
 	
@@ -548,7 +554,7 @@ $(document).ready(function () {
 		setResultsPage(1);
 	});
 	
-	$("#prevPageButton").click(function() {
+	$("#previousPageButton").click(function() {
 		setResultsPage(tablePage-1);
 	});
 	
@@ -557,7 +563,7 @@ $(document).ready(function () {
 	});
 	
 	$("#lastPageButton").click(function() {
-		alert("operation not yet supported");
+		setResultsPage(numPages);
 	});
 	
 	function toggleSidebar() {
@@ -611,7 +617,28 @@ $(document).ready(function () {
 		for (i=0; i<queue.length; i++) {
 			selectedMeasures.splice(queue[i][1] + i, 0, queue[i][0]); //+i to account for the number of columns already inserted
 		}
-				
+		
+		//get the number of records
+		$.ajax({
+			type: "POST",
+			url: "/WQIS/generic-samples/tablePages",
+			datatype: 'JSON',
+			data: {
+				'sites': sites,
+				'startDate': startDate,
+				'endDate': endDate,
+				'category': categorySelect,
+				'amountEnter': amountEnter,
+				'overUnderSelect': overUnderSelect,
+				'measurementSearch': measurementSearch,
+				'selectedMeasures': selectedMeasures,
+			},
+			success: function(response) {
+				numPages = Math.ceil(response[0] / numRows);
+				document.getElementById("totalPages").innerText = numPages;
+			}
+		});
+			
 		$.ajax({
 			type: "POST",
 			url: "/WQIS/generic-samples/tabledata",
@@ -927,7 +954,6 @@ $(document).ready(function () {
 					if (document.getElementById("showBenchmarks").checked) {
 						//add benchmark lines
 						var benchmarks = response[1][0]; //max and min
-						console.log(response);
 						
 						function bench(val, color) {
 							return {

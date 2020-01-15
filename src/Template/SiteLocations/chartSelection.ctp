@@ -205,7 +205,7 @@
 					<div>
 						<button type="button" id="firstPageButton">First</button>
 						<button type="button" id="previousPageButton">Previous</button>
-						<input type="text" id="pageNumBox" name="pageNumBox" value="1"></input>
+						Page <input type="text" id="pageNumBox" name="pageNumBox" value="1" size=3></input> of <span id="totalPages">x</span>
 						<button type="button" id="nextPageButton">Next</button>
 						<button type="button" id="lastPageButton">Last</button>
 					</div>
