@@ -11,6 +11,10 @@
 
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
 
+<script>
+var admin = <?php echo $admin?>;
+</script>
+
 <div>
 	<div id="mySidebar" class="sidebar">
 		<h3 class="pt-3 centeredText">Narrow results</h3>

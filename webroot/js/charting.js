@@ -673,7 +673,9 @@ $(document).ready(function () {
 					newCell.innerText = colNames[selectedMeasures[i]]["text"];
 				}
 				tableHeader.insertCell().innerText = "Comments";
-				tableHeader.insertCell().innerText = "Actions";
+				if (admin) {
+					tableHeader.insertCell().innerText = "Actions";
+				}
 				
 				//fill in each row
 				for (var i=0; i<response[0].length; i++) {
@@ -689,122 +691,134 @@ $(document).ready(function () {
 								value = value.split("T")[0];
 							}
 						
-							var textDiv = document.createElement('div');
-							textDiv.setAttribute("class", "input text");
-							newCell.appendChild(textDiv);
-						
-							var label = document.createElement('label');
-							label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
-							label.setAttribute("class", "btn btn-thin inputHide");
-							label.setAttribute("for", key + "-" + i);
-							label.innerText = value;
-						
-							label.onclick = function () {
-								var label = $(this);
-								var input = $('#' + label.attr('for'));
-								input.trigger('click');
-								label.attr('style', 'display: none');
-								input.attr('style', 'display: in-line');
-							};
-						
-							textDiv.appendChild(label);
+							if (admin) {
+								var textDiv = document.createElement('div');
+								textDiv.setAttribute("class", "input text");
+								newCell.appendChild(textDiv);
+								
+								var label = document.createElement('label');
+								label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
+								label.setAttribute("class", "btn btn-thin inputHide");
+								label.setAttribute("for", key + "-" + i);
+								label.innerText = value;
+								
+								label.onclick = function () {
+									var label = $(this);
+									var input = $('#' + label.attr('for'));
+									input.trigger('click');
+									label.attr('style', 'display: none');
+									input.attr('style', 'display: in-line');
+								};
 							
-							var cellInput = document.createElement("input");
-							cellInput.type = "text";
-							cellInput.name = key + "-" + i;
-							cellInput.setAttribute("maxlength", 20);
-							cellInput.size = 20;
-							cellInput.setAttribute("class", "inputfields tableInput");
-							cellInput.style = "display: none";
-							cellInput.id = key + "-" + i;
-							cellInput.setAttribute("value", value);
-						
-							cellInput.onfocusout = (function () {
-								var input = $(this);
+								textDiv.appendChild(label);
+								
+								var cellInput = document.createElement("input");
+								cellInput.type = "text";
+								cellInput.name = key + "-" + i;
+								cellInput.setAttribute("maxlength", 20);
+								cellInput.size = 20;
+								cellInput.setAttribute("class", "inputfields tableInput");
+								cellInput.style = "display: none";
+								cellInput.id = key + "-" + i;
+								cellInput.setAttribute("value", value);
+							
+								cellInput.onfocusout = (function () {
+									var input = $(this);
 
-								if (!input.attr('id')) {
-									return;
-								}
-	
-								var rowNumber = (input.attr('id')).split("-")[1];
-								var sampleNumber = $('#Sample_Number-' + rowNumber).val();
-	
-								var parameter = (input.attr('name')).split("-")[0];
-								var value = input.val();
-
-								$.ajax({
-									type: "POST",
-									url: "/WQIS/generic-samples/updatefield",
-									datatype: 'JSON',
-									data: {
-										'sampleNumber': sampleNumber,
-										'parameter': parameter,
-										'value': value
-									},
-									success: function () {
-										var label = $('label[for="' + input.attr('id') + '"');
-
-										input.attr('style', 'display: none');
-										label.attr('style', 'display: in-line; cursor: pointer');
-
-										if (value === '') {
-											label.text('  ');
-										}
-										else {
-											label.text(value);
-										}
-									},
-									failure: function() {
-										alert("failed");
+									if (!input.attr('id')) {
+										return;
 									}
+		
+									var rowNumber = (input.attr('id')).split("-")[1];
+									var sampleNumber = $('#Sample_Number-' + rowNumber).val();
+		
+									var parameter = (input.attr('name')).split("-")[0];
+									var value = input.val();
+
+									$.ajax({
+										type: "POST",
+										url: "/WQIS/generic-samples/updatefield",
+										datatype: 'JSON',
+										data: {
+											'sampleNumber': sampleNumber,
+											'parameter': parameter,
+											'value': value
+										},
+										success: function () {
+											var label = $('label[for="' + input.attr('id') + '"');
+
+											input.attr('style', 'display: none');
+											label.attr('style', 'display: in-line; cursor: pointer');
+
+											if (value === '') {
+												label.text('  ');
+											}
+											else {
+												label.text(value);
+											}
+										},
+										failure: function() {
+											alert("failed");
+										}
+									});
 								});
-							});
-						
-							textDiv.appendChild(cellInput);
+							
+								textDiv.appendChild(cellInput);
+							}
+							else {
+								var label = document.createElement('label');
+								label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
+								label.setAttribute("for", key + "-" + i);
+								label.innerText = value;
+								
+								newCell.appendChild(label);
+							}
 						}
 					});
 					
-					//add the deletion button
-					var newCell = newRow.insertCell();
-					var delButton = document.createElement("span");
-					delButton.setAttribute("class", "delete glyphicon glyphicon-trash");
-					delButton.setAttribute("id", "Delete-" + i);
-					delButton.setAttribute("name", "Delete-" + i);
-					delButton.onclick = function() {
-						var rowDiv = this;
-		
-						if (!$(rowDiv).attr('id')) {
-							return;
-						}
-		
-						$.confirm("Are you sure you want to delete this record?", function (bool) {
-							if (bool) {
-								var rowNumber = ($(rowDiv).attr('id')).split("-")[1];
-								var sampleNumber = $('#Sample_Number-' + rowNumber).val();
-				
-								//Now send ajax data to a delete script
-								$.ajax({
-									type: "POST",
-									url: "/WQIS/generic-samples/deleteRecord",
-									datatype: 'JSON',
-									data: {
-										'sampleNumber': sampleNumber,
-										'type': categorySelect
-									},
-									success: function () {
-										//remove the row from view
-										rowDiv.parentNode.parentNode.style.display = "none";
-						
-										//future work: build a new table, to still maintain 20 total rows and have correct black/white/black sequencing after deletions
-									},
-									fail: function () {
-										alert("Deletion failed");
-									}
-								});
+					if (admin) {
+						//add the deletion button
+						var newCell = newRow.insertCell();
+						var delButton = document.createElement("span");
+						delButton.setAttribute("class", "delete glyphicon glyphicon-trash");
+						delButton.setAttribute("id", "Delete-" + i);
+						delButton.setAttribute("name", "Delete-" + i);
+						delButton.onclick = function() {
+							var rowDiv = this;
+			
+							if (!$(rowDiv).attr('id')) {
+								return;
 							}
-						});
+			
+							$.confirm("Are you sure you want to delete this record?", function (bool) {
+								if (bool) {
+									var rowNumber = ($(rowDiv).attr('id')).split("-")[1];
+									var sampleNumber = $('#Sample_Number-' + rowNumber).val();
+					
+									//Now send ajax data to a delete script
+									$.ajax({
+										type: "POST",
+										url: "/WQIS/generic-samples/deleteRecord",
+										datatype: 'JSON',
+										data: {
+											'sampleNumber': sampleNumber,
+											'type': categorySelect
+										},
+										success: function () {
+											//remove the row from view
+											rowDiv.parentNode.parentNode.style.display = "none";
+							
+											//future work: build a new table, to still maintain 20 total rows and have correct black/white/black sequencing after deletions
+										},
+										fail: function () {
+											alert("Deletion failed");
+										}
+									});
+								}
+							});
+						}
+						newCell.append(delButton);
 					}
-					newCell.append(delButton);
 				}
 	
 				document.getElementById("tableDiv").append(table);
