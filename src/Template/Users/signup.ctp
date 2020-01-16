@@ -4,6 +4,7 @@
 <?=
     $this->Form->create(false, [
         'id' => 'registerForm',
+		'autocomplete' => 'new-password'
         ]
     )
 ?>
@@ -28,7 +29,8 @@
 		    'name' => "firstname",
 		    'id' => "firstname",
 		    'placeholder' => "Your First Name...",
-		    'oninput' => "ensureInput();"
+		    'oninput' => "ensureInput();",
+			'autocomplete' => 'new-password'
 		]);
 	    ?>
         </div>
@@ -48,7 +50,8 @@
 		    'name' => "lastname",
 		    'id' => "lastname",
 		    'placeholder' => "Your Last Name...",
-		    'oninput' => "ensureInput();"
+		    'oninput' => "ensureInput();",
+			'autocomplete' => 'new-password'
 		]);
 	    ?>
         </div>
@@ -70,7 +73,8 @@
 		    'name' => "email",
 		    'id' => "email",
 		    'placeholder' => "Your Email...",
-		    'oninput' => "ensureInput();"
+		    'oninput' => "ensureInput();",
+			'autocomplete' => 'new-password'
 		]);
 	    ?>
         </div>
@@ -90,7 +94,8 @@
 		    'name' => "organization",
 		    'id' => "organization",
 		    'placeholder' => "Your Organization...",
-		    'oninput' => "ensureInput();"
+		    'oninput' => "ensureInput();",
+			'autocomplete' => 'new-password'
 		]);
 	    ?>
         </div>
@@ -110,7 +115,8 @@
 		    'name' => "position",
 		    'id' => "position",
 		    'placeholder' => "Your Position...",
-		    'oninput' => "ensureInput();"
+		    'oninput' => "ensureInput();",
+			'autocomplete' => 'new-password'
 		]);
 	    ?>
         </div>
@@ -131,7 +137,8 @@
 		    'name' => "username",
 		    'id' => "username",
 		    'placeholder' => "Your Username...",
-		    'oninput' => "ensureInput();"
+		    'oninput' => "ensureInput();",
+			'autocomplete' => 'new-password'
 		]);
 	    ?>
 
@@ -155,7 +162,8 @@
 		    'name' => "userpw",
 		    'id' => "userpw",
 		    'placeholder' => "Your Password...",
-		    'oninput' => "ensureInput();"
+		    'oninput' => "ensureInput();",
+			'autocomplete' => 'new-password'
 		]);
 	    ?>
 
@@ -177,7 +185,8 @@
 		    'name' => "passConfirm",
 		    'id' => "passConfirm",
 		    'placeholder' => "Your Password...",
-		    'oninput' => "ensureInput();"
+		    'oninput' => "ensureInput();",
+			'autocomplete' => 'new-password'
 		]);
 	    ?>
         </div>
