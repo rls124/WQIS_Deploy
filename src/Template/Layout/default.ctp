@@ -105,9 +105,6 @@ function hideBrowserCompatibilityMessage() {
         <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
             <?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
 			
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
 			<div class="collapse navbar-collapse">
 				<ul class="navbar-nav mr-auto navbar-right">
 					<li class="nav-item">
@@ -145,6 +142,7 @@ function hideBrowserCompatibilityMessage() {
 				?>
 				</ul>
 
+				<?php if ($userinfo) { ?>
 				<ul class="nav pull-right">
 					<li class="dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -161,6 +159,7 @@ function hideBrowserCompatibilityMessage() {
 						</div>
 					</li>
 				</ul>
+				<?php } ?>
 			</div>
         </nav>
         
