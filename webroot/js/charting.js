@@ -52,6 +52,10 @@ var categoryMeasures = {
 };
 
 $(document).ready(function () {
+	if (typeof admin == 'undefined') {
+		admin = false;
+	}
+	
 	//map code
 	require([
 		"esri/Map",
