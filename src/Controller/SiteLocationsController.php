@@ -173,52 +173,34 @@
 				->find('all')
 				->where(['ID = ' => $siteid])
 				->first();
-			//Delete the site
+			//delete the site
 			$this->SiteLocations->delete($site);
 		}
 
 		public function fetchSites() {
-			$this->autoRender = false;
+			$this->render(false);
 			
-			if ($this->request->is('post')) {
-				//Get the sites
+			if ($this->request->is('POST')) {
+				//get the sites
 				$sites = $this->SiteLocations->find('all')->order('Site_Number');
-
-				$this->loadModel('BacteriaSamples');
-				$this->loadModel('NutrientSamples');
-				$this->loadModel('PesticideSamples');
 
 				$connection = ConnectionManager::get('default');
 				
-				//returns the most recent value for each site location
-				$bactQuery = "select f.Date as 'Date', f.site_location_id as 'site_location_id', f.Ecoli as 'Ecoli'" .
-					" from (" .
-					"select site_location_id, max(Date) as maxdate" .
-					" from bacteria_samples group by site_location_id" .
-					") as x inner join bacteria_samples as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
-				$bactDateAndData = $connection->execute($bactQuery)->fetchAll('assoc');
-
-				$nutrientQuery = "SELECT f.Date as 'Date', f.site_location_id as 'site_location_id', f.Phosphorus as 'Phosphorus', f.NitrateNitrite as 'NitrateNitrite', f.DRP as 'DRP', f.Ammonia as 'Ammonia'" .
-					" from (" .
-					"select site_location_id, max(Date) as maxdate" .
-					" from nutrient_samples group by site_location_id" .
-					") as x inner join nutrient_samples as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
-				$nutrientDateAndData = $connection->execute($nutrientQuery)->fetchAll('assoc');
-
-				$pesticideQuery = "SELECT f.Date as 'Date', f.site_location_id as 'site_location_id', f.Atrazine as 'Atrazine', f.Alachlor as 'Alachlor', f.Metolachlor as 'Metolachlor'" .
-					" from (" .
-					"select site_location_id, max(Date) as maxdate" .
-					" from pesticide_samples group by site_location_id" .
-					") as x inner join pesticide_samples as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
-				$pestDateAndData = $connection->execute($pesticideQuery)->fetchAll('assoc');
-                                
-				$json = json_encode([
-					'SiteData' => $sites, 
-					'BacteriaData' => $bactDateAndData, 
-					'NutrientData' => $nutrientDateAndData, 
-					'PestData' => $pestDateAndData]);
+				$data = ["SiteData" => $sites];
+				$tableNames = ["bacteria_samples", "nutrient_samples", "pesticide_samples", "physical_samples"];
 				
-				$this->response = $this->response->withStringBody($json);
+				for ($i=0; $i<sizeof($tableNames); $i++) {
+					$query = "select * from (select site_location_id, max(Date) as maxdate from " .
+						$tableNames[$i] .
+						" group by site_location_id) as x inner join " .
+						$tableNames[$i] .
+						" as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
+						
+					$queryResult = $connection->execute($query)->fetchAll('assoc');
+					$data = array_merge($data, [$tableNames[$i] => $queryResult]);
+				}
+				
+				$this->response = $this->response->withStringBody(json_encode($data));
 				$this->response = $this->response->withType('json');
 				
 				return $this->response;

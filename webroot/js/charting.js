@@ -13,9 +13,6 @@ $(document).ajaxStart(function() {
 });
 
 const SITE_DATA = 'SiteData';
-const BACTERIA_DATA = 'BacteriaData';
-const NUTRIENT_DATA = 'NutrientData';
-const PEST_DATA = 'PestData';
 
 var chartsDisplayMode = "in-line";
 var tablePage = 1;
@@ -72,10 +69,6 @@ $(document).ready(function () {
 			datatype: 'JSON',
 			async: false,
 			success: function(response) {
-				var currentBactRow = 0;
-				var currentNutrientRow = 0;
-				var currentPestRow = 0;
-	
 				//build the table template we use to display all the data associated with a point on the map
 				var templateContent = "<table>";
 				for (var category in categoryMeasures) {
@@ -128,59 +121,25 @@ $(document).ready(function () {
 						attributes: {}
 					});
 					
-					pointGraphic.attributes.siteNumber = response[SITE_DATA][i]["Site_Number"];
+					pointGraphic.attributes.siteNumber = response[SITE_DATA][i]["Site_Number"].toString();
 					pointGraphic.attributes.siteName = response[SITE_DATA][i]["Site_Name"];
 					pointGraphic.attributes.siteLocation = response[SITE_DATA][i]["Site_Location"];
 					
-					var bactLatestDate = 'No Records Found';
-					var nutrientLatestDate = 'No Records Found';
-					var pestLatestDate = 'No Records Found';
-
-					//check to see if the current site has bacteria data associated with it
-					if (response[BACTERIA_DATA][currentBactRow]) {
-						var bactSiteNumber = response[BACTERIA_DATA][currentBactRow]['site_location_id'];
-						if (pointGraphic.attributes.siteNumber == bactSiteNumber) {
-							bactLatestDate = response[BACTERIA_DATA][currentBactRow]['Date'].split('T')[0];
-							if (response[BACTERIA_DATA][currentBactRow]['Ecoli'] !== null) {
-								pointGraphic.attributes.Ecoli = response[BACTERIA_DATA][currentBactRow]['Ecoli'];
+					for (var shortField in categoryMeasures) {
+						var latestDate = "No Records Found";
+						var field = shortField + "_samples";
+						
+						for (rowNum=0; rowNum<response[field].length; rowNum++) {
+							var siteNumber = response[field][rowNum]["site_location_id"];
+							if (pointGraphic.attributes.siteNumber == siteNumber) {
+								//latestDate = response[field][rowNum]["Date"].split('T')[0]; //to be used later
+								for (var key in categoryMeasures[shortField]) {
+									if (!(categoryMeasures[shortField][key]["visible"] == false) && response[field][rowNum][key] !== null) {
+										pointGraphic.attributes[key] = response[field][rowNum][key].toString();
+									}
+								}
+								break;
 							}
-							currentBactRow++;
-						}
-					}
-
-					//check to see if the current site has nutrient data associated with it
-					if (response[NUTRIENT_DATA][currentNutrientRow]) {
-						var nutrientSiteNumber = response[NUTRIENT_DATA][currentNutrientRow]['site_location_id'];
-						if (pointGraphic.attributes.siteNumber == nutrientSiteNumber) {
-							nutrientLatestDate = response[NUTRIENT_DATA][currentNutrientRow]['Date'].split('T')[0];
-							if (response[NUTRIENT_DATA][currentNutrientRow]['Phosphorus'] !== null) {
-								pointGraphic.attributes.Phosphorus = response[NUTRIENT_DATA][currentNutrientRow]['Phosphorus'];
-							}
-							if (response[NUTRIENT_DATA][currentNutrientRow]['NitrateNitrite'] !== null) {
-								pointGraphic.attributes.NitrateNitrite = response[NUTRIENT_DATA][currentNutrientRow]['NitrateNitrite'];
-							}
-							if (response[NUTRIENT_DATA][currentNutrientRow]['DRP'] !== null) {
-								pointGraphic.attributes.DRP = response[NUTRIENT_DATA][currentNutrientRow]['DRP'];
-							}
-							currentNutrientRow++;
-						}
-					}
-
-					//check to see if the current site has pesticide data associated with it
-					if (response[PEST_DATA][currentPestRow]) {
-						var pestSiteNumber = response[PEST_DATA][currentPestRow]['site_location_id'];
-						if (pointGraphic.attributes.siteNumber == pestSiteNumber) {
-							pestLatestDate = response[PEST_DATA][currentPestRow]['Date'].split('T')[0];
-							if (response[PEST_DATA][currentPestRow]['Atrazine'] !== null) {
-								pointGraphic.attributes.Atrazine = response[PEST_DATA][currentPestRow]['Atrazine'];
-							}
-							if (response[PEST_DATA][currentPestRow]['Alachlor'] !== null) {
-								pointGraphic.attributes.Alachlor = response[PEST_DATA][currentPestRow]['Alachlor'];
-							}
-							if (response[PEST_DATA][currentPestRow]['Metolachlor'] !== null) {
-								pointGraphic.attributes.Metolachlor = response[PEST_DATA][currentPestRow]['Metolachlor'];
-							}
-							currentPestRow++;
 						}
 					}
 					
@@ -873,7 +832,7 @@ $(document).ready(function () {
 			var chartsGrid = document.createElement("div");
 			chartsGrid.setAttribute("class", "container");
 			
-			//figure out the number of rows, assuming 2 columns each
+			//figure out the number of rows with 2 columns each
 			var nx = 2;
 			var ny = Math.ceil(nMeasures/nx);
 			for (y=0; y<ny; y++) {
