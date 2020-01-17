@@ -97,9 +97,9 @@ var admin = <?php echo $admin?>;
 			<div>
 				<?=
 				$this->Form->select('overUnderSelect', [
-					'over' => 'Over',
-					'under' => 'Under',
-					'equal' => 'Equal To'
+					'>=' => 'Over',
+					'<=' => 'Under',
+					'==' => 'Equal To'
 					], [
 					'label' => 'Search',
 					'id' => 'overUnderSelect',

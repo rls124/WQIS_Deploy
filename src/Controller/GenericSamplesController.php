@@ -21,7 +21,7 @@
 		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
 		$sites = $this->request->getData('sites');
 		$amount = $_POST["amountEnter"];
-		$searchRange = $_POST["overUnderSelect"];
+		$searchDirection = $_POST["overUnderSelect"];
 		$measurementSearch = $_POST["measurementSearch"];
 		$category = $this->request->getData('category');
 		$selectedMeasures = $_POST["selectedMeasures"];
@@ -29,16 +29,6 @@
 		//set model
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
-		
-		if ($searchRange == "over") {
-			$searchDirection = ' >=';
-		}
-		else if($searchRange == "under") {
-			$searchDirection = ' <=';
-		}
-		else if($searchRange == "equals") {
-			$searchDirection = ' ==';
-		}
 		
 		$fields = ['site_location_id', 'Date', 'Sample_Number'];
 		$fields = array_merge($fields, $selectedMeasures);
@@ -51,7 +41,7 @@
 		];
 		
 		if ($amount != '') {
-			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . $searchDirection => $amount]);
+			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
 		}
 		
 		$count = $this->$model->find('all', [
@@ -74,7 +64,7 @@
 		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
 		$sites = $this->request->getData('sites');
 		$amount = $_POST["amountEnter"];
-		$searchRange = $_POST["overUnderSelect"];
+		$searchDirection = $_POST["overUnderSelect"];
 		$measurementSearch = $_POST["measurementSearch"];
 		$category = $this->request->getData('category');
 		$selectedMeasures = $_POST["selectedMeasures"];
@@ -86,49 +76,28 @@
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
 		
-		if ($searchRange == "over") {
-			$searchDirection = ' >=';
-		}
-		else if($searchRange == "under") {
-			$searchDirection = ' <=';
-		}
-		else if($searchRange == "equals") {
-			$searchDirection = ' ==';
-		}
-		
 		$fields = ['site_location_id', 'Date', 'Sample_Number'];
 		$fields = array_merge($fields, $selectedMeasures);
 		array_push($fields, (ucfirst($category) . "Comments"));
 		
+		$andConditions = [
+			'site_location_id IN' => $sites,
+			$model . '.Date >=' => $startDate,
+			$model . '.Date <= ' => $endDate
+		];
+		
 		if ($amount != '') {
-			$samples = $this->$model->find('all', [
-				'fields' => $fields,
-				'conditions' => [
-					'and' => [
-						'site_location_id IN' => $sites,
-						$model . '.Date >=' => $startDate,
-						$model . '.Date <= ' => $endDate,
-						$model . '.' . $measurementSearch . $searchDirection => $amount
-					]
-				],
-				'limit' => $numRows,
-				'page' => $pageNum
-			])->order(['Date' => 'Desc']);
+			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
 		}
-		else {
-			$samples = $this->$model->find('all', [
-				'fields' => $fields,
-				'conditions' => [
-					'and' => [
-						'site_location_id IN ' => $sites,
-						$model . '.Date >=' => $startDate,
-						$model . '.Date <= ' => $endDate
-					]
-				],
-				'limit' => $numRows,
-				'page' => $pageNum
-			])->order(['Date' => 'Desc']);
-		}
+		
+		$samples = $this->$model->find('all', [
+			'fields' => $fields,
+			'conditions' => [
+				'and' => $andConditions
+			],
+			'limit' => $numRows,
+			'page' => $pageNum
+		])->order(['Date' => 'Desc']);
 		
 		$this->response = $this->response->withStringBody(json_encode([$samples]));
 		$this->response = $this->response->withType('json');
