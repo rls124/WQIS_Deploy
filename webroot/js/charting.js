@@ -462,6 +462,7 @@ $(document).ready(function () {
 	
 	$("#updateButton").click(function() {
 		resetCharts();
+		setResultsPage(1);
 		getGraphData($('#startDate').val(), $('#endDate').val());
 		getTableData($('#startDate').val(), $('#endDate').val());
 		$("#chartsLayoutSelect").show();
@@ -496,7 +497,6 @@ $(document).ready(function () {
 		tablePage = page;
 		document.getElementById("tableDiv").innerHTML = "";
 		document.getElementById("pageNumBox").value = tablePage;
-		getTableData($('#startDate').val(), $('#endDate').val());
 		
 		$("#firstPageButton").attr("disabled", false);
 		$("#previousPageButton").attr("disabled", false);
@@ -515,18 +515,22 @@ $(document).ready(function () {
 	
 	$("#firstPageButton").click(function() {
 		setResultsPage(1);
+		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#previousPageButton").click(function() {
 		setResultsPage(tablePage-1);
+		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#nextPageButton").click(function() {
 		setResultsPage(tablePage+1);
+		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#lastPageButton").click(function() {
 		setResultsPage(numPages);
+		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	function toggleSidebar() {
