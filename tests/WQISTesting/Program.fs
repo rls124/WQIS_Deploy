@@ -1,10 +1,34 @@
 ﻿open canopy.runner.classic
 open canopy.classic
+open CommandLine
+open System
+
+type options = {
+    [<Option('P', HelpText = "Use production environment")>] prodEnvironment : bool;}
+
+let inline (|Success|Help|Version|Fail|) (result : ParserResult<'a>) =
+  match result with
+  | :? Parsed<'a> as parsed -> Success(parsed.Value)
+  | :? NotParsed<'a> as notParsed when notParsed.Errors.IsHelp() -> Help
+  | :? NotParsed<'a> as notParsed when notParsed.Errors.IsVersion() -> Version
+  | :? NotParsed<'a> as notParsed -> Fail(notParsed.Errors)
+  | _ -> failwith "invalid parser result"
+
+let args = Environment.GetCommandLineArgs()
+let result = Parser.Default.ParseArguments<options>(args)
+let mutable prodEnvironment = false
+
+match result with
+  | Success(opts) -> (prodEnvironment <- opts.prodEnvironment)
+  | Fail(errs) -> printf "Invalid: %A, Errors: %u\n" args (Seq.length errs)
+  | Help | Version -> ()
 
 canopy.configuration.chromeDir <- System.AppContext.BaseDirectory
 
 //settings
-let baseUrl = "http://localhost/WQIS/"
+let baseUrl =
+    if (prodEnvironment) then "http://emerald.pfw.edu/WQISBeta/"
+    else "http://localhost/WQIS/"
 
 //start an instance of chrome
 start chrome
