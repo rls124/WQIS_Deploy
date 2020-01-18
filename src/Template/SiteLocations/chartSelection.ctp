@@ -179,12 +179,14 @@ var admin = <?php echo $admin?>;
 			</div>
 			<div id="collapseTwo" class="panel-collapse collapse show">
 				<div class="panel-body">
-					<div id="chartsLayoutSelect" style="display: none;">
+					<div id="chartsLayoutSelect" style="display: none">
 						<button type="button" id="chartsInlineButton">In-line</button>
 						<button type="button" id="chartsGridButton">Grid</button>
 						<input type="checkbox" id="showBenchmarks" value="showBenchmarks" checked>Show benchmark lines
 					</div>
 					<div id="chartDiv" style="text-align: center;"></div>
+					<span id="chartsNoData">No data to display</span>
+					<span id="chartsWhereError" style="display: none">Graph view does not support the "Where" search feature</span>
 				</div>
 			</div>
 		</div>
@@ -195,18 +197,21 @@ var admin = <?php echo $admin?>;
 			</div>
 			<div id="collapseThree" class="panel-collapse collapse show">
 				<div class="panel-body">
-					Show 
-					<select id="numRowsDropdown">
-						<option value=10>10</option>
-						<option value=25 selected="selected">25</option>
-						<option value=100>100</option>
-						<option value=500>500</option>
-						<option value=-1>All</option>
-					</select>
-					results
+					<div id="tableSettings" style="display: none">
+						Show 
+						<select id="numRowsDropdown">
+							<option value=10>10</option>
+							<option value=25 selected="selected">25</option>
+							<option value=100>100</option>
+							<option value=500>500</option>
+							<option value=-1>All</option>
+						</select>
+						results
+					</div>
 					<div id="tableDiv" style="text-align: center;"></div>
+					<span id="tableNoData">No data to display</span>
 
-					<div>
+					<div id="tablePageSelector" style="display: none">
 						<button type="button" id="firstPageButton">First</button>
 						<button type="button" id="previousPageButton">Previous</button>
 						Page <input type="text" id="pageNumBox" name="pageNumBox" value="1" size=3></input> of <span id="totalPages">x</span>
