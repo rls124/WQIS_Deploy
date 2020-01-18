@@ -29,7 +29,7 @@
                             if ($min != 0.0) {
                                 $min = number_format((float)$min, 3, '.', '');
                             }
-                            echo $this->Form->input('min-benchmarkMinimum', ['maxlength' => '7',
+                            echo $this->Form->control('min-benchmarkMinimum', ['maxlength' => '7',
                                 'id' => 'min-' . $row,
                                 'class' => 'inputfields tableInput',
                                 'size' => '11',
@@ -48,7 +48,7 @@
                             if(!($benchmark->measureKey == 'Ecoli') && !($benchmark->measureKey == 'Turbidity')){
                                 $max = number_format((float)$max, 3, '.', '');
                             }	
-                            echo $this->Form->input('max-benchmarkMaximum', ['maxlength' => '7',
+                            echo $this->Form->control('max-benchmarkMaximum', ['maxlength' => '7',
                                 'id' => 'max-' . $row,
                                 'class' => 'inputfields tableInput',
                                 'size' => '11',
@@ -65,7 +65,7 @@
 						<td>
 							<?php
 							$detectionMin = $benchmark->detectionMinimum;
-							echo $this->Form->input('min-detectionMinimum', ['maxlength' => '7',
+							echo $this->Form->control('min-detectionMinimum', ['maxlength' => '7',
                                 'id' => 'detectionMinimum-' . $row,
                                 'class' => 'inputfields tableInput',
                                 'size' => '11',
@@ -82,7 +82,7 @@
 						<td>
 							<?php
 							$detectionMax = $benchmark->detectionMaximum;
-							echo $this->Form->input('max-detectionMaximum', ['maxlength' => '7',
+							echo $this->Form->control('max-detectionMaximum', ['maxlength' => '7',
                                 'id' => 'detectionMaximum-' . $row,
                                 'class' => 'inputfields tableInput',
                                 'size' => '11',
@@ -103,3 +103,4 @@
 		<?php endforeach; ?>
         </tbody>
     </table>
+</p>
