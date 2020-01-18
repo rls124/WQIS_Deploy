@@ -1,0 +1,12 @@
+Automated testing is accomplished via an F# program using Canopy. This is currently in a primitive state, but will be expanded to cover nearly all testing for the project.
+
+You will need Visual Studio to compile the project (can also probably compile it by command line, but I've not tested this). Canopy, Selenium.WebDriver.ChromeDriver, and commandlineparser are NuGet dependencies. You'll also need Chrome installed.
+
+Build the project from VS using Build -> Build Solution, then run the program from the command line (the executable will be stored at WQIS/tests/WQISTesting/bin/Debug/netcoreapp3.1/WQISTesting.exe).
+
+Options:
+	-P: Run from the production site (currently configured to https://emerald.pfw.edu/WQIS) instead of localhost (currently doesn't work, production is incompatible with this test tool but will be supported after the redesign exits beta)
+
+	-B: Run from the beta test site (currently configured to https://emerald.pfw.edu/WQISBeta) instead of localhost
+
+	-U: Set the type of user to test as (either admin or normal)
