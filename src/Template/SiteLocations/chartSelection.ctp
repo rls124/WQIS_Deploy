@@ -15,7 +15,6 @@
 var admin = <?php echo $admin?>;
 </script>
 
-<div>
 	<div id="mySidebar" class="sidebar">
 		<h3 class="pt-3 centeredText">Narrow results</h3>
 	
@@ -85,7 +84,8 @@ var admin = <?php echo $admin?>;
 				<?=
 				$this->Form->select('measurementSelect', [
 					'select' => 'Select a measure',
-					'Ecoli' => 'E. Coli (CFU/100 mil)'
+					'Ecoli' => 'E. Coli (CFU/100 mil)',
+					'TotalColiform' => 'Coliform (CFU/100 mil)'
 					], [
 					'label' => 'Measurement',
 					'id' => 'measurementSelect',
@@ -227,6 +227,5 @@ var admin = <?php echo $admin?>;
 		?>
 	</div>
 	</div>
-</div>
 
 <script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwcJIWDoWbEgt7mX_j5CXGevgWvQPh6bc&callback=initMap' type="text/javascript"></script>
