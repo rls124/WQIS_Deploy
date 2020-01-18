@@ -42,3 +42,9 @@ nbproject/* # NetBeans
 .sass-cache/ # Sass preprocessor
 
 \.vscode/settings\.json
+
+# Testing-related files #
+#########################
+/tests/.vs/
+/tests/WQISTesting/bin/
+/tests/WQISTesting/obj/
