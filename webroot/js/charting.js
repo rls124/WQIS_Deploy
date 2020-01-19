@@ -12,12 +12,6 @@ $(document).ajaxStart(function() {
     $('body').css('cursor', 'default');
 });
 
-const SITE_DATA = 'SiteData';
-
-var chartsDisplayMode = "in-line";
-var tablePage = 1;
-var numPages = -1;
-
 //measurement names/database names available for each category
 var categoryMeasures = {
 	'bacteria': {
@@ -48,6 +42,75 @@ var categoryMeasures = {
 	}
 };
 
+//build the fields object the map uses for the points layer
+var fields = [{
+	name: "ObjectID",
+	type: "oid"
+}, {
+	name: "siteNumber",
+	type: "string"
+}, {
+	name: "siteName",
+	type: "string"
+}, {
+	name: "siteLocation",
+	type: "string"
+}];
+
+for (var category in categoryMeasures) {
+	for (var key in categoryMeasures[category]) {
+		fields.push({
+			name: key,
+			type: "string",
+			defaultValue: "No Data"
+		});
+	}
+}
+
+//build the table template we use to display all the data associated with a point on the map
+var templateContent = "<table>";
+for (var category in categoryMeasures) {
+	for (var key in categoryMeasures[category]) {
+		if (!(categoryMeasures[category][key]["visible"] == false)) {
+			templateContent = templateContent + "<tr><th>" + categoryMeasures[category][key]["text"] + "</th><td>{" + key + "}</td></tr>";
+		}
+	}
+}
+templateContent = templateContent + "</table>";
+
+const template = {
+	title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
+	content: templateContent
+};
+
+const renderer = {
+	type: "simple",
+	symbol: {
+		type: "simple-marker",
+		color: "orange",
+		outline: {
+			color: "white"
+		}
+	}
+};
+
+const markerSymbol = {
+	type: "simple-marker",
+	color: [226, 119, 40],
+	outline: {
+		color: [255, 255, 255],
+		width: 2
+	}
+};
+
+const SITE_DATA = 'SiteData';
+
+//page state information
+var chartsDisplayMode = "in-line";
+var tablePage = 1;
+var numRecords = 0;
+var numPages = 0;
+
 $(document).ready(function () {
 	if (typeof admin == 'undefined') {
 		admin = false;
@@ -69,42 +132,6 @@ $(document).ready(function () {
 			datatype: 'JSON',
 			async: false,
 			success: function(response) {
-				//build the table template we use to display all the data associated with a point on the map
-				var templateContent = "<table>";
-				for (var category in categoryMeasures) {
-					for (var key in categoryMeasures[category]) {
-						if (!(categoryMeasures[category][key]["visible"] == false)) {
-							templateContent = templateContent + "<tr><th>" + categoryMeasures[category][key]["text"] + "</th><td>{" + key + "}</td></tr>";
-						}
-					}
-				}
-				templateContent = templateContent + "</table>";
-	
-				const template = {
-					title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
-					content: templateContent
-				};
-
-				const renderer = {
-					type: "simple",
-					symbol: {
-						type: "simple-marker",
-						color: "orange",
-						outline: {
-							color: "white"
-						}
-					}
-				};
-				
-				const markerSymbol = {
-					type: "simple-marker",
-					color: [226, 119, 40],
-					outline: {
-						color: [255, 255, 255],
-						width: 2
-					}
-				};
-				
 				var graphics = [];
 				//add markers to the map at each sites longitude and latitude
 				for (var i = 0; i < response[SITE_DATA].length; i++) {
@@ -144,30 +171,6 @@ $(document).ready(function () {
 					}
 					
 					graphics.push(pointGraphic);
-				}
-				
-				var fields = [{
-					name: "ObjectID",
-					type: "oid"
-				}, {
-					name: "siteNumber",
-					type: "string"
-				}, {
-					name: "siteName",
-					type: "string"
-				}, {
-					name: "siteLocation",
-					type: "string"
-				}];
-				
-				for (var category in categoryMeasures) {
-					for (var key in categoryMeasures[category]) {
-						fields.push({
-							name: key,
-							type: "string",
-							defaultValue: "No Data"
-						});
-					}
 				}
 				
 				var sampleSitesLayer = new FeatureLayer({
@@ -463,6 +466,7 @@ $(document).ready(function () {
 	$("#updateButton").click(function() {
 		resetCharts();
 		setResultsPage(1);
+		getNumRecords($('#startDate').val(), $('#endDate').val());
 		getGraphData($('#startDate').val(), $('#endDate').val());
 		getTableData($('#startDate').val(), $('#endDate').val());
 		$("#chartsLayoutSelect").show();
@@ -533,6 +537,32 @@ $(document).ready(function () {
 		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
+	function getNumRecords(startDate, endDate) {
+		//get the number of records
+		$.ajax({
+			type: "POST",
+			url: "/WQIS/generic-samples/tablePages",
+			datatype: 'JSON',
+			async: false,
+			data: {
+				'sites': $("#sites").val(),
+				'startDate': startDate,
+				'endDate': endDate,
+				'category': document.getElementById("categorySelect").value,
+				'amountEnter': document.getElementById("amountEnter").value,
+				'overUnderSelect': document.getElementById("overUnderSelect").value,
+				'measurementSearch': document.getElementById("measurementSelect").value,
+				'selectedMeasures': getSelectedMeasures(),
+			},
+			success: function(response) {
+				numResults = response[0];
+				var numRows = document.getElementById("numRowsDropdown").value;
+				numPages = Math.ceil(numResults / numRows);
+				document.getElementById("totalPages").innerText = numPages;
+			}
+		});
+	}
+	
 	function toggleSidebar() {
 		//expand the search sidebar and shift the rest of the page over, or the opposite
 		if (document.getElementById("mySidebar").style.width == "450px") {
@@ -584,28 +614,6 @@ $(document).ready(function () {
 		for (i=0; i<queue.length; i++) {
 			selectedMeasures.splice(queue[i][1] + i, 0, queue[i][0]); //+i to account for the number of columns already inserted
 		}
-		
-		//get the number of records
-		$.ajax({
-			type: "POST",
-			url: "/WQIS/generic-samples/tablePages",
-			datatype: 'JSON',
-			async: false,
-			data: {
-				'sites': sites,
-				'startDate': startDate,
-				'endDate': endDate,
-				'category': categorySelect,
-				'amountEnter': amountEnter,
-				'overUnderSelect': overUnderSelect,
-				'measurementSearch': measurementSearch,
-				'selectedMeasures': selectedMeasures,
-			},
-			success: function(response) {
-				numPages = Math.ceil(response[0] / numRows);
-				document.getElementById("totalPages").innerText = numPages;
-			}
-		});
 		
 		if (numPages > 0) { //if there is any data to display
 			document.getElementById("tableNoData").style = "display: none";
