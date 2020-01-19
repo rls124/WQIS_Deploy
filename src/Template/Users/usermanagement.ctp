@@ -100,7 +100,7 @@
             </div>
             <div class="modal-body">
 		<?=
-		    $this->Form->input('firstname', [
+		    $this->Form->control('firstname', [
 			'label' => [
 			    'text' => 'First Name',
 			    'class' => 'label-reg lol'
@@ -115,7 +115,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('lastname', [
+		    $this->Form->control('lastname', [
 			'label' => [
 			    'text' => 'Last Name',
 			    'class' => 'label-reg lol'
@@ -130,7 +130,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('email', [
+		    $this->Form->control('email', [
 			'label' => [
 			    'text' => 'Email Address',
 			    'class' => 'label-reg lol'
@@ -145,7 +145,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('organization', [
+		    $this->Form->control('organization', [
 			'label' => [
 			    'text' => 'Organization',
 			    'class' => 'label-reg lol'
@@ -160,7 +160,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('position', [
+		    $this->Form->control('position', [
 			'label' => [
 			    'text' => 'Position',
 			    'class' => 'label-reg lol'
@@ -241,7 +241,7 @@
             </div>
             <div class="modal-body">
 		<?=
-		    $this->Form->input('firstname', [
+		    $this->Form->control('firstname', [
 			'label' => [
 			    'text' => 'First Name',
 			    'class' => 'label-reg lol'
@@ -256,7 +256,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('lastname', [
+		    $this->Form->control('lastname', [
 			'label' => [
 			    'text' => 'Last Name',
 			    'class' => 'label-reg lol'
@@ -271,7 +271,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('email', [
+		    $this->Form->control('email', [
 			'label' => [
 			    'text' => 'Email Address',
 			    'class' => 'label-reg lol'
@@ -286,7 +286,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('organization', [
+		    $this->Form->control('organization', [
 			'label' => [
 			    'text' => 'Organization',
 			    'class' => 'label-reg lol'
@@ -301,7 +301,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('position', [
+		    $this->Form->control('position', [
 			'label' => [
 			    'text' => 'Position',
 			    'class' => 'label-reg lol'
@@ -316,7 +316,7 @@
 		    ]);
 		?>
 		<?=
-		    $this->Form->input('username', [
+		    $this->Form->control('username', [
 			'label' => [
 			    'Username' => 'Username',
 			    'class' => 'label-reg lol'
