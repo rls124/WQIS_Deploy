@@ -7,10 +7,6 @@ body,
 	width: 100%;
 }
 
-table{
-    border: thin solid #FFF;
-}
-
 textarea{
     width: 100%;
     resize: both;
@@ -227,21 +223,27 @@ ul.pagination .disabled:hover a {
     outline: solid #2a5171;
 }
 
-/*
-    Table Stuff
-*/
+/*Table Stuff*/
 table{
-    width: 100%;
+    border: thin solid #FFF;
+	background: #FFF;
+	border-collapse: collapse;
+	width: 100%; 
 }
-
+td,
+th{ 
+	padding: 4px; 
+	border: 1px solid #CCC;
+	overflow: hidden;
+	text-align: left;
+	vertical-align: middle;
+}
 th{
-    text-align: center;
+	background-color: #DDD; 
+	font-weight: 400;
 }
 
-td{
-    vertical-align: top;
-}
-
+/*datepicker stuff*/
 #startDate, #endDate{
     font-size: 12pt;
     height: 38px;

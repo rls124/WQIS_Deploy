@@ -68,6 +68,8 @@
 		$measurementSearch = $_POST["measurementSearch"];
 		$category = $this->request->getData('category');
 		$selectedMeasures = $_POST["selectedMeasures"];
+		$sortBy = $_POST["sortBy"];
+		$sortDirection = $_POST["sortDirection"];
 		
 		$pageNum = $_POST['pageNum'];
 		$numRows = $_POST["numRows"];
@@ -97,7 +99,7 @@
 			],
 			'limit' => $numRows,
 			'page' => $pageNum
-		])->order(['Date' => 'Desc']);
+		])->order([$sortBy => $sortDirection]);
 		
 		$this->response = $this->response->withStringBody(json_encode([$samples]));
 		$this->response = $this->response->withType('json');

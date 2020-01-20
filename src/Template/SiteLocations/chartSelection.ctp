@@ -8,6 +8,7 @@
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
 <script defer src="../js/charting.js"></script>
 <script defer src="../js/lib/a"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
 
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
 

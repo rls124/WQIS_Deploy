@@ -110,6 +110,8 @@ var chartsDisplayMode = "in-line";
 var tablePage = 1;
 var numRecords = 0;
 var numPages = 0;
+var sortBy = "Date";
+var sortDirection = "Desc";
 
 $(document).ready(function () {
 	if (typeof admin == 'undefined') {
@@ -420,6 +422,9 @@ $(document).ready(function () {
 		});
 		
         getRange(); //recalculate date range
+		
+		//reset the sortBy field to Date, since none of the other measures will be valid anymore
+		sortBy = "Date";
 	}
 	
 	function downloadFile(fileData, type) {
@@ -464,17 +469,16 @@ $(document).ready(function () {
 	}
 	
 	$("#updateButton").click(function() {
-		resetCharts();
-		setResultsPage(1);
+		resetAll();
 		getNumRecords($('#startDate').val(), $('#endDate').val());
 		getGraphData($('#startDate').val(), $('#endDate').val());
-		getTableData($('#startDate').val(), $('#endDate').val());
+		setResultsPage(1);
 		$("#chartsLayoutSelect").show();
 	});
 	
 	$("#resetButton").click(function() {
 		//clear all parameters to default values, and clear the chart/table view
-		resetCharts();
+		resetAll();
 		$("#sites").val(null).trigger("change");
 		$("#categorySelect").val("bacteria");
 		changeMeasures();
@@ -483,13 +487,13 @@ $(document).ready(function () {
 	
 	$("#chartsInlineButton").click(function() {
 		chartsDisplayMode = "in-line";
-		document.getElementById("chartDiv").innerHTML = "";
+		resetCharts();
 		getGraphData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#chartsGridButton").click(function() {
 		chartsDisplayMode = "grid";
-		document.getElementById("chartDiv").innerHTML = "";
+		resetCharts();
 		getGraphData($('#startDate').val(), $('#endDate').val());
 	});
 	
@@ -515,26 +519,24 @@ $(document).ready(function () {
 			$("#nextPageButton").attr("disabled", true);
 			$("#lastPageButton").attr("disabled", true);
 		}
+		
+		getTableData();
 	}
 	
 	$("#firstPageButton").click(function() {
 		setResultsPage(1);
-		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#previousPageButton").click(function() {
 		setResultsPage(tablePage-1);
-		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#nextPageButton").click(function() {
 		setResultsPage(tablePage+1);
-		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	$("#lastPageButton").click(function() {
 		setResultsPage(numPages);
-		getTableData($('#startDate').val(), $('#endDate').val());
 	});
 	
 	function getNumRecords(startDate, endDate) {
@@ -580,8 +582,12 @@ $(document).ready(function () {
 	}
 
 	function resetCharts() {
-		//remove the old chart and table
+		//remove the old chart
 		document.getElementById("chartDiv").innerHTML = "";
+	}
+	
+	function resetTable() {
+		//remove the old table
 		document.getElementById("tableDiv").innerHTML = "";
 		
 		var sampleTable = document.getElementById("tableView");
@@ -590,7 +596,38 @@ $(document).ready(function () {
 		}
 	}
 	
+	function resetAll() {
+		resetCharts();
+		resetTable();
+	}
+	
+	function setSort(e) {
+		var field = e.srcElement.id;
+		
+		if (field == "") {
+			//we probably clicked on the sorting icon, get its parent node and try again
+			field = e.srcElement.parentElement.id;
+		}
+		
+		//check if this was already the sortBy field, if so then we swap the sort direction
+		if (sortBy == field) {
+			if (sortDirection == "Desc") {
+				sortDirection = "Asc";
+			}
+			else {
+				sortDirection = "Desc";
+			}
+		}
+		
+		resetTable();
+		sortBy = field;
+		
+		setResultsPage(1);
+	}
+	
 	function getTableData(startDate, endDate) {
+		var startDate = $('#startDate').val();
+		var endDate = $('#endDate').val();
 		var sites = $("#sites").val();
 		var categorySelect = document.getElementById("categorySelect").value;
 		var amountEnter = document.getElementById("amountEnter").value;
@@ -615,6 +652,16 @@ $(document).ready(function () {
 			selectedMeasures.splice(queue[i][1] + i, 0, queue[i][0]); //+i to account for the number of columns already inserted
 		}
 		
+		//set up the column names and IDs to actually display
+		var columns = ["Site ID", "Date", "Sample Number"];
+		for (i=0; i<selectedMeasures.length; i++) {
+			columns.push(categoryMeasures[categorySelect][selectedMeasures[i]]["text"]);
+		}
+		columns.push("Comments");
+		var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
+		
+		columnIDs.push(categorySelect[0].toUpperCase + categorySelect.slice(1) + "Comments");
+		
 		if (numPages > 0) { //if there is any data to display
 			document.getElementById("tableNoData").style = "display: none";
 			document.getElementById("tableSettings").style = "display: block";
@@ -635,7 +682,9 @@ $(document).ready(function () {
 					'measurementSearch': measurementSearch,
 					'selectedMeasures': selectedMeasures,
 					'numRows': numRows,
-					'pageNum': tablePage
+					'pageNum': tablePage,
+					'sortBy': sortBy,
+					'sortDirection': sortDirection
 				},
 				success: function(response) {
 					//create the blank table
@@ -645,18 +694,34 @@ $(document).ready(function () {
 					
 					//build the header row first
 					var tableHeader = table.insertRow();
-
-					tableHeader.insertCell().innerText = "Site ID";
-					tableHeader.insertCell().innerText = "Date";
-					tableHeader.insertCell().innerText = "Sample Number";
-					var colNames = categoryMeasures[categorySelect];
-					for (i=0; i<selectedMeasures.length; i++) {
-						var newCell = tableHeader.insertCell();
-						newCell.innerText = colNames[selectedMeasures[i]]["text"];
+					
+					for (i=0; i<columns.length; i++) {
+						var newCell = document.createElement("th");
+						
+						var arrows;
+						if (columnIDs[i] == sortBy) {
+							if (sortDirection == "Desc") {
+								arrows = "fa-sort-down";
+							}
+							else {
+								arrows = "fa-sort-up";
+							}
+						}
+						else {
+							arrows = "fa-sort";
+						}
+						
+						newCell.innerHTML = columns[i] + "<i style='float: right' class='fas " + arrows + "'></i>";
+						newCell.setAttribute("class", "sort-by");
+						newCell.id = columnIDs[i];
+						tableHeader.appendChild(newCell);
+						
+						newCell.onclick = function() {setSort(event);};
 					}
-					tableHeader.insertCell().innerText = "Comments";
 					if (admin) {
-						tableHeader.insertCell().innerText = "Actions";
+						var actionsCell = document.createElement("th");
+						actionsCell.innerText = "Actions";
+						tableHeader.appendChild(actionsCell);
 					}
 					
 					//fill in each row
