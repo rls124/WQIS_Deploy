@@ -515,7 +515,7 @@ $(document).ready(function () {
 			$("#previousPageButton").attr("disabled", true);
 			$("#firstPageButton").attr("disabled", true);
 		}
-		else if (tablePage == numPages) {
+		if (tablePage == numPages) {
 			$("#nextPageButton").attr("disabled", true);
 			$("#lastPageButton").attr("disabled", true);
 		}
@@ -568,7 +568,12 @@ $(document).ready(function () {
 			success: function(response) {
 				numResults = response[0];
 				var numRows = document.getElementById("numRowsDropdown").value;
-				numPages = Math.ceil(numResults / numRows);
+				if (numRows > -1) {
+					numPages = Math.ceil(numResults / numRows);
+				}
+				else {
+					numPages = 1;
+				}
 				document.getElementById("totalPages").innerText = numPages;
 			}
 		});

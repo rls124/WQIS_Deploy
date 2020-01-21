@@ -74,6 +74,11 @@
 		$pageNum = $_POST['pageNum'];
 		$numRows = $_POST["numRows"];
 		
+		if ($numRows == -1) {
+			//just set this to a very large number. Ideally would just remove the limit entirely, but thats a bit more logic
+			$numRows = 10000;
+		}
+		
 		//set model
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
