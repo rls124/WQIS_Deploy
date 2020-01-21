@@ -58,6 +58,12 @@ var fields = [{
 }];
 
 for (var category in categoryMeasures) {
+	fields.push({
+		name: category + "Date",
+		type: "string",
+		defaultValue: "No Records Found"
+	});
+	
 	for (var key in categoryMeasures[category]) {
 		fields.push({
 			name: key,
@@ -70,6 +76,7 @@ for (var category in categoryMeasures) {
 //build the table template we use to display all the data associated with a point on the map
 var templateContent = "<table>";
 for (var category in categoryMeasures) {
+	templateContent = templateContent + "<tr><th>" + category + " data</th><th>{" + category + "Date}</th></tr>";
 	for (var key in categoryMeasures[category]) {
 		if (!(categoryMeasures[category][key]["visible"] == false)) {
 			templateContent = templateContent + "<tr><th>" + categoryMeasures[category][key]["text"] + "</th><td>{" + key + "}</td></tr>";
@@ -155,13 +162,12 @@ $(document).ready(function () {
 					pointGraphic.attributes.siteLocation = response[SITE_DATA][i]["Site_Location"];
 					
 					for (var shortField in categoryMeasures) {
-						var latestDate = "No Records Found";
 						var field = shortField + "_samples";
 						
 						for (rowNum=0; rowNum<response[field].length; rowNum++) {
 							var siteNumber = response[field][rowNum]["site_location_id"];
 							if (pointGraphic.attributes.siteNumber == siteNumber) {
-								//latestDate = response[field][rowNum]["Date"].split('T')[0]; //to be used later
+								pointGraphic.attributes[shortField + "Date"] = response[field][rowNum]["Date"].split('T')[0];
 								for (var key in categoryMeasures[shortField]) {
 									if (!(categoryMeasures[shortField][key]["visible"] == false) && response[field][rowNum][key] !== null) {
 										pointGraphic.attributes[key] = response[field][rowNum][key].toString();
