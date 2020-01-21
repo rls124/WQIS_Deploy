@@ -470,7 +470,7 @@ $(document).ready(function () {
 	
 	$("#updateButton").click(function() {
 		resetAll();
-		getNumRecords($('#startDate').val(), $('#endDate').val());
+		getNumRecords();
 		getGraphData($('#startDate').val(), $('#endDate').val());
 		setResultsPage(1);
 		$("#chartsLayoutSelect").show();
@@ -523,6 +523,11 @@ $(document).ready(function () {
 		getTableData();
 	}
 	
+	$("#numRowsDropdown").change(function() {
+		getNumRecords();
+		setResultsPage(1);
+	});
+	
 	$("#firstPageButton").click(function() {
 		setResultsPage(1);
 	});
@@ -539,8 +544,12 @@ $(document).ready(function () {
 		setResultsPage(numPages);
 	});
 	
-	function getNumRecords(startDate, endDate) {
+	function getNumRecords() {
 		//get the number of records
+		
+		var startDate = $('#startDate').val();
+		var endDate = $('#endDate').val();
+		
 		$.ajax({
 			type: "POST",
 			url: "/WQIS/generic-samples/tablePages",
@@ -625,7 +634,7 @@ $(document).ready(function () {
 		setResultsPage(1);
 	}
 	
-	function getTableData(startDate, endDate) {
+	function getTableData() {
 		var startDate = $('#startDate').val();
 		var endDate = $('#endDate').val();
 		var sites = $("#sites").val();
