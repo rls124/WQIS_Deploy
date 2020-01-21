@@ -1,5 +1,6 @@
 ﻿open canopy.runner.classic
 open canopy.classic
+open canopy.types
 open CommandLine
 open System
 
@@ -37,6 +38,7 @@ let runTests(opts) =
 
     //start an instance of chrome
     start chrome
+    pin FullScreen
 
     //login test
     "login" &&& fun _ ->
@@ -74,13 +76,32 @@ let runTests(opts) =
     //search works
     "search works" &&& fun _ ->
         "#sites" << "100 Cedar Creek"
+        sleep 1 //wait for the date fields to autopopulate
         click "#updateButton"
         displayed "#tableView"
-        click "#updateButton" //we have to do this a second time or it doesn't work properly, not really sure why
 
     //correct number of rows display
     "correct number of table rows" &&& fun _ ->
-        count "#tableView *" 886 //for nutrient data with 25 rows
+        if (opts.userType = "admin") then
+            count "#tableView *" 894 //for nutrient data with 25 rows
+        else
+            count "#tableView *" 443 //fewer elements because theres no editability or deletion buttons
+
+    //navbar links work
+    "navbar links work" &&& fun _ ->
+        click "View Water Quality Data"
+        sleep 1
+        on (baseUrl + "site-locations/chartselection")
+        click "About"
+        sleep 1
+        on (baseUrl + "pages/about")
+        click "Help"
+        sleep 1
+        on (baseUrl + "pages/help")
+
+        if (opts.userType = "Admin") then
+            click "Admin Panel"
+            on (baseUrl + "pages/administratorpanel")
 
     //run all tests
     run()
