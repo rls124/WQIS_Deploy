@@ -120,6 +120,8 @@ var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
 
+var drainsLayer = null;
+
 $(document).ready(function () {
 	if (typeof admin == 'undefined') {
 		admin = false;
@@ -189,10 +191,8 @@ $(document).ready(function () {
 					source: graphics,
 					renderer: renderer
 				});
-				
-				var drainsLayer = new MapImageLayer("http://gis1.acimap.us/imapweb/rest/services/Engineering/Drains/MapServer", null);
 
-				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
+				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml" // + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
 				var watershedsLayer = new KMLLayer({
 					url: kmlurl
 				});
@@ -200,7 +200,7 @@ $(document).ready(function () {
 				//create the map
 				var map = new Map({
 					basemap: "gray",
-					layers: [sampleSitesLayer, drainsLayer, watershedsLayer]
+					layers: [sampleSitesLayer, watershedsLayer]
 				});
 		
 				const view = new MapView({
@@ -221,9 +221,12 @@ $(document).ready(function () {
 					watershedsLayer.visible = watershedsLayerToggle.checked;
 				});
 				
-				drainsLayer.visible = false;
 				var drainsLayerToggle = document.getElementById("drainsLayer");
 				drainsLayerToggle.addEventListener("change", function() {
+					if (drainsLayer == null) {
+						drainsLayer = new MapImageLayer("http://gis1.acimap.us/imapweb/rest/services/Engineering/Drains/MapServer", null);
+						map.layers.push(drainsLayer);
+					}
 					drainsLayer.visible = drainsLayerToggle.checked;
 				});
 				
