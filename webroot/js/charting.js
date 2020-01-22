@@ -351,20 +351,19 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/export/exportData",
+			url: "/WQIS/generic-samples/exportData",
 			datatype: 'JSON',
 			data: {
-					'sites': sites,
-					'startDate': startDate,
-					'endDate': endDate,
-					'category': categorySelect,
-					'amountEnter': amountEnter,
-					'overUnderSelect': overUnderSelect,
-					'measurementSearch': measurementSearch,
-					'selectedMeasures': selectedMeasures
+				'sites': sites,
+				'startDate': startDate,
+				'endDate': endDate,
+				'category': categorySelect,
+				'amountEnter': amountEnter,
+				'overUnderSelect': overUnderSelect,
+				'measurementSearch': measurementSearch,
+				'selectedMeasures': selectedMeasures
 			},
 			success: function (response) {
-				console.log("success");
 				downloadFile(response, categorySelect);
 			},
 			failure: function (response) {
