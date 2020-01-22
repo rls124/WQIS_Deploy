@@ -82,10 +82,28 @@ let runTests(opts) =
 
     //correct number of rows display
     "correct number of table rows" &&& fun _ ->
-        if (opts.userType = "admin") then
-            count "#tableView *" 894 //for nutrient data with 25 rows
-        else
-            count "#tableView *" 443 //fewer elements because theres no editability or deletion buttons
+        let el = (((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr") |> List.length)
+        26 === el
+
+    //table edit works
+    "table edit works" &&& fun _ ->
+        //let tableFirstRow = element "#tableView:first-child:nth-child(2)"
+        //printfn "%s" (tableFirstRow.ToString())
+        //describe "#tableView:nth-child(1)"
+
+        //let rows = element "#tableView" |> elementsWithin ".input"
+        //printfn "%s" (rows.ToString())
+
+        //-------
+
+        //let el = (((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr") |> List.length)
+        //printfn "%s" (el.ToString())
+
+        let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
+        let row = el.[0]
+        let cells = row |> elementsWithin "th"
+        let sampleNumberCol = cells.[2].Text
+        printfn "%s" sampleNumberCol
 
     //navbar links work
     "navbar links work" &&& fun _ ->
