@@ -339,34 +339,33 @@ $(document).ready(function () {
 	}, false);
 	
 	$("#exportBtn").click(function () {
-		var sampleType = $('#categorySelect').val();		
 		var startDate = $('#startDate').val();
 		var endDate = $('#endDate').val();
-		var sites = $('#sites').val();
-		
-		var amountEnter = $("#amountEnter").val();
-		var overUnderSelect = $("#overUnderSelect").val();
-		
-		var measures = ['all'];
-		
-		var measurementSelect = $("#measurementSelect").val();
+		var sites = $("#sites").val();
+		var categorySelect = document.getElementById("categorySelect").value;
+		var amountEnter = document.getElementById("amountEnter").value;
+		var overUnderSelect = document.getElementById("overUnderSelect").value;
+		var measurementSearch = document.getElementById("measurementSelect").value;
+		var selectedMeasures = selectedMeasuresWithRawCount();
+		selectedMeasures.push(categorySelect[0].toUpperCase() + categorySelect.slice(1) + "Comments");
 
 		$.ajax({
 			type: "POST",
 			url: "/WQIS/export/exportData",
 			datatype: 'JSON',
 			data: {
-				'type': sampleType,
-				'startDate': startDate,
-				'endDate': endDate,
-				'sites': sites,
-				'measures': measures,
-				'amountEnter': amountEnter,
-				'overUnderSelect': overUnderSelect,
-				'measurementSelect': measurementSelect
+					'sites': sites,
+					'startDate': startDate,
+					'endDate': endDate,
+					'category': categorySelect,
+					'amountEnter': amountEnter,
+					'overUnderSelect': overUnderSelect,
+					'measurementSearch': measurementSearch,
+					'selectedMeasures': selectedMeasures
 			},
 			success: function (response) {
-				downloadFile(response, sampleType);
+				console.log("success");
+				downloadFile(response, categorySelect);
 			},
 			failure: function (response) {
 				alert("Failed");
@@ -648,15 +647,7 @@ $(document).ready(function () {
 		setResultsPage(1);
 	}
 	
-	function getTableData() {
-		var startDate = $('#startDate').val();
-		var endDate = $('#endDate').val();
-		var sites = $("#sites").val();
-		var categorySelect = document.getElementById("categorySelect").value;
-		var amountEnter = document.getElementById("amountEnter").value;
-		var overUnderSelect = document.getElementById("overUnderSelect").value;
-		var measurementSearch = document.getElementById("measurementSelect").value;
-		var numRows = document.getElementById("numRowsDropdown").value;
+	function selectedMeasuresWithRawCount() {
 		var selectedMeasures = getSelectedMeasures();
 		
 		//check if there are associated RawCount columns we should include for those selected measures as well
@@ -675,6 +666,20 @@ $(document).ready(function () {
 			selectedMeasures.splice(queue[i][1] + i, 0, queue[i][0]); //+i to account for the number of columns already inserted
 		}
 		
+		return selectedMeasures;
+	}
+	
+	function getTableData() {
+		var startDate = $('#startDate').val();
+		var endDate = $('#endDate').val();
+		var sites = $("#sites").val();
+		var categorySelect = document.getElementById("categorySelect").value;
+		var amountEnter = document.getElementById("amountEnter").value;
+		var overUnderSelect = document.getElementById("overUnderSelect").value;
+		var measurementSearch = document.getElementById("measurementSelect").value;
+		var numRows = document.getElementById("numRowsDropdown").value;
+		var selectedMeasures = selectedMeasuresWithRawCount();
+		
 		//set up the column names and IDs to actually display
 		var columns = ["Site ID", "Date", "Sample Number"];
 		for (i=0; i<selectedMeasures.length; i++) {
@@ -683,7 +688,7 @@ $(document).ready(function () {
 		columns.push("Comments");
 		var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
 		
-		columnIDs.push(categorySelect[0].toUpperCase + categorySelect.slice(1) + "Comments");
+		columnIDs.push(categorySelect[0].toUpperCase() + categorySelect.slice(1) + "Comments");
 		
 		if (numPages > 0) { //if there is any data to display
 			document.getElementById("tableNoData").style = "display: none";
