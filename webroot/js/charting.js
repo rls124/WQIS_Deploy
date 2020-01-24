@@ -959,26 +959,25 @@ $(document).ready(function () {
 				//figure out the number of rows with 2 columns each
 				var nx = 2;
 				var ny = Math.ceil(nMeasures/nx);
+				var chartNum = 0;
 				for (y=0; y<ny; y++) {
 					var row = document.createElement("div");
 					row.setAttribute("class", "row");
 					
 					for (x=0; x<nx; x++) {
-						var chartNum = (y*x + x);
-						if (chartNum < nMeasures) {
-							var cell = document.createElement("div");
-							cell.setAttribute("class", "col-sm");
-						
-							var newCanvasContainer = document.createElement("div");
-							newCanvasContainer.style = "width: 100%; text-align: center; margin: auto;";
-						
-							var newCanvas = document.createElement("canvas");
-							newCanvas.id = "chart-" + chartNum;
-							newCanvasContainer.appendChild(newCanvas);
-						
-							cell.appendChild(newCanvasContainer);
-							row.appendChild(cell);
-						}
+						var cell = document.createElement("div");
+						cell.setAttribute("class", "col-sm");
+					
+						var newCanvasContainer = document.createElement("div");
+						newCanvasContainer.style = "width: 100%; text-align: center; margin: auto;";
+					
+						var newCanvas = document.createElement("canvas");
+						newCanvas.id = "chart-" + chartNum;
+						newCanvasContainer.appendChild(newCanvas);
+					
+						cell.appendChild(newCanvasContainer);
+						row.appendChild(cell);
+						chartNum++;
 					}
 					chartsGrid.appendChild(row);
 				}
@@ -1053,6 +1052,7 @@ $(document).ready(function () {
 							}
 						}
 						
+						console.log("trying to get chart " + k);
 						var ctx = document.getElementById("chart-" + k).getContext("2d");
 						var benchmarkLines = [];
 

@@ -193,7 +193,6 @@ ul.pagination .disabled:hover a {
 	left: 0;
 	background-color: grey;
 	overflow-x: hidden;
-	padding-top: 60px;
 	transition: 0.5s;
 	border-color: black;
 	border-width: thin;
