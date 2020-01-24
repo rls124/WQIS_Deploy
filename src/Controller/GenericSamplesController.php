@@ -29,7 +29,6 @@
 		$modelBare = $this->$modelName;
 		
 		$data = "";
-		$sampleQuery = $modelBare;
 		
 		$fields = ['site_location_id', 'Date', 'Sample_Number'];
 		$fields = array_merge($fields, $selectedMeasures);

@@ -120,7 +120,7 @@ var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
 
-var drainsLayer = null;
+var drainsLayer;
 
 $(document).ready(function () {
 	if (typeof admin == 'undefined') {
@@ -134,8 +134,9 @@ $(document).ready(function () {
 		"esri/layers/MapImageLayer",
 		"esri/Graphic",
 		"esri/layers/FeatureLayer",
+		"esri/layers/GraphicsLayer",
 		"esri/layers/KMLLayer"
-	], function(Map, MapView, MapImageLayer, Graphic, FeatureLayer, KMLLayer) {
+	], function(Map, MapView, MapImageLayer, Graphic, FeatureLayer, GraphicsLayer, KMLLayer) {
 		//fetches site information from the database
 		$.ajax({
 			type: 'POST',
@@ -192,7 +193,7 @@ $(document).ready(function () {
 					renderer: renderer
 				});
 
-				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml" // + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
+				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml"; // + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
 				var watershedsLayer = new KMLLayer({
 					url: kmlurl
 				});
@@ -200,7 +201,7 @@ $(document).ready(function () {
 				//create the map
 				var map = new Map({
 					basemap: "gray",
-					layers: [sampleSitesLayer, watershedsLayer]
+					layers: [watershedsLayer, sampleSitesLayer],
 				});
 		
 				const view = new MapView({
@@ -1000,9 +1001,13 @@ $(document).ready(function () {
 					success: function(response) {
 						function selectColor(colorIndex, palleteSize) {
 							//returns color at an index of an evenly-distributed color pallete of arbitrary size
+							
+							//to avoid ever having the color of the line matching the color of the benchmark lines, we offset the index and pallet size by 1
+							colorIndex++;
 							if (palleteSize < 1) {
 								palleteSize = 1; //defaults to one color, can't divide by zero or the universe implodes
 							}
+							palleteSize++;
 							
 							return "hsl(" + (colorIndex * (360 / palleteSize) % 360) + ",70%,50%)";
 						}
