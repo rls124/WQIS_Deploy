@@ -1052,7 +1052,6 @@ $(document).ready(function () {
 							}
 						}
 						
-						console.log("trying to get chart " + k);
 						var ctx = document.getElementById("chart-" + k).getContext("2d");
 						var benchmarkLines = [];
 

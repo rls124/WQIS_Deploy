@@ -232,5 +232,3 @@ var admin = <?php echo $admin?>;
 	])
 	?>
 </div>
-
-<script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwcJIWDoWbEgt7mX_j5CXGevgWvQPh6bc&callback=initMap' type="text/javascript"></script>

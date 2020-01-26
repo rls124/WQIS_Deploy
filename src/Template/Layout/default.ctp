@@ -2,22 +2,6 @@
 $pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), '/') + 1);
 ?>
 
-<script>
-var dojoConfig = {
-	//prevents conflicts with jquery
-	async:true,
-	deps:["jquery"],
-	packages: [{
-		name: "jquery",
-		main: "jquery.min"
-	},{
-		name: "dojo",
-		location: "https://js.arcgis.com/4.8/dojo",
-		main: "dojo"
-	}]
-};
-</script>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -37,11 +21,20 @@ var dojoConfig = {
         <?= $this->Html->css('styling.css') ?>
         <?= $this->Html->css('cakemessages.css') ?>
 		<?= $this->Html->css("loading.css") ?>
-
+		
+		<script>
+		var dojoConfig = {
+			//prevents conflicts with jquery
+			async:true,
+			packages: [{
+				name: "dojo",
+				location: "https://js.arcgis.com/4.8/dojo",
+				main: "dojo"
+			}]
+		};
 <?php
 if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session
 ?>
-<script>
 function browserDetect() {
 	var ua = navigator.userAgent;
 	var upToDate = true;
@@ -98,14 +91,14 @@ function hideBrowserCompatibilityMessage() {
 	//set a cookie so we don't keep annoying the user about this
 	document.cookie = "ignoreBrowserCompatibility";
 }
-</script>
 	<?php } ?>
-    </head>
-    <body class="h-100">
-        <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+	</script>
+	</head>
+	<body class="h-100">
+		<nav class="navbar navbar-expand-lg navbar-light" id="navbar">
             <?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
 			
-			<div class="collapse navbar-collapse">
+			<div class="navbar-collapse">
 				<ul class="navbar-nav mr-auto navbar-right">
 					<li class="nav-item">
 						<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Water Quality Data</a>
