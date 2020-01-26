@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ChartSelectionTests.fs" />
+    <Compile Include="User.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
