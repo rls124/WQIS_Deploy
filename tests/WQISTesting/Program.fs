@@ -8,6 +8,7 @@ type options = {
     [<Option('P', HelpText = "Use production environment")>] prodEnvironment : bool;
     [<Option('B', HelpText = "Use beta environment")>] betaEnvironment : bool;
     [<Option('U', HelpText = "Type of users to test with (admin, normal)")>] userType : String;
+    [<Option('V', HelpText = "Verbose")>] verbose: bool;
     }
 
 let inline (|Success|Help|Version|Fail|) (result : ParserResult<'a>) =
@@ -45,8 +46,8 @@ let runTests(opts) =
         url baseUrl
 
         //set username and password fields
-        "#userName" << user.[0]
-        "#userPW" << user.[1]
+        "#username" << user.[0]
+        "#userpw" << user.[1]
 
         click "#login-btn"
 
@@ -78,6 +79,7 @@ let runTests(opts) =
         "#sites" << "100 Cedar Creek"
         sleep 1 //wait for the date fields to autopopulate
         click "#updateButton"
+        sleep 1 //wait to populate
         displayed "#tableView"
 
     //correct number of rows display
@@ -85,25 +87,36 @@ let runTests(opts) =
         let el = (((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr") |> List.length)
         26 === el
 
-    //table edit works
-    "table edit works" &&& fun _ ->
-        //let tableFirstRow = element "#tableView:first-child:nth-child(2)"
-        //printfn "%s" (tableFirstRow.ToString())
-        //describe "#tableView:nth-child(1)"
-
-        //let rows = element "#tableView" |> elementsWithin ".input"
-        //printfn "%s" (rows.ToString())
-
-        //-------
-
-        //let el = (((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr") |> List.length)
-        //printfn "%s" (el.ToString())
-
+    //table sort works
+    "table sort works" &&& fun _ ->
         let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
         let row = el.[0]
         let cells = row |> elementsWithin "th"
-        let sampleNumberCol = cells.[2].Text
-        printfn "%s" sampleNumberCol
+        let sampleNumberCol = cells.[2]
+        click sampleNumberCol
+        //TODO: validate that this actually works, all we do for now is click on the column
+
+    if opts.userType = "admin" then
+        //table edit works
+        "table edit works" &&& fun _ ->
+            let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
+            let row = el.[1]
+            let cells = row |> elementsWithin "td"
+            let cell = cells.[3] |> elementWithin "div"
+            let label = cell |> elementWithin "label"
+            let input = cell |> elementWithin "input"
+            if opts.verbose then
+                printfn "Label = %s, input = %s" label.Text (read input)
+
+            //validate that the label is visible to start with
+            displayed label
+            click label
+            //validate that the label is now hidden
+            notDisplayed label
+
+            input << "50"
+            click "body"
+            sleep 1
 
     //navbar links work
     "navbar links work" &&& fun _ ->
