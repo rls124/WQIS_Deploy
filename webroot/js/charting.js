@@ -120,7 +120,6 @@ var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
 
-var drainsLayer;
 
 $(document).ready(function () {
 	if (typeof admin == 'undefined') {
@@ -192,16 +191,44 @@ $(document).ready(function () {
 					source: graphics,
 					renderer: renderer
 				});
+				
+				
 
 				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml"; // + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
+				
 				var watershedsLayer = new KMLLayer({
 					url: kmlurl
+				});
+				
+				var drainsLayer = new MapImageLayer({
+					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Bodies_Flowlines_Unclassified_LocalRes/MapServer"
+				});
+				var riverLayer = new MapImageLayer({
+					url: "https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Streams/MapServer"
+				});
+				var impairedLayer = new MapImageLayer({
+					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Quality_Impaired_Waters_303d_2016/MapServer"
+				});
+				var bodiesLayer = new MapImageLayer({
+					url: "https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Lakes/MapServer"
+				});;
+				var floodLayer = new MapImageLayer({
+					url:"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Floodplains_FIRM/MapServer"
+				});
+				var damLayer = new MapImageLayer({
+					url: "https://maps.indiana.edu/ArcGIS/rest/services/Infrastructure/Dams_IDNR/MapServer"
+				});
+				var wellLayer = new MapImageLayer({
+					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Wells_IDNR/MapServer"
+				});;
+				var wetlandLayer = new MapImageLayer({
+					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer"
 				});
 
 				//create the map
 				var map = new Map({
 					basemap: "gray",
-					layers: [watershedsLayer, sampleSitesLayer],
+					layers: [watershedsLayer, sampleSitesLayer, drainsLayer, riverLayer, impairedLayer, bodiesLayer, floodLayer, damLayer, wellLayer, wetlandLayer],
 				});
 		
 				const view = new MapView({
@@ -224,12 +251,52 @@ $(document).ready(function () {
 				
 				var drainsLayerToggle = document.getElementById("drainsLayer");
 				drainsLayerToggle.addEventListener("change", function() {
-					if (drainsLayer == null) {
-						drainsLayer = new MapImageLayer("http://gis1.acimap.us/imapweb/rest/services/Engineering/Drains/MapServer", null);
-						map.layers.push(drainsLayer);
-					}
 					drainsLayer.visible = drainsLayerToggle.checked;
+					
 				});
+				drainsLayer.visible = false;
+				
+				var riverLayerToggle = document.getElementById("riverLayer");
+				riverLayerToggle.addEventListener("change", function(){
+					riverLayer.visible = riverLayerToggle.checked;
+				});
+				riverLayer.visible = false;
+				
+				var impairedLayerToggle = document.getElementById("impairedLayer");
+				impairedLayerToggle.addEventListener("change", function(){
+					impairedLayer.visible = impairedLayerToggle.checked;
+				});
+				impairedLayer.visible = false;
+				
+				var bodiesLayerToggle = document.getElementById("bodiesLayer");
+				bodiesLayerToggle.addEventListener("change", function(){
+					bodiesLayer.visible = bodiesLayerToggle.checked;
+				});
+				bodiesLayer.visible = false;
+				
+				var floodLayerToggle = document.getElementById("floodLayer");
+				floodLayerToggle.addEventListener("change", function(){
+					floodLayer.visible = floodLayerToggle.checked;
+				});
+				floodLayer.visible = false;
+				
+				var damLayerToggle = document.getElementById("damLayer");
+				damLayerToggle.addEventListener("change", function(){
+					damLayer.visible = damLayerToggle.checked;
+				});
+				damLayer.visible = false;
+				
+				var wellLayerToggle = document.getElementById("wellLayer");
+				wellLayerToggle.addEventListener("change", function(){
+					wellLayer.visible = wellLayerToggle.checked;
+				});
+				wellLayer.visible = false;
+				
+				var wetlandLayerToggle = document.getElementById("wetlandLayer");
+				wetlandLayerToggle.addEventListener("change", function(){
+					wetlandLayer.visible = wetlandLayerToggle.checked;
+				});
+				wetlandLayer.visible = false;
 				
 				//handle the dropdown that allows basemap to be changed
 				var basemapSelect = document.getElementById("selectBasemap");
