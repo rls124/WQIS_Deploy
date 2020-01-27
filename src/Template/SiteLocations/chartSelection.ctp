@@ -155,11 +155,18 @@ var admin = <?php echo $admin?>;
 			<div class="panel-body" id="mapContainer">
 				<div id="map"></div>
 				<div class="row">
-					<div class="col-sm-2">
+					<div class="col-sm">
 						<input type="checkbox" id="watershedsLayer" checked /> Watersheds
 						<input type="checkbox" id="drainsLayer" /> Drains
+						<input type="checkbox" id="riverLayer" /> Rivers/Streams
+						<input type="checkbox" id="impairedLayer" /> IDEM - Impaired Waters
+						<input type="checkbox" id="bodiesLayer" /> Water Bodies
+						<input type="checkbox" id="floodLayer" /> Floodplains
+						<input type="checkbox" id="damLayer" /> Dams
+						<input type="checkbox" id="wellLayer" /> Wells
+						<input type="checkbox" id="wetlandLayer" /> Wetlands
 					</div>
-					<div class="col-sm">
+					<div class="col-sm-6">
 						Use basemap
 						<select id="selectBasemap">
 							<option value="gray">Gray</option>
