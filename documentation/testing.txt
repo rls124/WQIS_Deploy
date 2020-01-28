@@ -10,3 +10,7 @@ Options:
 	-B: Run from the beta test site (currently configured to https://emerald.pfw.edu/WQISBeta) instead of localhost
 
 	-U: Set the type of user to test as (either admin or normal)
+
+	-V: Verbose mode. Gives additional information for debugging purposes
+
+	--override: Overrides limitations on database editing for the production environment, which exist to prevent flawed code from altering data and potentially giving users incorrect results. ONLY USE THIS IF YOU ARE VIRTUALLY CERTAIN IT WILL WORK CORRECTLY.
