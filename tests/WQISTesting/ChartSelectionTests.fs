@@ -7,9 +7,14 @@ let start userType verbose =
     "map displays" &&& fun _ ->
         displayed "#mapContainer"
 
-    "search box opens" &&& fun _ ->
-        //this will always be true, it just clicks the button. Need to detect if the sidebar is actually open/closed, but the "displayed" operator doesn't work because we don't actually hide the sidebar, just shift it to a negative x position
-        click "#searchButton"
+    "search box toggles" &&& fun _ ->
+        //initial state should be "open"
+        "CLOSE" == read "#sidebarToggleLabel"
+        click "#sidebarToggle"
+        "OPEN" == read "#sidebarToggleLabel"
+
+        //make sure its now open for the rest of the tests to proceed
+        click "#sidebarToggle"
 
     "changing category sets correct measurement options" &&& fun _ ->
         "#categorySelect" << "Nutrient"
