@@ -16,137 +16,139 @@
 var admin = <?php echo $admin?>;
 </script>
 
-<div id="mySidebar" class="sidebar">
-	<h3 class="pt-3 centeredText">Narrow results</h3>
-	
-	<fieldset>
-		<h5>Sites:</h5>
-		<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%">
-		<?php
-		//populate the site drop down box
-		foreach ($siteLocations as $siteLocation) {
-			$siteNumber = $this->Number->format($siteLocation->Site_Number);
-			$siteName = h($siteLocation->Site_Name);
-			$siteLocation = h($siteLocation->Site_Location);
-			echo "<option value=$siteNumber title=\"$siteLocation\">$siteNumber $siteName</option>";
-		}
-		?>
-		</select>
-	
-		<hr/>
-	
-		<h5>Categories:</h5>
-		<?=
-		$this->Form->select('categorySelect', [
-			'bacteria' => 'Bacteria',
-			'nutrient' => 'Nutrient',
-			'pesticide' => 'Pesticide',
-			'physical' => 'Physical Properties'
-			], [
-			'label' => 'Category',
-			'id' => 'categorySelect',
-			'class' => 'form-control select'
-			]
-		)
-		?>
-		
-		<hr/>
-		
-		<div>
-			<h5>From:</h5>
-			<?=
-			$this->Form->control('startDate', [
-				'label' => false,
-				'type' => 'text',
-				'class' => 'form-control date-picker col-lg-12',
-				'id' => 'startDate',
-				'placeholder' => 'mm/dd/yyyy'
-			])
+<div class="sidebarContainer">
+	<div class="sidebarInner" id="sidebarInner">
+		<h3>Search</h3>
+		<fieldset>
+			<h5>Sites:</h5>
+			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%">
+			<?php
+			//populate the site drop down box
+			foreach ($siteLocations as $siteLocation) {
+				$siteNumber = $this->Number->format($siteLocation->Site_Number);
+				$siteName = h($siteLocation->Site_Name);
+				$siteLocation = h($siteLocation->Site_Location);
+				echo "<option value=$siteNumber title=\"$siteLocation\">$siteNumber $siteName</option>";
+			}
 			?>
-		</div>
-			
-		<div>
-			<h5>To:</h5>
+			</select>
+		
+			<hr/>
+		
+			<h5>Categories:</h5>
 			<?=
-			$this->Form->control('endDate', [
-				'label' => false,
-				'type' => 'text',
-				'class' => 'form-control date-picker col-lg-12',
-				'id' => 'endDate',
-				'placeholder' => 'mm/dd/yyyy'
-			])
-			?>
-		</div>
-			
-		<hr/>
-			
-		<div>
-			<h5>Where</h5>
-			<?=
-			$this->Form->select('measurementSelect', [
-				'select' => 'Select a measure',
-				'Ecoli' => 'E. Coli (CFU/100 mil)',
-				'TotalColiform' => 'Coliform (CFU/100 mil)'
+			$this->Form->select('categorySelect', [
+				'bacteria' => 'Bacteria',
+				'nutrient' => 'Nutrient',
+				'pesticide' => 'Pesticide',
+				'physical' => 'Physical Properties'
 				], [
-				'label' => 'Measurement',
-				'id' => 'measurementSelect',
+				'label' => 'Category',
+				'id' => 'categorySelect',
 				'class' => 'form-control select'
 				]
 			)
 			?>
-		</div>
-		<div>
-		<?=
-		$this->Form->select('overUnderSelect', [
-			'>=' => 'Over',
-			'<=' => 'Under',
-			'==' => 'Equal To'
-			], [
-			'label' => 'Search',
-			'id' => 'overUnderSelect',
-			'class' => 'form-control select'
-			]
-		)
-		?>
-		</div>
-		<div>
-		<?=
-		$this->Form->control('amountEnter', [
-			'label' => false,
-			'type' => 'text',
-			'class' => 'form-control input col-lg-12',
-			'id' => 'amountEnter',
-			'placeholder' => 'Get Benchmark'
-		])
-		?>
-		</div>
 			
-		<hr/>
-		
-		<div>
-			<h5>Display fields:</h5>
-			<ul id="checkboxList" style="list-style-type:none;">
-				<li>
-					<input type="checkbox" value="all" id="allCheckbox" checked><label for="allCheckbox">All</label>
-				</li>
-				<li>
-					<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">Ecoli</label>
-				</li>
-				<li>
-					<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">TotalColiform</label>
-				</li>
-			</ul>
-		</div>
+			<hr/>
 			
-		<button type="button" id="updateButton">Update</button>
-		<button type="button" id="resetButton">Reset</button>
-	</fieldset>
-	<?= $this->Form->end() ?>
+			<div>
+				<h5>From:</h5>
+				<?=
+				$this->Form->control('startDate', [
+					'label' => false,
+					'type' => 'text',
+					'class' => 'form-control date-picker col-lg-12',
+					'id' => 'startDate',
+					'placeholder' => 'mm/dd/yyyy'
+				])
+				?>
+			</div>
+				
+			<div>
+				<h5>To:</h5>
+				<?=
+				$this->Form->control('endDate', [
+					'label' => false,
+					'type' => 'text',
+					'class' => 'form-control date-picker col-lg-12',
+					'id' => 'endDate',
+					'placeholder' => 'mm/dd/yyyy'
+				])
+				?>
+			</div>
+				
+			<hr/>
+				
+			<div>
+				<h5>Where</h5>
+				<?=
+				$this->Form->select('measurementSelect', [
+					'select' => 'Select a measure',
+					'Ecoli' => 'E. Coli (CFU/100 mil)',
+					'TotalColiform' => 'Coliform (CFU/100 mil)'
+					], [
+					'label' => 'Measurement',
+					'id' => 'measurementSelect',
+					'class' => 'form-control select'
+					]
+				)
+				?>
+			</div>
+			<div>
+			<?=
+			$this->Form->select('overUnderSelect', [
+				'>=' => 'Over',
+				'<=' => 'Under',
+				'==' => 'Equal To'
+				], [
+				'label' => 'Search',
+				'id' => 'overUnderSelect',
+				'class' => 'form-control select'
+				]
+			)
+			?>
+			</div>
+			<div>
+			<?=
+			$this->Form->control('amountEnter', [
+				'label' => false,
+				'type' => 'text',
+				'class' => 'form-control input col-lg-12',
+				'id' => 'amountEnter',
+				'placeholder' => 'Get Benchmark'
+			])
+			?>
+			</div>
+				
+			<hr/>
+			
+			<div>
+				<h5>Display fields:</h5>
+				<ul id="checkboxList" style="list-style-type:none;">
+					<li>
+						<input type="checkbox" value="all" id="allCheckbox" checked><label for="allCheckbox">All</label>
+					</li>
+					<li>
+						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">Ecoli</label>
+					</li>
+					<li>
+						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">TotalColiform</label>
+					</li>
+				</ul>
+			</div>
+				
+			<button type="button" id="updateButton">Update</button>
+			<button type="button" id="resetButton">Reset</button>
+		</fieldset>
+		<?= $this->Form->end() ?>
+	</div>
+	<div class="sidebarToggle" id="sidebarToggle">
+		<b id="sidebarToggleLabel">CLOSE</b>
+	</div>
 </div>
 
 <div class="col-lg-12" id="main">
-	<button class="btn btn-basic btn-lg mb-3 mt-3" id="searchButton">&#9776; Search</button> 
-
 	<div class="card">
 		<div class="card-header">
 			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseOne">Map</a></h4>

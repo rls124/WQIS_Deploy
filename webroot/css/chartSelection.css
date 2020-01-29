@@ -1,6 +1,6 @@
 html,
 body,
-#map {
+#map{
 	padding: 0;
 	margin: 0;
 	height: 500px;
@@ -11,10 +11,6 @@ textarea{
     width: 100%;
     resize: both;
     overflow: hidden;
-}
-
-.close{
-    color: red;
 }
 
 .btn-basic{
@@ -86,30 +82,6 @@ textarea{
     border-color: rgb(57, 156, 255);
 }
 
-ul.pagination li.active a {
-    background-color: rgb(0, 0, 0);
-    color: #FFF;
-    font-weight: bold;
-    cursor: default;
-}
-ul.pagination .disabled:hover a {
-    background: none;
-}
-
-.paginator {
-    text-align: center;
-}
-
-.paginator ul.pagination li {
-    float: none;
-    display: inline-block;
-    padding-right: 5px;
-}
-
-.paginator p {
-    text-align: right;
-    color: rgba(0, 0 ,0 , 0.54);
-}
 .comment:hover {
     color: #00F;
     cursor: pointer;
@@ -183,33 +155,36 @@ ul.pagination .disabled:hover a {
 	width: 200px;
 	height: 400px;
 }
-	
-.sidebar {
-	height: 100%; /* 100% Full-height */
-	width: 0; /* 0 width - change this with JavaScript */
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Stay on top */
+
+.sidebarContainer {
+	height: 100%;
+	width: 502px;
+	position: fixed;
+	z-index: 1;
 	top: 0;
 	left: 0;
+	transition: 0.5s;
+}
+
+.sidebarToggle{
+	margin-top: 70px;
+	float: left;
+	background-color: grey;
+	padding: 5px;
+	border-radius: 0px 10px 10px 0px;
+	writing-mode: vertical-lr;
+	text-orientation: upright;
+}
+
+.sidebarInner{
+	height: 100%;
+	width: 0;
+	float: left;
 	background-color: grey;
 	overflow-x: hidden;
-	transition: 0.5s;
 	border-color: black;
 	border-width: thin;
 	border-style: solid;
-}
-
-.toggleButton {
-	font-size: 20px;
-	cursor: pointer;
-	background-color: #111;
-	color: white;
-	padding: 10px 15px;
-	border: none;
-}
-
-.toggleButton:hover {
-	background-color: #444;
 }
 
 .select{

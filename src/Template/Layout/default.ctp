@@ -95,66 +95,68 @@ function hideBrowserCompatibilityMessage() {
 	</script>
 	</head>
 	<body class="h-100">
-		<nav class="navbar navbar-expand-lg navbar-light" id="navbar">
-            <?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
-			
-			<div class="navbar-collapse">
-				<ul class="navbar-nav mr-auto navbar-right">
-					<li class="nav-item">
-						<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Water Quality Data</a>
-					</li>
-					
-					<li class="nav-item">
-						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>">About</a>
-					</li>
-					
-					<li class="nav-item">
-						<a href="/WQIS/pages/help" class="nav-link <?php if ($pageName == "help") { echo "active"; }?>">Help</a>
-					</li>
-					
-					<?php if ($admin) { ?>
-					<li class="nav-item">
-						<a href="/WQIS/pages/administratorpanel" class="nav-link <?php if ($pageName == "administratorpanel") { echo "active"; }?>">Admin Panel</a>
-					</li>
+		<div style="background-color:lightgrey">
+			<nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+				<?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
+				
+				<div class="navbar-collapse">
+					<ul class="navbar-nav mr-auto navbar-right">
+						<li class="nav-item">
+							<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Water Quality Data</a>
+						</li>
+						
+						<li class="nav-item">
+							<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>">About</a>
+						</li>
+						
+						<li class="nav-item">
+							<a href="/WQIS/pages/help" class="nav-link <?php if ($pageName == "help") { echo "active"; }?>">Help</a>
+						</li>
+						
+						<?php if ($admin) { ?>
+						<li class="nav-item">
+							<a href="/WQIS/pages/administratorpanel" class="nav-link <?php if ($pageName == "administratorpanel") { echo "active"; }?>">Admin Panel</a>
+						</li>
+						<?php
+						}
+						?>
+						
+						<?php if ($admin) { ?>
+						<li class="nav-item">
+							<a href="/WQIS/feedback/adminfeedback" class="nav-link <?php if ($pageName == "adminfeedback" || $pageName == "userfeedback") { echo "active"; }?>">Feedback</a>
+						</li>
+					<?php
+					} 
+					else { ?>
+						<li class="nav-item">
+							<a href="/WQIS/feedback/userfeedback" class="nav-link <?php if ($pageName == "userfeedback") { echo "active"; }?>">Feedback</a>
+						</li>
 					<?php
 					}
 					?>
-					
-					<?php if ($admin) { ?>
-					<li class="nav-item">
-						<a href="/WQIS/feedback/adminfeedback" class="nav-link <?php if ($pageName == "adminfeedback" || $pageName == "userfeedback") { echo "active"; }?>">Feedback</a>
-					</li>
-				<?php
-				} 
-				else { ?>
-					<li class="nav-item">
-						<a href="/WQIS/feedback/userfeedback" class="nav-link <?php if ($pageName == "userfeedback") { echo "active"; }?>">Feedback</a>
-					</li>
-				<?php
-				}
-				?>
-				</ul>
+					</ul>
 
-				<?php if ($userinfo) { ?>
-				<ul class="nav pull-right">
-					<li class="dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<?php
-							echo $userinfo["username"];
-							if ($admin) {
-								echo " (Administrator)";
-							}
-						?>
-						</a>
-						<div class="dropdown-menu" style="right: 0; left: auto;" aria-labelledby="userDropdownMenu">
-							<a class="dropdown-item" href="/WQIS/users/edituserinfo">User profile</a>
-							<a class="dropdown-item" href='<?php echo $this->Url->build(['controller' => 'users', 'action' => 'logout']) ?>'>Log out</a>
-						</div>
-					</li>
-				</ul>
-				<?php } ?>
-			</div>
-        </nav>
+					<?php if ($userinfo) { ?>
+					<ul class="nav pull-right">
+						<li class="dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<?php
+								echo $userinfo["username"];
+								if ($admin) {
+									echo " (Administrator)";
+								}
+							?>
+							</a>
+							<div class="dropdown-menu" style="right: 0; left: auto;" aria-labelledby="userDropdownMenu">
+								<a class="dropdown-item" href="/WQIS/users/edituserinfo">User profile</a>
+								<a class="dropdown-item" href='<?php echo $this->Url->build(['controller' => 'users', 'action' => 'logout']) ?>'>Log out</a>
+							</div>
+						</li>
+					</ul>
+					<?php } ?>
+				</div>
+			</nav>
+		</div>
         
         <?= $this->Flash->render() ?>
 		<div class="container content col-lg-12" style="min-height:500px">

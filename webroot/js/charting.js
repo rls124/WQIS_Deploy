@@ -402,7 +402,7 @@ $(document).ready(function () {
 	document.addEventListener('keydown', function(e) {
 		if (e.keyCode == 27) {
 			//when user hits escape key, close the sidebar
-			sidebarSize("0");
+			closeSidebar();
 		}
 	}, false);
 	
@@ -572,7 +572,7 @@ $(document).ready(function () {
 		getGraphData($('#startDate').val(), $('#endDate').val());
 	});
 	
-	$("#searchButton").click(function() {
+	$("#sidebarToggle").click(function() {
 		toggleSidebar();
 	});
 	
@@ -656,19 +656,30 @@ $(document).ready(function () {
 	
 	function toggleSidebar() {
 		//expand the search sidebar and shift the rest of the page over, or the opposite
-		if (document.getElementById("mySidebar").style.width == "450px") {
-			sidebarSize("0")
+		if (document.getElementById("sidebarInner").style.width == "402px") {
+			closeSidebar();
 		}
 		else {
-			sidebarSize("450px");
+			openSidebar();
 		}
 	}
-
-	function sidebarSize(width) {
-		document.getElementById("mySidebar").style.width = width;
-		document.getElementById("main").style.marginLeft = width;
-		document.getElementById("navbar").style.marginLeft = width;
+	
+	function openSidebar() {
+		document.getElementById("sidebarInner").style.width = "402px";
+		document.getElementById("main").style.marginLeft = "412px";
+		document.getElementById("navbar").style.marginLeft = "412px";
+		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
 	}
+	
+	function closeSidebar() {
+		document.getElementById("sidebarInner").style.width = 0;
+		document.getElementById("main").style.marginLeft = "5px";
+		document.getElementById("navbar").style.marginLeft = "5px";
+		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
+	}
+	
+	//set the sidebar open at start
+	openSidebar();
 
 	function resetCharts() {
 		//remove the old chart
