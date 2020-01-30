@@ -192,8 +192,6 @@ $(document).ready(function () {
 					renderer: renderer
 				});
 				
-				
-
 				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml"; // + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
 				
 				var watershedsLayer = new KMLLayer({
