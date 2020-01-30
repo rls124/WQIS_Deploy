@@ -13,6 +13,23 @@ textarea{
     overflow: hidden;
 }
 
+/*control display of popup box for ArcGIS map*/
+.esri-icon-dock-right{
+	display: none !important;
+}
+
+.esri-popup__feature-menu-button{
+	display: none !important;
+}
+
+.esri-popup__pagination-previous-icon{
+	display: none !important;
+}
+
+.esri-popup__pagination-next{
+	display: none !important;
+}
+
 .btn-basic{
     background-color: #2a5171;
     border: medium solid #2a5171;
