@@ -134,8 +134,10 @@ $(document).ready(function () {
 		"esri/Graphic",
 		"esri/layers/FeatureLayer",
 		"esri/layers/GraphicsLayer",
-		"esri/layers/KMLLayer"
-	], function(Map, MapView, MapImageLayer, Graphic, FeatureLayer, GraphicsLayer, KMLLayer) {
+		"esri/layers/KMLLayer",
+		"esri/widgets/Home",
+		"esri/widgets/Fullscreen"
+	], function(Map, MapView, MapImageLayer, Graphic, FeatureLayer, GraphicsLayer, KMLLayer, Home, Fullscreen) {
 		//fetches site information from the database
 		$.ajax({
 			type: 'POST',
@@ -235,6 +237,18 @@ $(document).ready(function () {
 					zoom: 8,
 					map: map
 				});
+				
+				//add home button to return to the default extent
+				var homeButton = new Home({
+					view: view
+				});
+				view.ui.add(homeButton, "top-left");
+				
+				//add fullscreen button
+				var fullscreenButton = new Fullscreen({
+					view: view
+				});
+				view.ui.add(fullscreenButton, "bottom-left");
 			
 				//add all our Graphics objects that represent our sample collection sites
 				view.when(function() {
