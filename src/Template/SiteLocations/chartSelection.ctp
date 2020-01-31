@@ -18,9 +18,9 @@ var admin = <?php echo $admin?>;
 
 <div class="sidebarContainer">
 	<div class="sidebarInner" id="sidebarInner">
-		<h3>Search</h3>
+		<h4>Search</h3>
 		<fieldset>
-			<h5>Sites:</h5>
+			<h6>Sites:</h6>
 			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%">
 			<?php
 			//populate the site drop down box
@@ -35,7 +35,7 @@ var admin = <?php echo $admin?>;
 		
 			<hr/>
 		
-			<h5>Categories:</h5>
+			<h6>Categories:</h6>
 			<?=
 			$this->Form->select('categorySelect', [
 				'bacteria' => 'Bacteria',
@@ -53,7 +53,7 @@ var admin = <?php echo $admin?>;
 			<hr/>
 			
 			<div>
-				<h5>From:</h5>
+				<h6>From:</h6>
 				<?=
 				$this->Form->control('startDate', [
 					'label' => false,
@@ -66,7 +66,7 @@ var admin = <?php echo $admin?>;
 			</div>
 				
 			<div>
-				<h5>To:</h5>
+				<h6>To:</h6>
 				<?=
 				$this->Form->control('endDate', [
 					'label' => false,
@@ -81,7 +81,7 @@ var admin = <?php echo $admin?>;
 			<hr/>
 				
 			<div>
-				<h5>Where</h5>
+				<h6>Where</h6>
 				<?=
 				$this->Form->select('measurementSelect', [
 					'select' => 'Select a measure',
@@ -124,7 +124,7 @@ var admin = <?php echo $admin?>;
 			<hr/>
 			
 			<div>
-				<h5>Display fields:</h5>
+				<h6>Display fields:</h6>
 				<ul id="checkboxList" style="list-style-type:none;">
 					<li>
 						<input type="checkbox" value="all" id="allCheckbox" checked><label for="allCheckbox">All</label>

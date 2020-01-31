@@ -678,14 +678,18 @@ $(document).ready(function () {
 	
 	function openSidebar() {
 		document.getElementById("sidebarInner").style.width = "402px";
+		document.getElementById("sidebarInner").style.padding = "10px";
 		document.getElementById("main").style.marginLeft = "412px";
+		document.getElementById("main").style.padding = "15px";
 		document.getElementById("navbar").style.marginLeft = "412px";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
 	}
 	
 	function closeSidebar() {
 		document.getElementById("sidebarInner").style.width = 0;
+		document.getElementById("sidebarInner").style.padding = 0;
 		document.getElementById("main").style.marginLeft = "5px";
+		document.getElementById("main").style.padding = "25px";
 		document.getElementById("navbar").style.marginLeft = "5px";
 		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
 	}

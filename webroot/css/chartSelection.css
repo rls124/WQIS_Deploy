@@ -201,6 +201,7 @@ textarea{
 	border-color: black;
 	border-width: thin;
 	border-style: solid;
+	padding: 10px;
 }
 
 .select{
