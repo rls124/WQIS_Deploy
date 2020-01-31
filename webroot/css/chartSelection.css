@@ -119,6 +119,17 @@ textarea{
     content: "\e080"; 
 }
 
+.collapsible-panel:before{
+	content: '\2212';
+	font-size: 36px;
+	float: right;
+}
+.collapsible-panel.collapsed:before{
+	content: "\002B";
+	font-size: 36px;	
+	float: right;
+}
+
 #tetris {
 	margin: 1em auto;
 	padding: 1em;
