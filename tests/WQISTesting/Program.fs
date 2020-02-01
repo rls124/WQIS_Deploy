@@ -12,6 +12,7 @@ type options = {
     [<Option('U', HelpText = "Type of users to test with (admin, normal)")>] userType : String;
     [<Option('V', HelpText = "Verbose")>] verbose: bool;
     [<Option("override", HelpText = "Override safety precautions on live site")>] overrideSafety: bool;
+    [<Option("demo", HelpText = "Live demo mode. Runs through site functionality without performing tests")>] demoMode: bool;
     }
 
 let inline (|Success|Help|Version|Fail|) (result : ParserResult<'a>) =
@@ -44,29 +45,27 @@ let runTests(opts) =
     start chrome
     pin FullScreen
 
-    //login test
-    User.login baseUrl user.[0] user.[1]
+    if (opts.demoMode = false) then
+        //login test
+        UserTests.login baseUrl user.[0] user.[1]
 
-    ChartSelectionTests.start opts.userType opts.verbose
+        ChartSelectionTests.mapDisplaysTest
+        ChartSelectionTests.searchBoxTogglesTest
+        ChartSelectionTests.changeCategoryTest
+        ChartSelectionTests.searchTest
+        ChartSelectionTests.correctNumberOfRowsTest
+        ChartSelectionTests.tableSortTest
+        if (opts.userType = "admin") then
+            ChartSelectionTests.tableEditTest opts.verbose
+        else
+            printf("Skipping table edit test because it must be run as an administrator\r\n")
 
-    //navbar links work
-    "navbar links work" &&& fun _ ->
-        click "View Water Quality Data"
-        sleep 1
-        on (baseUrl + "site-locations/chartselection")
-        click "About"
-        sleep 1
-        on (baseUrl + "pages/about")
-        click "Help"
-        sleep 1
-        on (baseUrl + "pages/help")
+        NavigationTests.navbarWorksTest baseUrl opts.userType
 
-        if (opts.userType = "Admin") then
-            click "Admin Panel"
-            on (baseUrl + "pages/administratorpanel")
-
-    //logout works
-    User.logout
+        //logout works
+        UserTests.logout
+    else
+        printf("Demo mode")
 
     //run all tests
     run()

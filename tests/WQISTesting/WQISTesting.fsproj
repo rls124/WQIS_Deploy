@@ -7,7 +7,8 @@
 
   <ItemGroup>
     <Compile Include="ChartSelectionTests.fs" />
-    <Compile Include="User.fs" />
+    <Compile Include="NavigationTests.fs" />
+    <Compile Include="UserTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

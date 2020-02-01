@@ -3,10 +3,11 @@
 open canopy.runner.classic
 open canopy.classic
 
-let start userType verbose =
+let mapDisplaysTest =
     "map displays" &&& fun _ ->
         displayed "#mapContainer"
 
+let searchBoxTogglesTest =
     "search box toggles" &&& fun _ ->
         //initial state should be "open"
         "CLOSE" == read "#sidebarToggleLabel"
@@ -16,6 +17,7 @@ let start userType verbose =
         //make sure its now open for the rest of the tests to proceed
         click "#sidebarToggle"
 
+let changeCategoryTest =
     "changing category sets correct measurement options" &&& fun _ ->
         "#categorySelect" << "Nutrient"
     
@@ -26,6 +28,7 @@ let start userType verbose =
         //display fields should contain that as well
         displayed "#NitrateNitriteCheckbox"
 
+let searchTest =
     "search works" &&& fun _ ->
         "#sites" << "100 Cedar Creek"
         sleep 1 //wait for the date fields to autopopulate
@@ -33,11 +36,13 @@ let start userType verbose =
         sleep 1 //wait to populate
         displayed "#tableView"
 
+let correctNumberOfRowsTest =
     //correct number of rows display
     "correct number of table rows" &&& fun _ ->
         let el = (((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr") |> List.length)
         26 === el
 
+let tableSortTest =
     //table sort works
     "table sort works" &&& fun _ ->
         let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
@@ -47,34 +52,34 @@ let start userType verbose =
         click sampleNumberCol
         //TODO: validate that this actually works, all we do for now is click on the column
 
-    if userType = "admin" then
-        //table edit works
-        "table edit works" &&& fun _ ->
-            let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
-            let row = el.[1]
-            let cells = row |> elementsWithin "td"
-            let cell = cells.[3] |> elementWithin "div"
-            let label = cell |> elementWithin "label"
-            let input = cell |> elementWithin "input"
+let tableEditTest verbose =
+    //table edit works
+    "table edit works" &&& fun _ ->
+        let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
+        let row = el.[1]
+        let cells = row |> elementsWithin "td"
+        let cell = cells.[3] |> elementWithin "div"
+        let label = cell |> elementWithin "label"
+        let input = cell |> elementWithin "input"
 
-            label.Text == (read input) //these should be the same
-            let originalValue = label.Text
+        label.Text == (read input) //these should be the same
+        let originalValue = label.Text
 
-            if verbose then
-                printfn "Label = %s, input = %s" label.Text (read input)
+        if verbose then
+            printfn "Label = %s, input = %s" label.Text (read input)
 
-            //validate that the label is visible to start with
-            displayed label
-            click label
-            //validate that the label is now hidden
-            notDisplayed label
+        //validate that the label is visible to start with
+        displayed label
+        click label
+        //validate that the label is now hidden
+        notDisplayed label
 
-            input << "50"
-            click "body"
-            sleep 1 //wait for the AJAX query to update the db
+        input << "50"
+        click "body"
+        sleep 1 //wait for the AJAX query to update the db
 
-            //now put the original value back in
-            click label
-            input << originalValue
-            click "body"
-            sleep 1
+        //now put the original value back in
+        click label
+        input << originalValue
+        click "body"
+        sleep 1

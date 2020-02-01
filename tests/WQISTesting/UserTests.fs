@@ -1,4 +1,4 @@
-﻿module User
+﻿module UserTests
 
 open canopy.runner.classic
 open canopy.classic
