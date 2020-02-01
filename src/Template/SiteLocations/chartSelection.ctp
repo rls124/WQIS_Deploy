@@ -17,7 +17,7 @@ var admin = <?php echo $admin?>;
 </script>
 
 <div class="sidebarContainer">
-	<div class="sidebarInner" id="sidebarInner" style="color: white">
+	<div id="sidebarInner">
 		<h4>Search</h3>
 		<div id="searchBox">
 		<fieldset>
@@ -131,10 +131,10 @@ var admin = <?php echo $admin?>;
 						<input type="checkbox" value="all" id="allCheckbox" checked><label for="allCheckbox">All</label>
 					</li>
 					<li>
-						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">Ecoli</label>
+						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">E. Coli (CFU/100 mil)</label>
 					</li>
 					<li>
-						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">TotalColiform</label>
+						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">Coliform (CFU/100 mil)</label>
 					</li>
 				</ul>
 			</div>

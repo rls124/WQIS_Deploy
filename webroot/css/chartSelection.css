@@ -186,6 +186,7 @@ textarea{
 	height: 400px;
 }
 
+/*sidebar stuff*/
 .sidebarContainer {
 	height: 100%;
 	position: fixed;
@@ -205,13 +206,18 @@ textarea{
 	text-orientation: upright;
 }
 
-.sidebarInner{
+#sidebarInner{
 	height: 100%;
 	width: 0;
 	float: left;
 	background-color: #5085A5;
+	color: #F7F9FB;
 	overflow-x: hidden;
 	padding: 10px;
+}
+
+#sidebarToggleLabel{
+	color: #F7F9FB;
 }
 
 .select{

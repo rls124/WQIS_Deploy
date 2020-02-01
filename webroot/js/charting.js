@@ -254,6 +254,17 @@ $(document).ready(function () {
 				view.when(function() {
 					view.graphics.addMany(graphics);
 				});
+				
+				//dock the popup permanently to the bottom right, so its not hidden if the user pans away from that point on the map
+				view.popup = {
+					dockEnabled: true,
+					dockOptions: {
+						//disables the dock button from the popup
+						buttonEnabled: false,
+						breakpoint: false,
+						position: "bottom-right"
+					}
+				};
 		
 				//handle the checkboxes that toggle layer visibility
 				var watershedsLayerToggle = document.getElementById("watershedsLayer");
