@@ -3,8 +3,10 @@ body,
 #map{
 	padding: 0;
 	margin: 0;
+}
+
+#map{
 	height: 500px;
-	width: 100%;
 }
 
 textarea{
@@ -196,7 +198,7 @@ textarea{
 .sidebarToggle{
 	margin-top: 70px;
 	float: left;
-	background-color: grey;
+	background-color: #5085A5;
 	padding: 5px;
 	border-radius: 0px 10px 10px 0px;
 	writing-mode: vertical-lr;
@@ -207,11 +209,8 @@ textarea{
 	height: 100%;
 	width: 0;
 	float: left;
-	background-color: grey;
+	background-color: #5085A5;
 	overflow-x: hidden;
-	border-color: black;
-	border-width: thin;
-	border-style: solid;
 	padding: 10px;
 }
 
@@ -243,6 +242,11 @@ th{
 th{
 	background-color: #DDD; 
 	font-weight: 400;
+}
+
+#tableDiv{
+	text-align: center;
+	overflow: auto;
 }
 
 /*datepicker stuff*/

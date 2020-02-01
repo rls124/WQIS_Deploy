@@ -95,7 +95,7 @@ function hideBrowserCompatibilityMessage() {
 	</script>
 	</head>
 	<body class="h-100">
-		<div style="background-color:lightgrey">
+		<div style="background-color:#5085A5">
 			<nav class="navbar navbar-expand-lg navbar-light" id="navbar">
 				<?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
 				

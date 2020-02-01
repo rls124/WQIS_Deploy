@@ -17,8 +17,9 @@ var admin = <?php echo $admin?>;
 </script>
 
 <div class="sidebarContainer">
-	<div class="sidebarInner" id="sidebarInner">
+	<div class="sidebarInner" id="sidebarInner" style="color: white">
 		<h4>Search</h3>
+		<div id="searchBox">
 		<fieldset>
 			<h6>Sites:</h6>
 			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%">
@@ -142,6 +143,7 @@ var admin = <?php echo $admin?>;
 			<button type="button" id="resetButton">Reset</button>
 		</fieldset>
 		<?= $this->Form->end() ?>
+		</div>
 	</div>
 	<div class="sidebarToggle" id="sidebarToggle">
 		<b id="sidebarToggleLabel">CLOSE</b>
@@ -218,7 +220,7 @@ var admin = <?php echo $admin?>;
 					</select>
 					results
 				</div>
-				<div id="tableDiv" style="text-align: center;"></div>
+				<div id="tableDiv"></div>
 				<span id="tableNoData">No data to display</span>
 
 				<div id="tablePageSelector" style="display: none">

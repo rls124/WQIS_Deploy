@@ -1,30 +1,19 @@
 body{
-    background-image: url("../img/riverPic.jpg");
+    background-color: #8FC1E3;
     background-size:100% 100%;
     background-repeat: no-repeat;
     color:#373737;
     background-attachment: fixed;
 }
 
-.active{
-    color:#a3e8a6;
-}
-
 .content{
-    background-color: #DDDDDD;
-    background-size: 100% 100%;
+    background-color: #8FC1E3;
     margin-bottom: 10%;
-    overflow-x: auto;
-    box-shadow:3px 3px 3px black;
 }
 
 .centeredText{
     text-align:center;
     position:relative;
-}
-
-.navbarBackground{
-    background-color:lightgrey;
 }
 
 .btn{
@@ -59,4 +48,12 @@ body{
     text-shadow: none;
     color: white;
     cursor: auto;
+}
+
+.nav-link{
+	color: #F7F9FB;
+}
+
+.nav-link:hover{
+	color: lightgrey;
 }

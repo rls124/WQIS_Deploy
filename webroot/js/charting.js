@@ -683,6 +683,7 @@ $(document).ready(function () {
 		document.getElementById("main").style.padding = "15px";
 		document.getElementById("navbar").style.marginLeft = "412px";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
+		document.getElementById("main").style.width="70vw";
 	}
 	
 	function closeSidebar() {
@@ -692,6 +693,7 @@ $(document).ready(function () {
 		document.getElementById("main").style.padding = "25px";
 		document.getElementById("navbar").style.marginLeft = "5px";
 		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
+		document.getElementById("main").style.width="100%";
 	}
 	
 	//set the sidebar open at start
