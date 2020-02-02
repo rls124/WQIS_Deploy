@@ -1,0 +1,40 @@
+Development environment:
+
+	Windows:
+		WQIS is compatible with either XAMPP or WAMP.
+
+		1. Install XAMPP or WAMP as prefered.
+
+		2. Create a new folder for WQIS. If using XAMPP, this should be at C:\xampp\htdocs\WQIS. If using WAMP, this should be at [TBD]. Capitalization does matter.
+
+		3. Download CakePHP. We are currently using CakePHP 3.8.3, this can be downloaded from https://github.com/cakephp/cakephp/releases/tag/3.8.3 . Copy the bin and vendor folders to the WQIS folder, and create a new "logs" folder. Don't touch anything else
+
+		4. The default settings for phpmyadmin don't allow you to import a file as large as our sql dump. We need to reconfigure that. Go to C:\xampp\php\php.ini, and make these changes: [WAMP instructions coming soon]
+
+		post_max_size = 128M
+		upload_max_filesize = 128M
+		max_execution_time = 300
+		max_input_time = 300
+
+		5. Start xampp-control (C:\xampp\xampp-control.exe). Enable Apache and MySQL. Go to localhost, you should see the WQIS homepage but you won't be able to login.
+
+		6. From xampp-control, click the admin button next to MySql (or just go to localhost/phpmyadmin). Click "Databases" in the top row, and create a new database called wqis_db.
+
+		7. Now click "Import" in the top row, then "browse", then select the sql file at C:\xampp\htdocs\wqis\MariaDB Sql File\wqis_db.sql. Then click "Go". It may take a few seconds
+
+		8. On the left panel you should now see the wqis_db database, and should be able to view its entries.
+
+		9. We need to create a new user that the system itself will use to access the database. Go to "Home", then "user accounts", then "add user". Create a new user with username "programUser" and password "waterquality". Grant this user all "Data" privileges (SELECT, INSERT, UPDATE, DELETE, FILE)
+
+		10. You should now be able to log in to WQIS. Use the root account, password is waterquality
+
+	Linux:
+		[TBD]
+
+	MacOS:
+		[TBD]
+
+Live server:
+	1. Follow the instructions for the development environment first
+
+	2. The app configuration file included is intended for use in a development environment, because that is where it will most commonly be deployed. At WQIS/config/app.php, line 225, you should see "'host' => 'localhost'". We need to specify the port number for MariaDB, by default this is 3307 (consult the server administrator if needed). Change "localhost" to "localhost:3307".
