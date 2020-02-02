@@ -12,6 +12,7 @@ type options = {
     [<Option('U', HelpText = "Type of users to test with (admin, normal)")>] userType : String;
     [<Option('V', HelpText = "Verbose")>] verbose: bool;
     [<Option("override", HelpText = "Override safety precautions on live site")>] overrideSafety: bool;
+    [<Option("persistedits", HelpText = "Do not revert changes made to the database")>] persistEdits: bool;
     [<Option("demo", HelpText = "Live demo mode. Runs through site functionality without performing tests")>] demoMode: bool;
     }
 
@@ -52,7 +53,6 @@ let runTests(opts) =
     pin FullScreen
 
     if (opts.demoMode = false) then
-        //login
         UserTests.loginTest baseUrl user.[0] user.[1]
 
         ChartSelectionTests.mapDisplayTest
@@ -61,11 +61,13 @@ let runTests(opts) =
         ChartSelectionTests.searchTest
         ChartSelectionTests.correctNumberOfRowsTest
         ChartSelectionTests.tableSortTest
-        if (opts.userType = "admin") then
-            ChartSelectionTests.tableEditTest opts.verbose
-        else
-            if (opts.verbose) then
+        if (not opts.prodEnvironment) || (opts.prodEnvironment && opts.overrideSafety) then
+            if (opts.userType = "admin") then
+                ChartSelectionTests.tableEditTest opts.persistEdits opts.verbose
+            else if (opts.verbose) then
                 printf("Skipping table edit test because it must be run as an administrator\r\n")
+        else if (opts.verbose) then
+            printf("Skipping table edit test because we are targetting production. Use --override to force\r\n")
 
         NavigationTests.navbarLinksWorkTest baseUrl opts.userType
 

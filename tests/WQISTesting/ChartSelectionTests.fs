@@ -65,7 +65,7 @@ let tableSortTest =
         click sampleNumberCol
         //TODO: validate that this actually works, all we do for now is click on the column
 
-let tableEditTest verbose =
+let tableEditTest persistEdits verbose =
     //table edit works
     "table edit works" &&& fun _ ->
         let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
@@ -91,8 +91,9 @@ let tableEditTest verbose =
         click "body"
         sleep 1 //wait for the AJAX query to update the db
 
-        //now put the original value back in
-        click label
-        input << originalValue
-        click "body"
-        sleep 1
+        if not persistEdits then
+            //now put the original value back in
+            click label
+            input << originalValue
+            click "body"
+            sleep 1
