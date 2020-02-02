@@ -26,6 +26,12 @@ let inline (|Success|Help|Version|Fail|) (result : ParserResult<'a>) =
 let args = Environment.GetCommandLineArgs()
 let result = Parser.Default.ParseArguments<options>(args)
 
+let withWait action =
+    //get user to confirm the program should proceed. For use with the live demo functionality
+    printfn "press [ENTER] to proceed"
+    System.Console.ReadLine() |> ignore
+    action()
+
 let runTests(opts) =
     let admin = [|"root"; "waterquality"|]
     let normalUser = [|"jsmith"; "Test1234"|]
@@ -46,11 +52,11 @@ let runTests(opts) =
     pin FullScreen
 
     if (opts.demoMode = false) then
-        //login test
-        UserTests.login baseUrl user.[0] user.[1]
+        //login
+        UserTests.loginTest baseUrl user.[0] user.[1]
 
-        ChartSelectionTests.mapDisplaysTest
-        ChartSelectionTests.searchBoxTogglesTest
+        ChartSelectionTests.mapDisplayTest
+        ChartSelectionTests.searchBoxToggleTest
         ChartSelectionTests.changeCategoryTest
         ChartSelectionTests.searchTest
         ChartSelectionTests.correctNumberOfRowsTest
@@ -58,14 +64,18 @@ let runTests(opts) =
         if (opts.userType = "admin") then
             ChartSelectionTests.tableEditTest opts.verbose
         else
-            printf("Skipping table edit test because it must be run as an administrator\r\n")
+            if (opts.verbose) then
+                printf("Skipping table edit test because it must be run as an administrator\r\n")
 
-        NavigationTests.navbarWorksTest baseUrl opts.userType
+        NavigationTests.navbarLinksWorkTest baseUrl opts.userType
 
         //logout works
-        UserTests.logout
+        UserTests.logoutTest baseUrl
     else
-        printf("Demo mode")
+        printf("Demo mode\r\n")
+        UserTests.loginDemo baseUrl user.[0] user.[1]
+        withWait (fun _ -> ChartSelectionTests.searchBoxToggleDemo())
+        withWait (fun _ -> ChartSelectionTests.searchDemo())
 
     //run all tests
     run()

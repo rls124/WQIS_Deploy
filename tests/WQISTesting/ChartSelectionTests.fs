@@ -3,11 +3,11 @@
 open canopy.runner.classic
 open canopy.classic
 
-let mapDisplaysTest =
+let mapDisplayTest =
     "map displays" &&& fun _ ->
         displayed "#mapContainer"
 
-let searchBoxTogglesTest =
+let searchBoxToggleTest =
     "search box toggles" &&& fun _ ->
         //initial state should be "open"
         "CLOSE" == read "#sidebarToggleLabel"
@@ -16,6 +16,12 @@ let searchBoxTogglesTest =
 
         //make sure its now open for the rest of the tests to proceed
         click "#sidebarToggle"
+
+let searchBoxToggleDemo () =
+    printfn "Search box toggle demo"
+    click "#sidebarToggle"
+    sleep 1
+    click "#sidebarToggle"
 
 let changeCategoryTest =
     "changing category sets correct measurement options" &&& fun _ ->
@@ -27,6 +33,13 @@ let changeCategoryTest =
 
         //display fields should contain that as well
         displayed "#NitrateNitriteCheckbox"
+
+let searchDemo () =
+    printfn "Search demo"
+    "#sites" << "100 Cedar Creek"
+    sleep 1 //wait for the date fields to autopopulate
+    click "#updateButton"
+    sleep 1 //wait to populate
 
 let searchTest =
     "search works" &&& fun _ ->

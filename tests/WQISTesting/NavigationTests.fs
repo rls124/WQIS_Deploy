@@ -3,7 +3,7 @@
 open canopy.runner.classic
 open canopy.classic
 
-let navbarWorksTest baseUrl userType =
+let navbarLinksWorkTest baseUrl userType =
     //navbar links work
     "navbar links work" &&& fun _ ->
         click "View Water Quality Data"
