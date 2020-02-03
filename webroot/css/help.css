@@ -1,15 +1,9 @@
-.box{
-    margin-bottom: 10px;
+.indent{
+	padding-left: 15px;
 }
 
-.heading > a{
-    color: #2a5171;
-}
-
-.heading > a:hover{
-    text-decoration: none;
-}
-
-.card-block{
-    padding: 10px;
+.adminInfo{
+	background: pink;
+	border-radius: 10px;
+	padding: 5px;
 }

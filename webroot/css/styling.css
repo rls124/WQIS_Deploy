@@ -1,13 +1,10 @@
 body{
-    background-color: #8FC1E3;
-    background-size:100% 100%;
-    background-repeat: no-repeat;
+    background-color: #e2f0f5;
     color:#373737;
-    background-attachment: fixed;
 }
 
 .content{
-    background-color: #8FC1E3;
+    background-color: #e2f0f5;
     margin-bottom: 10%;
 }
 
