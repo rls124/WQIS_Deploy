@@ -706,17 +706,16 @@ $(document).ready(function () {
 	}
 	
 	//show/hide the filler space at the top of the sidebar as needed, so its not visible when we scroll below the navbar
-	var topofDiv = $("#navbar").offset().top; //gets offset of header
-	var height = $("#navbar").outerHeight(); //gets height of header
+	var navbarHeight = $("#navbar").outerHeight(); //gets height of header
 
 	$(window).scroll(function(){
-		if($(window).scrollTop() > (topofDiv + height)){
-		   console.log("below");
-		   document.getElementById("sidebarSpacing").style.height = 0;
+		if ($(window).scrollTop() > navbarHeight) {
+			//navbar is hidden, don't need the spacer
+			document.getElementById("sidebarSpacing").style.height = 0;
 		}
 		else{
-		   console.log("above");
-		   document.getElementById("sidebarSpacing").style.height = "6vh";
+		   //navbar is visible, add spacer
+		   document.getElementById("sidebarSpacing").style.height = (navbarHeight - $(window).scrollTop()) + "px";
 		}
 	});
 	
