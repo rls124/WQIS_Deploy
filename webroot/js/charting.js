@@ -692,7 +692,6 @@ $(document).ready(function () {
 		document.getElementById("sidebarInner").style.padding = "10px";
 		document.getElementById("main").style.marginLeft = "412px";
 		document.getElementById("main").style.padding = "15px";
-		document.getElementById("navbar").style.marginLeft = "412px";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
 		document.getElementById("main").style.width="70vw";
 	}
@@ -702,10 +701,24 @@ $(document).ready(function () {
 		document.getElementById("sidebarInner").style.padding = 0;
 		document.getElementById("main").style.marginLeft = "5px";
 		document.getElementById("main").style.padding = "25px";
-		document.getElementById("navbar").style.marginLeft = "5px";
 		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
 		document.getElementById("main").style.width="100%";
 	}
+	
+	//show/hide the filler space at the top of the sidebar as needed, so its not visible when we scroll below the navbar
+	var topofDiv = $("#navbar").offset().top; //gets offset of header
+	var height = $("#navbar").outerHeight(); //gets height of header
+
+	$(window).scroll(function(){
+		if($(window).scrollTop() > (topofDiv + height)){
+		   console.log("below");
+		   document.getElementById("sidebarSpacing").style.height = 0;
+		}
+		else{
+		   console.log("above");
+		   document.getElementById("sidebarSpacing").style.height = "6vh";
+		}
+	});
 	
 	//set the sidebar open at start
 	openSidebar();

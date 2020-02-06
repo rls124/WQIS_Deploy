@@ -18,7 +18,7 @@ var admin = <?php echo $admin?>;
 
 <div class="sidebarContainer">
 	<div id="sidebarInner">
-		<h4>Search</h3>
+		<div id="sidebarSpacing" style="height: 6vh"></div> <!--filler space so the sidebar doesn't get covered by the navbar-->
 		<div id="searchBox">
 		<fieldset>
 			<h6>Sites:</h6>

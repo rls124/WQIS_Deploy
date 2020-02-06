@@ -96,7 +96,7 @@ function hideBrowserCompatibilityMessage() {
 	</head>
 	<body class="h-100">
 		<div style="background-color:#5085A5">
-			<nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+			<nav class="navbar navbar-expand-lg navbar-light" id="navbar" style="z-index: 1; height: 7vh;">
 				<?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
 				
 				<div class="navbar-collapse">
@@ -159,7 +159,7 @@ function hideBrowserCompatibilityMessage() {
 		</div>
         
         <?= $this->Flash->render() ?>
-		<div class="container content col-lg-12" style="min-height:500px">
+		<div class="container content col-lg-12">
 		<?= $this->fetch('content') ?>
 		</div>
 	

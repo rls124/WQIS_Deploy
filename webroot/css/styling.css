@@ -48,9 +48,17 @@ body{
 }
 
 .nav-link{
-	color: #F7F9FB;
+	color: #F7F9FB !important;
 }
 
 .nav-link:hover{
-	color: lightgrey;
+	color: lightgrey !important;
+}
+
+.navbar-brand{
+	color: #F7F9FB !important;
+}
+
+.active{
+	color: white !important;
 }

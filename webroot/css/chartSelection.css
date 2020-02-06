@@ -190,7 +190,6 @@ textarea{
 .sidebarContainer {
 	height: 100%;
 	position: fixed;
-	z-index: 1;
 	top: 0;
 	left: 0;
 	transition: 0.5s;
@@ -212,17 +211,22 @@ textarea{
 	float: left;
 	background-color: #5085A5;
 	color: #F7F9FB;
-	overflow-x: hidden;
 	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 #sidebarToggleLabel{
 	color: #F7F9FB;
 }
 
-.select{
-    font-size: 12pt;
-    height: 50px;
+#searchBox{
+	overflow-y: auto;
+}
+
+.select2-selection__choice{
+	color: black;
 }
 
 .select:focus, .date-picker:focus{
