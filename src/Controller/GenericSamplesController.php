@@ -81,6 +81,14 @@
 			$model . '.Date <= ' => $endDate
 		];
 		
+		//don't count rows in which none of the selected measurements actually have data in them
+		$notAllNullString = "NOT ( (" . $selectedMeasures[0] . " IS NULL)";
+		for ($i=1; $i<sizeof($selectedMeasures); $i++) {
+			$notAllNullString = $notAllNullString . " AND (" . $selectedMeasures[$i] . " IS NULL)";
+		}
+		$notAllNullString = $notAllNullString . ")";
+		$andConditions = array_merge($andConditions, array($notAllNullString));
+		
 		if ($amount != '') {
 			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
 		}
@@ -128,6 +136,8 @@
 		$fields = array_merge($fields, $selectedMeasures);
 		array_push($fields, (ucfirst($category) . "Comments"));
 		
+		$numMeasures = sizeof($selectedMeasures);
+		
 		$andConditions = [
 			'site_location_id IN' => $sites,
 			$model . '.Date >=' => $startDate,
@@ -137,6 +147,14 @@
 		if ($amount != '') {
 			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
 		}
+		
+		//don't return rows in which none of the selected measurements actually have data in them
+		$notAllNullString = "NOT ( (" . $selectedMeasures[0] . " IS NULL)";
+		for ($i=1; $i<sizeof($selectedMeasures); $i++) {
+			$notAllNullString = $notAllNullString . " AND (" . $selectedMeasures[$i] . " IS NULL)";
+		}
+		$notAllNullString = $notAllNullString . ")";
+		$andConditions = array_merge($andConditions, array($notAllNullString));
 		
 		$samples = $this->$model->find('all', [
 			'fields' => $fields,
