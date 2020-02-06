@@ -194,7 +194,7 @@ $(document).ready(function () {
 					renderer: renderer
 				});
 				
-				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml"; // + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
+				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
 				
 				var watershedsLayer = new KMLLayer({
 					url: kmlurl
@@ -567,11 +567,26 @@ $(document).ready(function () {
 	}
 	
 	$("#updateButton").click(function() {
-		resetAll();
-		getNumRecords();
-		getGraphData($('#startDate').val(), $('#endDate').val());
-		setResultsPage(1);
-		$("#chartsLayoutSelect").show();
+		//validation
+		//check that, if there is something in amountEnter, a measure is also selected
+		var amountEnter = document.getElementById("amountEnter").value;
+		var measurementSelect = document.getElementById("measurementSelect").value;
+		if (amountEnter != "" && measurementSelect == "select") {
+			alert("You must specify a measure to search by");
+		}
+		else {
+			resetAll();
+			getNumRecords();
+			getGraphData($('#startDate').val(), $('#endDate').val());
+			setResultsPage(1);
+			$("#chartsLayoutSelect").show();
+			if (numPages > 0) {
+				document.getElementById("exportBtn").disabled = false;
+			}
+			else {
+				document.getElementById("exportBtn").disabled = true;
+			}
+		}
 	});
 	
 	$("#resetButton").click(function() {
@@ -581,6 +596,7 @@ $(document).ready(function () {
 		$("#categorySelect").val("bacteria");
 		changeMeasures();
 		$("#chartsLayoutSelect").hide();
+		document.getElementById("exportBtn").disabled = true;
 	});
 	
 	$("#chartsInlineButton").click(function() {

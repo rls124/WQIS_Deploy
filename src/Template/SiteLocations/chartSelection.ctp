@@ -239,7 +239,8 @@ var admin = <?php echo $admin?>;
 		'label' => false,
 		'type' => 'submit',
 		'class' => 'btn btn-basic btn-lg mb-3 mt-3 col-md-4 float-right',
-		'id' => 'exportBtn'
+		'id' => 'exportBtn',
+		'disabled' => true
 	])
 	?>
 </div>
