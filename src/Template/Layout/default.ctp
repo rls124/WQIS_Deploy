@@ -52,6 +52,7 @@ function browserDetect() {
 					upToDate = false;
 					break;
 				}
+				break;
 			}
 		}
 	}
@@ -164,7 +165,7 @@ function hideBrowserCompatibilityMessage() {
 		</div>
 	
 		<!--loading spinner-->
-		<div class="csscssload-load-frame loadingspinnermain">
+		<div class="csscssload-load-frame loadingspinnermain" id="loadingSpinner">
 			<?php
 				for ($i=0; $i<24; $i++) {
 					echo "<div class=\"cssload-dot\"></div>";

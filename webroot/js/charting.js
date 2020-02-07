@@ -119,7 +119,7 @@ var numRecords = 0;
 var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
-var showBenchmarks = true;
+
 
 $(document).ready(function () {
 	if (typeof admin == 'undefined') {
@@ -333,12 +333,6 @@ $(document).ready(function () {
 	$("#sites").change(function() {
         getRange();
     });
-	
-	$("#showBenchmarks").change(function() {
-		showBenchmarks = !showBenchmarks;
-		resetCharts();
-		getGraphData($('#startDate').val(), $('#endDate').val());
-	});
 	
 	$("#allCheckbox").change(function() {
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
@@ -1196,7 +1190,7 @@ $(document).ready(function () {
 						var ctx = document.getElementById("chart-" + k).getContext("2d");
 						var benchmarkLines = [];
 
-						if (showBenchmarks) {
+						if (document.getElementById("showBenchmarks").checked) {
 							//add benchmark lines
 							var benchmarks = response[1][0]; //max and min
 							

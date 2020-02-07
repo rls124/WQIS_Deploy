@@ -1,11 +1,11 @@
 /* Loading Spinner */
-
 .loadingspinnermain {
     visibility: hidden;
     position: fixed;
 }
 
 .csscssload-load-frame {
+	z-index: 1;
     top: 0;
     left: 0;
     right: 0;
