@@ -82,7 +82,7 @@ var admin = <?php echo $admin?>;
 			<hr/>
 				
 			<div>
-				<h6>Where</h6>
+				<h6>Optional Filter</h6>
 				<?=
 				$this->Form->select('measurementSelect', [
 					'select' => 'Select a measure',
@@ -168,7 +168,7 @@ var admin = <?php echo $admin?>;
 						<input type="checkbox" id="floodLayer" /> Floodplains
 						<input type="checkbox" id="damLayer" /> Dams
 						<input type="checkbox" id="wellLayer" /> Wells
-						<input type="checkbox" id="wetlandLayer" /> Wetlands
+						<input type="checkbox" id="wetlandLayer" /> Wetlands and Deepwater Habitats
 					</div>
 					<div class="col-sm-6">
 						Use basemap
