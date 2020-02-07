@@ -227,7 +227,7 @@ $(document).ready(function () {
 
 				//create the map
 				var map = new Map({
-					basemap: "gray",
+					basemap: "satellite",
 					layers: [watershedsLayer, sampleSitesLayer, drainsLayer, riverLayer, impairedLayer, bodiesLayer, floodLayer, damLayer, wellLayer, wetlandLayer],
 				});
 		

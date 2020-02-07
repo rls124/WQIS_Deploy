@@ -173,8 +173,8 @@ var admin = <?php echo $admin?>;
 					<div class="col-sm-6">
 						Use basemap
 						<select id="selectBasemap">
-							<option value="gray">Gray</option>
 							<option value="satellite">Satellite</option>
+							<option value="gray">Gray</option>
 							<option value="osm">Streets</option>
 							<option value="hybrid">Hybrid</option>
 							<option value="terrain">Terrain</option>

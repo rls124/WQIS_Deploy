@@ -30,7 +30,7 @@
 		<h4>Basemaps</h4>
 		<div class="indent">
 			<p>
-				Basemaps are different backgrounds for the map that highlight different features. For example, the default 'Gray' basemap offers a minimal view that only highlights major roads and city names. Whereas the 'Streets' basemap displays all major and minor road ways in the area, but forgoes environmental details.
+				Basemaps are different backgrounds for the map that highlight different features. For example, the default 'Satellite' basemap offers a colorful photographic view. Whereas the 'Streets' basemap displays all major and minor road ways in the area, but forgoes environmental details.
 			</p>
 		</div>
 	</div>
