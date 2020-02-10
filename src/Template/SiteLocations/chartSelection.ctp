@@ -138,14 +138,15 @@ var admin = <?php echo $admin?>;
 					</li>
 				</ul>
 			</div>
-				
+			
 			<button type="button" id="updateButton">Update</button>
 			<button type="button" id="resetButton">Reset</button>
 		</fieldset>
 		<?= $this->Form->end() ?>
 		</div>
 	</div>
-	<div class="sidebarToggle" id="sidebarToggle">
+	
+	<div class="sidebarToggle" id="sidebarToggle" style="margin-top: 70px;">
 		<b id="sidebarToggleLabel">CLOSE</b>
 	</div>
 </div>

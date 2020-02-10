@@ -13,7 +13,7 @@ $(document).ajaxStart(function() {
 });
 
 //measurement names/database names available for each category
-var categoryMeasures = {
+const categoryMeasures = {
 	'bacteria': {
 		'Ecoli': {text: 'E. Coli (CFU/100 mil)'},
 		'EcoliRawCount': {text: 'E. Coli Raw Count', visible: false}, //if these raw count columns are ever removed, it'll simplify a lot of stuff
@@ -110,6 +110,15 @@ const markerSymbol = {
 	}
 };
 
+const highlightedMarkerSymbol = {
+	type: "simple-marker",
+	color: [0, 150, 255],
+	outline: {
+		color: [255, 255, 255],
+		width: 2
+	}
+};
+
 const SITE_DATA = 'SiteData';
 
 //page state information
@@ -120,6 +129,12 @@ var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
 var showBenchmarks = true;
+
+//global variables used by the map
+var mapData;
+var map;
+var view;
+var sampleSitesLayer;
 
 $(document).ready(function () {
 	if (typeof admin == 'undefined') {
@@ -145,97 +160,70 @@ $(document).ready(function () {
 			datatype: 'JSON',
 			async: false,
 			success: function(response) {
-				var graphics = [];
-				//add markers to the map at each sites longitude and latitude
-				for (var i = 0; i < response[SITE_DATA].length; i++) {
-					var point = {
-						type: "point",
-						longitude: response[SITE_DATA][i]['Longitude'],
-						latitude: response[SITE_DATA][i]['Latitude']
-					};
-					
-					var pointGraphic = new Graphic({
-						ObjectID: i,
-						geometry: point,
-						symbol: markerSymbol,
-						attributes: {}
-					});
-					
-					pointGraphic.attributes.siteNumber = response[SITE_DATA][i]["Site_Number"].toString();
-					pointGraphic.attributes.siteName = response[SITE_DATA][i]["Site_Name"];
-					pointGraphic.attributes.siteLocation = response[SITE_DATA][i]["Site_Location"];
-					
-					for (var shortField in categoryMeasures) {
-						var field = shortField + "_samples";
-						
-						for (rowNum=0; rowNum<response[field].length; rowNum++) {
-							var siteNumber = response[field][rowNum]["site_location_id"];
-							if (pointGraphic.attributes.siteNumber == siteNumber) {
-								pointGraphic.attributes[shortField + "Date"] = response[field][rowNum]["Date"].split('T')[0];
-								for (var key in categoryMeasures[shortField]) {
-									if (!(categoryMeasures[shortField][key]["visible"] == false) && response[field][rowNum][key] !== null) {
-										pointGraphic.attributes[key] = response[field][rowNum][key].toString();
-									}
-								}
-								break;
-							}
-						}
-					}
-					
-					graphics.push(pointGraphic);
-				}
+				mapData = response;
 				
-				var sampleSitesLayer = new FeatureLayer({
-					fields: fields,
-					objectIdField: "ObjectID",
-					geometryType: "point",
-					popupTemplate: template,
-					source: graphics,
-					renderer: renderer
-				});
-				
-				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished
-				
+				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
 				var watershedsLayer = new KMLLayer({
-					url: kmlurl
+					url: kmlurl,
+					id: "watersheds"
 				});
 				
 				var drainsLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Bodies_Flowlines_Unclassified_LocalRes/MapServer"
+					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Bodies_Flowlines_Unclassified_LocalRes/MapServer",
+					id: "drains",
+					visible: false
 				});
 				var riverLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Streams/MapServer"
+					url: "https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Streams/MapServer",
+					id: "rivers",
+					visible: false
 				});
 				var impairedLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Quality_Impaired_Waters_303d_2016/MapServer"
+					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Quality_Impaired_Waters_303d_2016/MapServer",
+					id: "impaired",
+					visible: false
 				});
 				var bodiesLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Lakes/MapServer"
-				});;
+					url: "https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Lakes/MapServer",
+					id: "bodies",
+					visible: false
+				});
 				var floodLayer = new MapImageLayer({
-					url:"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Floodplains_FIRM/MapServer"
+					url:"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Floodplains_FIRM/MapServer",
+					id: "floods",
+					visible: false
 				});
 				var damLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/ArcGIS/rest/services/Infrastructure/Dams_IDNR/MapServer"
+					url: "https://maps.indiana.edu/ArcGIS/rest/services/Infrastructure/Dams_IDNR/MapServer",
+					id: "dams",
+					visible: false
 				});
 				var wellLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Wells_IDNR/MapServer"
-				});;
+					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Wells_IDNR/MapServer",
+					id: "wells",
+					visible: false
+				});
 				var wetlandLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer"
+					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer",
+					id: "wetlands",
+					visible: false
 				});
-
+				
 				//create the map
-				var map = new Map({
+				map = new Map({
 					basemap: "satellite",
-					layers: [watershedsLayer, sampleSitesLayer, drainsLayer, riverLayer, impairedLayer, bodiesLayer, floodLayer, damLayer, wellLayer, wetlandLayer],
+					layers: [watershedsLayer, drainsLayer, riverLayer, impairedLayer, bodiesLayer, floodLayer, damLayer, wellLayer, wetlandLayer],
+					//layers: []
 				});
-		
-				const view = new MapView({
+				view = new MapView({
 					container: "map",
 					center: [-85, 41],
 					zoom: 8,
 					map: map
+				});
+				
+				view.when(function() {
+					updateMapPoints(); //build the FeatureLayer and graphics for all our collection sites
 				});
 				
 				//add home button to return to the default extent
@@ -249,11 +237,6 @@ $(document).ready(function () {
 					view: view
 				});
 				view.ui.add(fullscreenButton, "bottom-left");
-			
-				//add all our Graphics objects that represent our sample collection sites
-				view.when(function() {
-					view.graphics.addMany(graphics);
-				});
 				
 				//dock the popup permanently to the bottom right, so its not hidden if the user pans away from that point on the map
 				view.popup = {
@@ -277,49 +260,41 @@ $(document).ready(function () {
 					drainsLayer.visible = drainsLayerToggle.checked;
 					
 				});
-				drainsLayer.visible = false;
 				
 				var riverLayerToggle = document.getElementById("riverLayer");
 				riverLayerToggle.addEventListener("change", function(){
 					riverLayer.visible = riverLayerToggle.checked;
 				});
-				riverLayer.visible = false;
 				
 				var impairedLayerToggle = document.getElementById("impairedLayer");
 				impairedLayerToggle.addEventListener("change", function(){
 					impairedLayer.visible = impairedLayerToggle.checked;
 				});
-				impairedLayer.visible = false;
 				
 				var bodiesLayerToggle = document.getElementById("bodiesLayer");
 				bodiesLayerToggle.addEventListener("change", function(){
 					bodiesLayer.visible = bodiesLayerToggle.checked;
 				});
-				bodiesLayer.visible = false;
 				
 				var floodLayerToggle = document.getElementById("floodLayer");
 				floodLayerToggle.addEventListener("change", function(){
 					floodLayer.visible = floodLayerToggle.checked;
 				});
-				floodLayer.visible = false;
 				
 				var damLayerToggle = document.getElementById("damLayer");
 				damLayerToggle.addEventListener("change", function(){
 					damLayer.visible = damLayerToggle.checked;
 				});
-				damLayer.visible = false;
 				
 				var wellLayerToggle = document.getElementById("wellLayer");
 				wellLayerToggle.addEventListener("change", function(){
 					wellLayer.visible = wellLayerToggle.checked;
 				});
-				wellLayer.visible = false;
 				
 				var wetlandLayerToggle = document.getElementById("wetlandLayer");
 				wetlandLayerToggle.addEventListener("change", function(){
 					wetlandLayer.visible = wetlandLayerToggle.checked;
 				});
-				wetlandLayer.visible = false;
 				
 				//handle the dropdown that allows basemap to be changed
 				var basemapSelect = document.getElementById("selectBasemap");
@@ -329,9 +304,82 @@ $(document).ready(function () {
 			}
 		});
 	});
+	
+	function updateMapPoints() {
+		var FeatureLayer = require("esri/layers/FeatureLayer");
+		view.graphics.removeAll();
 		
+		var newGraphics = drawPointsWithHighlight(mapData, $("#sites").val());
+		view.graphics.addMany(newGraphics);
+		
+		sampleSitesLayer = new FeatureLayer({
+			fields: fields,
+			objectIdField: "ObjectID",
+			geometryType: "point",
+			popupTemplate: template,
+			source: newGraphics,
+			renderer: renderer,
+			id: "sampleSites"
+		});
+	}
+	
+	function drawPointsWithHighlight(response, selected) {
+		var Graphic = require("esri/Graphic");
+		if (selected == null) {
+			selected = [];
+		}
+		var graphics = [];
+		//add markers to the map at each sites longitude and latitude
+		for (var i = 0; i < response[SITE_DATA].length; i++) {
+			var point = {
+				type: "point",
+				longitude: response[SITE_DATA][i]['Longitude'],
+				latitude: response[SITE_DATA][i]['Latitude']
+			};
+			
+			var pointGraphic = new Graphic({
+				ObjectID: i,
+				geometry: point,
+				attributes: {}
+			});
+			
+			pointGraphic.attributes.siteNumber = response[SITE_DATA][i]["Site_Number"].toString();
+			if (selected.includes(response[SITE_DATA][i]["Site_Number"].toString())) {
+				pointGraphic.symbol = highlightedMarkerSymbol;
+			}
+			else {
+				pointGraphic.symbol = markerSymbol;
+			}
+			
+			pointGraphic.attributes.siteName = response[SITE_DATA][i]["Site_Name"];
+			pointGraphic.attributes.siteLocation = response[SITE_DATA][i]["Site_Location"];
+			
+			for (var shortField in categoryMeasures) {
+				var field = shortField + "_samples";
+				
+				for (rowNum=0; rowNum<response[field].length; rowNum++) {
+					var siteNumber = response[field][rowNum]["site_location_id"];
+					if (pointGraphic.attributes.siteNumber == siteNumber) {
+						pointGraphic.attributes[shortField + "Date"] = response[field][rowNum]["Date"].split('T')[0];
+						for (var key in categoryMeasures[shortField]) {
+							if (!(categoryMeasures[shortField][key]["visible"] == false) && response[field][rowNum][key] !== null) {
+								pointGraphic.attributes[key] = response[field][rowNum][key].toString();
+							}
+						}
+						break;
+					}
+				}
+			}
+			
+			graphics.push(pointGraphic);
+		}
+		
+		return graphics;
+	}
+	
 	$("#sites").change(function() {
         getRange();
+		updateMapPoints();
     });
 	
 	$("#showBenchmarks").change(function() {
@@ -431,7 +479,7 @@ $(document).ready(function () {
 	document.addEventListener('keydown', function(e) {
 		if (e.keyCode == 27) {
 			//when user hits escape key, close the sidebar
-			closeSidebar();
+			closeSearchSidebar();
 		}
 	}, false);
 	
@@ -618,7 +666,7 @@ $(document).ready(function () {
 	});
 	
 	$("#sidebarToggle").click(function() {
-		toggleSidebar();
+		toggleSearchSidebar();
 	});
 	
 	function setResultsPage(page) {
@@ -699,17 +747,17 @@ $(document).ready(function () {
 		});
 	}
 	
-	function toggleSidebar() {
+	function toggleSearchSidebar() {
 		//expand the search sidebar and shift the rest of the page over, or the opposite
 		if (document.getElementById("sidebarInner").style.width == "402px") {
-			closeSidebar();
+			closeSearchSidebar();
 		}
 		else {
-			openSidebar();
+			openSearchSidebar();
 		}
 	}
 	
-	function openSidebar() {
+	function openSearchSidebar() {
 		document.getElementById("sidebarInner").style.width = "402px";
 		document.getElementById("sidebarInner").style.padding = "10px";
 		document.getElementById("main").style.marginLeft = "412px";
@@ -718,7 +766,7 @@ $(document).ready(function () {
 		document.getElementById("main").style.width="70vw";
 	}
 	
-	function closeSidebar() {
+	function closeSearchSidebar() {
 		document.getElementById("sidebarInner").style.width = 0;
 		document.getElementById("sidebarInner").style.padding = 0;
 		document.getElementById("main").style.marginLeft = "5px";
@@ -741,8 +789,8 @@ $(document).ready(function () {
 		}
 	});
 	
-	//set the sidebar open at start
-	openSidebar();
+	//set the search sidebar open at start
+	openSearchSidebar();
 
 	function resetCharts() {
 		//remove the old chart
