@@ -20,6 +20,16 @@
 			$this->set(compact('siteLocations'));
 			$this->set('_serialize', ['siteLocations']);
 		}
+		
+		public function siteinfo() {
+			$this->loadModel("SiteLocations");
+			
+			$SiteLocations = $this->SiteLocations->find('all')->order(['Site_Number' => 'ASC']);
+			$numSites = $SiteLocations->count();
+			
+			$this->set(compact('SiteLocations'));
+			$this->set(compact('numSites'));
+		}
 
 		public function daterange() {
 			$this->render(false);
@@ -179,6 +189,8 @@
 
 		public function fetchSites() {
 			$this->render(false);
+			
+			$this->loadModel("SiteLocations");
 			
 			if ($this->request->is('POST')) {
 				//get the sites

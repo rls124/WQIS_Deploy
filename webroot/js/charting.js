@@ -141,6 +141,10 @@ $(document).ready(function () {
 		admin = false;
 	}
 	
+	if (preselectSite != null) {
+		$("#sites").val(preselectSite);
+	}
+	
 	//map code
 	require([
 		"esri/Map",

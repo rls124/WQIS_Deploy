@@ -14,6 +14,7 @@
 
 <script>
 var admin = <?php echo $admin?>;
+var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else { echo "null"; }?>;
 </script>
 
 <div class="sidebarContainer">
