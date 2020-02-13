@@ -762,9 +762,9 @@ $(document).ready(function () {
 	}
 	
 	function openSearchSidebar() {
-		document.getElementById("sidebarInner").style.width = "402px";
+		document.getElementById("sidebarInner").style.width = "252px";
 		document.getElementById("sidebarInner").style.padding = "10px";
-		document.getElementById("main").style.marginLeft = "412px";
+		document.getElementById("main").style.marginLeft = "262px";
 		document.getElementById("main").style.padding = "15px";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
 		document.getElementById("main").style.width="70vw";
