@@ -103,7 +103,7 @@ const renderer = {
 
 const markerSymbol = {
 	type: "simple-marker",
-	color: [226, 119, 40],
+	color: [0, 150, 255],
 	outline: {
 		color: [255, 255, 255],
 		width: 2
@@ -112,7 +112,7 @@ const markerSymbol = {
 
 const highlightedMarkerSymbol = {
 	type: "simple-marker",
-	color: [0, 150, 255],
+	color: [226, 119, 40],
 	outline: {
 		color: [255, 255, 255],
 		width: 2
@@ -762,12 +762,12 @@ $(document).ready(function () {
 	}
 	
 	function openSearchSidebar() {
-		document.getElementById("sidebarInner").style.width = "252px";
+		document.getElementById("sidebarInner").style.width = "20vw";
 		document.getElementById("sidebarInner").style.padding = "10px";
-		document.getElementById("main").style.marginLeft = "262px";
+		document.getElementById("main").style.marginLeft = "20vw";
 		document.getElementById("main").style.padding = "15px";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
-		document.getElementById("main").style.width="70vw";
+		document.getElementById("main").style.width="78vw";
 	}
 	
 	function closeSearchSidebar() {
@@ -1289,7 +1289,17 @@ $(document).ready(function () {
 											labelString: categoryMeasures[category][measures[k]]["text"]
 										}
 									}]
-								}
+								},
+								pan: {
+									enabled: true,
+									mode: 'x',
+									speed: 100
+								},
+								zoom: {
+									enabled: true,         
+									mode: 'x',
+								},
+								responsive: true
 							}
 						});
 					},

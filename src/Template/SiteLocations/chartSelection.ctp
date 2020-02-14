@@ -8,6 +8,10 @@
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
 <script defer src="../js/charting.js"></script>
 <script defer src="../js/lib/a"></script>
+<!--<script src="https://npmcdn.com/Chart.Zoom.js@0.3.0/Chart.Zoom.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+<?= $this->Html->script('zoom.js') ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
 
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
@@ -142,6 +146,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			
 			<button type="button" id="updateButton">Update</button>
 			<button type="button" id="resetButton">Reset</button>
+			<button type="button" id="testButton">Test</button>
 		</fieldset>
 		<?= $this->Form->end() ?>
 		</div>
