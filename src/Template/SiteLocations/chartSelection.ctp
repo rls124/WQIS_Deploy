@@ -8,8 +8,6 @@
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
 <script defer src="../js/charting.js"></script>
 <script defer src="../js/lib/a"></script>
-<!--<script src="https://npmcdn.com/Chart.Zoom.js@0.3.0/Chart.Zoom.min.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
 <?= $this->Html->script('zoom.js') ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
@@ -41,7 +39,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		
 			<hr/>
 		
-			<h6>Categories:</h6>
+			<h6>Measurements:</h6>
 			<?=
 			$this->Form->select('categorySelect', [
 				'bacteria' => 'Bacteria',
@@ -55,7 +53,19 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 				]
 			)
 			?>
-			
+			<div>
+				<ul id="checkboxList" style="list-style-type:none; padding-left: 0;">
+					<li>
+						<input type="checkbox" value="all" id="allCheckbox" checked><label for="allCheckbox">All</label>
+					</li>
+					<li>
+						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">E. Coli (CFU/100 mil)</label>
+					</li>
+					<li>
+						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">Coliform (CFU/100 mil)</label>
+					</li>
+				</ul>
+			</div>
 			<hr/>
 			
 			<div>
@@ -87,7 +97,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			<hr/>
 				
 			<div>
-				<h6>Optional Filter</h6>
+				<h6>Filter (optional):</h6>
 				<?=
 				$this->Form->select('measurementSelect', [
 					'select' => 'Select a measure',
@@ -126,27 +136,9 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			])
 			?>
 			</div>
-				
-			<hr/>
-			
-			<div>
-				<h6>Display fields:</h6>
-				<ul id="checkboxList" style="list-style-type:none;">
-					<li>
-						<input type="checkbox" value="all" id="allCheckbox" checked><label for="allCheckbox">All</label>
-					</li>
-					<li>
-						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">E. Coli (CFU/100 mil)</label>
-					</li>
-					<li>
-						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">Coliform (CFU/100 mil)</label>
-					</li>
-				</ul>
-			</div>
 			
 			<button type="button" id="updateButton">Update</button>
 			<button type="button" id="resetButton">Reset</button>
-			<button type="button" id="testButton">Test</button>
 		</fieldset>
 		<?= $this->Form->end() ?>
 		</div>
