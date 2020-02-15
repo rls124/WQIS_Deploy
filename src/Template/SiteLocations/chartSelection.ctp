@@ -11,7 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
 <?= $this->Html->script('zoom.js') ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
-
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
 
 <script>

@@ -1,0 +1,10 @@
+.errorList {
+	color: red;
+	list-style-type:none;
+	padding-left: 0;
+}
+
+.errorText {
+	color: red;
+	margin-left: 10px;
+}
