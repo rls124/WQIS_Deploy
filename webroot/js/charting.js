@@ -129,6 +129,8 @@ var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
 var showBenchmarks = true;
+var charts = [];
+var benchmarkAnnotations = [];
 
 //global variables used by the map
 var mapData;
@@ -141,7 +143,7 @@ $(document).ready(function () {
 		admin = false;
 	}
 	
-	if (preselectSite != null) {
+	if (preselectSite) {
 		$("#sites").val(preselectSite);
 	}
 	
@@ -388,8 +390,17 @@ $(document).ready(function () {
 	
 	$("#showBenchmarks").change(function() {
 		showBenchmarks = !showBenchmarks;
-		resetCharts();
-		getGraphData($('#startDate').val(), $('#endDate').val());
+		for (i=0; i<charts.length; i++) {
+			//console.log(charts[i].options.annotation);
+			if (showBenchmarks == false) {
+				charts[i].options.annotation = null;
+			}
+			else {
+				charts[i].options.annotation = benchmarkAnnotations[i];
+			}
+			charts[i].update(0);
+		//	console.log(charts[i].options.annotation);
+		}
 	});
 	
 	$("#allCheckbox").change(function() {
@@ -1118,6 +1129,9 @@ $(document).ready(function () {
 	}
 
 	function getGraphData(startDate, endDate) {
+		charts = [];
+		benchmarkAnnotations = [];
+		
 		//make sure there's no "Where" search, which we can't support for line graphs
 		if (document.getElementById("measurementSelect").value != "select") {
 			document.getElementById("chartsWhereError").style = "display: block";
@@ -1271,17 +1285,19 @@ $(document).ready(function () {
 								benchmarkLines.push(bench(benchmarks["min"], "blue"));
 							}
 						}
+						
+						benchmarkAnnotation = {annotations: benchmarkLines};
+						
+						benchmarkAnnotations.push(benchmarkAnnotation);
 
-						new Chart(ctx, {
+						charts.push(new Chart(ctx, {
 							type: 'line',
 							data: {
 								labels: labels,
 								datasets: datasets
 							},
 							options: {
-								annotation: {
-									annotations: benchmarkLines
-								},
+								annotation: benchmarkAnnotation,
 								scales: {
 									yAxes: [{
 										scaleLabel: {
@@ -1301,7 +1317,7 @@ $(document).ready(function () {
 								},
 								responsive: true
 							}
-						});
+						}));
 					},
 					async: false
 				});

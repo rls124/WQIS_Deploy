@@ -15,7 +15,11 @@
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
 
 <script>
-var admin = <?php echo $admin?>;
+<?php
+if ($admin) {
+	echo "var admin = true;";
+}
+?>
 var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else { echo "null"; }?>;
 </script>
 
