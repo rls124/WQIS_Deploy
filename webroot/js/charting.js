@@ -391,7 +391,6 @@ $(document).ready(function () {
 	$("#showBenchmarks").change(function() {
 		showBenchmarks = !showBenchmarks;
 		for (i=0; i<charts.length; i++) {
-			//console.log(charts[i].options.annotation);
 			if (showBenchmarks == false) {
 				charts[i].options.annotation = null;
 			}
@@ -399,7 +398,6 @@ $(document).ready(function () {
 				charts[i].options.annotation = benchmarkAnnotations[i];
 			}
 			charts[i].update(0);
-		//	console.log(charts[i].options.annotation);
 		}
 	});
 	
@@ -1262,33 +1260,34 @@ $(document).ready(function () {
 						var ctx = document.getElementById("chart-" + k).getContext("2d");
 						var benchmarkLines = [];
 
-						if (showBenchmarks) {
-							//add benchmark lines
-							var benchmarks = response[1][0]; //max and min
-							
-							function bench(val, color) {
-								return {
-									type: 'line',
-									mode: 'horizontal',
-									scaleID: 'y-axis-0',
-									value: val,
-									borderColor: color,
-									borderWidth: 3,
-									drawTime: 'afterDatasetsDraw',
-								};
-							}
-							
-							if (benchmarks["max"] != null) {
-								benchmarkLines.push(bench(benchmarks["max"], "red"));
-							}
-							if (benchmarks["min"] != null) {
-								benchmarkLines.push(bench(benchmarks["min"], "blue"));
-							}
+						//add benchmark annotations, and save that to a global variable so we can toggle it off/on as needed without requerying the server/drawing the graph
+						var benchmarks = response[1][0]; //max and min
+						
+						function bench(val, color) {
+							return {
+								type: 'line',
+								mode: 'horizontal',
+								scaleID: 'y-axis-0',
+								value: val,
+								borderColor: color,
+								borderWidth: 3,
+								drawTime: 'afterDatasetsDraw',
+							};
 						}
 						
-						benchmarkAnnotation = {annotations: benchmarkLines};
+						if (benchmarks["max"] != null) {
+							benchmarkLines.push(bench(benchmarks["max"], "red"));
+						}
+						if (benchmarks["min"] != null) {
+							benchmarkLines.push(bench(benchmarks["min"], "blue"));
+						}
 						
-						benchmarkAnnotations.push(benchmarkAnnotation);
+						benchmarkAnnotations.push({annotations: benchmarkLines});
+
+						//if showBenchmarks is currently on, just add the benchmark lines here
+						if (showBenchmarks) {
+							benchmarkAnnotation = {annotations: benchmarkLines};
+						}
 
 						charts.push(new Chart(ctx, {
 							type: 'line',
