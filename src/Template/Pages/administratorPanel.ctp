@@ -114,7 +114,7 @@ if ($admin) { ?>
                     <a type="submit" href="..\webroot\files\exampleFiles.zip"  class="mb-0 mt-1 btn btn-basic col-sm sampleFile" id="sampleFileDisabled" name="sampleFile" style="height: 43px;">Download Sample File</a>
 					
                     <input type="submit" class="mb-0 ml-4 mt-1 btn btn-basic col-sm" value="Import Data" id="submitFile" name="submitFile" style="height: 43px;" disabled >
-					<img id="loadingIcon" src="..\webroot\img\loading.gif" style="display: block; margin-top: 12px; margin-left: 6px; auto; width: 32px; height: 32px; visibility: hidden;">
+					<img id="loadingIcon" src="..\webroot\img\loading.gif" style="display: block; margin-top: 12px; margin-left: 6px; width: 32px; height: 32px; visibility: hidden;">
                 </div>
 		<?= $this->Form->end() ?>
             </div>
@@ -122,37 +122,49 @@ if ($admin) { ?>
     </div>
 
     <hr>
-
-    <div class="col-sm-3">
-        <div class="card" style="width:100%">
-            <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'MeasurementSettings', 'action' => 'measurementsettings']) ?>';">
-                <div class="card-header" style="height: 50px;">
-                    <h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>  Measurement settings</h5>
-                </div>
-            </a>
-        </div>
-        <div class="card" style="width:100%">
-            <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'users', 'action' => 'usermanagement']) ?>';">
-                <div class="card-header" style="height: 50px;">
-                    <h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>  User Management</h5>
-                </div>
-            </a>
-        </div>
-        <div class="card" style="width:100%">
-            <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'SiteLocations', 'action' => 'sitemanagement']) ?>';">
-                <div class="card-header" style="height: 50px;">
-                    <h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 14pt;"></span>  Site Management</h5>
-                </div>
-            </a>
-        </div>
-        <div class="card" style="width:100%">
-            <a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'feedback', 'action' => 'adminfeedback']) ?>';">
-                <div class="card-header" style="height: 50px;">
-                    <h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:14pt;"></span>  View Feedback</h5>
-                </div>
-            </a>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="card" style="width:100%; margin-top:10px;">
+				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'MeasurementSettings', 'action' => 'measurementsettings']) ?>';">
+					<div class="card-header" style="height: 50px;">
+						<h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>  Measurement Settings</h5>
+					</div>
+				</a>
+			</div>
+			<div class="card" style="width:100%; margin-top:10px;">
+				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'users', 'action' => 'usermanagement']) ?>';">
+					<div class="card-header" style="height: 50px;">
+						<h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>  User Management</h5>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="card" style="width:100%; margin-top:10px;">
+				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'SiteLocations', 'action' => 'sitemanagement']) ?>';">
+					<div class="card-header" style="height: 50px;">
+						<h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 14pt;"></span>  Site Management</h5>
+					</div>
+				</a>
+			</div>
+			<div class="card" style="width:100%; margin-top:10px;">
+				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'SiteGroups', 'action' => 'sitegroups']) ?>';">
+					<div class="card-header" style="height: 50px;">
+						<h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-folder-open" style="font-size: 14pt;"></span>&nbsp; Site Groups</h5>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="card" style="width:100%; margin-top:10px;">
+				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'feedback', 'action' => 'adminfeedback']) ?>';">
+					<div class="card-header" style="height: 50px;">
+						<h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:14pt;"></span>  View Feedback</h5>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
 
 <script>
 $("#entryType").change(function () {

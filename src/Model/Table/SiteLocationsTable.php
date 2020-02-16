@@ -15,6 +15,7 @@
      * @property \App\Model\Table\NutrientSamplesTable|\Cake\ORM\Association\HasMany $NutrientSamples
      * @property \App\Model\Table\PesticideSamplesTable|\Cake\ORM\Association\HasMany $PesticideSamples
      * @property \App\Model\Table\WaterQualitySamplesTable|\Cake\ORM\Association\HasMany $WaterQualitySamples
+     * @property \App\Model\Table\GroupingsTable|\Cake\ORM\Association\HasMany $Groupings
      *
      * @method \App\Model\Entity\SiteLocation get($primaryKey, $options = [])
      * @method \App\Model\Entity\SiteLocation newEntity($data = null, array $options = [])
@@ -53,6 +54,9 @@
             ]);
             $this->hasMany('WaterQualitySamples', [
                 'foreignKey' => 'site_location_id'
+            ]);
+            $this->HasMany('Groupings', [
+                'foreignKey' => 'site_ID'
             ]);
         }
 
