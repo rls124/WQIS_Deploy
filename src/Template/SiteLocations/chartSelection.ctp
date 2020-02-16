@@ -147,7 +147,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		</div>
 	</div>
 	
-	<div class="sidebarToggle" id="sidebarToggle" style="margin-top: 70px;">
+	<div class="sidebarToggle" id="sidebarToggle" style="margin-top: 70px; z-index: 1">
 		<b id="sidebarToggleLabel">CLOSE</b>
 	</div>
 </div>

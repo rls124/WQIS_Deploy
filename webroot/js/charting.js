@@ -762,7 +762,7 @@ $(document).ready(function () {
 	
 	function toggleSearchSidebar() {
 		//expand the search sidebar and shift the rest of the page over, or the opposite
-		if (document.getElementById("sidebarInner").style.width == "402px") {
+		if (document.getElementById("sidebarInner").style.width == "20vw") {
 			closeSearchSidebar();
 		}
 		else {
