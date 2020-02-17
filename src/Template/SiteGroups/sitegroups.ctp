@@ -46,8 +46,9 @@
 				<td id='<?php echo 'td-' . $siteGroup->groupKey . '-sites'; ?>'>
 					<?php
 					foreach ($Groupings as $grouping) {
-						if ($grouping->group_ID == $siteGroup->groupKey) {
-							echo $grouping->site_ID . " ";
+						$groups = explode(',', $grouping->groups);
+						if (in_array($siteGroup->groupKey, $groups)) {
+							echo $grouping->Site_Number . " ";
 						}
 					} 
 					?>
