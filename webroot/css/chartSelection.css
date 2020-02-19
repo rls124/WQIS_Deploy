@@ -3,7 +3,7 @@ body,
 #map{
 	padding: 0;
 	margin: 0;
-}
+}	
 
 #map{
 	height: 500px;
@@ -193,6 +193,7 @@ textarea{
 	top: 0;
 	left: 0;
 	transition: 0.5s;
+	
 }
 
 .sidebarToggle{
@@ -202,6 +203,7 @@ textarea{
 	border-radius: 0px 10px 10px 0px;
 	writing-mode: vertical-lr;
 	text-orientation: upright;
+	
 }
 
 #sidebarInner{
@@ -249,7 +251,7 @@ th{
 	vertical-align: middle;
 }
 th{
-	background-color: #DDD; 
+	background-color: #e2f0f5; 
 	font-weight: 400;
 }
 
@@ -272,4 +274,21 @@ th{
 .datepicker{
     border: solid medium #2a5171;
     background-color: #f4f6fa;
+}
+
+#updateButton{
+	float: left;
+	margin-left: 25%;
+	
+}
+#resetButton{
+	float: right;
+	margin-right: 35%;
+	
+}
+
+#buttonGroup{
+	margin-top: 30px;
+	font-size: 17px;
+
 }
