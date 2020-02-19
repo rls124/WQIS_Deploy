@@ -100,7 +100,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			<hr/>
 				
 			<div>
-				<h6>Filter (optional):</h6>
+				<h6>Filter by (optional):</h6>
 				<?=
 				$this->Form->select('measurementSelect', [
 					'select' => 'Select a measure',
@@ -140,8 +140,11 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			?>
 			</div>
 			
+			<div id="buttonGroup">
 			<button type="button" id="updateButton">Update</button>
 			<button type="button" id="resetButton">Reset</button>
+			</div>
+			
 		</fieldset>
 		<?= $this->Form->end() ?>
 		</div>
