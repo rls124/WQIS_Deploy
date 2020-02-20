@@ -1221,7 +1221,9 @@ $(document).ready(function () {
 							var newDataset = {
 								label: sites[i],
 								borderColor: selectColor(i, sites.length),
-								data: []
+								data: [],
+								fill: false,
+								borderWidth: 1.5
 							};
 							
 							datasets.push(newDataset);
