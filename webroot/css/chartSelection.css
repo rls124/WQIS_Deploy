@@ -274,16 +274,8 @@ th{
     background-color: #f4f6fa;
 }
 
-#updateButton{
-	float: left;
-	margin-left: 25%;
-}
-#resetButton{
-	float: right;
-	margin-right: 35%;
-}
-
 #buttonGroup{
 	margin-top: 30px;
 	font-size: 17px;
+	text-align: center;
 }
