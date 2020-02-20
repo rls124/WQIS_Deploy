@@ -8,8 +8,7 @@ use Cake\Validation\Validator;
 
 /**
  * SiteGroups Model
- * 
- * @property \App\Model\Table\GroupingsTable|\Cake\ORM\Association\HasMany $Groupings
+ *
  * 
  * @method \App\Model\Entity\SiteGroups get($primaryKey, $options = [])
  * @method \App\Model\Entity\SiteGroups newEntity($data = null, array $options = [])
@@ -33,10 +32,6 @@ class SiteGroupsTable extends Table {
         $this->setTable('site_groups');
         $this->setDisplayField('groupKey');
         $this->setPrimaryKey('groupKey');
-
-        $this->hasMany('Groupings', [
-            'foreignKey' => 'group_ID'
-        ]);
     }
 
     /**
