@@ -3,7 +3,7 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 
-<div id ='message' class="message hidden"></div>
+<div id='message' class="message hidden"></div>
     
 <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-folder-open" style="font-size: 20pt;"></span>  Site Groups
 	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
@@ -24,7 +24,7 @@
 </div>
 
 <input type='button' class='addGroupbtn btn-basic btn mt-2 mb-2 btn-md' value='Add Group' id='addGroupBtn' name='addGroupBtn' data-toggle="modal" data-target="#addGroupModal"/>
-<table id='tableView'  class="table table-striped table-responsive">
+<table id='tableView' class="table table-striped table-responsive">
 	<thead>
 		<tr>
 			<th>Group Name</th>

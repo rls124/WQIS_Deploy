@@ -141,10 +141,9 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			</div>
 			
 			<div id="buttonGroup">
-			<button type="button" id="updateButton">Update</button>
-			<button type="button" id="resetButton">Reset</button>
+				<button type="button" id="updateButton">Update</button>
+				<button type="button" id="resetButton">Reset</button>
 			</div>
-			
 		</fieldset>
 		<?= $this->Form->end() ?>
 		</div>

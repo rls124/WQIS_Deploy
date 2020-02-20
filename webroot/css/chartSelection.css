@@ -3,7 +3,7 @@ body,
 #map{
 	padding: 0;
 	margin: 0;
-}	
+}
 
 #map{
 	height: 500px;
@@ -193,7 +193,6 @@ textarea{
 	top: 0;
 	left: 0;
 	transition: 0.5s;
-	
 }
 
 .sidebarToggle{
@@ -203,7 +202,6 @@ textarea{
 	border-radius: 0px 10px 10px 0px;
 	writing-mode: vertical-lr;
 	text-orientation: upright;
-	
 }
 
 #sidebarInner{
@@ -279,16 +277,13 @@ th{
 #updateButton{
 	float: left;
 	margin-left: 25%;
-	
 }
 #resetButton{
 	float: right;
 	margin-right: 35%;
-	
 }
 
 #buttonGroup{
 	margin-top: 30px;
 	font-size: 17px;
-
 }

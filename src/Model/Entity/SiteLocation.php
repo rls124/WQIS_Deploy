@@ -13,6 +13,7 @@
      * @property float $Latitude
      * @property string $Site_Location
      * @property string $Site_Name
+	 * @property string $groups
      *
      * @property \App\Model\Entity\BacteriaSample[] $bacteria_samples
      * @property \App\Model\Entity\NutrientSample[] $nutrient_samples
@@ -40,6 +41,7 @@
             'bacteria_samples' => true,
             'nutrient_samples' => true,
             'pesticide_samples' => true,
-            'physical_samples' => true
+            'physical_samples' => true,
+			'groups' => true
         ];
     }

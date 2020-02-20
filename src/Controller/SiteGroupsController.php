@@ -2,8 +2,6 @@
 	namespace App\Controller;
 
 	use App\Controller\AppController;
-	//use Cake\ORM\Query;
-	//use \Cake\Database\Expression\QueryExpression as QueryExp;
 
 	/**
 	 * Site Groups Controller
@@ -26,7 +24,6 @@
 			$this->set(compact('SiteLocations'));
 		}
 		
-		
 		public function fetchgroupdata() {
 			$this->render(false);
 			//Check if groupkey is set
@@ -44,7 +41,7 @@
 			$groupings = $this->SiteLocations
 				->find('all')
 				->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) {
-					return $exp->like('groups', '%A1%A'); //WHERE groups LIKE "%Agroupkey%A"
+					return $exp->like('groups', '%A' . $groupkey . '%A'); //WHERE groups LIKE "%Agroupkey%A"
 				})
 				->select('Site_Number');
 
@@ -65,7 +62,6 @@
 			return $this->response;
 		}
 
-		/*
 		public function updategroupdata() {
 			$this->render(false);
 
@@ -79,14 +75,19 @@
 				->find('all')
 				->where(['groupKey = ' => $groupkey])
 				->first();
-				
-			$this->loadModel('Groupings');
-			$groupings = $this->Groupings
-				->find('all')
-				->where(['group_ID = ' => $group->groupKey]);
 
+			$this->loadModel('SiteLocations');
+			$groupings = $this->SiteLocations
+				->find('all')
+				->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) {
+					return $exp->like('groups', '%A' . $groupkey . '%A'); //WHERE groups LIKE "%Agroupkey%A"
+				})
+				->select('Site_Number');
+
+/* //what is even happening here?
 			foreach ($groupings as $grouping) {
 				if ($this->Groupings->delete($grouping)); // delete every grouping...
+				
 			}
 			
 			//...then add all of the new groups
@@ -96,7 +97,7 @@
 					return;
 				}
 			}
-			
+*/			
 			$group->groupName = $this->request->getData('groupname');
 			$group->groupDescription = $this->request->getData('groupdescription');
 
@@ -104,7 +105,6 @@
 				return;
 			}
 		}
-		*/
 
 		public function addgroup() {
 			$this->render(false);
@@ -119,13 +119,27 @@
 						->where(['groupName = ' => $groupName])
 						->first();
 
-					$this->loadModel('Groupings');
-					// save each of the groupings to the DB
+					$this->loadModel('SiteLocations');
 					foreach ($this->request->getData('sites') as $site) {
-						$Grouping = $this->Groupings->newEntity(['group_ID' => $group->groupKey, 'site_ID' => $site]);
-						if (!$this->Groupings->save($Grouping)) {
-							return;
+						//add this group to the sites group list
+						$this->log($site, 'debug');
+						//first get the site
+						$siteObj = $this->SiteLocations
+							->find('all')
+							->where(['Site_Number = ' => $site])
+							->first();
+						
+						//get its existing list of groups
+						$existingGroups = $siteObj->groups;
+						
+						if ($existingGroups == null) { //no groups present
+							$siteObj->groups = $group->groupKey;
 						}
+						else {
+							$siteObj->groups = $siteObj->groups . "," . $group->groupKey;
+						}
+						
+						$this->SiteLocations->save($siteObj);
 					}
 
 					$this->response->type('json');
@@ -149,7 +163,7 @@
 				->where(['groupKey = ' => $groupkey])
 				->first();
 
-			//then the site_group
+			//then delete the site_group
 			$this->SiteGroups->delete($group);
 		}
 	}

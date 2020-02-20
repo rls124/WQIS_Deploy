@@ -76,8 +76,7 @@ for (var category in categoryMeasures) {
 //build the table template we use to display all the data associated with a point on the map
 var templateContent = "<table>";
 for (var category in categoryMeasures) {
-	
-	templateContent = templateContent + "<tr><th>" + category[0].toUpperCase() + category.slice(1) + " Measurements</th><th>{" + category + "Date}</th></tr>";
+	 	templateContent = templateContent + "<tr><th>" + category[0].toUpperCase() + category.slice(1) + " Measurements</th><th>{" + category + "Date}</th></tr>";
 	for (var key in categoryMeasures[category]) {
 		if (!(categoryMeasures[category][key]["visible"] == false)) {
 			templateContent = templateContent + "<tr><th>" + categoryMeasures[category][key]["text"] + "</th><td>{" + key + "}</td></tr>";
@@ -812,7 +811,6 @@ $(document).ready(function () {
 	}
 	
 	function resetTable() {
-		
 		//remove the old table
 		document.getElementById("tableDiv").innerHTML = "";
 		
