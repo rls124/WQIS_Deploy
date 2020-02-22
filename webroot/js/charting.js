@@ -407,7 +407,6 @@ $(document).ready(function () {
 		for (i=0; i<checkboxList.length; i++) {
 			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
 		}
-		updateAll();
 	});
 	
 	function checkboxesChanged() {
@@ -462,11 +461,7 @@ $(document).ready(function () {
 		spinnerInhibited = false;
     }
 	
-    document.getElementById('categorySelect').addEventListener("change", function() {
-		changeMeasures();
-		updateAll();
-	});
-	
+    document.getElementById('categorySelect').addEventListener("change", changeMeasures);
     $(".date-picker").datepicker({
         trigger: "focus",
         format: 'mm/dd/yyyy',
@@ -477,12 +472,10 @@ $(document).ready(function () {
     $("#startDate").datepicker().on('changeDate', function (selected) {
         var minDate = new Date(selected.date.valueOf());
         $('#endDate').datepicker('setStartDate', minDate);
-		updateAll();
     });
     $("#endDate").datepicker().on('changeDate', function (selected) {
         var maxDate = new Date(selected.date.valueOf());
         $('#startDate').datepicker('setEndDate', maxDate);
-		updateAll();
     });
 
 	$('#sites').select2({
@@ -648,17 +641,20 @@ $(document).ready(function () {
 	});
 	
 	function updateAll() {
+		getNumRecords(); //for some reason we have to do this here before we do the actual update, or the table fails to load properly the first time. Reason unknown
+		
 		//validation
 		//check that, if there is something in amountEnter, a measure is also selected
 		var amountEnter = document.getElementById("amountEnter").value;
 		var measurementSelect = document.getElementById("measurementSelect").value;
+		
 		if (amountEnter != "" && measurementSelect == "select") {
 			alert("You must specify a measure to search by");
 		}
 		else {
 			resetAll();
 			getNumRecords();
-			getGraphData($('#startDate').val(), $('#endDate').val());
+			getGraphData();
 			setResultsPage(1);
 			$("#chartsLayoutSelect").show();
 			if (numPages > 0) {
@@ -683,13 +679,13 @@ $(document).ready(function () {
 	$("#chartsInlineButton").click(function() {
 		chartsDisplayMode = "in-line";
 		resetCharts();
-		getGraphData($('#startDate').val(), $('#endDate').val());
+		getGraphData();
 	});
 	
 	$("#chartsGridButton").click(function() {
 		chartsDisplayMode = "grid";
 		resetCharts();
-		getGraphData($('#startDate').val(), $('#endDate').val());
+		getGraphData();
 	});
 	
 	$("#sidebarToggle").click(function() {
@@ -1140,16 +1136,15 @@ $(document).ready(function () {
 		return measures;
 	}
 
-	function getGraphData(startDate, endDate) {
+	function getGraphData() {
 		charts = [];
 		benchmarkAnnotations = [];
-		
+
+		var startDate = $('#startDate').val();
+		var endDate = $('#endDate').val();
 		var sites = $("#sites").val();
 		var measures = getSelectedMeasures();
 		var category = $('#categorySelect').val();
-		var amountEnter = document.getElementById("amountEnter").value;
-		var overUnderSelect = document.getElementById("overUnderSelect").value;
-		var measurementSearch = document.getElementById("measurementSelect").value;
 		
 		//build the necessary canvases
 		var chartDiv = document.getElementById("chartDiv");
@@ -1210,10 +1205,7 @@ $(document).ready(function () {
 					'startDate': startDate,
 					'endDate': endDate,
 					'measure': measures[k],
-					"category": category,
-					'amountEnter': amountEnter,
-					'overUnderSelect': overUnderSelect,
-					'measurementSearch': measurementSearch
+					"category": category
 				},
 				success: function(response) {
 					function selectColor(colorIndex, palleteSize) {
