@@ -386,6 +386,7 @@ $(document).ready(function () {
 	$("#sites").change(function() {
         getRange();
 		updateMapPoints();
+		updateAll();
     });
 	
 	$("#showBenchmarks").change(function() {
@@ -406,6 +407,7 @@ $(document).ready(function () {
 		for (i=0; i<checkboxList.length; i++) {
 			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
 		}
+		updateAll();
 	});
 	
 	function checkboxesChanged() {
@@ -423,6 +425,8 @@ $(document).ready(function () {
 			//deselect the All checkbox
 			document.getElementById("allCheckbox").checked = false;
 		}
+		
+		updateAll();
 	}
 	
 	$(".measurementCheckbox").change(function() {
@@ -458,7 +462,11 @@ $(document).ready(function () {
 		spinnerInhibited = false;
     }
 	
-    document.getElementById('categorySelect').addEventListener("change", changeMeasures);
+    document.getElementById('categorySelect').addEventListener("change", function() {
+		changeMeasures();
+		updateAll();
+	});
+	
     $(".date-picker").datepicker({
         trigger: "focus",
         format: 'mm/dd/yyyy',
@@ -469,10 +477,12 @@ $(document).ready(function () {
     $("#startDate").datepicker().on('changeDate', function (selected) {
         var minDate = new Date(selected.date.valueOf());
         $('#endDate').datepicker('setStartDate', minDate);
+		updateAll();
     });
     $("#endDate").datepicker().on('changeDate', function (selected) {
         var maxDate = new Date(selected.date.valueOf());
         $('#startDate').datepicker('setEndDate', maxDate);
+		updateAll();
     });
 
 	$('#sites').select2({
@@ -634,6 +644,10 @@ $(document).ready(function () {
 	}
 	
 	$("#updateButton").click(function() {
+		updateAll();
+	});
+	
+	function updateAll() {
 		//validation
 		//check that, if there is something in amountEnter, a measure is also selected
 		var amountEnter = document.getElementById("amountEnter").value;
@@ -654,7 +668,7 @@ $(document).ready(function () {
 				document.getElementById("exportBtn").disabled = true;
 			}
 		}
-	});
+	}
 	
 	$("#resetButton").click(function() {
 		//clear all parameters to default values, and clear the chart/table view
@@ -1130,199 +1144,198 @@ $(document).ready(function () {
 		charts = [];
 		benchmarkAnnotations = [];
 		
-		//make sure there's no "Where" search, which we can't support for line graphs
-		if (document.getElementById("measurementSelect").value != "select") {
-			document.getElementById("chartsWhereError").style = "display: block";
+		var sites = $("#sites").val();
+		var measures = getSelectedMeasures();
+		var category = $('#categorySelect').val();
+		var amountEnter = document.getElementById("amountEnter").value;
+		var overUnderSelect = document.getElementById("overUnderSelect").value;
+		var measurementSearch = document.getElementById("measurementSelect").value;
+		
+		//build the necessary canvases
+		var chartDiv = document.getElementById("chartDiv");
+		var nMeasures = measures.length;
+		
+		if (chartsDisplayMode == "in-line") {
+			for (var k=0; k<nMeasures; k++) {
+				var newCanvasContainer = document.createElement("div");
+				newCanvasContainer.style = "width: 80%; text-align: center; margin: auto;";
+			
+				var newCanvas = document.createElement("canvas");
+				newCanvas.id = "chart-" + k;
+				newCanvasContainer.appendChild(newCanvas);
+				chartDiv.appendChild(newCanvasContainer);
+			}
 		}
 		else {
-			document.getElementById("chartsNoData").style = "display: none";
+			//grid view
+			var chartsGrid = document.createElement("div");
+			chartsGrid.setAttribute("class", "container");
 			
-			var sites = $("#sites").val();
-			var measures = getSelectedMeasures();
-			var category = $('#categorySelect').val();
-			
-			//build the necessary canvases
-			var chartDiv = document.getElementById("chartDiv");
-			var nMeasures = measures.length;
-			
-			if (chartsDisplayMode == "in-line") {
-				for (var k=0; k<nMeasures; k++) {
+			//figure out the number of rows with 2 columns each
+			var nx = 2;
+			var ny = Math.ceil(nMeasures/nx);
+			var chartNum = 0;
+			for (y=0; y<ny; y++) {
+				var row = document.createElement("div");
+				row.setAttribute("class", "row");
+				
+				for (x=0; x<nx; x++) {
+					var cell = document.createElement("div");
+					cell.setAttribute("class", "col-sm");
+				
 					var newCanvasContainer = document.createElement("div");
-					newCanvasContainer.style = "width: 80%; text-align: center; margin: auto;";
+					newCanvasContainer.style = "width: 100%; text-align: center; margin: auto;";
 				
 					var newCanvas = document.createElement("canvas");
-					newCanvas.id = "chart-" + k;
+					newCanvas.id = "chart-" + chartNum;
 					newCanvasContainer.appendChild(newCanvas);
-					chartDiv.appendChild(newCanvasContainer);
-				}
-			}
-			else {
-				//grid view
-				var chartsGrid = document.createElement("div");
-				chartsGrid.setAttribute("class", "container");
 				
-				//figure out the number of rows with 2 columns each
-				var nx = 2;
-				var ny = Math.ceil(nMeasures/nx);
-				var chartNum = 0;
-				for (y=0; y<ny; y++) {
-					var row = document.createElement("div");
-					row.setAttribute("class", "row");
-					
-					for (x=0; x<nx; x++) {
-						var cell = document.createElement("div");
-						cell.setAttribute("class", "col-sm");
-					
-						var newCanvasContainer = document.createElement("div");
-						newCanvasContainer.style = "width: 100%; text-align: center; margin: auto;";
-					
-						var newCanvas = document.createElement("canvas");
-						newCanvas.id = "chart-" + chartNum;
-						newCanvasContainer.appendChild(newCanvas);
-					
-						cell.appendChild(newCanvasContainer);
-						row.appendChild(cell);
-						chartNum++;
-					}
-					chartsGrid.appendChild(row);
+					cell.appendChild(newCanvasContainer);
+					row.appendChild(cell);
+					chartNum++;
 				}
-				chartDiv.appendChild(chartsGrid);
+				chartsGrid.appendChild(row);
 			}
-			
-			//get data and fill the charts in
-			for (var k=0; k<nMeasures; k++) {
-				$.ajax({
-					type: "POST",
-					url: "/WQIS/generic-samples/graphdata",
-					datatype: 'JSON',
-					data: {
-						'sites': sites,
-						'startDate': startDate,
-						'endDate': endDate,
-						'measure': measures[k],
-						"category": category
-					},
-					success: function(response) {
-						function selectColor(colorIndex, palleteSize) {
-							//returns color at an index of an evenly-distributed color pallete of arbitrary size
-							
-							//to avoid ever having the color of the line matching the color of the benchmark lines, we offset the index and pallet size by 1
-							colorIndex++;
-							if (palleteSize < 1) {
-								palleteSize = 1; //defaults to one color, can't divide by zero or the universe implodes
-							}
-							palleteSize++;
-							
-							return "hsl(" + (colorIndex * (360 / palleteSize) % 360) + ",70%,50%)";
+			chartDiv.appendChild(chartsGrid);
+		}
+		
+		//get data and fill the charts in
+		for (var k=0; k<nMeasures; k++) {
+			$.ajax({
+				type: "POST",
+				url: "/WQIS/generic-samples/graphdata",
+				datatype: 'JSON',
+				data: {
+					'sites': sites,
+					'startDate': startDate,
+					'endDate': endDate,
+					'measure': measures[k],
+					"category": category,
+					'amountEnter': amountEnter,
+					'overUnderSelect': overUnderSelect,
+					'measurementSearch': measurementSearch
+				},
+				success: function(response) {
+					function selectColor(colorIndex, palleteSize) {
+						//returns color at an index of an evenly-distributed color pallete of arbitrary size
+						
+						//to avoid ever having the color of the line matching the color of the benchmark lines, we offset the index and pallet size by 1
+						colorIndex++;
+						if (palleteSize < 1) {
+							palleteSize = 1; //defaults to one color, can't divide by zero or the universe implodes
 						}
+						palleteSize++;
 						
-						var datasets = [];
-						for (i=0; i<sites.length; i++) {
-							var newDataset = {
-								label: sites[i],
-								borderColor: selectColor(i, sites.length),
-								data: [],
-								fill: false,
-								borderWidth: 1.5
-							};
-							
-							datasets.push(newDataset);
-						}
+						return "hsl(" + (colorIndex * (360 / palleteSize) % 360) + ",70%,50%)";
+					}
+					
+					var datasets = [];
+					for (i=0; i<sites.length; i++) {
+						var newDataset = {
+							label: sites[i],
+							borderColor: selectColor(i, sites.length),
+							data: [],
+							lineTension: 0,
+							fill: false,
+							borderWidth: 1.5
+						};
 						
-						var labels = [];
+						datasets.push(newDataset);
+					}
+					
+					var labels = [];
+					
+					for (i=0; i<response[0].length; i++) {
+						var newRow = []
 						
-						for (i=0; i<response[0].length; i++) {
-							var newRow = []
-							
-							var date = response[0][i].date.split("T")[0];
-							
-							newRow.t = date;
-							newRow.y = response[0][i].value;
-							
-							for (j=0; j<sites.length; j++) {
-								if (response[0][i].site == sites[j]) {
-									datasets[j].data.push(newRow);
-									break;
-								}
-							}
-							
-							//make sure there isn't already a label created for this date, or things break in weird ways
-							var found = false;
-							for (j=0; j<labels.length; j++) {
-								if (labels[j] == date) {
-									found = true;
-									break;
-								}
-							}
-							if (found == false) {
-								labels.push(date);
+						var date = response[0][i].date.split("T")[0];
+						
+						newRow.t = date;
+						newRow.y = response[0][i].value;
+						
+						for (j=0; j<sites.length; j++) {
+							if (response[0][i].site == sites[j]) {
+								datasets[j].data.push(newRow);
+								break;
 							}
 						}
 						
-						var ctx = document.getElementById("chart-" + k).getContext("2d");
-						var benchmarkLines = [];
+						//make sure there isn't already a label created for this date, or things break in weird ways
+						var found = false;
+						for (j=0; j<labels.length; j++) {
+							if (labels[j] == date) {
+								found = true;
+								break;
+							}
+						}
+						if (found == false) {
+							labels.push(date);
+						}
+					}
+					
+					var ctx = document.getElementById("chart-" + k).getContext("2d");
+					var benchmarkLines = [];
 
-						//add benchmark annotations, and save that to a global variable so we can toggle it off/on as needed without requerying the server/drawing the graph
-						var benchmarks = response[1][0]; //max and min
-						
-						function bench(val, color) {
-							return {
-								type: 'line',
-								mode: 'horizontal',
-								scaleID: 'y-axis-0',
-								value: val,
-								borderColor: color,
-								borderWidth: 3,
-								drawTime: 'afterDatasetsDraw',
-							};
-						}
-						
-						if (benchmarks["max"] != null) {
-							benchmarkLines.push(bench(benchmarks["max"], "red"));
-						}
-						if (benchmarks["min"] != null) {
-							benchmarkLines.push(bench(benchmarks["min"], "blue"));
-						}
-						
-						benchmarkAnnotations.push({annotations: benchmarkLines});
-
-						//if showBenchmarks is currently on, just add the benchmark lines here
-						if (showBenchmarks) {
-							benchmarkAnnotation = {annotations: benchmarkLines};
-						}
-
-						charts.push(new Chart(ctx, {
+					//add benchmark annotations, and save that to a global variable so we can toggle it off/on as needed without requerying the server/drawing the graph
+					var benchmarks = response[1][0]; //max and min
+					
+					function bench(val, color) {
+						return {
 							type: 'line',
-							data: {
-								labels: labels,
-								datasets: datasets
+							mode: 'horizontal',
+							scaleID: 'y-axis-0',
+							value: val,
+							borderColor: color,
+							borderWidth: 3,
+							drawTime: 'afterDatasetsDraw',
+						};
+					}
+					
+					if (benchmarks["max"] != null) {
+						benchmarkLines.push(bench(benchmarks["max"], "red"));
+					}
+					if (benchmarks["min"] != null) {
+						benchmarkLines.push(bench(benchmarks["min"], "blue"));
+					}
+					
+					benchmarkAnnotations.push({annotations: benchmarkLines});
+
+					//if showBenchmarks is currently on, just add the benchmark lines here
+					if (showBenchmarks) {
+						benchmarkAnnotation = {annotations: benchmarkLines};
+					}
+
+					charts.push(new Chart(ctx, {
+						type: 'line',
+						data: {
+							labels: labels,
+							datasets: datasets
+						},
+						options: {
+							annotation: benchmarkAnnotation,
+							scales: {
+								yAxes: [{
+									scaleLabel: {
+										display: true,
+										labelString: categoryMeasures[category][measures[k]]["text"]
+									}
+								}]
 							},
-							options: {
-								annotation: benchmarkAnnotation,
-								scales: {
-									yAxes: [{
-										scaleLabel: {
-											display: true,
-											labelString: categoryMeasures[category][measures[k]]["text"]
-										}
-									}]
-								},
-								pan: {
-									enabled: true,
-									mode: 'x',
-									speed: 100
-								},
-								zoom: {
-									enabled: true,         
-									mode: 'x',
-								},
-								responsive: true
-							}
-						}));
-					},
-					async: false
-				});
-			}
+							pan: {
+								enabled: true,
+								mode: 'x',
+								speed: 100
+							},
+							zoom: {
+								enabled: true,         
+								mode: 'x',
+							},
+							responsive: true
+						}
+					}));
+				},
+				async: false
+			});
 		}
 	}
 	

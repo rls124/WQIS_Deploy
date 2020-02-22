@@ -157,9 +157,9 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 <div class="col-lg-12" id="main">
 	<div class="card">
 		<div class="card-header">
-			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseOne">Map</a></h4>
+			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseMap">Map</a></h4>
 		</div>
-		<div id="collapseOne" class="panel-collapse collapse show">
+		<div id="collapseMap" class="panel-collapse collapse show">
 			<div class="panel-body" id="mapContainer">
 				<div id="map"></div>
 				<div class="row">
@@ -191,9 +191,9 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		
 	<div class="card">
 		<div class="card-header">
-			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseTwo">Timeline</a></h4>
+			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseTimeline">Timeline</a></h4>
 		</div>
-		<div id="collapseTwo" class="panel-collapse collapse show">
+		<div id="collapseTimeline" class="panel-collapse collapse show">
 			<div class="panel-body">
 				<div id="chartsLayoutSelect" style="display: none">
 					<button type="button" id="chartsInlineButton">In-line</button>
@@ -201,17 +201,16 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 					<input type="checkbox" id="showBenchmarks" value="showBenchmarks" checked>Show benchmark lines
 				</div>
 				<div id="chartDiv" style="text-align: center;"></div>
-				<span id="chartsNoData">No data to display</span>
-				<span id="chartsWhereError" style="display: none">Graph view does not support the "Where" search feature</span>
+				<span id="chartsMsg">No data to display</span>
 			</div>
 		</div>
 	</div>
 		
 	<div class="card">
 		<div class="card-header">
-			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseThree">Table</a></h4>
+			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseTable">Table</a></h4>
 		</div>
-		<div id="collapseThree" class="panel-collapse collapse show">
+		<div id="collapseTable" class="panel-collapse collapse show">
 			<div class="panel-body">
 				<div id="tableSettings" style="display: none">
 					Show 
