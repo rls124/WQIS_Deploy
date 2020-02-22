@@ -603,6 +603,10 @@
 		$sites = $this->request->getData("sites");
 		$measure = $this->request->getData("measure");
 		$category = $this->request->getData("category");
+		$sites = $this->request->getData('sites');
+		$amount = $_POST["amountEnter"];
+		$searchDirection = $_POST["overUnderSelect"];
+		$measurementSearch = $_POST["measurementSearch"];
 		$model = ucfirst($category) . "Samples";
 		
 		$this->loadModel($model);
@@ -625,6 +629,16 @@
 			$threshold = [['min' => NULL, 'max' => NULL]];
 		}
 		
+		$andConditions = [
+			'site_location_id IN' => $sites,
+			$model . '.Date >=' => $startDate,
+			$model . '.Date <= ' => $endDate
+		];
+				
+		if ($amount != '') {
+			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
+		}
+		
 		//get data requested
 		$samples = $this->$model->find('all', [
 			'fields' => [
@@ -633,13 +647,7 @@
 				'value' => $measure
 			],
 			'conditions' => [
-				'and' => [
-					'site_location_id IN ' => $sites,
-					[
-						$model . '.Date >=' => $startDate,
-						$model . '.Date <= ' => $endDate
-					]
-				]
+				'and' => $andConditions
 			]
 		])->order(['Date' => 'ASC']);
 		

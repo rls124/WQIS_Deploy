@@ -407,6 +407,7 @@ $(document).ready(function () {
 		for (i=0; i<checkboxList.length; i++) {
 			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
 		}
+		updateAll();
 	});
 	
 	function checkboxesChanged() {
@@ -461,7 +462,11 @@ $(document).ready(function () {
 		spinnerInhibited = false;
     }
 	
-    document.getElementById('categorySelect').addEventListener("change", changeMeasures);
+    document.getElementById('categorySelect').addEventListener("change", function() {
+		changeMeasures();
+		updateAll();
+	});
+	
     $(".date-picker").datepicker({
         trigger: "focus",
         format: 'mm/dd/yyyy',
@@ -472,10 +477,13 @@ $(document).ready(function () {
     $("#startDate").datepicker().on('changeDate', function (selected) {
         var minDate = new Date(selected.date.valueOf());
         $('#endDate').datepicker('setStartDate', minDate);
+		updateAll();
     });
+	
     $("#endDate").datepicker().on('changeDate', function (selected) {
         var maxDate = new Date(selected.date.valueOf());
         $('#startDate').datepicker('setEndDate', maxDate);
+		updateAll();
     });
 
 	$('#sites').select2({
@@ -1145,6 +1153,9 @@ $(document).ready(function () {
 		var sites = $("#sites").val();
 		var measures = getSelectedMeasures();
 		var category = $('#categorySelect').val();
+		var amountEnter = document.getElementById("amountEnter").value;
+		var overUnderSelect = document.getElementById("overUnderSelect").value;
+		var measurementSearch = document.getElementById("measurementSelect").value;
 		
 		//build the necessary canvases
 		var chartDiv = document.getElementById("chartDiv");
@@ -1205,7 +1216,10 @@ $(document).ready(function () {
 					'startDate': startDate,
 					'endDate': endDate,
 					'measure': measures[k],
-					"category": category
+					"category": category,
+					'amountEnter': amountEnter,
+					'overUnderSelect': overUnderSelect,
+					'measurementSearch': measurementSearch
 				},
 				success: function(response) {
 					function selectColor(colorIndex, palleteSize) {
