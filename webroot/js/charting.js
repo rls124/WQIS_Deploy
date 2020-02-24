@@ -1,4 +1,5 @@
 var spinnerInhibited = true; //inhibit this initially so basic setup tasks that are done through AJAX, like loading the map, can be done without showing this. Can also inhibit as needed for minor things that aren't expected to take much time
+var inhibitSitesChange = false;
 
 //loading graphic
 $(document).ajaxStart(function() {
@@ -311,11 +312,30 @@ $(document).ready(function () {
 		});
 	});
 	
+	function getVisibleSites() {
+		var groupKey = $("#selectGroupsToShow").val();
+		if (groupKey == "all") {
+			var visibleSites = mapData["SiteData"];
+		}
+		else {
+			var visibleSites = [];
+			for (i=0; i<mapData["SiteData"].length; i++) {
+				var groups = mapData["SiteData"][i].groups.split(",");
+				if (groups.includes(groupKey)) {
+					visibleSites.push(mapData["SiteData"][i]);
+				}
+			}
+		}
+		return visibleSites;
+	}
+	
 	function updateMapPoints() {
 		var FeatureLayer = require("esri/layers/FeatureLayer");
 		view.graphics.removeAll();
 		
-		var newGraphics = drawPointsWithHighlight(mapData, $("#sites").val());
+		var visibleSites = getVisibleSites();
+		
+		var newGraphics = drawPointsWithHighlight(mapData, $("#sites").val(), visibleSites);
 		view.graphics.addMany(newGraphics);
 		
 		sampleSitesLayer = new FeatureLayer({
@@ -329,18 +349,18 @@ $(document).ready(function () {
 		});
 	}
 	
-	function drawPointsWithHighlight(response, selected) {
+	function drawPointsWithHighlight(response, selected, visibleSites) {
 		var Graphic = require("esri/Graphic");
 		if (selected == null) {
 			selected = [];
 		}
 		var graphics = [];
 		//add markers to the map at each sites longitude and latitude
-		for (var i = 0; i < response[SITE_DATA].length; i++) {
+		for (var i = 0; i < visibleSites.length; i++) {
 			var point = {
 				type: "point",
-				longitude: response[SITE_DATA][i]['Longitude'],
-				latitude: response[SITE_DATA][i]['Latitude']
+				longitude: visibleSites[i]['Longitude'],
+				latitude: visibleSites[i]['Latitude']
 			};
 			
 			var pointGraphic = new Graphic({
@@ -349,16 +369,16 @@ $(document).ready(function () {
 				attributes: {}
 			});
 			
-			pointGraphic.attributes.siteNumber = response[SITE_DATA][i]["Site_Number"].toString();
-			if (selected.includes(response[SITE_DATA][i]["Site_Number"].toString())) {
+			pointGraphic.attributes.siteNumber = visibleSites[i]["Site_Number"].toString();
+			if (selected.includes(visibleSites[i]["Site_Number"].toString())) {
 				pointGraphic.symbol = highlightedMarkerSymbol;
 			}
 			else {
 				pointGraphic.symbol = markerSymbol;
 			}
 			
-			pointGraphic.attributes.siteName = response[SITE_DATA][i]["Site_Name"];
-			pointGraphic.attributes.siteLocation = response[SITE_DATA][i]["Site_Location"];
+			pointGraphic.attributes.siteName = visibleSites[i]["Site_Name"];
+			pointGraphic.attributes.siteLocation = visibleSites[i]["Site_Location"];
 			
 			for (var shortField in categoryMeasures) {
 				var field = shortField + "_samples";
@@ -384,10 +404,30 @@ $(document).ready(function () {
 	}
 	
 	$("#sites").change(function() {
-        getRange();
-		updateMapPoints();
-		updateAll();
+		if (inhibitSitesChange == false) {
+			getRange();
+			updateMapPoints();
+			updateAll();
+		}
     });
+	
+	$("#selectGroupsToShow").change(function() {
+		var visibleSites = getVisibleSites();
+		inhibitSitesChange = true; //inhibit the change listener because of a recursion issue
+	
+		//remove all existing options from the dropdown
+		$("#sites").empty();
+		
+		for (i=0; i<visibleSites.length; i++) {
+			var newOption = new Option(visibleSites[i].Site_Number + " " + visibleSites[i].Site_Name, visibleSites[i].Site_Number, false, false);
+			$('#sites').append(newOption).trigger('change');
+		}
+		
+		inhibitSitesChange = false;
+		view.popup.close()
+		updateMapPoints();
+		resetAll();
+	});
 	
 	$("#showBenchmarks").change(function() {
 		showBenchmarks = !showBenchmarks;

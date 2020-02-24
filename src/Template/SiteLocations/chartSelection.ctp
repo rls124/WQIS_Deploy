@@ -174,7 +174,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 						<input type="checkbox" id="wellLayer" /> Wells
 						<input type="checkbox" id="wetlandLayer" /> Wetlands and Deepwater Habitats
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm">
 						Use basemap
 						<select id="selectBasemap">
 							<option value="satellite">Satellite</option>
@@ -182,6 +182,17 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 							<option value="osm">Streets</option>
 							<option value="hybrid">Hybrid</option>
 							<option value="terrain">Terrain</option>
+						</select>
+					</div>
+					<div class="col-sm">
+						Show sites from groups
+						<select id="selectGroupsToShow">
+							<option value="all">All</option>
+							<?php
+							foreach ($siteGroups as $siteGroup) {
+								echo "<option value=\"" . $siteGroup->groupKey . "\">" . $siteGroup->groupName . "</option>";
+							}
+							?>
 						</select>
 					</div>
 				</div>

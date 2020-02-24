@@ -14,10 +14,13 @@
 	class SiteLocationsController extends AppController {
 		public function chartselection() {
 			$this->loadModel("SiteLocations");
+			$this->loadModel("SiteGroups");
 			
 			$siteLocations = $this->SiteLocations->find('all');
+			$siteGroups = $this->SiteGroups->find('all');
 
 			$this->set(compact('siteLocations'));
+			$this->set(compact('siteGroups'));
 			$this->set('_serialize', ['siteLocations']);
 		}
 		
