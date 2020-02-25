@@ -453,17 +453,11 @@ $(document).ready(function () {
 	function checkboxesChanged() {
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
 		
-		var allSelected = true;
 		for (i=0; i<checkboxList.length; i++) {
 			if (checkboxList[i].checked == false) {
-				allSelected = false;
+				document.getElementById("allCheckbox").checked = false; //deselect the All checkbox
 				break;
 			}
-		}
-		
-		if (allSelected == false) {
-			//deselect the All checkbox
-			document.getElementById("allCheckbox").checked = false;
 		}
 		
 		updateAll();
