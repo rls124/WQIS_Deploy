@@ -471,24 +471,25 @@ $(document).ready(function () {
 		spinnerInhibited = true;
 		
 		//if both variables are not null, then we may submit an sql request
-        var siteData = document.querySelector('#sites').value;
-        var categoryData = $('#categorySelect').val();
-        if ((siteData !== null && siteData !== 'select') && categoryData !== null) {
+        var siteData = document.querySelector("#sites").value;
+        var categoryData = $("#categorySelect").val();
+        if ((siteData !== "select") && categoryData !== null) {
             $.ajax({
                 type: "POST",
                 url: "daterange",
                 data: {
-                    'site': siteData,
-                    'category': categoryData
+                    "site": siteData,
+                    "category": categoryData
                 },
                 datatype: 'JSON',
+				async: false,
                 success: function (data) {
-                    var startDateData = data[0];
-                    var endDateData = data[1];
-                    $('#startDate').val(startDateData);
-                    $('#endDate').val(endDateData);
-                    $("#startDate").datepicker('update', startDateData);
-                    $("#endDate").datepicker('update', endDateData);
+                    var startDate = data[0];
+                    var endDate = data[1];
+                    $("#startDate").val(startDate);
+                    $("#endDate").val(endDate);
+                    $("#startDate").datepicker("update", startDate);
+                    $("#endDate").datepicker("update", endDate);
                 }
             });
         }
@@ -683,8 +684,6 @@ $(document).ready(function () {
 	});
 	
 	function updateAll() {
-		getNumRecords(); //for some reason we have to do this here before we do the actual update, or the table fails to load properly the first time. Reason unknown
-		
 		//validation
 		//check that, if there is something in amountEnter, a measure is also selected
 		var amountEnter = document.getElementById("amountEnter").value;
@@ -780,9 +779,6 @@ $(document).ready(function () {
 	function getNumRecords() {
 		//get the number of records
 		
-		var startDate = $('#startDate').val();
-		var endDate = $('#endDate').val();
-		
 		$.ajax({
 			type: "POST",
 			url: "/WQIS/generic-samples/tablePages",
@@ -790,8 +786,8 @@ $(document).ready(function () {
 			async: false,
 			data: {
 				'sites': $("#sites").val(),
-				'startDate': startDate,
-				'endDate': endDate,
+				'startDate': $("#startDate").val(),
+				'endDate': $("#endDate").val(),
 				'category': document.getElementById("categorySelect").value,
 				'amountEnter': document.getElementById("amountEnter").value,
 				'overUnderSelect': document.getElementById("overUnderSelect").value,
