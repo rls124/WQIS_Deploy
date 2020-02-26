@@ -153,13 +153,11 @@ $(document).ready(function () {
 		"esri/Map",
 		"esri/views/MapView",
 		"esri/layers/MapImageLayer",
-		"esri/Graphic",
 		"esri/layers/FeatureLayer",
-		"esri/layers/GraphicsLayer",
 		"esri/layers/KMLLayer",
 		"esri/widgets/Home",
 		"esri/widgets/Fullscreen"
-	], function(Map, MapView, MapImageLayer, Graphic, FeatureLayer, GraphicsLayer, KMLLayer, Home, Fullscreen) {
+	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen) {
 		//fetches site information from the database
 		$.ajax({
 			type: 'POST',
@@ -315,19 +313,17 @@ $(document).ready(function () {
 	function getVisibleSites() {
 		var groupKey = $("#selectGroupsToShow").val();
 		if (groupKey == "all") {
-			var visibleSites = mapData["SiteData"];
+			return mapData["SiteData"];
 		}
-		else {
-			var visibleSites = [];
-			for (i=0; i<mapData["SiteData"].length; i++) {
-				var siteGroups = mapData["SiteData"][i].groups;
-				if (siteGroups != null) {
-					if (siteGroups.split(",").includes(groupKey)) {
-						visibleSites.push(mapData["SiteData"][i]);
-					}
-				}
+		
+		var visibleSites = [];
+		for (i=0; i<mapData["SiteData"].length; i++) {
+			var siteGroups = mapData["SiteData"][i].groups;
+			if (siteGroups != null && siteGroups.split(",").includes(groupKey)) {
+				visibleSites.push(mapData["SiteData"][i]);
 			}
 		}
+			
 		return visibleSites;
 	}
 	
@@ -337,7 +333,7 @@ $(document).ready(function () {
 		
 		var visibleSites = getVisibleSites();
 		
-		var newGraphics = drawPointsWithHighlight(mapData, $("#sites").val(), visibleSites);
+		var newGraphics = drawPoints(mapData, $("#sites").val(), visibleSites);
 		view.graphics.addMany(newGraphics);
 		
 		sampleSitesLayer = new FeatureLayer({
@@ -351,7 +347,7 @@ $(document).ready(function () {
 		});
 	}
 	
-	function drawPointsWithHighlight(response, selected, visibleSites) {
+	function drawPoints(response, selected, visibleSites) {
 		var Graphic = require("esri/Graphic");
 		if (selected == null) {
 			selected = [];
@@ -406,7 +402,7 @@ $(document).ready(function () {
 	}
 	
 	$("#sites").change(function() {
-		if (inhibitSitesChange == false) {
+		if (inhibitSitesChange === false) {
 			getRange();
 			updateMapPoints();
 			updateAll();
@@ -434,7 +430,7 @@ $(document).ready(function () {
 	$("#showBenchmarks").change(function() {
 		showBenchmarks = !showBenchmarks;
 		for (i=0; i<charts.length; i++) {
-			if (showBenchmarks == false) {
+			if (showBenchmarks === false) {
 				charts[i].options.annotation = null;
 			}
 			else {
@@ -537,16 +533,16 @@ $(document).ready(function () {
 			});
 	});
 	
-	document.addEventListener('keydown', function(e) {
-		if (e.keyCode == 27) {
+	document.addEventListener("keydown", function(e) {
+		if (e.keyCode === 27) {
 			//when user hits escape key, close the sidebar
 			closeSearchSidebar();
 		}
 	}, false);
 	
 	$("#exportBtn").click(function () {
-		var startDate = $('#startDate').val();
-		var endDate = $('#endDate').val();
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
 		var sites = $("#sites").val();
 		var categorySelect = document.getElementById("categorySelect").value;
 		var amountEnter = document.getElementById("amountEnter").value;
@@ -558,16 +554,16 @@ $(document).ready(function () {
 		$.ajax({
 			type: "POST",
 			url: "/WQIS/generic-samples/exportData",
-			datatype: 'JSON',
+			datatype: "JSON",
 			data: {
-				'sites': sites,
-				'startDate': startDate,
-				'endDate': endDate,
-				'category': categorySelect,
-				'amountEnter': amountEnter,
-				'overUnderSelect': overUnderSelect,
-				'measurementSearch': measurementSearch,
-				'selectedMeasures': selectedMeasures
+				"sites": sites,
+				"startDate": startDate,
+				"endDate": endDate,
+				"category": categorySelect,
+				"amountEnter": amountEnter,
+				"overUnderSelect": overUnderSelect,
+				"measurementSearch": measurementSearch,
+				"selectedMeasures": selectedMeasures
 			},
 			success: function (response) {
 				downloadFile(response, categorySelect);
@@ -596,7 +592,7 @@ $(document).ready(function () {
 		
 		document.getElementById("allCheckbox").checked = true;
 	
-		var option = document.createElement('option');
+		var option = document.createElement("option");
 		option.value = "select";
 		option.text = "Select a measure";
 		measureSelect.appendChild(option);
@@ -629,6 +625,8 @@ $(document).ready(function () {
 				checkboxList.appendChild(listItem);
 			}
 		}
+		
+		document.getElementById("amountEnter").value = "";
 		
 		$(".measurementCheckbox").change(function() {
 			checkboxesChanged();
@@ -780,11 +778,10 @@ $(document).ready(function () {
 	
 	function getNumRecords() {
 		//get the number of records
-		
 		$.ajax({
 			type: "POST",
 			url: "/WQIS/generic-samples/tablePages",
-			datatype: 'JSON',
+			datatype: "JSON",
 			async: false,
 			data: {
 				'sites': $("#sites").val(),
@@ -826,7 +823,7 @@ $(document).ready(function () {
 		document.getElementById("main").style.marginLeft = "20vw";
 		document.getElementById("main").style.padding = "15px";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
-		document.getElementById("main").style.width="78vw";
+		document.getElementById("main").style.width = "78vw";
 	}
 	
 	function closeSearchSidebar() {
@@ -835,7 +832,7 @@ $(document).ready(function () {
 		document.getElementById("main").style.marginLeft = "5px";
 		document.getElementById("main").style.padding = "25px";
 		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
-		document.getElementById("main").style.width="100%";
+		document.getElementById("main").style.width = "100%";
 	}
 	
 	//show/hide the filler space at the top of the sidebar as needed, so its not visible when we scroll below the navbar
@@ -846,7 +843,7 @@ $(document).ready(function () {
 			//navbar is hidden, don't need the spacer
 			document.getElementById("sidebarSpacing").style.height = 0;
 		}
-		else{
+		else {
 		   //navbar is visible, add spacer
 		   document.getElementById("sidebarSpacing").style.height = (navbarHeight - $(window).scrollTop()) + "px";
 		}
@@ -878,14 +875,14 @@ $(document).ready(function () {
 	function setSort(e) {
 		var field = e.srcElement.id;
 		
-		if (field == "") {
+		if (field === "") {
 			//we probably clicked on the sorting icon, get its parent node and try again
 			field = e.srcElement.parentElement.id;
 		}
 		
 		//check if this was already the sortBy field, if so then we swap the sort direction
-		if (sortBy == field) {
-			if (sortDirection == "Desc") {
+		if (sortBy === field) {
+			if (sortDirection === "Desc") {
 				sortDirection = "Asc";
 			}
 			else {
@@ -922,8 +919,8 @@ $(document).ready(function () {
 	}
 	
 	function getTableData() {
-		var startDate = $('#startDate').val();
-		var endDate = $('#endDate').val();
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
 		var sites = $("#sites").val();
 		var categorySelect = document.getElementById("categorySelect").value;
 		var amountEnter = document.getElementById("amountEnter").value;
@@ -1242,7 +1239,8 @@ $(document).ready(function () {
 			$.ajax({
 				type: "POST",
 				url: "/WQIS/generic-samples/graphdata",
-				datatype: 'JSON',
+				datatype: "JSON",
+				async: false,
 				data: {
 					'sites': sites,
 					'startDate': startDate,
@@ -1319,13 +1317,13 @@ $(document).ready(function () {
 					
 					function bench(val, color) {
 						return {
-							type: 'line',
-							mode: 'horizontal',
-							scaleID: 'y-axis-0',
+							type: "line",
+							mode: "horizontal",
+							scaleID: "y-axis-0",
 							value: val,
 							borderColor: color,
 							borderWidth: 3,
-							drawTime: 'afterDatasetsDraw',
+							drawTime: "afterDatasetsDraw",
 						};
 					}
 					
@@ -1371,8 +1369,7 @@ $(document).ready(function () {
 							responsive: true
 						}
 					}));
-				},
-				async: false
+				}
 			});
 		}
 	}
