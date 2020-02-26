@@ -122,6 +122,8 @@ $(document).ready(function () {
             admin = 1;
             adminVal = 'admin';
         }
+		
+		console.log(admin);
 
         var validInput = validateInput(username, firstname, lastname, email, organization, position);
         if (!validInput) {

@@ -1,5 +1,4 @@
 <?php
-
 	namespace App\Controller;
 
 	use App\Controller\AppController;
@@ -175,12 +174,13 @@
 			$userpw = $this->request->getData('userpw');
 			$passConfirm = $this->request->getData('passconfirm');
 
-			if ($userpw != '' && $userpw == $passConfirm) {
+			if (($userpw == '') || ($userpw != '' && $userpw == $passConfirm)) {
 				$user->userpw = $userpw;
 			}
 			else {
 				return;
 			}
+			
 			if ($this->Users->save($user)) {
 				return;
 			}
@@ -204,7 +204,6 @@
 					}
 					return;
 				}
-
 
 				$userpw = $this->request->getData('userpw');
 				$passConfirm = $this->request->getData('passConfirm');

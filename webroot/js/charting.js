@@ -473,7 +473,7 @@ $(document).ready(function () {
 		//if both variables are not null, then we may submit an sql request
         var siteData = document.querySelector("#sites").value;
         var categoryData = $("#categorySelect").val();
-        if ((siteData !== "select") && categoryData !== null) {
+        if (siteData !== "select" && categoryData !== null) {
             $.ajax({
                 type: "POST",
                 url: "daterange",
