@@ -187,9 +187,7 @@ $(document).ready(function () {
             adminVal = 'admin';
         }
 
-        var validInput = validateInput(username, firstname, lastname, email, organization, position);
-        var validPass = validatePassword(userpw, passconfirm);
-        if (!validInput || !validPass) {
+        if (!validateInput(username, firstname, lastname, email, organization, position) || ((userpw !== '' || passconfirm !== '') && !validatePassword(userpw, passconfirm))) { //validation
             return false;
         }
 
@@ -217,7 +215,6 @@ $(document).ready(function () {
                 $('#tr-' + username).append('<td id="td-' + username + '-pos">' + position + '</td>');
                 $('#tr-' + username).append('<td><span class="edit glyphicon glyphicon-pencil" id="edit-' + username + '" name="edit-' + username + '" data-toggle="modal" data-target="#editUserModal" style="margin-right: 5px;"></span>' +
                         '<span class="delete glyphicon glyphicon-trash" id = "delete-' + username + '" name = "delete-' + username + '" > </span>');
-
 
                 $('#add-close').trigger('click');
                 $('#add-firstname').val('');
