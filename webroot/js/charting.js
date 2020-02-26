@@ -320,9 +320,11 @@ $(document).ready(function () {
 		else {
 			var visibleSites = [];
 			for (i=0; i<mapData["SiteData"].length; i++) {
-				var groups = mapData["SiteData"][i].groups.split(",");
-				if (groups.includes(groupKey)) {
-					visibleSites.push(mapData["SiteData"][i]);
+				var siteGroups = mapData["SiteData"][i].groups;
+				if (siteGroups != null) {
+					if (siteGroups.split(",").includes(groupKey)) {
+						visibleSites.push(mapData["SiteData"][i]);
+					}
 				}
 			}
 		}
