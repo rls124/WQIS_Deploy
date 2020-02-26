@@ -122,18 +122,9 @@ $(document).ready(function () {
             admin = 1;
             adminVal = 'admin';
         }
-		
-		console.log(admin);
 
-        var validInput = validateInput(username, firstname, lastname, email, organization, position);
-        if (!validInput) {
+        if (!validateInput(username, firstname, lastname, email, organization, position) || ((userpw !== '' || passconfirm !== '') && !validatePassword(userpw, passconfirm))) { //validation
             return false;
-        }
-        if (userpw !== '' || passconfirm !== '') {
-            var validPass = validatePassword(userpw, passconfirm);
-            if (!validPass) {
-                return false;
-            }
         }
 
         $.ajax({
