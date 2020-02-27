@@ -38,18 +38,14 @@
 				->first();
 
 			$this->loadModel('SiteLocations');
-			$groupings = $this->SiteLocations
+			$sitesInGroup = $this->SiteLocations
 				->find('all')
-				->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) {
-					return $exp->like('groups', '%A' . $groupkey . '%A'); //WHERE groups LIKE "%Agroupkey%A"
-				})
+				->where(['groups LIKE' => '%' . $groupkey . '%'])
 				->select('Site_Number');
 
 			$sites = array();
-			$i = 0;
-			foreach ($groupings as $grouping) {
-				$sites[$i] = $grouping->Site_Number;
-				$i++;
+			foreach ($sitesInGroup as $grouping) {
+				$sites[] = $grouping->Site_Number;
 			}
 
 			$json = json_encode(['groupname' => $group->groupName,
@@ -79,9 +75,7 @@
 			$this->loadModel('SiteLocations');
 			$groupings = $this->SiteLocations
 				->find('all')
-				->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) {
-					return $exp->like('groups', '%A' . $groupkey . '%A'); //WHERE groups LIKE "%Agroupkey%A"
-				})
+				->where(['groups LIKE' => '%' . $groupkey . '%'])
 				->select('Site_Number');
 
 /* //what is even happening here?
@@ -122,7 +116,6 @@
 					$this->loadModel('SiteLocations');
 					foreach ($this->request->getData('sites') as $site) {
 						//add this group to the sites group list
-						$this->log($site, 'debug');
 						//first get the site
 						$siteObj = $this->SiteLocations
 							->find('all')

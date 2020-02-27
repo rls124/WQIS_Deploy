@@ -160,7 +160,7 @@ $(document).ready(function () {
 		});
 	});
     
-	$.checkGroupName = function (groupname) {
+	$.checkGroupName = function(groupname) {
 		var flag = true;
 		$('tr').each(function() {
 			var celltext = $(this).find('td:first').text();
