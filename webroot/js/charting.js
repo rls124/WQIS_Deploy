@@ -1,5 +1,4 @@
 var spinnerInhibited = true; //inhibit this initially so basic setup tasks that are done through AJAX, like loading the map, can be done without showing this. Can also inhibit as needed for minor things that aren't expected to take much time
-var inhibitSitesChange = false;
 
 //loading graphic
 $(document).ajaxStart(function() {
@@ -165,6 +164,8 @@ $(document).ready(function () {
 			async: false,
 			success: function(response) {
 				mapData = response;
+				
+				buildSitesDropdown(mapData["SiteData"]);
 				
 				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
 				var watershedsLayer = new KMLLayer({
@@ -401,25 +402,22 @@ $(document).ready(function () {
 	}
 	
 	$("#sites").change(function() {
-		if (inhibitSitesChange === false) {
-			getRange();
-			updateMapPoints();
-		}
+		getRange();
+		updateMapPoints();
     });
 	
-	$("#selectGroupsToShow").change(function() {
-		var visibleSites = getVisibleSites();
-		inhibitSitesChange = true; //inhibit the change listener because of a recursion issue
+	function buildSitesDropdown(sites) {
+		for (i=0; i<sites.length; i++) {
+			$("#sites").append(new Option(sites[i].Site_Number + " " + sites[i].Site_Name, sites[i].Site_Number, false, false));
+		}
+	}
 	
+	$("#selectGroupsToShow").change(function() {
 		//remove all existing options from the dropdown
 		$("#sites").empty();
 		
-		for (i=0; i<visibleSites.length; i++) {
-			var newOption = new Option(visibleSites[i].Site_Number + " " + visibleSites[i].Site_Name, visibleSites[i].Site_Number, false, false);
-			$('#sites').append(newOption).trigger('change');
-		}
-		
-		inhibitSitesChange = false;
+		buildSitesDropdown(getVisibleSites());
+
 		view.popup.close()
 		updateMapPoints();
 		resetAll();

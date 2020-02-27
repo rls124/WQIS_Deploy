@@ -37,17 +37,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 				}
 				?>
 			</select>
-			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%">
-			<?php
-			//populate the site drop down box
-			foreach ($siteLocations as $siteLocation) {
-				$siteNumber = $this->Number->format($siteLocation->Site_Number);
-				$siteName = h($siteLocation->Site_Name);
-				$siteLocation = h($siteLocation->Site_Location);
-				echo "<option value=$siteNumber title=\"$siteLocation\">$siteNumber $siteName</option>";
-			}
-			?>
-			</select>
+			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%"></select>
 		
 			<hr/>
 		
