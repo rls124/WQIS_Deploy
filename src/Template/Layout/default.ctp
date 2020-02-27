@@ -103,7 +103,7 @@ function hideBrowserCompatibilityMessage() {
 				<div class="navbar-collapse">
 					<ul class="navbar-nav mr-auto navbar-right">
 						<li class="nav-item">
-							<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Water Quality Data</a>
+							<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Data</a>
 						</li>
 						
 						<li class="nav-item">

@@ -73,13 +73,15 @@
 				->first();
 
 			$this->loadModel('SiteLocations');
-			$groupings = $this->SiteLocations
+			$sitesInGroup = $this->SiteLocations
 				->find('all')
 				->where(['groups LIKE' => '%' . $groupkey . '%'])
 				->select('Site_Number');
+				
+			
 
-/* //what is even happening here?
-			foreach ($groupings as $grouping) {
+/*
+			foreach ($sitesInGroup as $grouping) {
 				if ($this->Groupings->delete($grouping)); // delete every grouping...
 				
 			}

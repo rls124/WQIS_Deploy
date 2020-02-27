@@ -1,13 +1,10 @@
-$(document).ajaxStart(function () {
-	$('.loadingspinner-edit').css('visibility', 'visible');
+//loading graphic
+$(document).ajaxStart(function() {
 	$('.loadingspinnermain').css('visibility', 'visible');
-	$('.loadingspinner-add').css('visibility', 'visible');
 	$('body').css('cursor', 'wait');
-}).ajaxStop(function () {
-	$('.loadingspinner-edit').css('visibility', 'hidden');
-	$('.loadingspinnermain').css('visibility', 'hidden');
-	$('.loadingspinner-add').css('visibility', 'hidden');
-	$('body').css('cursor', 'default');
+}).ajaxStop(function() {
+    $('.loadingspinnermain').css('visibility', 'hidden');
+    $('body').css('cursor', 'default');
 });
 
 $(document).ready(function () {

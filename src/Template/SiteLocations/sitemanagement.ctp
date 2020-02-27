@@ -1,7 +1,7 @@
 <?= $this->Html->script('siteManagement.js') ?>
 <?= $this->Html->css('loading.css') ?>
 
-<div id ='message' class="message hidden"></div>
+<div id="message" class="message hidden"></div>
     
 <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Site Management
 	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
@@ -12,7 +12,7 @@
 <hr>
 <div class="collapse" id="collapseInfo">
 	<div class="card card-body">
-		<p> This page is used to add, edit, or delete sites. </p>
+		<p>This page is used to add, edit, or delete sites.</p>
 		<ul>
 			<li>To add a site, click the 'Add Site' button.</li>
 			<li>To delete a site, click the delete icon in the row containing the site to delete.</li>
@@ -20,16 +20,17 @@
 		</ul>
 	</div>
 </div>
-<input type='button' class='addSitebtn btn-basic btn mt-2 mb-2 btn-md' value='Add Site' id='addSiteBtn' name='addSiteBtn' data-toggle="modal" data-target="#addSiteModal"/>
-<table id='tableView'  class="table table-striped table-responsive">
+<input type="button" class="addSitebtn btn-basic btn mt-2 mb-2 btn-md" value="Add Site" id="addSiteBtn" name="addSiteBtn" data-toggle="modal" data-target="#addSiteModal"/>
+<table id="tableView" class="table table-striped table-responsive">
 	<thead>
 		<tr>
-			<th>Site<br>Number</th>
+			<th>Site Number</th>
 			<th>Monitored</th>
 			<th>Longitude</th>
 			<th>Latitude</th>
-			<th>Site<br>Location</th>
-			<th>Site<br>Name</th>
+			<th>Site Location</th>
+			<th>Site Name</th>
+			<th>Groups</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
@@ -59,6 +60,7 @@
 			<td id='<?php echo 'td-' . $siteData->ID . '-latitude'; ?>'><?= $siteData->Latitude ?></td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-siteLoc'; ?>'><?= $siteData->Site_Location ?></td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-siteName'; ?>'><?= $siteData->Site_Name ?></td>
+			<td id='<?php echo 'td-' . $siteData->ID . '-groups'; ?>'><?= $siteData->groups ?></td>
 			<td>
 				<a id="edit-tooltip" data-toggle="tooltip" title="Edit Site">
 			    <?=

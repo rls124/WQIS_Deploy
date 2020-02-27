@@ -129,7 +129,6 @@ var numRecords = 0;
 var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
-var showBenchmarks = true;
 var charts = [];
 var benchmarkAnnotations = [];
 
@@ -405,7 +404,6 @@ $(document).ready(function () {
 		if (inhibitSitesChange === false) {
 			getRange();
 			updateMapPoints();
-			updateAll();
 		}
     });
 	
@@ -427,25 +425,11 @@ $(document).ready(function () {
 		resetAll();
 	});
 	
-	$("#showBenchmarks").change(function() {
-		showBenchmarks = !showBenchmarks;
-		for (i=0; i<charts.length; i++) {
-			if (showBenchmarks === false) {
-				charts[i].options.annotation = null;
-			}
-			else {
-				charts[i].options.annotation = benchmarkAnnotations[i];
-			}
-			charts[i].update(0);
-		}
-	});
-	
 	$("#allCheckbox").change(function() {
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
 		for (i=0; i<checkboxList.length; i++) {
 			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
 		}
-		updateAll();
 	});
 	
 	function checkboxesChanged() {
@@ -457,8 +441,6 @@ $(document).ready(function () {
 				break;
 			}
 		}
-		
-		updateAll();
 	}
 	
 	$(".measurementCheckbox").change(function() {
@@ -497,7 +479,6 @@ $(document).ready(function () {
 	
     document.getElementById('categorySelect').addEventListener("change", function() {
 		changeMeasures();
-		updateAll();
 	});
 	
     $(".date-picker").datepicker({
@@ -510,13 +491,11 @@ $(document).ready(function () {
     $("#startDate").datepicker().on('changeDate', function (selected) {
         var minDate = new Date(selected.date.valueOf());
         $('#endDate').datepicker('setStartDate', minDate);
-		updateAll();
     });
 	
     $("#endDate").datepicker().on('changeDate', function (selected) {
         var maxDate = new Date(selected.date.valueOf());
         $('#startDate').datepicker('setEndDate', maxDate);
-		updateAll();
     });
 
 	$('#sites').select2({
@@ -1177,7 +1156,7 @@ $(document).ready(function () {
 
 	function getGraphData() {
 		charts = [];
-		benchmarkAnnotations = [];
+		//benchmarkAnnotations = [];
 
 		var startDate = $('#startDate').val();
 		var endDate = $('#endDate').val();
@@ -1336,12 +1315,8 @@ $(document).ready(function () {
 						benchmarkLines.push(bench(benchmarks["min"], "blue"));
 					}
 					
-					benchmarkAnnotations.push({annotations: benchmarkLines});
-
-					//if showBenchmarks is currently on, just add the benchmark lines here
-					if (showBenchmarks) {
-						benchmarkAnnotation = {annotations: benchmarkLines};
-					}
+					//benchmarkAnnotations.push({annotations: benchmarkLines});
+					benchmarkAnnotation = {annotations: benchmarkLines};
 
 					charts.push(new Chart(ctx, {
 						type: 'line',

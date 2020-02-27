@@ -133,8 +133,7 @@
 		$this->loadModel($model);
 		
 		$fields = ['site_location_id', 'Date', 'Sample_Number'];
-		$fields = array_merge($fields, $selectedMeasures);
-		array_push($fields, (ucfirst($category) . "Comments"));
+		$fields = array_merge($fields, $selectedMeasures, [(ucfirst($category) . "Comments")]);
 		
 		$numMeasures = sizeof($selectedMeasures);
 		

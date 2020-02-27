@@ -28,6 +28,15 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		<div id="searchBox">
 		<fieldset>
 			<h6>Sites:</h6>
+			Show sites from groups
+			<select id="selectGroupsToShow" style="width:100%">
+				<option value="all">All</option>
+				<?php
+				foreach ($siteGroups as $siteGroup) {
+					echo "<option value=\"" . $siteGroup->groupKey . "\">" . $siteGroup->groupName . "</option>";
+				}
+				?>
+			</select>
 			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%">
 			<?php
 			//populate the site drop down box
@@ -184,17 +193,6 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 							<option value="terrain">Terrain</option>
 						</select>
 					</div>
-					<div class="col-sm">
-						Show sites from groups
-						<select id="selectGroupsToShow">
-							<option value="all">All</option>
-							<?php
-							foreach ($siteGroups as $siteGroup) {
-								echo "<option value=\"" . $siteGroup->groupKey . "\">" . $siteGroup->groupName . "</option>";
-							}
-							?>
-						</select>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -209,7 +207,6 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 				<div id="chartsLayoutSelect" style="display: none">
 					<button type="button" id="chartsInlineButton">In-line</button>
 					<button type="button" id="chartsGridButton">Grid</button>
-					<input type="checkbox" id="showBenchmarks" value="showBenchmarks" checked>Show benchmark lines
 				</div>
 				<div id="chartDiv" style="text-align: center;"></div>
 				<span id="chartsMsg">No data to display</span>
