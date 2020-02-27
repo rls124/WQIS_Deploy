@@ -525,6 +525,7 @@ $(document).ready(function () {
 		width: 'resolve'
 	});
 	
+	/*
 	var easter_egg = new Konami(function() {
 		//dynamically download the needed code so we don't bog down the 99.9% of users who won't even see this
 		import('/WQIS/js/EEGS.js')
@@ -532,6 +533,7 @@ $(document).ready(function () {
 				module.start();
 			});
 	});
+	*/
 	
 	document.addEventListener("keydown", function(e) {
 		if (e.keyCode === 27) {

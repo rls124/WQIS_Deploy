@@ -120,7 +120,7 @@ $(document).ready(function () {
 		}
 
 		if (!$.checkGroupName(groupname)) {
-			$.alert('This Group Name already exists, please create a new one');
+			$.alert('A group with this name already exists, please create a new one');
 			return false;
 		}
         
