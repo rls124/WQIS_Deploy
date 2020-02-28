@@ -6,7 +6,7 @@ open canopy.classic
 let navbarLinksWorkTest baseUrl userType =
     //navbar links work
     "navbar links work" &&& fun _ ->
-        click "View Water Quality Data"
+        click "View Data"
         sleep 1
         on (baseUrl + "site-locations/chartselection")
         click "About"
