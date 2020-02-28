@@ -475,7 +475,7 @@ $(document).ready(function () {
 		spinnerInhibited = false;
     }
 	
-    document.getElementById('categorySelect').addEventListener("change", function() {
+    document.getElementById("categorySelect").addEventListener("change", function() {
 		changeMeasures();
 	});
 	
@@ -496,7 +496,7 @@ $(document).ready(function () {
         $('#startDate').datepicker('setEndDate', maxDate);
     });
 
-	$('#sites').select2({
+	$("#sites").select2({
 		closeOnSelect: false,
 		placeholder: "Select sites",
 		width: 'resolve'
@@ -643,7 +643,7 @@ $(document).ready(function () {
 				return JSON.stringify(row[fieldName], replacer);
 			}).join(',');
 		});
-		fields[fields.indexOf('site_location_id')] = 'Site Number';
+		fields[fields.indexOf("site_location_id")] = "Site Number";
 		
 		//add header column
 		csv.unshift(fields.join(','));
@@ -652,7 +652,7 @@ $(document).ready(function () {
 		var encodedUri = encodeURI(csvContent);
 		var link = document.createElement("a");
 		link.setAttribute("href", encodedUri);
-		var name = type + '_export.csv';
+		var name = type + "_export.csv";
 		link.setAttribute("download", name);
 		document.body.appendChild(link);
 		link.click();
@@ -668,7 +668,7 @@ $(document).ready(function () {
 		var amountEnter = document.getElementById("amountEnter").value;
 		var measurementSelect = document.getElementById("measurementSelect").value;
 		
-		if (amountEnter != "" && measurementSelect == "select") {
+		if (amountEnter != "" && measurementSelect === "select") {
 			alert("You must specify a measure to search by");
 		}
 		else {
@@ -955,8 +955,8 @@ $(document).ready(function () {
 						var newCell = document.createElement("th");
 						
 						var arrows;
-						if (columnIDs[i] == sortBy) {
-							if (sortDirection == "Desc") {
+						if (columnIDs[i] === sortBy) {
+							if (sortDirection === "Desc") {
 								arrows = "fa-sort-down";
 							}
 							else {
@@ -1141,7 +1141,7 @@ $(document).ready(function () {
 	function getSelectedMeasures() {
 		var measures = [];
 		
-		var checkboxList = document.getElementsByClassName('measurementCheckbox');
+		var checkboxList = document.getElementsByClassName("measurementCheckbox");
 		
 		for (var i=0; i<checkboxList.length; i++) {
 			if (checkboxList[i].checked) {
@@ -1151,16 +1151,24 @@ $(document).ready(function () {
 		
 		return measures;
 	}
+	
+	function selectColor(colorIndex, palleteSize) {
+		//returns color at an index of an evenly-distributed color pallete of arbitrary size. To avoid ever having the color of the line matching the color of the benchmark lines, we offset the index and pallet size by 1
+		if (palleteSize < 1) {
+			palleteSize = 1; //defaults to one color, can't divide by zero or the universe implodes
+		}
+			
+		return "hsl(" + ((colorIndex+1) * (360 / (palleteSize+1)) % 360) + ",70%,50%)";
+	}
 
 	function getGraphData() {
 		charts = [];
-		//benchmarkAnnotations = [];
 
-		var startDate = $('#startDate').val();
-		var endDate = $('#endDate').val();
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
 		var sites = $("#sites").val();
 		var measures = getSelectedMeasures();
-		var category = $('#categorySelect').val();
+		var category = $("#categorySelect").val();
 		var amountEnter = document.getElementById("amountEnter").value;
 		var overUnderSelect = document.getElementById("overUnderSelect").value;
 		var measurementSearch = document.getElementById("measurementSelect").value;
@@ -1172,7 +1180,7 @@ $(document).ready(function () {
 		if (chartsDisplayMode == "in-line") {
 			for (var k=0; k<nMeasures; k++) {
 				var newCanvasContainer = document.createElement("div");
-				newCanvasContainer.style = "width: 80%; text-align: center; margin: auto;";
+				newCanvasContainer.style = "width: 80%; text-align: center; margin: auto";
 			
 				var newCanvas = document.createElement("canvas");
 				newCanvas.id = "chart-" + k;
@@ -1213,6 +1221,32 @@ $(document).ready(function () {
 			chartDiv.appendChild(chartsGrid);
 		}
 		
+		//testing
+		console.log("\r\n\r\n\r\n new graphdata");
+		$.ajax({
+			type: "POST",
+			url: "/WQIS/generic-samples/graphdataall",
+			datatype: "JSON",
+			async: false,
+			data: {
+				"sites": sites,
+				"startDate": startDate,
+				"endDate": endDate,
+				"selectedMeasures": measures,
+				"category": category,
+				"amount": amountEnter,
+				"overUnderSelect": overUnderSelect,
+				"measurementSearch": measurementSearch
+			},
+			success: function(response) {
+				console.log(response);
+				
+				for (k=0; k<measures.length; k++) {
+					console.log("plotting " + measures[k]);
+				}
+			}
+		});
+		
 		//get data and fill the charts in
 		for (var k=0; k<nMeasures; k++) {
 			$.ajax({
@@ -1231,18 +1265,8 @@ $(document).ready(function () {
 					'measurementSearch': measurementSearch
 				},
 				success: function(response) {
-					function selectColor(colorIndex, palleteSize) {
-						//returns color at an index of an evenly-distributed color pallete of arbitrary size
-						
-						//to avoid ever having the color of the line matching the color of the benchmark lines, we offset the index and pallet size by 1
-						colorIndex++;
-						if (palleteSize < 1) {
-							palleteSize = 1; //defaults to one color, can't divide by zero or the universe implodes
-						}
-						palleteSize++;
-						
-						return "hsl(" + (colorIndex * (360 / palleteSize) % 360) + ",70%,50%)";
-					}
+					console.log("old graphdata " + k);
+					console.log(response);
 					
 					var datasets = [];
 					for (i=0; i<sites.length; i++) {
@@ -1312,9 +1336,6 @@ $(document).ready(function () {
 					if (benchmarks["min"] != null) {
 						benchmarkLines.push(bench(benchmarks["min"], "blue"));
 					}
-					
-					//benchmarkAnnotations.push({annotations: benchmarkLines});
-					benchmarkAnnotation = {annotations: benchmarkLines};
 
 					charts.push(new Chart(ctx, {
 						type: 'line',
@@ -1323,7 +1344,7 @@ $(document).ready(function () {
 							datasets: datasets
 						},
 						options: {
-							annotation: benchmarkAnnotation,
+							annotation: {annotations: benchmarkLines},
 							scales: {
 								yAxes: [{
 									scaleLabel: {

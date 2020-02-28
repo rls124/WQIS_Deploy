@@ -591,6 +591,49 @@
 		//Save changes
 		$modelBare->save($sample);
 	}
+	
+	public function graphdataall() {
+		$this->render(false);
+		
+		//get request data
+		$startDate = date('Ymd', strtotime($this->request->getData("startDate")));
+		$endDate = date('Ymd', strtotime($this->request->getData("endDate")));
+		$sites = $this->request->getData("sites");
+		$category = $_POST["category"];
+		$amount = $_POST["amount"];
+		$searchDirection = $_POST["overUnderSelect"];
+		$measurementSearch = $_POST["measurementSearch"];
+		$selectedMeasures = $_POST["selectedMeasures"];
+		
+		//set model
+		$model = ucfirst($category) . "Samples";
+		$this->loadModel($model);
+		
+		$fields = ['site_location_id', 'Date'];
+		$fields = array_merge($fields, $selectedMeasures);
+		
+		$andConditions = [
+			'site_location_id IN' => $sites,
+			$model . '.Date >=' => $startDate,
+			$model . '.Date <= ' => $endDate
+		];
+		
+		if ($amount != '') {
+			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
+		}
+		
+		$samples = $this->$model->find('all', [
+			'fields' => $fields,
+			'conditions' => [
+				'and' => $andConditions
+			]
+		]);
+		
+		$this->response = $this->response->withStringBody(json_encode([$samples]));
+		$this->response = $this->response->withType('json');
+		
+		return $this->response;
+	}
 
 	public function graphdata() {
 		$this->render(false);
