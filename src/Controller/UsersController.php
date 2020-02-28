@@ -13,86 +13,85 @@
 	 * @method \App\Model\Entity\User[] paginate($object = null, array $settings = [])
 	 */
 	class UsersController extends AppController {
-
 		public function beforeFilter(Event $event) {
 			parent::beforeFilter($event);
 			//Which pages a user that is not logged in can access
-			$this->Auth->allow(['login', 'signup', 'logout', 'forgotpassword', 'getSecurityQuestions', 'verifySecurityQuestions', 'edituserinfo']);
+			$this->Auth->allow(["login", "signup", "logout", "forgotpassword", "getSecurityQuestions", "verifySecurityQuestions", "edituserinfo"]);
 		}
 
 		public function signup() {
-			if ($this->request->is('post')) {
+			if ($this->request->is("post")) {
 				//Create and set data for a new User
 				$user = $this->Users->newEntity();
 				$user = $this->Users->patchEntity($user, $this->request->getData());
 
-				$securityAnswer1 = strtolower($this->request->getData('securityanswer1'));
-				$securityAnswer2 = strtolower($this->request->getData('securityanswer2'));
-				$securityAnswer3 = strtolower($this->request->getData('securityanswer3'));
+				$securityAnswer1 = strtolower($this->request->getData("securityanswer1"));
+				$securityAnswer2 = strtolower($this->request->getData("securityanswer2"));
+				$securityAnswer3 = strtolower($this->request->getData("securityanswer3"));
 
 				//Hash security answers
-				$user->securityanswer1 = Security::hash($securityAnswer1, 'sha256');
-				$user->securityanswer2 = Security::hash($securityAnswer2, 'sha256');
-				$user->securityanswer3 = Security::hash($securityAnswer3, 'sha256');
+				$user->securityanswer1 = Security::hash($securityAnswer1, "sha256");
+				$user->securityanswer2 = Security::hash($securityAnswer2, "sha256");
+				$user->securityanswer3 = Security::hash($securityAnswer3, "sha256");
 
 				//Save user
 				if ($this->Users->save($user)) {
 					$this->Auth->setUser($user);
-					$this->set('admin', $user['admin']);
+					$this->set("admin", $user["admin"]);
 
-					return $this->redirect(['controller' => 'siteLocations', 'action' => 'chartselection']);
+					return $this->redirect(["controller" => "siteLocations", "action" => "chartselection"]);
 				}
 
 				//If we could not save the user, display the appropriate message
-				$username = $this->request->getData('username');
+				$username = $this->request->getData("username");
 				$usererror = $this->Users
-					->find('all')
-					->where(['username = ' => $username])
+					->find("all")
+					->where(["username" => $username])
 					->first();
 				if (count($usererror) > 0) {
-					$this->Flash->error(__('There is already an account with the username: ' . $username . '. Please choose another'));
+					$this->Flash->error(__("There is already an account with the username: " . $username . ". Please choose another"));
 					return;
 				}
 				$email = $this->request->getData('email');
 				$usererror = $this->Users
-					->find('all')
-					->where(['email = ' => $email])
+					->find("all")
+					->where(["email" => $email])
 					->first();
 				if (count($usererror) > 0) {
-					$this->Flash->error(__('There is already an account with the email: ' . $email . '. Please choose another'));
+					$this->Flash->error(__("There is already an account with the email: " . $email . ". Please choose another"));
 					return;
 				}
-				$this->Flash->error(__('The user could not be saved. Please, try again.'));
+				$this->Flash->error(__("The user could not be saved. Please, try again."));
 				return;
 			}
-			$this->set(compact('user'));
-			$this->set('_serialize', ['user']);
+			$this->set(compact("user"));
+			$this->set("_serialize", ["user"]);
 		}
 
 		public function login() {
-			if ($this->request->is('post')) {
+			if ($this->request->is("post")) {
 				//Ensure user exists
 				$user = $this->Auth->identify();
 				if ($user) {
 					$this->Auth->setUser($user);
 					//Set admin status
-					$this->set('admin', $user['admin']);
-					return $this->redirect(['controller' => 'siteLocations', 'action' => 'chartselection']);
+					$this->set("admin", $user["admin"]);
+					return $this->redirect(["controller" => "siteLocations", "action" => "chartselection"]);
 				}
-				$this->Flash->error('Invalid username or password.');
+				$this->Flash->error("Invalid username or password.");
 			}
 		}
 
 		public function logout() {
-			$this->set('admin', false);
+			$this->set("admin", false);
 			return $this->redirect($this->Auth->logout());
 		}
 
 		public function usermanagement() {
-			$Users = $this->Users->find('all')->order(['Created' => 'Asc']);
-			$this->set(compact('Users'));
+			$Users = $this->Users->find("all")->order(["Created" => "Asc"]);
+			$this->set(compact("Users"));
 			//If this is post data and it has a username set
-			if ($this->request->is('post') && $this->request->getData('username')) {
+			if ($this->request->is("post") && $this->request->getData("username")) {
 				//Create and save the entity
 				$user = $this->Users->newEntity();
 				$user = $this->Users->patchEntity($user, $this->request->getData());
@@ -105,13 +104,13 @@
 		public function deleteUser() {
 			$this->render(false);
 			//Ensure username is in the POST data
-			if (!$this->request->getData('username')) {
+			if (!$this->request->getData("username")) {
 				return;
 			}
-			$username = $this->request->getData('username');
+			$username = $this->request->getData("username");
 			$user = $this->Users
-				->find('all')
-				->where(['username = ' => $username])
+				->find("all")
+				->where(["username" => $username])
 				->first();
 			$this->Users->delete($user);
 		}
@@ -119,7 +118,7 @@
 		public function adduser() {
 			$this->render(false);
 			$user = $this->Users->newEntity();
-			if ($this->request->is('post')) {
+			if ($this->request->is("post")) {
 				$user = $this->Users->patchEntity($user, $this->request->getData());
 
 				if ($this->Users->save($user)) {
@@ -130,55 +129,55 @@
 
 		public function fetchuserdata() {
 			$this->render(false);
-			if (!$this->request->getData('username')) {
+			if (!$this->request->getData("username")) {
 				return;
 			}
-			$username = $this->request->getData('username');
+			$username = $this->request->getData("username");
 			$user = $this->Users
-				->find('all')
-				->where(['username = ' => $username])
+				->find("all")
+				->where(["username" => $username])
 				->first();
 
-			$this->response->type('json');
-
-			$json = json_encode(['username' => $user->username,
-				'admin' => $user->admin,
-				'firstname' => $user->firstname,
-				'lastname' => $user->lastname,
-				'email' => $user->email,
-				'organization' => $user->organization,
-				'position' => $user->position]);
-			$this->response->body($json);
+			$json = json_encode(["username" => $user->username,
+				"admin" => $user->admin,
+				"firstname" => $user->firstname,
+				"lastname" => $user->lastname,
+				"email" => $user->email,
+				"organization" => $user->organization,
+				"position" => $user->position]);
+			
+			
+			$this->response = $this->response->withStringBody($json);
+			$this->response = $this->response->withType('json');
+		
+			return $this->response;
 		}
 
 		public function updateuserdata() {
 			$this->render(false);
 			//Check if username is set
-			if (!$this->request->getData('username')) {
+			if (!$this->request->getData("username")) {
 				return;
 			}
-			$username = $this->request->getData('username');
+			$username = $this->request->getData("username");
 
 			$user = $this->Users
-				->find('all')
-				->where(['username = ' => $username])
+				->find("all")
+				->where(["username" => $username])
 				->first();
 				
 			//Update the data
-			$user->firstname = $this->request->getData('firstname');
-			$user->lastname = $this->request->getData('lastname');
-			$user->email = $this->request->getData('email');
-			$user->organization = $this->request->getData('organization');
-			$user->position = $this->request->getData('position');
-			$user->admin = $this->request->getData('admin');
-			$userpw = $this->request->getData('userpw');
-			$passConfirm = $this->request->getData('passconfirm');
+			$user->firstname = $this->request->getData("firstname");
+			$user->lastname = $this->request->getData("lastname");
+			$user->email = $this->request->getData("email");
+			$user->organization = $this->request->getData("organization");
+			$user->position = $this->request->getData("position");
+			$user->admin = $this->request->getData("admin");
+			$userpw = $this->request->getData("userpw");
+			$passConfirm = $this->request->getData("passconfirm");
 
-			if (($userpw == '') || ($userpw != '' && $userpw == $passConfirm)) {
+			if ($userpw !== "" && $userpw === $passConfirm) {
 				$user->userpw = $userpw;
-			}
-			else {
-				return;
 			}
 			
 			if ($this->Users->save($user)) {
@@ -209,8 +208,8 @@
 				$passConfirm = $this->request->getData('passConfirm');
 
 				// if the user is logged in
-				if ($this->Auth->User('username')) {
-					$username = $this->Auth->User('username');
+				if ($this->Auth->User("username")) {
+					$username = $this->Auth->User("username");
 					$firstname = $this->request->getData('firstname');
 					$lastname = $this->request->getData('lastname');
 					$organization = $this->request->getData('organization');
@@ -251,12 +250,14 @@
 					if ($this->Users->save($user)) {
 						$this->Flash->success('Your information has been changed');
 						return $this->redirect(['controller' => 'Users', 'action' => 'edituserinfo']);
-					} else {
+					}
+					else {
 						$this->Flash->error('Nothing was saved');
 						return;
 					}
-					// if the user is not logged in
-				} else {
+					//if the user is not logged in
+				}
+				else {
 					$username = $this->request->getData('username');
 					if ($userpw != '' && $userpw == $passConfirm) {
 						$user = $this->Users
@@ -295,8 +296,6 @@
 					->find('all')
 					->where(['username = ' => $username])
 					->first();
-					
-				$this->response->type('json');
 
 				if ($user == null) {
 					$json = json_encode([
@@ -312,17 +311,19 @@
 						'securityquestion3' => $user->securityquestion3
 					]);
 				}
-
-				$this->response->body($json);
-				return;
+				
+				$this->response = $this->response->withStringBody($json);
+				$this->response = $this->response->withType('json');
+		
+				return $this->response;
 			}
 			return $this->redirect(['controller' => 'Users', 'action' => 'login']);
 		}
 
 		public function verifySecurityQuestions() {
 			$this->render(false);
-			if ($this->request->is('post')) {
-				$username = $this->request->getData('username');
+			if ($this->request->is("post")) {
+				$username = $this->request->getData("username");
 				$securityanswer1 = strtolower($this->request->getData('securityanswer1'));
 				$securityanswer2 = strtolower($this->request->getData('securityanswer2'));
 				$securityanswer3 = strtolower($this->request->getData('securityanswer3'));
@@ -351,14 +352,16 @@
 					}
 				}
 
-				$this->response->type('json');
 				$json = json_encode([
-					'responseMessage' => $responseMessage,
-					'responseData' => $responseData
+					"responseMessage" => $responseMessage,
+					"responseData" => $responseData
 				]);
-				$this->response->body($json);
-				return;
+				
+				$this->response = $this->response->withStringBody($json);
+				$this->response = $this->response->withType('json');
+		
+				return $this->response;
 			}
-			return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+			return $this->redirect(["controller" => "Users", "action" => "login"]);
 		}
 	}
