@@ -592,7 +592,13 @@
 		$modelBare->save($sample);
 	}
 	
-	public function graphdataall() {
+	public function benchmarkdata() {
+		$this->render(false);
+		
+		
+	}
+	
+	public function graphdata() {
 		$this->render(false);
 		
 		//get request data
@@ -609,92 +615,28 @@
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
 		
-		$fields = ['site_location_id', 'Date'];
+		$fields = ["site" => "site_location_id", "Date"];
 		$fields = array_merge($fields, $selectedMeasures);
 		
 		$andConditions = [
-			'site_location_id IN' => $sites,
-			$model . '.Date >=' => $startDate,
-			$model . '.Date <= ' => $endDate
+			"site_location_id IN" => $sites,
+			$model . ".Date >=" => $startDate,
+			$model . ".Date <= " => $endDate
 		];
 		
-		if ($amount != '') {
-			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
+		if ($amount != "") {
+			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
 		}
 		
-		$samples = $this->$model->find('all', [
-			'fields' => $fields,
-			'conditions' => [
-				'and' => $andConditions
+		$samples = $this->$model->find("all", [
+			"fields" => $fields,
+			"conditions" => [
+				"and" => $andConditions
 			]
 		]);
 		
-		$this->response = $this->response->withStringBody(json_encode([$samples]));
-		$this->response = $this->response->withType('json');
-		
-		return $this->response;
-	}
-
-	public function graphdata() {
-		$this->render(false);
-		$this->loadModel("MeasurementSettings");
-		
-		//get request data
-		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
-		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
-		$sites = $this->request->getData("sites");
-		$measure = $this->request->getData("measure");
-		$category = $this->request->getData("category");
-		$sites = $this->request->getData('sites');
-		$amount = $_POST["amountEnter"];
-		$searchDirection = $_POST["overUnderSelect"];
-		$measurementSearch = $_POST["measurementSearch"];
-		$model = ucfirst($category) . "Samples";
-		
-		$this->loadModel($model);
-		
-		//Get theshold data
-		$threshold = $this->MeasurementSettings->find('all', [
-			'fields' => [
-				'min' => 'benchmarkMinimum',
-				'max' => 'benchmarkMaximum'
-			],
-			'conditions' => [
-				'and' => [
-					'measureKey LIKE' => $measure
-				]
-			]
-		]);
-		
-		//if there is no min/max for theshold, set as null
-		if ($threshold->isEmpty()) {
-			$threshold = [['min' => NULL, 'max' => NULL]];
-		}
-		
-		$andConditions = [
-			'site_location_id IN' => $sites,
-			$model . '.Date >=' => $startDate,
-			$model . '.Date <= ' => $endDate
-		];
-				
-		if ($amount != '') {
-			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
-		}
-		
-		//get data requested
-		$samples = $this->$model->find('all', [
-			'fields' => [
-				'site' => 'site_location_id',
-				'date' => 'Date',
-				'value' => $measure
-			],
-			'conditions' => [
-				'and' => $andConditions
-			]
-		])->order(['Date' => 'ASC']);
-		
-		$this->response = $this->response->withStringBody(json_encode([$samples, $threshold]));
-		$this->response = $this->response->withType('json');
+		$this->response = $this->response->withStringBody(json_encode($samples));
+		$this->response = $this->response->withType("json");
 		
 		return $this->response;
 	}

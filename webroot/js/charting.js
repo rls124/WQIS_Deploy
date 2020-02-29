@@ -1221,11 +1221,9 @@ $(document).ready(function () {
 			chartDiv.appendChild(chartsGrid);
 		}
 		
-		//testing
-		console.log("\r\n\r\n\r\n new graphdata");
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/generic-samples/graphdataall",
+			url: "/WQIS/generic-samples/graphdata",
 			datatype: "JSON",
 			async: false,
 			data: {
@@ -1239,36 +1237,9 @@ $(document).ready(function () {
 				"measurementSearch": measurementSearch
 			},
 			success: function(response) {
-				console.log(response);
-				
 				for (k=0; k<measures.length; k++) {
-					console.log("plotting " + measures[k]);
-				}
-			}
-		});
-		
-		//get data and fill the charts in
-		for (var k=0; k<nMeasures; k++) {
-			$.ajax({
-				type: "POST",
-				url: "/WQIS/generic-samples/graphdata",
-				datatype: "JSON",
-				async: false,
-				data: {
-					'sites': sites,
-					'startDate': startDate,
-					'endDate': endDate,
-					'measure': measures[k],
-					"category": category,
-					'amountEnter': amountEnter,
-					'overUnderSelect': overUnderSelect,
-					'measurementSearch': measurementSearch
-				},
-				success: function(response) {
-					console.log("old graphdata " + k);
-					console.log(response);
-					
 					var datasets = [];
+
 					for (i=0; i<sites.length; i++) {
 						var newDataset = {
 							label: sites[i],
@@ -1283,17 +1254,14 @@ $(document).ready(function () {
 					}
 					
 					var labels = [];
-					
-					for (i=0; i<response[0].length; i++) {
-						var newRow = []
-						
-						var date = response[0][i].date.split("T")[0];
-						
+					for (i=0; i<response.length; i++) {
+						var newRow = [];
+						var date = response[i].Date.split("T")[0];
 						newRow.t = date;
-						newRow.y = response[0][i].value;
+						newRow.y = response[i][measures[k]];
 						
 						for (j=0; j<sites.length; j++) {
-							if (response[0][i].site == sites[j]) {
+							if (response[i].site == sites[j]) {
 								datasets[j].data.push(newRow);
 								break;
 							}
@@ -1302,49 +1270,26 @@ $(document).ready(function () {
 						//make sure there isn't already a label created for this date, or things break in weird ways
 						var found = false;
 						for (j=0; j<labels.length; j++) {
-							if (labels[j] == date) {
+							if (labels[j] === date) {
 								found = true;
 								break;
 							}
 						}
-						if (found == false) {
+						
+						if (!found) {
 							labels.push(date);
 						}
 					}
 					
 					var ctx = document.getElementById("chart-" + k).getContext("2d");
-					var benchmarkLines = [];
-
-					//add benchmark annotations, and save that to a global variable so we can toggle it off/on as needed without requerying the server/drawing the graph
-					var benchmarks = response[1][0]; //max and min
 					
-					function bench(val, color) {
-						return {
-							type: "line",
-							mode: "horizontal",
-							scaleID: "y-axis-0",
-							value: val,
-							borderColor: color,
-							borderWidth: 3,
-							drawTime: "afterDatasetsDraw",
-						};
-					}
-					
-					if (benchmarks["max"] != null) {
-						benchmarkLines.push(bench(benchmarks["max"], "red"));
-					}
-					if (benchmarks["min"] != null) {
-						benchmarkLines.push(bench(benchmarks["min"], "blue"));
-					}
-
 					charts.push(new Chart(ctx, {
-						type: 'line',
+						type: "line",
 						data: {
 							labels: labels,
 							datasets: datasets
 						},
 						options: {
-							annotation: {annotations: benchmarkLines},
 							scales: {
 								yAxes: [{
 									scaleLabel: {
@@ -1355,19 +1300,19 @@ $(document).ready(function () {
 							},
 							pan: {
 								enabled: true,
-								mode: 'x',
+								mode: "x",
 								speed: 100
 							},
 							zoom: {
 								enabled: true,         
-								mode: 'x',
+								mode: "x",
 							},
 							responsive: true
 						}
 					}));
 				}
-			});
-		}
+			}
+		});
 	}
 	
 	spinnerInhibited = false;

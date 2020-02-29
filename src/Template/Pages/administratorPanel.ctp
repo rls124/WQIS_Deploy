@@ -22,24 +22,24 @@ if ($admin) { ?>
 		</li>
 		<hr>
 		<li class="info-li">
-		    <span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>
-		    - Used to define acceptable values and benchmarks for water quality data.
+		    <span class="glyphicon glyphicon-flag" style="font-size: 14pt;"></span>
+		    - Used to define the lowest and highest acceptable values when entering water quality data.
+		</li>
+		<li class="info-li">
+		    <span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>
+		    - Used to add, edit or delete users.
 		</li>
 		<li class="info-li">
 		    <span class="glyphicon glyphicon-map-marker" style="font-size: 14pt;"></span>
 		    - Used to add, edit, or delete sites.
 		</li>
 		<li class="info-li">
-		    <span class="glyphicon glyphicon-envelope" style="font-size: 14pt;"></span>
-		    - Used to view feedback from non-admin users.
+		    <span class="glyphicon glyphicon-scale" style="font-size:14pt;"></span>
+		    - Used to define the benchmark values for highlighting abnormal water quality data.
 		</li>
 		<li class="info-li">
-		    <span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>
-		    - Used to add, edit, or delete users.
-		</li>
-		<li class="info-li">
-		    <span class="glyphicon glyphicon-folder-open" style="font-size:14pt;"></span>
-		    - Used to add, edit, or delete site groups.
+		    <span class="glyphicon glyphicon-download-alt" style="font-size: 14pt;"></span>
+		    - Used to export bulk data into CSV files.
 		</li>
 	    </ul>
 	</div>
@@ -48,7 +48,7 @@ if ($admin) { ?>
     <div class="card-deck mb-3">
         <div class="card big-card">
             <div class="card-header">
-                <h5 class="card-title centeredText mb-0" style="font-size: 1.15rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:14pt;"></span>  Water Quality Data Entry</h5>
+                <h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:14pt;"></span>  Water Quality Data Entry</h5>
             </div>
             <div class="card-block">
 		<?=
@@ -87,7 +87,7 @@ if ($admin) { ?>
         </div>
         <div class="card big-card">
             <div class="card-header">
-                <h5 class="card-title centeredText mb-0" style="font-size: 1.15rem;"><span class="glyphicon glyphicon-upload" style="font-size:14pt;"></span>  Import</h5>
+                <h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-upload" style="font-size:14pt;"></span>  Import</h5>
             </div>
             <div class="card-block">
 		<?=
@@ -100,10 +100,10 @@ if ($admin) { ?>
 		?>
                 <div class="row"></div>
                 <div class="row mb-3">
-                    <label class="btn btn-file btn-basic  ml-3 mr-1" style="font-size: 12pt; margin-top: 5px;">Choose File <input type="file" name="file" accept=".csv" id="chooseFileButton"> </label>
+                    <label class="btn btn-file btn-basic  ml-3 mr-1" style="font-size: 14pt; margin-top: 5px;">Choose File <input type="file" name="file" accept=".csv" id="chooseFileButton"> </label>
 					
                     <div class="col-sm ml-2 mr-3 mb-1 mt-1" id="FileUploadDiv" style="padding-left: 5px;">
-                        <label id="FileUploadLabel" style="font-size: 12pt; margin-top: 8px; color: #919191;"> File Name</label>
+                        <label id="FileUploadLabel" style="font-size: 14pt; margin-top: 8px; color: #919191;"> File Name</label>
                     </div>
                 </div>
 				
@@ -127,14 +127,14 @@ if ($admin) { ?>
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'MeasurementSettings', 'action' => 'measurementsettings']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>  Measurement Settings</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>  Measurement Settings</h5>
 					</div>
 				</a>
 			</div>
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'users', 'action' => 'usermanagement']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size: 1.15rem;"><span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>  User Management</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>  User Management</h5>
 					</div>
 				</a>
 			</div>
@@ -143,14 +143,14 @@ if ($admin) { ?>
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'SiteLocations', 'action' => 'sitemanagement']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 14pt;"></span>  Site Management</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 14pt;"></span>  Site Management</h5>
 					</div>
 				</a>
 			</div>
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'SiteGroups', 'action' => 'sitegroups']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-folder-open" style="font-size: 14pt;"></span>&nbsp; Site Groups</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size:1.25rem;"><span class="glyphicon glyphicon-folder-open" style="font-size: 14pt;"></span>&nbsp; Site Groups</h5>
 					</div>
 				</a>
 			</div>
@@ -159,7 +159,7 @@ if ($admin) { ?>
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'feedback', 'action' => 'adminfeedback']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size: 1.15rem;"><span class="glyphicon glyphicon-envelope" style="font-size:14pt;"></span>  View Feedback</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size: 1.25rem;"><span class="glyphicon glyphicon-list-alt" style="font-size:14pt;"></span>  View Feedback</h5>
 					</div>
 				</a>
 			</div>
