@@ -132,19 +132,18 @@
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
 		
-		$fields = ['site_location_id', 'Date', 'Sample_Number'];
-		$fields = array_merge($fields, $selectedMeasures, [(ucfirst($category) . "Comments")]);
+		$fields = array_merge(['site_location_id', 'Date', 'Sample_Number'], $selectedMeasures, [(ucfirst($category) . "Comments")]);
 		
 		$numMeasures = sizeof($selectedMeasures);
 		
 		$andConditions = [
-			'site_location_id IN' => $sites,
-			$model . '.Date >=' => $startDate,
-			$model . '.Date <= ' => $endDate
+			"site_location_id IN" => $sites,
+			$model . ".Date >=" => $startDate,
+			$model . ".Date <=" => $endDate
 		];
 		
-		if ($amount != '') {
-			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
+		if ($amount != "") {
+			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
 		}
 		
 		//don't return rows in which none of the selected measurements actually have data in them
@@ -155,17 +154,17 @@
 		$notAllNullString = $notAllNullString . ")";
 		$andConditions = array_merge($andConditions, array($notAllNullString));
 		
-		$samples = $this->$model->find('all', [
-			'fields' => $fields,
-			'conditions' => [
-				'and' => $andConditions
+		$samples = $this->$model->find("all", [
+			"fields" => $fields,
+			"conditions" => [
+				"and" => $andConditions
 			],
-			'limit' => $numRows,
-			'page' => $pageNum
+			"limit" => $numRows,
+			"page" => $pageNum
 		])->order([$sortBy => $sortDirection]);
 		
 		$this->response = $this->response->withStringBody(json_encode([$samples]));
-		$this->response = $this->response->withType('json');
+		$this->response = $this->response->withType("json");
 		
 		return $this->response;
 	}
@@ -522,18 +521,18 @@
 			}
 		}
 		
-		$siteLocations = $model->SiteLocations->find('all');
-		$this->set(compact('sample', 'siteLocations'));
-		$this->set('_serialize', ['sample']);
+		$siteLocations = $model->SiteLocations->find("all");
+		$this->set(compact("sample", "siteLocations"));
+		$this->set("_serialize", ["sample"]);
 		$this->set('mode', $mode);
 
 		$rawCount = [];
 		for ($i=0; $i<=51; $i++) {
 			$rawCount[] = $i;
 		}
-		$this->set(compact('rawCount'));
+		$this->set(compact("rawCount"));
 
-		$this->set('formType', $name);
+		$this->set("formType", $name);
 	}
 
 	public function updatefield() {
@@ -545,7 +544,7 @@
 		}
 		$sampleNumber = $this->request->getData("sampleNumber");
 		
-		$parameter = $this->request->getData('parameter');
+		$parameter = $this->request->getData("parameter");
 		$parameter = strtolower($parameter); //shouldn't need to do this, but it'll reduce the risk of someone fucking this up again. Like I did.
 		$value = $this->request->getData('value');
 		
@@ -576,28 +575,6 @@
 		$this->$model->save($sample);
 	}
 	
-	public function benchmarkdata() {
-		$this->render(false);
-		
-		$this->loadModel("MeasurementSettings");
-		$benchmarks = $this->MeasurementSettings->find("all", [
-			"fields" => [
-				"min" => "benchmarkMinimum",
-				"max" => "benchmarkMaximum"
-			]
-		]);
-		
-		//if there is no min/max benchmark, set both to null
-		if ($benchmarks->isEmpty()) {
-			$benchmarks = [["min" => NULL, "max" => NULL]];
-		}
-		
-		$this->response = $this->response->withStringBody(json_encode($benchmarks));
-		$this->response = $this->response->withType("json");
-		
-		return $this->response;
-	}
-	
 	public function graphdata() {
 		$this->render(false);
 		
@@ -615,8 +592,7 @@
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
 		
-		$fields = ["site" => "site_location_id", "Date"];
-		$fields = array_merge($fields, $selectedMeasures);
+		$fields = array_merge(["site" => "site_location_id", "Date"], $selectedMeasures);
 		
 		$andConditions = [
 			"site_location_id IN" => $sites,
@@ -644,15 +620,14 @@
 	public function getmonitoredsites() {
 		$this->render(false);
 		$this->loadModel("SiteLocations");
-		//Get monitored sites
-		$monitoredSites = $this->SiteLocations
-		->find('all', [
-		'conditions' => [
-			'Monitored' => "1"
-		],
-		'fields' => [
-			'Site_Number'
-		]
+		
+		$monitoredSites = $this->SiteLocations->find("all", [
+			"conditions" => [
+				"Monitored" => "1"
+			],
+			"fields" => [
+				"Site_Number"
+			]
 		]);
 		$this->response->body(json_encode($monitoredSites));
 		return $this->response;

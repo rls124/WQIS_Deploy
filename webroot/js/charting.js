@@ -76,7 +76,7 @@ for (var category in categoryMeasures) {
 //build the table template we use to display all the data associated with a point on the map
 var templateContent = "<table>";
 for (var category in categoryMeasures) {
-	templateContent = templateContent + "<tr><th>" + category[0].toUpperCase() + category.slice(1) + " Measurements</th><th>{" + category + "Date}</th></tr>";
+	templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
 	for (var key in categoryMeasures[category]) {
 		if (!(categoryMeasures[category][key]["visible"] == false)) { //note that this is not the same as saying it is true
 			templateContent = templateContent + "<tr><th>" + categoryMeasures[category][key]["text"] + "</th><td>{" + key + "}</td></tr>";
@@ -119,7 +119,7 @@ const highlightedMarkerSymbol = {
 	}
 };
 
-const SITE_DATA = 'SiteData';
+const SITE_DATA = "SiteData";
 
 //page state information
 var chartsDisplayMode = "in-line";
@@ -137,14 +137,42 @@ var map;
 var view;
 var sampleSitesLayer;
 
+function ucfirst(str) {
+	//capitalize first character of a string
+	return str[0].toUpperCase() + str.slice(1);
+}
+
+function selectColor(colorIndex, palleteSize) {
+	//returns color at an index of an evenly-distributed color pallete of arbitrary size. To avoid ever having the color of the line matching the color of the benchmark lines, we offset the index and pallet size by 1
+	if (palleteSize < 1) {
+		palleteSize = 1; //defaults to one color, can't divide by zero or the universe implodes
+	}
+		
+	return "hsl(" + ((colorIndex+1) * (360 / (palleteSize+1)) % 360) + ",70%,50%)";
+}
+
 $(document).ready(function () {
-	if (typeof admin == 'undefined') {
+	if (typeof admin == "undefined") {
 		admin = false;
 	}
 	
 	if (preselectSite) {
 		$("#sites").val(preselectSite);
 	}
+	
+	console.log("getting benchmarks");
+	//get benchmarks
+	$.ajax({
+		type: "POST",
+		url: "/WQIS/measurement-settings/benchmarkdata",
+		datatype: "JSON",
+		success: function(response) {
+			console.log(response);
+		},
+		failure: function(response) {
+			console.log("failed");
+		}
+	});
 	
 	//map code
 	require([
@@ -158,9 +186,9 @@ $(document).ready(function () {
 	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen) {
 		//fetches site information from the database
 		$.ajax({
-			type: 'POST',
-			url: 'fetchSites',
-			datatype: 'JSON',
+			type: "POST",
+			url: "fetchSites",
+			datatype: "JSON",
 			async: false,
 			success: function(response) {
 				mapData = response;
@@ -218,7 +246,6 @@ $(document).ready(function () {
 				map = new Map({
 					basemap: "satellite",
 					layers: [watershedsLayer, drainsLayer, riverLayer, impairedLayer, bodiesLayer, floodLayer, damLayer, wellLayer, wetlandLayer],
-					//layers: []
 				});
 				view = new MapView({
 					container: "map",
@@ -434,7 +461,7 @@ $(document).ready(function () {
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
 		
 		for (i=0; i<checkboxList.length; i++) {
-			if (checkboxList[i].checked == false) {
+			if (checkboxList[i].checked === false) {
 				document.getElementById("allCheckbox").checked = false; //deselect the All checkbox
 				break;
 			}
@@ -487,25 +514,23 @@ $(document).ready(function () {
 	
     $(".date-picker").datepicker({
         trigger: "focus",
-        format: 'mm/dd/yyyy',
+        format: "mm/dd/yyyy",
         todayHighlight: true,
         todayBtn: "linked"
     });
 
-    $("#startDate").datepicker().on('changeDate', function (selected) {
-        var minDate = new Date(selected.date.valueOf());
-        $('#endDate').datepicker('setStartDate', minDate);
+    $("#startDate").datepicker().on("changeDate", function (selected) {
+        $("#endDate").datepicker("setStartDate", new Date(selected.date.valueOf()));
     });
 	
-    $("#endDate").datepicker().on('changeDate', function (selected) {
-        var maxDate = new Date(selected.date.valueOf());
-        $('#startDate').datepicker('setEndDate', maxDate);
+    $("#endDate").datepicker().on("changeDate", function (selected) {
+        $("#startDate").datepicker("setEndDate", new Date(selected.date.valueOf()));
     });
 
 	$("#sites").select2({
 		closeOnSelect: false,
 		placeholder: "Select sites",
-		width: 'resolve'
+		width: "resolve"
 	});
 	
 	/*
@@ -529,12 +554,12 @@ $(document).ready(function () {
 		var startDate = $("#startDate").val();
 		var endDate = $("#endDate").val();
 		var sites = $("#sites").val();
-		var categorySelect = document.getElementById("categorySelect").value;
+		var category = document.getElementById("categorySelect").value;
 		var amountEnter = document.getElementById("amountEnter").value;
 		var overUnderSelect = document.getElementById("overUnderSelect").value;
 		var measurementSearch = document.getElementById("measurementSelect").value;
 		var selectedMeasures = selectedMeasuresWithRawCount();
-		selectedMeasures.push(categorySelect[0].toUpperCase() + categorySelect.slice(1) + "Comments");
+		selectedMeasures.push(ucfirst(category) + "Comments");
 
 		$.ajax({
 			type: "POST",
@@ -544,14 +569,14 @@ $(document).ready(function () {
 				"sites": sites,
 				"startDate": startDate,
 				"endDate": endDate,
-				"category": categorySelect,
+				"category": category,
 				"amountEnter": amountEnter,
 				"overUnderSelect": overUnderSelect,
 				"measurementSearch": measurementSearch,
 				"selectedMeasures": selectedMeasures
 			},
 			success: function (response) {
-				downloadFile(response, categorySelect);
+				downloadFile(response, category);
 			},
 			failure: function (response) {
 				alert("Failed");
@@ -591,16 +616,16 @@ $(document).ready(function () {
 				measureSelect.appendChild(option);
 			
 				//now create the checkboxes as well
-				var listItem = document.createElement('li');
+				var listItem = document.createElement("li");
 				
-				var box = document.createElement('input');
+				var box = document.createElement("input");
 				box.value = i;
 				box.id = i + "Checkbox";
 				box.type = "checkbox";
 				box.setAttribute("class", "measurementCheckbox");
 				box.checked = true;
 			
-				var boxLabel = document.createElement('label');
+				var boxLabel = document.createElement("label");
 				boxLabel.innerText = categoryData[i]["text"];
 				boxLabel.setAttribute("for", i + "Checkbox");
 			
@@ -631,7 +656,7 @@ $(document).ready(function () {
 		var csvContent = "data:text/csv;charset=utf-8,";
 		var fields = Object.keys(fileData[0]);
 		for (var i = 0; i < fileData.length; i++) {
-			fileData[i]['Date'] = fileData[i]['Date'].substring(0, 10);
+			fileData[i]["Date"] = fileData[i]["Date"].substring(0, 10);
 		}
 
 		//if ID field exists, remove it
@@ -907,7 +932,7 @@ $(document).ready(function () {
 		var startDate = $("#startDate").val();
 		var endDate = $("#endDate").val();
 		var sites = $("#sites").val();
-		var categorySelect = document.getElementById("categorySelect").value;
+		var category = document.getElementById("categorySelect").value;
 		var amountEnter = document.getElementById("amountEnter").value;
 		var overUnderSelect = document.getElementById("overUnderSelect").value;
 		var measurementSearch = document.getElementById("measurementSelect").value;
@@ -917,12 +942,12 @@ $(document).ready(function () {
 		//set up the column names and IDs to actually display
 		var columns = ["Site ID", "Date", "Sample Number"];
 		for (i=0; i<selectedMeasures.length; i++) {
-			columns.push(categoryMeasures[categorySelect][selectedMeasures[i]]["text"]);
+			columns.push(categoryMeasures[category][selectedMeasures[i]]["text"]);
 		}
 		columns.push("Comments");
 		var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
 		
-		columnIDs.push(categorySelect[0].toUpperCase() + categorySelect.slice(1) + "Comments");
+		columnIDs.push(ucfirst(category) + "Comments");
 		
 		if (numPages > 0) { //if there is any data to display
 			document.getElementById("tableNoData").style = "display: none";
@@ -932,21 +957,21 @@ $(document).ready(function () {
 			$.ajax({
 				type: "POST",
 				url: "/WQIS/generic-samples/tabledata",
-				datatype: 'JSON',
+				datatype: "JSON",
 				async: false,
 				data: {
-					'sites': sites,
-					'startDate': startDate,
-					'endDate': endDate,
-					'category': categorySelect,
-					'amountEnter': amountEnter,
-					'overUnderSelect': overUnderSelect,
-					'measurementSearch': measurementSearch,
-					'selectedMeasures': selectedMeasures,
-					'numRows': numRows,
-					'pageNum': tablePage,
-					'sortBy': sortBy,
-					'sortDirection': sortDirection
+					"sites": sites,
+					"startDate": startDate,
+					"endDate": endDate,
+					"category": category,
+					"amountEnter": amountEnter,
+					"overUnderSelect": overUnderSelect,
+					"measurementSearch": measurementSearch,
+					"selectedMeasures": selectedMeasures,
+					"numRows": numRows,
+					"pageNum": tablePage,
+					"sortBy": sortBy,
+					"sortDirection": sortDirection
 				},
 				success: function(response) {
 					//create the blank table
@@ -991,11 +1016,11 @@ $(document).ready(function () {
 						var newRow = table.insertRow();
 						
 						Object.keys(response[0][i]).forEach(function(key) {
-							if (!(key == "ID")) {
+							if (key != "ID") {
 								var newCell = newRow.insertCell();
 								var value = response[0][i][key];
 								
-								if (key == "Date") {
+								if (key === "Date") {
 									//we get the date in a weird format, parse it to something more appropriate
 									value = value.split("T")[0];
 								}
@@ -1013,9 +1038,9 @@ $(document).ready(function () {
 									
 									label.onclick = function () {
 										var label = $(this);
-										var input = $('#' + label.attr('for'));
-										input.trigger('click');
-										label.attr('style', 'display: none');
+										var input = $("#" + label.attr("for"));
+										input.trigger("click");
+										label.attr("style", 'display: none');
 										input.attr('style', 'display: in-line');
 									};
 								
@@ -1034,12 +1059,12 @@ $(document).ready(function () {
 									cellInput.onfocusout = (function () {
 										var input = $(this);
 
-										if (!input.attr('id')) {
+										if (!input.attr("id")) {
 											return;
 										}
 			
-										var rowNumber = (input.attr('id')).split("-")[1];
-										var sampleNumber = $('#Sample_Number-' + rowNumber).val();
+										var rowNumber = (input.attr("id")).split("-")[1];
+										var sampleNumber = $("#Sample_Number-" + rowNumber).val();
 			
 										var parameter = (input.attr('name')).split("-")[0];
 										var value = input.val();
@@ -1111,7 +1136,7 @@ $(document).ready(function () {
 											datatype: 'JSON',
 											data: {
 												'sampleNumber': sampleNumber,
-												'type': categorySelect
+												'type': category
 											},
 											success: function () {
 												//remove the row from view
@@ -1156,15 +1181,6 @@ $(document).ready(function () {
 		}
 		
 		return measures;
-	}
-	
-	function selectColor(colorIndex, palleteSize) {
-		//returns color at an index of an evenly-distributed color pallete of arbitrary size. To avoid ever having the color of the line matching the color of the benchmark lines, we offset the index and pallet size by 1
-		if (palleteSize < 1) {
-			palleteSize = 1; //defaults to one color, can't divide by zero or the universe implodes
-		}
-			
-		return "hsl(" + ((colorIndex+1) * (360 / (palleteSize+1)) % 360) + ",70%,50%)";
 	}
 
 	function getGraphData() {

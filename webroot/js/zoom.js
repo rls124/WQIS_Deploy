@@ -15,12 +15,12 @@
 /*global require*/
 
 // hammer JS for touch support
-var Hammer = require('hammerjs');
-Hammer = typeof(Hammer) === 'function' ? Hammer : window.Hammer;
+var Hammer = require("hammerjs");
+Hammer = typeof(Hammer) === "function" ? Hammer : window.Hammer;
 
 //get the chart variable
-var Chart = require('chart.js');
-Chart = typeof(Chart) === 'function' ? Chart : window.Chart;
+var Chart = require("chart.js");
+Chart = typeof(Chart) === "function" ? Chart : window.Chart;
 var helpers = Chart.helpers;
 
 //take the zoom namespace of Chart
@@ -44,7 +44,8 @@ var defaultOptions = zoomNS.defaults = {
 function directionEnabled(mode, dir) {
 	if (mode === undefined) {
 		return true;
-	} else if (typeof mode === 'string') {
+	}
+	else if (typeof mode === "string") {
 		return mode.indexOf(dir) !== -1;
 	}
 
@@ -60,7 +61,6 @@ function zoomIndexScale(scale, zoom, center, zoomOptions) {
 	var chartCenter =  scale.isHorizontal() ? scale.left + (scale.width/2) : scale.top + (scale.height/2);
 	var centerPointer = scale.isHorizontal() ? center.x : center.y;
 
-	//zoomNS.zoomCumulativeDelta = zoom > 1 ? zoomNS.zoomCumulativeDelta + 1 : zoomNS.zoomCumulativeDelta - 1;
 	if (zoom > 1) {
 		zoomNS.zoomCumulativeDelta+=1;
 	}
@@ -101,9 +101,6 @@ function zoomIndexScale(scale, zoom, center, zoomOptions) {
 
 function addButtons(node, chartInstance) {
 	var node = chartInstance.chart.ctx.canvas;
-	//var options = chartInstance.options;
-	//var panThreshold = helpers.getValueOrDefault(options.pan ? options.pan.threshold : undefined, zoomNS.defaults.pan.threshold);
-
 	var chartNum = node.id.split("-")[1];
 	
 	var zoomInButton = document.createElement("button");
@@ -309,10 +306,11 @@ var zoomPlugin = {
 
 				if (e.deltaY < 0) {
 					doZoom(chartInstance, 1.1, center);
-				} else {
+				}
+				else {
 					doZoom(chartInstance, 0.909, center);
 				}
-				// Prevent the event from triggering the default behavior (eg. Content scrolling).
+				//prevent the event from triggering the default behavior (eg Content scrolling)
 				e.preventDefault();
 			};
 			chartInstance._wheelHandler = wheelHandler;
