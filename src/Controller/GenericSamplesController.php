@@ -602,8 +602,8 @@
 		$this->render(false);
 		
 		//get request data
-		$startDate = date('Ymd', strtotime($this->request->getData("startDate")));
-		$endDate = date('Ymd', strtotime($this->request->getData("endDate")));
+		$startDate = date("Ymd", strtotime($this->request->getData("startDate")));
+		$endDate = date("Ymd", strtotime($this->request->getData("endDate")));
 		$sites = $this->request->getData("sites");
 		$category = $_POST["category"];
 		$amount = $_POST["amount"];
@@ -638,112 +638,6 @@
 		$this->response = $this->response->withStringBody(json_encode($samples));
 		$this->response = $this->response->withType("json");
 		
-		return $this->response;
-	}
-
-	public function daterange() {
-		//current implementation is probably not what we actually want. Checks if theres any data for any sample type. Need to fix later		
-		
-		$this->render(false);
-		
-		$this->loadModel("BacteriaSamples");
-		$this->loadModel("NutrientSamples");
-		$this->loadModel("PesticideSamples");
-		$this->loadModel("PhysicalSamples");
-		
-		//ensure that sites is in POST data
-		if (!$this->request->getData('sites')) {
-			return;
-		}
-		
-		$sites = $this->request->getData('sites');
-		
-		//get min/max date of all the sites for each sample type
-		
-		//bacteria
-		$measureQuery = $this->BacteriaSamples
-				->find('all', [
-				'conditions' => [
-					'site_location_id IN ' => $sites
-				],
-				'fields' => [
-					'mindate' => 'MIN(Date)',
-					'maxdate' => 'MAX(Date)'
-				]
-				])->first();
-		
-		$bacteriaMinDate = date('m/d/Y', strtotime($measureQuery['mindate']));
-		$bacteriaMaxDate = date('m/d/Y', strtotime($measureQuery['maxdate']));
-					
-		//nutrient
-		$measureQuery = $this->NutrientSamples
-				->find('all', [
-				'conditions' => [
-					'site_location_id IN ' => $sites
-				],
-				'fields' => [
-					'mindate' => 'MIN(Date)',
-					'maxdate' => 'MAX(Date)'
-				]
-				])->first();
-				
-		$nutrientMinDate = date('m/d/Y', strtotime($measureQuery['mindate']));
-		$nutrientMaxDate = date('m/d/Y', strtotime($measureQuery['maxdate']));
-		
-		
-		//pesticide
-		$measureQuery = $this->PesticideSamples
-				->find('all', [
-				'conditions' => [
-					'site_location_id IN ' => $sites
-				],
-				'fields' => [
-					'mindate' => 'MIN(Date)',
-					'maxdate' => 'MAX(Date)'
-				]
-				])->first();
-				
-		$pesticideMinDate = date('m/d/Y', strtotime($measureQuery['mindate']));
-		$pesticideMaxDate = date('m/d/Y', strtotime($measureQuery['maxdate']));
-		
-		
-		//physical properties
-		$measureQuery = $this->PhysicalSamples
-				->find('all', [
-				'conditions' => [
-					'site_location_id IN ' => $sites
-				],
-				'fields' => [
-					'mindate' => 'MIN(Date)',
-					'maxdate' => 'MAX(Date)'
-				]
-				])->first();
-				
-		$physicalMinDate = date('m/d/Y', strtotime($measureQuery['mindate']));
-		$physicalMaxDate = date('m/d/Y', strtotime($measureQuery['maxdate']));	
-		
-		//find the overall min and max
-		$mins = array($bacteriaMinDate, $nutrientMinDate, $pesticideMinDate, $physicalMinDate);
-		$maxes = array($bacteriaMaxDate, $nutrientMaxDate, $pesticideMaxDate, $physicalMaxDate);
-		
-		$minDate = $mins[0];
-		$maxDate = $maxes[0];
-		
-		for ($i=1; $i<count($mins); $i++) {
-			if ($minDate > $mins[$i]) {
-				$minDate = $mins[$i];
-			}
-			
-			if ($maxDate < $maxes[$i]) {
-				$maxDate = $maxes[$i];
-			}
-		}
-		
-		$dateRange = [$minDate, $maxDate];
-		
-		$this->response = $this->response->withStringBody(json_encode([$minDate, $maxDate]));
-		$this->response = $this->response->withType('json');
-				
 		return $this->response;
 	}
 

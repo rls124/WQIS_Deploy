@@ -448,32 +448,38 @@ $(document).ready(function () {
     function getRange() {
 		spinnerInhibited = true;
 		
-		//if both variables are not null, then we may submit an sql request
-        var siteData = document.querySelector("#sites").value;
+		var sites = $("#sites").val();
         var categoryData = $("#categorySelect").val();
-        if (siteData !== "select" && categoryData !== null) {
+        if (sites.length != 0) { //no point making a request if no sites are selected
             $.ajax({
                 type: "POST",
                 url: "daterange",
                 data: {
-                    "site": siteData,
+                    "sites": sites,
                     "category": categoryData
                 },
-                datatype: 'JSON',
+                datatype: "JSON",
 				async: false,
                 success: function (data) {
-                    var startDate = data[0];
-                    var endDate = data[1];
-                    $("#startDate").val(startDate);
-                    $("#endDate").val(endDate);
-                    $("#startDate").datepicker("update", startDate);
-                    $("#endDate").datepicker("update", endDate);
+                    setDates(data);
                 }
             });
         }
+		else {
+			setDates([null, null]);
+		}
 		
 		spinnerInhibited = false;
     }
+	
+	function setDates(dates) {
+		var startDate = dates[0];
+		var endDate = dates[1];
+		$("#startDate").val(startDate);
+		$("#endDate").val(endDate);
+		$("#startDate").datepicker("update", startDate);
+		$("#endDate").datepicker("update", endDate);
+	}
 	
     document.getElementById("categorySelect").addEventListener("change", function() {
 		changeMeasures();
