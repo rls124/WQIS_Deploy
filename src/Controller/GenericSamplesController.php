@@ -178,19 +178,19 @@
 		$startTime = $time;
 
 		//get the data from the file
-		$file = $_FILES['file'];
-		$fileName = $_FILES['file']['name']; // store the name of the file like upload.png
-		$this->set('fileName', $fileName);
+		$file = $_FILES["file"];
+		$fileName = $file["name"]; //store the name of the file like upload.png
+		$this->set("fileName", $fileName);
 		
-		if ($this->request->is('post') && $file) {
+		if ($this->request->is("post") && $file) {
 			//Check if file is valid
 			$valid = $this->_fileIsValid($file);
-			if (!$valid['isValid']) {
-				$this->set(compact('valid'));
+			if (!$valid["isValid"]) {
+				$this->set(compact("valid"));
 				return;
 			}
 			
-			$csv = array_map('str_getcsv', file($file['tmp_name']));
+			$csv = array_map("str_getcsv", file($file["tmp_name"]));
 			
 			$fileType = GenericSamplesController::getFileTypeFromHeaders($csv); //determine filetype from column headers
 			
@@ -396,13 +396,13 @@
 					}
 				}
 				
-				if ($cellValid == false) {
+				if (!$cellValid) {
 					$correctType = false;
 					break;
 				}
 			}
 			
-			if ($correctType == true) {
+			if ($correctType) {
 				return $typeNumber + 1;
 			}
 		}
@@ -412,32 +412,18 @@
 		$this->render(false);
 
 		//ensure sample number data was included
-		if (!$this->request->getData('sampleNumber')) {
+		if (!$this->request->getData("sampleNumber")) {
 			return;
 		}
-		$sampleNumber = $this->request->getData('sampleNumber');
+		$sampleNumber = $this->request->getData("sampleNumber");
 		
-		if ($_POST["type"] == "bacteria") {
-			$this->loadModel('BacteriaSamples');
-			$modelBare = $this->BacteriaSamples;
-		}
-		elseif ($_POST["type"] == "nutrient") {
-			$this->loadModel('NutrientSamples');
-			$modelBare = $this->NutrientSamples;
-		}
-		elseif ($_POST["type"] == "pesticide") {
-			$this->loadModel('PesticideSamples');
-			$modelBare = $this->PesticideSamples;
-		}
-		elseif ($_POST["type"] == "physical") {
-			$this->loadModel('PhysicalSamples');
-			$modelBare = $this->PhysicalSamples;
-		}
+		$model = ucfirst($_POST["type"]) . "Samples";
+		$this->loadModel($model);
 		
 		//Get the sample we are deleting
-		$sample = $modelBare
-			->find('all')
-			->where(['Sample_Number = ' => $sampleNumber])
+		$sample = $this->$model
+			->find("all")
+			->where(["Sample_Number" => $sampleNumber])
 			->first();
 		
 		//delete it
@@ -490,13 +476,13 @@
 		$this->loadModel($modelName);
 		$model = $this->$modelName;
 		
-		$rows = $this->request->getData('totalrows');
+		$rows = $this->request->getData("totalrows");
 		$request = $this->request;
 		
 		$sample = $model->newEntity();
 		
 		//check if the request is post, and the request has at least one sample
-		if ($request->is('post') && $request->getData('site_location_id-0')) {
+		if ($request->is("post") && $request->getData("site_location_id-0")) {
 			$successes = 0;
 			$fails = 0;
 			$failsDetailed = "";
@@ -509,7 +495,7 @@
 				for ($col = 0; $col < sizeof($columns); $col++) {
 					$requestField = "";
 
-					if ($columns[$col] !== 'Date') {
+					if ($columns[$col] !== "Date") {
 						$requestField = strtolower($columns[$col]) . "-" . $i;
 					}
 					else {
@@ -525,11 +511,11 @@
 				}
 				else {
 					$fails++;
-					$failsDetailed .= $rowData['Sample_Number'] . ', ';
+					$failsDetailed .= $rowData["Sample_Number"] . ", ";
 				}
 			}
 			if ($successes) {
-				$this->Flash->success(__($successes . ' ' . $name . ' sample(s) has been saved.'));
+				$this->Flash->success(__($successes . " " . $name . " sample(s) has been saved."));
 			}
 			if ($fails) {
 				$this->Flash->error(__($fails . ' ' . $name . ' sample(s) could not be saved. Failure on number(s): ' . substr($failsDetailed, 0, strlen($failsDetailed) - 2)));
@@ -542,7 +528,7 @@
 		$this->set('mode', $mode);
 
 		$rawCount = [];
-		for ($i = 0; $i <= 51; $i++) {
+		for ($i=0; $i<=51; $i++) {
 			$rawCount[] = $i;
 		}
 		$this->set(compact('rawCount'));
@@ -554,48 +540,62 @@
 		$this->render(false);
 		
 		//Ensure sample number data was included
-		if (!$this->request->getData('sampleNumber')) {
+		if (!$this->request->getData("sampleNumber")) {
 			return;
 		}
-		$sampleNumber = $this->request->getData('sampleNumber');
+		$sampleNumber = $this->request->getData("sampleNumber");
 		
 		$parameter = $this->request->getData('parameter');
 		$parameter = strtolower($parameter); //shouldn't need to do this, but it'll reduce the risk of someone fucking this up again. Like I did.
 		$value = $this->request->getData('value');
 		
 		if ($parameter == "ecolirawcount" || $parameter == "ecoli" || $parameter == "totalcoliformrawcount" || $parameter == "totalcoliform" || $parameter == "bacteriacomments") { //bacteria
-			$this->loadModel('BacteriaSamples');
-			$modelBare = $this->BacteriaSamples;
+			$model = "BacteriaSamples";
 		}
 		elseif ($parameter == "nitratenitrite" || $parameter == "phosphorus" || $parameter == "drp" || $parameter == "ammonia" || $parameter == "nutrientcomments") { //nutrient
-			$this->loadModel('NutrientSamples');
-			$modelBare = $this->NutrientSamples;
+			$model = "NutrientSamples";
 		}
 		elseif ($parameter == "atrazine" || $parameter == "alachlor" || $parameter == "metolachlor" || $parameter == "pesticidecomments") { //pesticide
-			$this->loadModel('PesticideSamples');
-			$modelBare = $this->PesticideSamples;
+			$model = "PesticideSamples";
 		}
 		elseif ($parameter == "conductivity" || $parameter == "do" || $parameter == "bridge_to_water_height" || $parameter == "ph" || $parameter == "water_temp" || $parameter == "tds" || $parameter == "turbidity" || $parameter == "physicalcomments") { //water quality meter
-			$this->loadModel('PhysicalSamples');
-			$modelBare = $this->PhysicalSamples;
+			$model = "PhysicalSamples";
 		}
 		
+		$this->loadModel($model);
+		
 		//Get the sample we are editing
-		$sample = $modelBare
-			->find('all')
-			->where(['Sample_Number = ' => $sampleNumber])
+		$sample = $this->$model
+			->find("all")
+			->where(["Sample_Number" => $sampleNumber])
 			->first();
 		//Set the edited field
 		$parameter = $this->request->getData('parameter');
 		$sample->$parameter = $value;
 		//Save changes
-		$modelBare->save($sample);
+		$this->$model->save($sample);
 	}
 	
 	public function benchmarkdata() {
 		$this->render(false);
 		
+		$this->loadModel("MeasurementSettings");
+		$benchmarks = $this->MeasurementSettings->find("all", [
+			"fields" => [
+				"min" => "benchmarkMinimum",
+				"max" => "benchmarkMaximum"
+			]
+		]);
 		
+		//if there is no min/max benchmark, set both to null
+		if ($benchmarks->isEmpty()) {
+			$benchmarks = [["min" => NULL, "max" => NULL]];
+		}
+		
+		$this->response = $this->response->withStringBody(json_encode($benchmarks));
+		$this->response = $this->response->withType("json");
+		
+		return $this->response;
 	}
 	
 	public function graphdata() {
