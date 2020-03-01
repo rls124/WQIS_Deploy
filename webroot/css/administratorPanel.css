@@ -1,21 +1,6 @@
-/*
-   Ben Color Scheme
-        Alabaster - #f4f6fa
-        Anakiwa - #8eceff
-        Cornflower Blue - #638de2
-        Waterloo - #6e7393
-        Astronaut - #2a5171
-
-*/
-
 body{
-    /*    background-image: url("../img/stripes.svg");*/
-    color:#373737;/*default text color to charcoal*/
+    color:#373737;
 }
-/*
-    Overridden css
-*/
-
 
 .btn-close{
     background-color: #868E96;
@@ -46,10 +31,8 @@ body{
     Page specific css
 */
 .panel{
-    /*background-color: #0b1a28;/*#312f32;*//*#373737;*/
     border-radius: 5px;
-    border: solid thin rgb(150, 150, 150);/*#373737;*/
-    /*margin-bottom: 5px;*/
+    border: solid thin rgb(150, 150, 150);
 }
 
 .panel-title{
@@ -59,7 +42,7 @@ body{
 }
 
 .list-group-item{
-    border: solid thin #312f32;/*#373737;*/
+    border: solid thin #312f32;
 }
 
 .btn-file {
@@ -174,66 +157,21 @@ body{
 #infoGlyph:hover{
     color: #638de2;
 }
-/*
-#sampleFile{
-    background-color: #1fa83d;
-    border: medium solid #1fa83d;
-    color: white;
-}
 
-#sampleFile:hover{
-    background-color: #5cf77e;
-    text-shadow: 1px 1px 3px black;
-    color: black;
-}
-
-#sampleFile:active{
-    background-color: #dddddd;
-    border: medium solid #77b0d9;
-    color: black;
-}*/
-
-.sampleFileDisabled{
-    /*    background-color: #6eb57d !important;
-        border-color: #6eb57d !important;
-        text-shadow: none;
-        color: white;
-        cursor: auto;*/
-    background-color: #748EA2;
-    border-color: #748EA2;
-    text-shadow: none;
-    color: white;
-    cursor: auto;
-}
-
-.sampleFileDisabled:hover{
-    /*    background-color: #6eb57d;
-        border-color: #6eb57d !important;
-        text-shadow: none !important;
-        color: white !important;
-        cursor: auto;*/
-    background-color: #748EA2;
-    border-color: #748EA2;
-    text-shadow: none;
-    color: white;
-    cursor: auto;
-}
-
-
-ul {
+ul{
     list-style-type:none;
 }
 
-.info-li {
+.info-li{
     margin-bottom: 10px;
 }
 
-#FileUploadDiv {
+#FileUploadDiv{
     border: solid thin #868E96;
     background-color: #eaeaea;
 }
 
-.center {
+.center{
     margin-left: 0px;
     margin-right: 0px;
 }
