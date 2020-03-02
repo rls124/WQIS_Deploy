@@ -241,7 +241,12 @@
 			$countSuccesses = 0;
 			$countFails = 0;
 		
-			$numColumns = sizeof($columnIDs);
+			if (isset($_POST["overwrite"]) && $_POST["overwrite"] == "true") {
+				$overwrite = true;
+			} 
+			else {
+				$overwrite = false;
+			}
 		
 			//go through each non-header row
 			for ($row=1; $row<sizeof($csv); $row++) {
@@ -266,10 +271,73 @@
 						$countSuccesses++;
 					}
 					else {
-						//failure
-						$currentRow[] = $entity->getErrors();
-						$log[] = $currentRow;
-						$countFails++;
+						//failure (or duplicate sample number)
+						//overwrite duplicate sample number if user requested it
+						if ($entity->getError('Sample_Number') != NULL && $overwrite == true) {
+							$table = $this->$model
+								->find('all')
+								->where(['Sample_Number = ' => $currentRow[2]])
+								->first();
+		
+							switch ($model) {
+								case "BacteriaSamples":
+									$table->site_location_id = $currentRow[0];
+									$table->Date = $currentRow[1];
+									$table->EcoliRawCount = $currentRow[3];
+									$table->Ecoli = $currentRow[4];
+									$table->TotalColiformRawCount = $currentRow[5];
+									$table->TotalColiform = $currentRow[6];
+									$table->BacteriaComments = $currentRow[7];
+									break;
+								case "NutrientSamples":
+									$table->site_location_id = $currentRow[0];
+									$table->Date = $currentRow[1];
+									$table->Phosphorus = $currentRow[3];
+									$table->NitrateNitrite = $currentRow[4];
+									$table->DRP = $currentRow[5];
+									$table->Ammonia = $currentRow[6];
+									$table->NutrientComments = $currentRow[7];
+									break;
+								case "PesticideSamples":
+									$table->site_location_id = $currentRow[0];
+									$table->Date = $currentRow[1];
+									$table->Atrazine = $currentRow[3];
+									$table->Alachlor = $currentRow[4];
+									$table->Metolachlor = $currentRow[5];
+									$table->PesticideComments = $currentRow[6];
+									break;
+								case "PhysicalSamples":
+									$table->site_location_id = $currentRow[0];
+									$table->Date = $currentRow[1];
+									$table->Time = $currentRow[3];
+									$table->Bridge_to_Water_Height = $currentRow[4];
+									$table->Water_Temp = $currentRow[5];
+									$table->pH = $currentRow[6];
+									$table->Conductivity = $currentRow[7];
+									$table->TDS = $currentRow[8];
+									$table->DO = $currentRow[9];
+									$table->Turbidity = $currentRow[10];
+									$table->Turbidity_Scale_Value = $currentRow[11];
+									$table->PhysicalComments = $currentRow[12];
+									$table->Import_Date = $currentRow[13];
+									$table->Import_Time = $currentRow[14];
+									$table->Requires_Checking = $currentRow[15];
+									break;
+							}
+							
+							if ($this->$model->save($table)) {
+								$countSuccesses++;
+							} else {
+								$currentRow[] = $table->getErrors();
+								$log[] = $currentRow;
+								$countFails++;
+							}
+						} 
+						else {
+							$currentRow[] = $entity->getErrors();
+							$log[] = $currentRow;
+							$countFails++;
+						}
 					}
 				}
 				catch (\PDOException $e) {
