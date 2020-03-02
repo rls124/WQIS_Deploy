@@ -58,22 +58,5 @@
 		
 			return $this->response;
 		}
-		
-		public function benchmarkdata() {
-			$this->render(false);
-		
-			$benchmarks = $this->MeasurementSettings->find("all", [
-				"fields" => [
-					"measureKey",
-					"min" => "benchmarkMinimum",
-					"max" => "benchmarkMaximum"
-				]
-			]);
-		
-			$this->response = $this->response->withStringBody(json_encode($benchmarks));
-			$this->response = $this->response->withType("json");
-		
-			return $this->response;
-		}
 	}
 ?>
