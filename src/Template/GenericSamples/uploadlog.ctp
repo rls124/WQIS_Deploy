@@ -42,7 +42,7 @@ else if (isset($log)) {
 						if (is_array($v)) {
 							echo "<ul class='errorList'>";
 							if (isset($v['Sample_Number'])) {
-								echo "<li>Sample number already exists</li>";
+								echo "<li>Sample Number already exists at that location</li>";
 							}
 							else {
 								foreach ($v as $errorKey => $errorVal) {

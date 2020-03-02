@@ -240,7 +240,7 @@
 		
 			$countSuccesses = 0;
 			$countFails = 0;
-		
+			
 			if (isset($_POST["overwrite"]) && $_POST["overwrite"] == "true") {
 				$overwrite = true;
 			} 
@@ -278,7 +278,7 @@
 								->find('all')
 								->where(['Sample_Number = ' => $currentRow[2]])
 								->first();
-		
+
 							switch ($model) {
 								case "BacteriaSamples":
 									$table->site_location_id = $currentRow[0];
@@ -324,7 +324,7 @@
 									$table->Requires_Checking = $currentRow[15];
 									break;
 							}
-							
+
 							if ($this->$model->save($table)) {
 								$countSuccesses++;
 							} else {

@@ -12,35 +12,8 @@ $(document).ajaxStart(function() {
     $('body').css('cursor', 'default');
 });
 
-//measurement names/database names available for each category
-const categoryMeasures = {
-	'bacteria': {
-		'Ecoli': {text: 'E. Coli (CFU/100 mil)'},
-		'EcoliRawCount': {text: 'E. Coli Raw Count', visible: false}, //if these raw count columns are ever removed, it'll simplify a lot of stuff
-		'TotalColiform': {text: 'Coliform (CFU/100 mil)'},
-		'TotalColiformRawCount': {text: 'Coliform Raw Count', visible: false}
-	},
-	'nutrient': {
-		'NitrateNitrite': {text: 'Nitrate/Nitrite (mg/L)'},
-		'Phosphorus': {text: 'Total Phosphorus (mg/L)'},
-		'DRP': {text: 'Dissolved Reactive Phosphorus (mg/L)'},
-		'Ammonia': {text: 'Ammonia (mg/L)'}
-	},
-	'pesticide': {
-		'Alachlor': {text: 'Alachlor (µg/L)'},
-		'Atrazine': {text: 'Atrazine (µg/L)'},
-		'Metolachlor': {text: 'Metolachlor (µg/L)'}
-	},
-	'physical': {
-		'Conductivity': {text: 'Conductivity (mS/cm)'},
-		'DO': {text: 'Dissolved Oxygen (mg/L'},
-		'Bridge_to_Water_Height': {text: 'Bridge to Water Height (in)'},
-		'pH': {text: 'pH'},
-		'Water_Temp': {text: 'Water Temperature (°C)'},
-		'TDS': {text: 'Total Dissolved Solids (g/L)'},
-		'Turbidity': {text: 'Turbidity (NTU)'}
-	}
-};
+//will be filled in with the contents of the MeasurementSettings table, containing category/name/alias/benchmarks/detection limits for each
+var measurementSettings;
 
 //build the fields object the map uses for the points layer
 var fields = [{
@@ -57,39 +30,46 @@ var fields = [{
 	type: "string"
 }];
 
-for (var category in categoryMeasures) {
-	fields.push({
-		name: category + "Date",
-		type: "string",
-		defaultValue: "No Records Found"
-	});
-	
-	for (var key in categoryMeasures[category]) {
+function buildFields() {
+	for (var category in measurementSettings) {
 		fields.push({
-			name: key,
+			name: category + "Date",
 			type: "string",
-			defaultValue: "No Data"
+			defaultValue: "No Records Found"
 		});
-	}
-}
-
-//build the table template we use to display all the data associated with a point on the map
-var templateContent = "<table>";
-for (var category in categoryMeasures) {
-	templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
-	for (var key in categoryMeasures[category]) {
-		if (!(categoryMeasures[category][key]["visible"] == false)) { //note that this is not the same as saying it is true
-			templateContent = templateContent + "<tr><th>" + categoryMeasures[category][key]["text"] + "</th><td>{" + key + "}</td></tr>";
+		
+		for (i=0; i<measurementSettings[category].length; i++) {
+			if (measurementSettings[category][i].Visible) {
+				fields.push({
+					name: measurementSettings[category][i].measureKey,
+					type: "string",
+					defaultValue: "No Data"
+				});
+			}
 		}
 	}
 }
-templateContent = templateContent + "</table>";
 
-const template = {
-	title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
-	content: templateContent
+function buildTemplate() {
+	//build the table template we use to display all the data associated with a point on the map
+	var templateContent = "<table>";
+	for (var category in measurementSettings) {
+		templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
+		for (i=0; i<measurementSettings[category].length; i++) {
+			if (measurementSettings[category][i].Visible) {
+				templateContent = templateContent + "<tr><th>" + measurementSettings[category][i].measureName + "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
+			}
+		}
+	}
+	templateContent = templateContent + "</table>";
+
+	template = {
+		title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
+		content: templateContent
+	};
 };
 
+var template;
 const renderer = {
 	type: "simple",
 	symbol: {
@@ -129,7 +109,6 @@ var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
 var charts = [];
-var benchmarkAnnotations = [];
 
 //global variables used by the map
 var mapData;
@@ -151,6 +130,19 @@ function selectColor(colorIndex, palleteSize) {
 	return "hsl(" + ((colorIndex+1) * (360 / (palleteSize+1)) % 360) + ",70%,50%)";
 }
 
+function benchmarkLine(val, color) {
+	//builds annotation line with a given value and color
+	return {
+		type: "line",
+		mode: "horizontal",
+		scaleID: "y-axis-0",
+		value: val,
+		borderColor: color,
+		borderWidth: 3,
+		drawTime: "afterDatasetsDraw",
+	};
+}
+
 $(document).ready(function () {
 	if (typeof admin == "undefined") {
 		admin = false;
@@ -160,17 +152,19 @@ $(document).ready(function () {
 		$("#sites").val(preselectSite);
 	}
 	
-	console.log("getting benchmarks");
 	//get benchmarks
 	$.ajax({
 		type: "POST",
-		url: "/WQIS/measurement-settings/benchmarkdata",
+		url: "/WQIS/measurement-settings/settingsData",
 		datatype: "JSON",
+		async: false,
 		success: function(response) {
-			console.log(response);
+			measurementSettings = response;
+			buildFields();
+			buildTemplate();
 		},
 		failure: function(response) {
-			console.log("failed");
+			alert("Failed");
 		}
 	});
 	
@@ -405,15 +399,16 @@ $(document).ready(function () {
 			pointGraphic.attributes.siteName = visibleSites[i]["Site_Name"];
 			pointGraphic.attributes.siteLocation = visibleSites[i]["Site_Location"];
 			
-			for (var shortField in categoryMeasures) {
+			for (var shortField in measurementSettings) {
 				var field = shortField + "_samples";
 				
 				for (rowNum=0; rowNum<response[field].length; rowNum++) {
 					var siteNumber = response[field][rowNum]["site_location_id"];
 					if (pointGraphic.attributes.siteNumber == siteNumber) {
 						pointGraphic.attributes[shortField + "Date"] = response[field][rowNum]["Date"].split('T')[0];
-						for (var key in categoryMeasures[shortField]) {
-							if (!(categoryMeasures[shortField][key]["visible"] == false) && response[field][rowNum][key] !== null) {
+						for (z=0; z<measurementSettings[shortField].length; z++) {
+							var key = measurementSettings[shortField][z].measureKey;
+							if (response[field][rowNum][key] !== null) {
 								pointGraphic.attributes[key] = response[field][rowNum][key].toString();
 							}
 						}
@@ -586,10 +581,10 @@ $(document).ready(function () {
 	
 	function changeMeasures() {
 		//when the measurement category is changed, change both lists of available measurements to match
-		var measureSelect = document.getElementById('measurementSelect');
-		var checkboxList = document.getElementById('checkboxList');
+		var measureSelect = document.getElementById("measurementSelect");
+		var checkboxList = document.getElementById("checkboxList");
 		var measurementCheckboxes = document.getElementsByClassName("measurementCheckbox");
-		var categoryData = categoryMeasures[document.getElementById('categorySelect').value];
+		var categoryData = measurementSettings[document.getElementById("categorySelect").value];
 		
 		//first clear all the measures currently listed
 		while (measureSelect.options.length > 0) {
@@ -607,27 +602,27 @@ $(document).ready(function () {
 		option.text = "Select a measure";
 		measureSelect.appendChild(option);
 		
-		for (var i in categoryData) {
+		for (i=0; i<categoryData.length; i++) {
 			//fill in the measurementSelect dropdown
-			if (!(categoryData[i]["visible"] == false)) {
+			if (categoryData[i]["Visible"]) {
 				var option = document.createElement('option');
-				option.value = i;
-				option.text = categoryData[i]["text"];
+				option.value = categoryData[i].measureKey;
+				option.text = categoryData[i]["measureName"];
 				measureSelect.appendChild(option);
 			
 				//now create the checkboxes as well
 				var listItem = document.createElement("li");
 				
 				var box = document.createElement("input");
-				box.value = i;
-				box.id = i + "Checkbox";
+				box.value = categoryData[i].measureKey;
+				box.id = categoryData[i].measureKey + "Checkbox";
 				box.type = "checkbox";
 				box.setAttribute("class", "measurementCheckbox");
 				box.checked = true;
 			
 				var boxLabel = document.createElement("label");
-				boxLabel.innerText = categoryData[i]["text"];
-				boxLabel.setAttribute("for", i + "Checkbox");
+				boxLabel.innerText = categoryData[i]["measureName"];
+				boxLabel.setAttribute("for", categoryData[i].measureKey + "Checkbox");
 			
 				listItem.appendChild(box);
 				listItem.appendChild(boxLabel);
@@ -942,7 +937,13 @@ $(document).ready(function () {
 		//set up the column names and IDs to actually display
 		var columns = ["Site ID", "Date", "Sample Number"];
 		for (i=0; i<selectedMeasures.length; i++) {
-			columns.push(categoryMeasures[category][selectedMeasures[i]]["text"]);
+			//get index of this measure so we can find its printable name
+			for (j=0; j<measurementSettings[category].length; j++) {
+				if (measurementSettings[category][j].measureKey === selectedMeasures[i]) {
+					columns.push(measurementSettings[category][j].measureName);
+					break;
+				}
+			}
 		}
 		columns.push("Comments");
 		var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
@@ -1305,6 +1306,27 @@ $(document).ready(function () {
 					
 					var ctx = document.getElementById("chart-" + k).getContext("2d");
 					
+					var measureKey;
+					//get index of this measure so we can find its printable name
+					var measureIndex
+					for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
+						if (measurementSettings[category][measureIndex].measureKey === measures[k]) {
+							measureKey = measurementSettings[category][measureIndex].measureName;
+							break;
+						}
+					}
+					
+					var benchmarkMax = measurementSettings[category][measureIndex].benchmarkMaximum;
+					var benchmarkMin = measurementSettings[category][measureIndex].benchmarkMinimum;
+					var benchmarkLines = [];
+					
+					if (benchmarkMax != null) {
+						benchmarkLines.push(benchmarkLine(benchmarkMax, "red"));
+					}
+					if (benchmarkMin != null) {
+						benchmarkLines.push(benchmarkLine(benchmarkMin, "blue"));
+					}
+					
 					charts.push(new Chart(ctx, {
 						type: "line",
 						data: {
@@ -1312,11 +1334,12 @@ $(document).ready(function () {
 							datasets: datasets
 						},
 						options: {
+							annotation: {annotations: benchmarkLines},
 							scales: {
 								yAxes: [{
 									scaleLabel: {
 										display: true,
-										labelString: categoryMeasures[category][measures[k]]["text"]
+										labelString: measureKey
 									}
 								}]
 							},
