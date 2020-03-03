@@ -30,6 +30,10 @@ var fields = [{
 	type: "string"
 }];
 
+function genericError() {
+	alert("We encountered a problem, try again later");
+}
+
 function buildFields() {
 	for (var category in measurementSettings) {
 		fields.push({
@@ -163,7 +167,7 @@ $(document).ready(function () {
 			buildFields();
 			buildTemplate();
 		},
-		failure: function(response) {
+		error: function(response) {
 			alert("Failed");
 		}
 	});
@@ -570,11 +574,11 @@ $(document).ready(function () {
 				"measurementSearch": measurementSearch,
 				"selectedMeasures": selectedMeasures
 			},
-			success: function (response) {
+			success: function(response) {
 				downloadFile(response, category);
 			},
-			failure: function (response) {
-				alert("Failed");
+			error: function(response) {
+				genericError();
 			}
 		});
 	});
@@ -808,6 +812,9 @@ $(document).ready(function () {
 					numPages = 1;
 				}
 				document.getElementById("totalPages").innerText = numPages;
+			},
+			error: function(response) {
+				genericError();
 			}
 		});
 	}
@@ -1090,8 +1097,8 @@ $(document).ready(function () {
 													label.text(value);
 												}
 											},
-											failure: function() {
-												alert("failed");
+											error: function() {
+												genericError();
 											}
 										});
 									});
@@ -1143,8 +1150,8 @@ $(document).ready(function () {
 								
 												//future work: build a new table, to still maintain correct total number of rows and have correct black/white/black sequencing after deletions
 											},
-											fail: function () {
-												alert("Deletion failed");
+											error: function () {
+												genericError();
 											}
 										});
 									}
@@ -1156,8 +1163,8 @@ $(document).ready(function () {
 		
 					document.getElementById("tableDiv").append(table);
 				},
-				fail: function(response) {
-					alert("failed");
+				error: function(response) {
+					genericError();
 				}
 			});
 		}

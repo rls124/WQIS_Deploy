@@ -490,7 +490,7 @@
 			->first();
 		
 		//delete it
-		$modelBare->delete($sample);
+		$this->$model->delete($sample);
 	}
 
 	public function entryform() {
