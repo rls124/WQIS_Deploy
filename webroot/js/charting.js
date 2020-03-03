@@ -159,7 +159,7 @@ $(document).ready(function () {
 	//get benchmarks
 	$.ajax({
 		type: "POST",
-		url: "/WQIS/measurement-settings/settingsData",
+		url: "/wqis/measurement-settings/settingsData",
 		datatype: "JSON",
 		async: false,
 		success: function(response) {
@@ -193,7 +193,7 @@ $(document).ready(function () {
 				
 				buildSitesDropdown(mapData["SiteData"]);
 				
-				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
+				var kmlurl = "http://emerald.pfw.edu/wqis/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
 				var watershedsLayer = new KMLLayer({
 					url: kmlurl,
 					id: "watersheds"
@@ -511,6 +511,10 @@ $(document).ready(function () {
 		changeMeasures();
 	});
 	
+	document.getElementById('measurementSelect').addEventListener("change", function(){
+		changeBenchmark();
+	});
+	
     $(".date-picker").datepicker({
         trigger: "focus",
         format: "mm/dd/yyyy",
@@ -562,7 +566,7 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/generic-samples/exportData",
+			url: "/wqis/generic-samples/exportData",
 			datatype: "JSON",
 			data: {
 				"sites": sites,
@@ -589,7 +593,7 @@ $(document).ready(function () {
 		var checkboxList = document.getElementById("checkboxList");
 		var measurementCheckboxes = document.getElementsByClassName("measurementCheckbox");
 		var categoryData = measurementSettings[document.getElementById("categorySelect").value];
-		
+			
 		//first clear all the measures currently listed
 		while (measureSelect.options.length > 0) {
 			measureSelect.remove(0);
@@ -608,10 +612,12 @@ $(document).ready(function () {
 		
 		for (i=0; i<categoryData.length; i++) {
 			//fill in the measurementSelect dropdown
-			if (categoryData[i]["Visible"]) {
+			if (categoryData[i].measureKey != "EcoliRawCount" && categoryData[i].measureKey != "TotalColiformRawCount") {			//(categoryData[i]["Visible"]) and console.log(categoryData[1].visible); are both showing underfined, no mater what the value is set in the Database, causing errors. This is a temporary workaround.
+				
 				var option = document.createElement('option');
 				option.value = categoryData[i].measureKey;
 				option.text = categoryData[i]["measureName"];
+				
 				measureSelect.appendChild(option);
 			
 				//now create the checkboxes as well
@@ -647,6 +653,22 @@ $(document).ready(function () {
 		sortBy = "Date";
 	}
 	
+	function changeBenchmark(){
+		var category = $("#categorySelect").val();
+		var measureIndex
+			for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
+				if (measurementSettings[category][measureIndex].measureKey === document.getElementById("measurementSelect").value) {
+					break;
+				}
+			}	
+		if(measurementSettings[category][measureIndex].benchmarkMaximum == null){
+			document.getElementById("amountEnter").placeholder ="No Benchmark Available";
+		}else{
+			document.getElementById("amountEnter").placeholder ="Benchmark: " + measurementSettings[category][measureIndex].benchmarkMaximum;
+		}
+		
+	};
+			
 	function downloadFile(fileData, type) {
 		if (fileData.length < 1) {
 			return;
@@ -789,7 +811,7 @@ $(document).ready(function () {
 		//get the number of records
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/generic-samples/tablePages",
+			url: "/wqis/generic-samples/tablePages",
 			datatype: "JSON",
 			async: false,
 			data: {
@@ -962,7 +984,7 @@ $(document).ready(function () {
 		
 			$.ajax({
 				type: "POST",
-				url: "/WQIS/generic-samples/tabledata",
+				url: "/wqis/generic-samples/tabledata",
 				datatype: "JSON",
 				async: false,
 				data: {
@@ -1077,7 +1099,7 @@ $(document).ready(function () {
 
 										$.ajax({
 											type: "POST",
-											url: "/WQIS/generic-samples/updatefield",
+											url: "/wqis/generic-samples/updatefield",
 											datatype: 'JSON',
 											data: {
 												'sampleNumber': sampleNumber,
@@ -1138,7 +1160,7 @@ $(document).ready(function () {
 										//Now send ajax data to a delete script
 										$.ajax({
 											type: "POST",
-											url: "/WQIS/generic-samples/deleteRecord",
+											url: "/wqis/generic-samples/deleteRecord",
 											datatype: 'JSON',
 											data: {
 												'sampleNumber': sampleNumber,
@@ -1251,7 +1273,7 @@ $(document).ready(function () {
 		
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/generic-samples/graphdata",
+			url: "/wqis/generic-samples/graphdata",
 			datatype: "JSON",
 			async: false,
 			data: {
@@ -1323,6 +1345,7 @@ $(document).ready(function () {
 					
 					var benchmarkMax = measurementSettings[category][measureIndex].benchmarkMaximum;
 					var benchmarkMin = measurementSettings[category][measureIndex].benchmarkMinimum;
+					
 					var benchmarkLines = [];
 					
 					if (benchmarkMax != null) {
