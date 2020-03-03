@@ -9,6 +9,10 @@ body,
 	height: 500px;
 }
 
+#main{
+	padding: 15px;
+}
+
 textarea{
     width: 100%;
     resize: both;

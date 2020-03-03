@@ -825,17 +825,15 @@ $(document).ready(function () {
 	function openSearchSidebar() {
 		document.getElementById("sidebarInner").style.width = "20vw";
 		document.getElementById("sidebarInner").style.padding = "10px";
-		document.getElementById("main").style.marginLeft = "20vw";
-		document.getElementById("main").style.padding = "15px";
+		document.getElementById("main").style.marginLeft = "20.5vw";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
-		document.getElementById("main").style.width = "78vw";
+		document.getElementById("main").style.width = "77vw";
 	}
 	
 	function closeSearchSidebar() {
 		document.getElementById("sidebarInner").style.width = 0;
 		document.getElementById("sidebarInner").style.padding = 0;
-		document.getElementById("main").style.marginLeft = "5px";
-		document.getElementById("main").style.padding = "25px";
+		document.getElementById("main").style.marginLeft = "15px";
 		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
 		document.getElementById("main").style.width = "100%";
 	}

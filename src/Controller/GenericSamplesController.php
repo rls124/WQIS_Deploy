@@ -50,7 +50,7 @@
 			]
 		])->order(['Date' => 'Desc']);
 
-		$this->set(compact('data'));
+		$this->set(compact("data"));
 		return $this->response->withType("application/json")->withStringBody(json_encode($data));
 	}
 	
@@ -58,27 +58,23 @@
 		$this->render(false);
 		
 		//get request data
-		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
-		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
-		$sites = $this->request->getData('sites');
+		$startDate = date("Ymd", strtotime($_POST["startDate"]));
+		$endDate = date("Ymd", strtotime($_POST["endDate"]));
+		$sites = $_POST["sites"];
 		$amount = $_POST["amountEnter"];
 		$searchDirection = $_POST["overUnderSelect"];
 		$measurementSearch = $_POST["measurementSearch"];
-		$category = $this->request->getData('category');
+		$category = $_POST["category"];
 		$selectedMeasures = $_POST["selectedMeasures"];
 		
 		//set model
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
 		
-		$fields = ['site_location_id', 'Date', 'Sample_Number'];
-		$fields = array_merge($fields, $selectedMeasures);
-		array_push($fields, (ucfirst($category) . "Comments"));
-		
 		$andConditions = [
-			'site_location_id IN ' => $sites,
-			$model . '.Date >=' => $startDate,
-			$model . '.Date <= ' => $endDate
+			"site_location_id IN " => $sites,
+			$model . ".Date >=" => $startDate,
+			$model . ".Date <=" => $endDate
 		];
 		
 		//don't count rows in which none of the selected measurements actually have data in them
@@ -89,18 +85,18 @@
 		$notAllNullString = $notAllNullString . ")";
 		$andConditions = array_merge($andConditions, array($notAllNullString));
 		
-		if ($amount != '') {
-			$andConditions = array_merge($andConditions, [$model . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
+		if ($amount != "") {
+			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
 		}
 		
-		$count = $this->$model->find('all', [
-			'conditions' => [
-				'and' => $andConditions
+		$count = $this->$model->find("all", [
+			"conditions" => [
+				"and" => $andConditions
 			]
 		])->count();
 		
 		$this->response = $this->response->withStringBody(json_encode([$count]));
-		$this->response = $this->response->withType('json');
+		$this->response = $this->response->withType("json");
 		
 		return $this->response;
 	}
