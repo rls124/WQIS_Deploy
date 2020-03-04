@@ -1,7 +1,7 @@
 #!/bin/bash
 cd ..
-git config user.email "brickmack@gmail.com"
-git config user.name "brickmack"
+git config user.email "grep 'email = *' ../.git/config | sed 's/name = //1'"
+git config user.name "grep 'name = *' ../.git/config | sed 's/name = //1'"
 if [ $# -eq 0 ]; then
 	echo "No arguments supplied"
 else
@@ -22,8 +22,6 @@ else
 			echo "commit with message $2"
 			git commit -m "$2"
 		fi
-		git branch -v
-		echo "pushing"
 		git push
 	else
 		echo "invalid arguments $@"
