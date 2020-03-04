@@ -197,6 +197,10 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 				<div id="chartsLayoutSelect" style="display: none">
 					<button type="button" id="chartsInlineButton">In-line</button>
 					<button type="button" id="chartsGridButton">Grid</button>
+					<select id="chartType">
+						<option value="scatter">Scatter</option>
+						<option value="line">Line</option>
+					</select>
 				</div>
 				<div id="chartDiv" style="text-align: center;"></div>
 				<span id="chartsMsg">No data to display</span>

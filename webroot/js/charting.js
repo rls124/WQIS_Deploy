@@ -805,6 +805,19 @@ $(document).ready(function () {
 		setResultsPage(numPages);
 	});
 	
+	$("#chartType").change(function() {
+		for (i=0; i<charts.length; i++) {
+			var datasets = charts[i].data.datasets;
+			var showLine = ($("#chartType").val() === "line");
+			
+			for (j=0; j<datasets.length; j++) {
+				datasets[j].showLine = showLine;
+			}
+			
+			charts[i].update(0);
+		}
+	});
+	
 	function getNumRecords() {
 		//get the number of records
 		$.ajax({
@@ -851,7 +864,6 @@ $(document).ready(function () {
 	
 	function openSearchSidebar() {
 		document.getElementById("sidebarInner").style.width = "20vw";
-		document.getElementById("sidebarInner").style.padding = "10px";
 		document.getElementById("main").style.marginLeft = "20.5vw";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
 		document.getElementById("main").style.width = "77vw";
@@ -859,7 +871,6 @@ $(document).ready(function () {
 	
 	function closeSearchSidebar() {
 		document.getElementById("sidebarInner").style.width = 0;
-		document.getElementById("sidebarInner").style.padding = 0;
 		document.getElementById("main").style.marginLeft = "15px";
 		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
 		document.getElementById("main").style.width = "100%";
@@ -1285,6 +1296,8 @@ $(document).ready(function () {
 				"measurementSearch": measurementSearch
 			},
 			success: function(response) {
+				var displayLine = (document.getElementById("chartType").value == "line");
+				
 				for (k=0; k<measures.length; k++) {
 					var datasets = [];
 
@@ -1295,7 +1308,9 @@ $(document).ready(function () {
 							data: [],
 							lineTension: 0,
 							fill: false,
-							borderWidth: 1.5
+							borderWidth: 1.5,
+							showLine: displayLine,
+							spanGaps: true,
 						};
 						
 						datasets.push(newDataset);
