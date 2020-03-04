@@ -1,7 +1,9 @@
 #!/bin/bash
 cd ..
-git config user.email "grep 'email = *' ../.git/config | sed 's/email = //1'"
-git config user.name "grep 'name = *' ../.git/config | sed 's/name = //1'"
+EMAIL="$(grep 'email = *' .git/config | sed 's/email = //1')"
+NAME="$(grep 'name = *' .git/config | sed 's/name = //1')"
+git config user.email "${EMAIL}"
+git config user.name "${NAME}"
 if [ $# -eq 0 ]; then
 	echo "No arguments supplied"
 else
