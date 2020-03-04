@@ -59,7 +59,7 @@ let runTests(opts) =
         ChartSelectionTests.searchBoxToggleTest
         ChartSelectionTests.changeCategoryTest
         ChartSelectionTests.searchTest
-        ChartSelectionTests.correctNumberOfRowsTest
+        ChartSelectionTests.tablePaginationTest
         ChartSelectionTests.tableSortTest
         if (not opts.prodEnvironment) || (opts.prodEnvironment && opts.overrideSafety) then
             if (opts.userType = "admin") then

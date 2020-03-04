@@ -864,6 +864,8 @@ $(document).ready(function () {
 	
 	function openSearchSidebar() {
 		document.getElementById("sidebarInner").style.width = "20vw";
+		document.getElementById("sidebarInner").style.paddingLeft = "10px";
+		document.getElementById("sidebarInner").style.paddingRight = "10px";
 		document.getElementById("main").style.marginLeft = "20.5vw";
 		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
 		document.getElementById("main").style.width = "77vw";
@@ -871,6 +873,8 @@ $(document).ready(function () {
 	
 	function closeSearchSidebar() {
 		document.getElementById("sidebarInner").style.width = 0;
+		document.getElementById("sidebarInner").style.paddingLeft = 0;
+		document.getElementById("sidebarInner").style.paddingRight = 0;
 		document.getElementById("main").style.marginLeft = "15px";
 		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
 		document.getElementById("main").style.width = "100%";
