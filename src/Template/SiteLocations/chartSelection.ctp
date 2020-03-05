@@ -201,6 +201,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 						<option value="scatter">Scatter</option>
 						<option value="line">Line</option>
 					</select>
+					<input type="checkbox" id="showBenchmarks" value="showBenchmarks" checked>Show benchmark lines
 				</div>
 				<div id="chartDiv" style="text-align: center;"></div>
 				<span id="chartsMsg">No data to display</span>

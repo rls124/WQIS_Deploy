@@ -112,6 +112,7 @@ var numRecords = 0;
 var numPages = 0;
 var sortBy = "Date";
 var sortDirection = "Desc";
+var showBenchmarks = true;
 var charts = [];
 
 //global variables used by the map
@@ -447,6 +448,12 @@ $(document).ready(function () {
 		view.popup.close()
 		updateMapPoints();
 		resetAll();
+	});
+	
+	$("#showBenchmarks").change(function() {
+		showBenchmarks = !showBenchmarks;
+		resetCharts();
+		getGraphData();
 	});
 	
 	$("#allCheckbox").change(function() {
@@ -1360,15 +1367,19 @@ $(document).ready(function () {
 						}
 					}
 					
-					var benchmarkMax = measurementSettings[category][measureIndex].benchmarkMaximum;
-					var benchmarkMin = measurementSettings[category][measureIndex].benchmarkMinimum;
-					var benchmarkLines = [];
-					
-					if (benchmarkMax != null) {
-						benchmarkLines.push(benchmarkLine(benchmarkMax, "red"));
-					}
-					if (benchmarkMin != null) {
-						benchmarkLines.push(benchmarkLine(benchmarkMin, "blue"));
+					var benchmarkAnnotation = {};
+					if (showBenchmarks) {
+						var benchmarkMax = measurementSettings[category][measureIndex].benchmarkMaximum;
+						var benchmarkMin = measurementSettings[category][measureIndex].benchmarkMinimum;
+						var benchmarkLines = [];
+						
+						if (benchmarkMax != null) {
+							benchmarkLines.push(benchmarkLine(benchmarkMax, "red"));
+						}
+						if (benchmarkMin != null) {
+							benchmarkLines.push(benchmarkLine(benchmarkMin, "blue"));
+						}
+						benchmarkAnnotation = {annotations: benchmarkLines};
 					}
 					
 					charts.push(new Chart(ctx, {
@@ -1378,7 +1389,7 @@ $(document).ready(function () {
 							datasets: datasets
 						},
 						options: {
-							annotation: {annotations: benchmarkLines},
+							annotation: benchmarkAnnotation,
 							scales: {
 								yAxes: [{
 									scaleLabel: {

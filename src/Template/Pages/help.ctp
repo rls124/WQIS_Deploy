@@ -63,13 +63,16 @@
 		The Timeline section is for graphically displaying measurement trends across time. The Timeline will show searched measures over a user defined period of time.
 	</p>
 	<p>
-		These results can be viewed in an in-line or grid format. The in-line format simply dedicated each graph to its own line, while the grid layout will display all graphs in rows of two. A graph will appear for each selected field, and multiple lines will appear on the graph for each site selected. If multiple sites are selected, they will be highlighted in unique colors for easy differentiation.
+		A graph will appear for each selected field, and multiple lines will appear on the graph for each site selected. If multiple sites are selected, they will be highlighted in unique colors for easy differentiation. These results can be viewed in an in-line or grid format. The in-line format simply dedicated each graph to its own line, while the grid layout will display all graphs in rows of two.
 	</p>
 	<p>
-		The graph can be zoomed in on, either using the +/- buttons underneath, or pinching in/out on the graph itself (if on a touch screen or trackpad) or using the scrollwheel (on a mouse). Panning can be done by dragging left or right on the graph.
+		The graph can be zoomed in on, either using the +/- buttons underneath, or pinching in/out on the graph itself (if on a touch screen or trackpad) or using the scrollwheel (on a conventional mouse). Panning can be done by dragging left or right on the graph.
 	</p>
 	<p>
-		The Timeline graphs also have a option to display benchmark lines, indicating the upper (red) and lower (blue) bounds for acceptable values for each measure. For information on how these benchmarks are defined, see our About page. These lines can be toggled on or off using the "Show benchmark lines" checkbox at the top of the Timeline panel
+		Each graph will display benchmark lines, indicating the upper (red) and lower (blue) bounds for acceptable values for the measure. For information on how these benchmarks are defined, see our About page. These lines can be toggled on or off using the "Show benchmark lines" checkbox at the top of the Timeline panel
+	</p>
+	<p>
+		By default the Timeline graphs display as scatterplots, but the user may choose to display them as a line graph instead.
 	</p>
 </div>
 
