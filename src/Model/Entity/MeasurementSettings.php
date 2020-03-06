@@ -14,7 +14,6 @@ use Cake\ORM\Entity;
  * @property float $detectionMaximum
  */
 class MeasurementSettings extends Entity {
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *

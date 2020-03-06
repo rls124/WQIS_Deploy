@@ -43,13 +43,11 @@ function buildFields() {
 		});
 		
 		for (i=0; i<measurementSettings[category].length; i++) {
-			if (measurementSettings[category][i].Visible) {
-				fields.push({
-					name: measurementSettings[category][i].measureKey,
-					type: "string",
-					defaultValue: "No Data"
-				});
-			}
+			fields.push({
+				name: measurementSettings[category][i].measureKey,
+				type: "string",
+				defaultValue: "No Data"
+			});
 		}
 	}
 }
@@ -568,7 +566,7 @@ $(document).ready(function () {
 		var amountEnter = document.getElementById("amountEnter").value;
 		var overUnderSelect = document.getElementById("overUnderSelect").value;
 		var measurementSearch = document.getElementById("measurementSelect").value;
-		var selectedMeasures = selectedMeasuresWithRawCount();
+		var selectedMeasures = getSelectedMeasures();
 		selectedMeasures.push(ucfirst(category) + "Comments");
 
 		$.ajax({
@@ -619,31 +617,29 @@ $(document).ready(function () {
 		
 		for (i=0; i<categoryData.length; i++) {
 			//fill in the measurementSelect dropdown
-			if (categoryData[i]["Visible"]) {
-				var option = document.createElement('option');
-				option.value = categoryData[i].measureKey;
-				option.text = categoryData[i]["measureName"];
-				measureSelect.appendChild(option);
+			var option = document.createElement('option');
+			option.value = categoryData[i].measureKey;
+			option.text = categoryData[i]["measureName"];
+			measureSelect.appendChild(option);
 			
-				//now create the checkboxes as well
-				var listItem = document.createElement("li");
+			//now create the checkboxes as well
+			var listItem = document.createElement("li");
 				
-				var box = document.createElement("input");
-				box.value = categoryData[i].measureKey;
-				box.id = categoryData[i].measureKey + "Checkbox";
-				box.type = "checkbox";
-				box.setAttribute("class", "measurementCheckbox");
-				box.checked = true;
+			var box = document.createElement("input");
+			box.value = categoryData[i].measureKey;
+			box.id = categoryData[i].measureKey + "Checkbox";
+			box.type = "checkbox";
+			box.setAttribute("class", "measurementCheckbox");
+			box.checked = true;
 			
-				var boxLabel = document.createElement("label");
-				boxLabel.innerText = categoryData[i]["measureName"];
-				boxLabel.setAttribute("for", categoryData[i].measureKey + "Checkbox");
+			var boxLabel = document.createElement("label");
+			boxLabel.innerText = categoryData[i]["measureName"];
+			boxLabel.setAttribute("for", categoryData[i].measureKey + "Checkbox");
 			
-				listItem.appendChild(box);
-				listItem.appendChild(boxLabel);
+			listItem.appendChild(box);
+			listItem.appendChild(boxLabel);
 			
-				checkboxList.appendChild(listItem);
-			}
+			checkboxList.appendChild(listItem);
 		}
 		
 		document.getElementById("amountEnter").value = "";
@@ -948,28 +944,6 @@ $(document).ready(function () {
 		setResultsPage(1);
 	}
 	
-	function selectedMeasuresWithRawCount() {
-		var selectedMeasures = getSelectedMeasures();
-		
-		//check if there are associated RawCount columns we should include for those selected measures as well
-		var hasRawCount = ["Ecoli", "TotalColiform"];
-		
-		//we want to keep these in order, so we make a queue first containing all the column names and positions that need to be inserted...
-		var queue = [];
-		for (i=0; i<selectedMeasures.length; i++) {
-			if (hasRawCount.includes(selectedMeasures[i])) {
-				queue.push([selectedMeasures[i] + "RawCount", i+1]);
-			}
-		}
-		
-		//now add the queue contents to the selectedMeasures array itself, in the correct locations
-		for (i=0; i<queue.length; i++) {
-			selectedMeasures.splice(queue[i][1] + i, 0, queue[i][0]); //+i to account for the number of columns already inserted
-		}
-		
-		return selectedMeasures;
-	}
-	
 	function getTableData() {
 		var startDate = $("#startDate").val();
 		var endDate = $("#endDate").val();
@@ -979,7 +953,7 @@ $(document).ready(function () {
 		var overUnderSelect = document.getElementById("overUnderSelect").value;
 		var measurementSearch = document.getElementById("measurementSelect").value;
 		var numRows = document.getElementById("numRowsDropdown").value;
-		var selectedMeasures = selectedMeasuresWithRawCount();
+		var selectedMeasures = getSelectedMeasures();
 		
 		//set up the column names and IDs to actually display
 		var columns = ["Site ID", "Date", "Sample Number"];

@@ -192,8 +192,8 @@
 			if ($fileType == 1) {
 				//bacteria
 				$model = "BacteriaSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'BacteriaComments');
-				$columnText = array("Site Number", "Date", "Sample Number", "Ecoli Raw Count", "Ecoli", "Total Coliform Raw Count", "Total Coliform", "Comments");
+				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Ecoli', 'TotalColiform', 'BacteriaComments');
+				$columnText = array("Site Number", "Date", "Sample Number", "Ecoli", "Total Coliform", "Comments");
 				
 				$this->set("fileTypeName", "Bacteria Samples");
 			}
@@ -279,9 +279,7 @@
 								case "BacteriaSamples":
 									$table->site_location_id = $currentRow[0];
 									$table->Date = $currentRow[1];
-									$table->EcoliRawCount = $currentRow[3];
 									$table->Ecoli = $currentRow[4];
-									$table->TotalColiformRawCount = $currentRow[5];
 									$table->TotalColiform = $currentRow[6];
 									$table->BacteriaComments = $currentRow[7];
 									break;
@@ -367,9 +365,7 @@
 			array("site number", "site_number", "sitenumber"),
 			array("date"),
 			array("sample number", "sample_number", "samplenumber"),
-			array("ecoliraw", "ecolirawcount", "ecoli raw", "ecoli_raw", "ecoli raw count", "ecoli_raw_count"),
 			array("ecoli"),
-			array("total coliform raw", "total_coliform_raw", "totalcoliformraw", "total coliform raw count", "total_coliform_raw_count", "totalcoliformrawcount"),
 			array("total coliform", "total_coliform", "totalcoliform"),
 			array("comments"),
 		);
@@ -497,7 +493,7 @@
 		if (!isset($_POST["entryType"])) {
 			$mode = "submit";
 			//already submitted from entry form
-			if (isset($_POST["ecolirawcount-0"])) { //bacteria
+			if (isset($_POST["ecoli-0"])) { //bacteria
 				$name = "bacteria";
 			}
 			elseif (isset($_POST["phosphorus-0"])) { //nutrient
@@ -524,7 +520,7 @@
 		
 		$modelName = ucfirst($name) . "Samples";
 		if ($name == "bacteria") {
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'BacteriaComments');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Ecoli', 'TotalColiform', 'BacteriaComments');
 		}
 		elseif ($name == "nutrient") {
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'NutrientComments');
@@ -612,7 +608,7 @@
 		$parameter = strtolower($parameter); //shouldn't need to do this, but it'll reduce the risk of someone fucking this up again. Like I did.
 		$value = $this->request->getData('value');
 		
-		if ($parameter == "ecolirawcount" || $parameter == "ecoli" || $parameter == "totalcoliformrawcount" || $parameter == "totalcoliform" || $parameter == "bacteriacomments") { //bacteria
+		if ($parameter == "ecoli" || $parameter == "totalcoliform" || $parameter == "bacteriacomments") { //bacteria
 			$model = "BacteriaSamples";
 		}
 		elseif ($parameter == "nitratenitrite" || $parameter == "phosphorus" || $parameter == "drp" || $parameter == "ammonia" || $parameter == "nutrientcomments") { //nutrient

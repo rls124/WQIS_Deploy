@@ -1,5 +1,4 @@
 <?php
-
     namespace App\Model\Entity;
 
     use Cake\ORM\Entity;
@@ -11,16 +10,13 @@
      * @property int $site_location_id
      * @property \Cake\I18n\FrozenDate $Date
      * @property int $Sample_Number
-     * @property int $EcoliRawCount
      * @property int $Ecoli
-     * @property int $TotalColiformRawCount
      * @property int $TotalColiform
      * @property string $BacteriaComments
      *
      * @property \App\Model\Entity\SiteLocation $site_location
      */
     class BacteriaSample extends Entity {
-
         /**
          * Fields that can be mass assigned using newEntity() or patchEntity().
          *
@@ -34,9 +30,7 @@
             'site_location_id' => true,
             'Date' => true,
             'Sample_Number' => true,
-            'EcoliRawCount' => true,
             'Ecoli' => true,
-            'TotalColiformRawCount' => true,
             'TotalColiform' => true,
             'BacteriaComments' => true,
             'site_location' => true

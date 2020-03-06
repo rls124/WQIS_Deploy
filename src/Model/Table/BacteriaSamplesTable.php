@@ -62,7 +62,7 @@
 						
 						$allNull = true;
 						
-						foreach (['EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform', 'BacteriaComments'] as $key) {
+						foreach (['Ecoli', 'TotalColiform', 'BacteriaComments'] as $key) {
 							if (isset($data[$key]) && $data[$key] != null && $data[$key] != "") {
 								$allNull = false;
 								break;
@@ -81,16 +81,8 @@
                 ->add('Sample_Number', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
             $validator
-                ->integer('EcoliRawCount')
-                ->allowEmpty('EcoliRawCount');
-
-            $validator
                 ->integer('Ecoli')
                 ->allowEmpty('Ecoli');
-
-            $validator
-                ->integer('TotalColiformRawCount')
-                ->allowEmpty('TotalColiformRawCount');
 
             $validator
                 ->integer('TotalColiform')
@@ -119,7 +111,7 @@
 		
 		public function beforeMarshal(Event $event, \ArrayObject $data, \ArrayObject $options) {
 			//treat values like "n/a" or "no data" as null fields (they'll still show as the original values if theres other errors though, to help the user figure out what went wrong)
-			foreach (['EcoliRawCount', 'Ecoli', 'TotalColiformRawCount', 'TotalColiform'] as $key) {
+			foreach (['Ecoli', 'TotalColiform'] as $key) {
 				if (isset($data[$key]) && is_string($data[$key])) {
 					if (in_array(strtolower($data[$key]), ["n/a", "na", "nd", "no data"])) {
 						$data[$key] = null;
