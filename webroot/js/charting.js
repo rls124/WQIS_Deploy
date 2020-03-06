@@ -58,9 +58,7 @@ function buildTemplate() {
 	for (var category in measurementSettings) {
 		templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
 		for (i=0; i<measurementSettings[category].length; i++) {
-			if (measurementSettings[category][i].Visible) {
-				templateContent = templateContent + "<tr><th>" + measurementSettings[category][i].measureName + "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
-			}
+			templateContent = templateContent + "<tr><th>" + measurementSettings[category][i].measureName + "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
 		}
 	}
 	templateContent = templateContent + "</table>";
