@@ -890,6 +890,8 @@ $(document).ready(function () {
 	function resetCharts() {
 		//remove the old chart
 		document.getElementById("chartDiv").innerHTML = "";
+		
+		document.getElementById("chartsNoData").style = "display: block";
 	}
 	
 	function resetTable() {
@@ -900,6 +902,10 @@ $(document).ready(function () {
 		if (sampleTable != null) {
 			sampleTable.parentNode.removeChild(sampleTable);
 		}
+		
+		document.getElementById("tableNoData").style = "display: block";
+		document.getElementById("tableSettings").style = "display: none";
+		document.getElementById("tablePageSelector").style = "display: none";
 	}
 	
 	function resetAll() {
@@ -960,6 +966,7 @@ $(document).ready(function () {
 		
 		if (numPages > 0) { //if there is any data to display
 			document.getElementById("tableNoData").style = "display: none";
+			document.getElementById("chartsNoData").style = "display: none";
 			document.getElementById("tableSettings").style = "display: block";
 			document.getElementById("tablePageSelector").style = "display: block";
 		
@@ -1173,6 +1180,7 @@ $(document).ready(function () {
 		}
 		else {
 			document.getElementById("tableNoData").style = "display: block";
+			document.getElementById("chartsNoData").style = "display: block";
 			document.getElementById("tableSettings").style = "display: none";
 			document.getElementById("tablePageSelector").style = "display: none";
 		}
