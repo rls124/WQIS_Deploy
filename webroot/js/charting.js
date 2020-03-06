@@ -34,41 +34,6 @@ function genericError() {
 	alert("We encountered a problem, try again later");
 }
 
-function buildFields() {
-	for (var category in measurementSettings) {
-		fields.push({
-			name: category + "Date",
-			type: "string",
-			defaultValue: "No Records Found"
-		});
-		
-		for (i=0; i<measurementSettings[category].length; i++) {
-			fields.push({
-				name: measurementSettings[category][i].measureKey,
-				type: "string",
-				defaultValue: "No Data"
-			});
-		}
-	}
-}
-
-function buildTemplate() {
-	//build the table template we use to display all the data associated with a point on the map
-	var templateContent = "<table>";
-	for (var category in measurementSettings) {
-		templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
-		for (i=0; i<measurementSettings[category].length; i++) {
-			templateContent = templateContent + "<tr><th>" + measurementSettings[category][i].measureName + "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
-		}
-	}
-	templateContent = templateContent + "</table>";
-
-	template = {
-		title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
-		content: templateContent
-	};
-};
-
 var template;
 const renderer = {
 	type: "simple",
@@ -161,8 +126,32 @@ $(document).ready(function () {
 		async: false,
 		success: function(response) {
 			measurementSettings = response;
-			buildFields();
-			buildTemplate();
+			//build the table template we use to display all the data associated with a point on the map
+			var templateContent = "<table>";
+			for (var category in measurementSettings) {
+				fields.push({
+					name: category + "Date",
+					type: "string",
+					defaultValue: "No Records Found"
+				});
+		
+				templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
+				for (i=0; i<measurementSettings[category].length; i++) {
+					fields.push({
+						name: measurementSettings[category][i].measureKey,
+						type: "string",
+						defaultValue: "No Data"
+					});
+			
+					templateContent = templateContent + "<tr><th>" + measurementSettings[category][i].measureName + "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
+				}
+			}
+			templateContent = templateContent + "</table>";
+
+			template = {
+				title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
+				content: templateContent
+			};
 		},
 		error: function(response) {
 			alert("Failed");
@@ -334,7 +323,7 @@ $(document).ready(function () {
 	
 	function getVisibleSites() {
 		var groupKey = $("#selectGroupsToShow").val();
-		if (groupKey == "all") {
+		if (groupKey === "all") {
 			return mapData["SiteData"];
 		}
 		
@@ -379,8 +368,8 @@ $(document).ready(function () {
 		for (var i = 0; i < visibleSites.length; i++) {
 			var point = {
 				type: "point",
-				longitude: visibleSites[i]['Longitude'],
-				latitude: visibleSites[i]['Latitude']
+				longitude: visibleSites[i]["Longitude"],
+				latitude: visibleSites[i]["Latitude"]
 			};
 			
 			var pointGraphic = new Graphic({

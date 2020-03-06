@@ -161,8 +161,8 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		<div id="collapseMap" class="panel-collapse collapse show">
 			<div class="panel-body" id="mapContainer">
 				<div id="map"></div>
-				<div class="row">
-					<div class="col-sm">
+				<div>
+					<div>
 						<input type="checkbox" id="watershedsLayer" checked /> Watersheds
 						<input type="checkbox" id="drainsLayer" /> Drains
 						<input type="checkbox" id="riverLayer" /> Rivers/Streams
@@ -173,7 +173,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 						<input type="checkbox" id="wellLayer" /> Wells
 						<input type="checkbox" id="wetlandLayer" /> Wetlands and Deepwater Habitats
 					</div>
-					<div class="col-sm">
+					<div>
 						Use basemap
 						<select id="selectBasemap">
 							<option value="satellite">Satellite</option>
