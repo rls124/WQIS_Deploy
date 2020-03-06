@@ -93,12 +93,16 @@ if ($admin) { ?>
 				'name' => 'fileupload'
 				])
 			?>
-				<div class="row mb-3">
+				<div class="row mb-2">
 					<label class="btn btn-file btn-basic ml-3 mr-1" style="font-size: 12pt; margin-top: 5px;">Choose File <input type="file" name="file" accept=".csv" id="chooseFileButton"> </label>
 
 					<div class="col-sm ml-2 mr-3 mb-1 mt-1" id="FileUploadDiv" style="padding-left: 5px;">
 						<label id="FileUploadLabel" style="font-size: 12pt; margin-top: 8px; color: #919191;"> File Name</label>
 					</div>
+				</div>
+
+				<div class="row center mb-2">
+					<label class="ml-3 mr-1" style="font-size: 12pt; margin-top: 5px;">Overwrite duplicate sample numbers <input type="checkbox" name="overwrite" id="overwrite" value="true"> </label>
 				</div>
 		
                 <div class="row center mb-0">
