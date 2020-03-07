@@ -95,10 +95,7 @@
 			]
 		])->count();
 		
-		$this->response = $this->response->withStringBody(json_encode([$count]));
-		$this->response = $this->response->withType("json");
-		
-		return $this->response;
+		return $this->response->withType("json")->withStringBody(json_encode([$count]));
 	}
 
 	public function tabledata() {
@@ -159,10 +156,7 @@
 			"page" => $pageNum
 		])->order([$sortBy => $sortDirection]);
 		
-		$this->response = $this->response->withStringBody(json_encode([$samples]));
-		$this->response = $this->response->withType("json");
-		
-		return $this->response;
+		return $this->response->withType("json")->withStringBody(json_encode([$samples]));
 	}
 
 	public function uploadlog() {
@@ -321,7 +315,8 @@
 
 							if ($this->$model->save($table)) {
 								$countSuccesses++;
-							} else {
+							}
+							else {
 								$currentRow[] = $table->getErrors();
 								$log[] = $currentRow;
 								$countFails++;
@@ -629,7 +624,7 @@
 			->where(["Sample_Number" => $sampleNumber])
 			->first();
 		//Set the edited field
-		$parameter = $this->request->getData('parameter');
+		$parameter = $this->request->getData("parameter");
 		$sample->$parameter = $value;
 		//Save changes
 		$this->$model->save($sample);
@@ -671,10 +666,7 @@
 			]
 		]);
 		
-		$this->response = $this->response->withStringBody(json_encode($samples));
-		$this->response = $this->response->withType("json");
-		
-		return $this->response;
+		return $this->response->withType("json")->withStringBody(json_encode($samples));
 	}
 
 	public function getmonitoredsites() {
@@ -689,7 +681,6 @@
 				"Site_Number"
 			]
 		]);
-		$this->response->body(json_encode($monitoredSites));
-		return $this->response;
+		return $this->response->withType("json")->withStringBody(json_encode($monitoredSites));
 	}
 }

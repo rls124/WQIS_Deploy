@@ -13,15 +13,9 @@
 	 */
 	class SiteLocationsController extends AppController {
 		public function chartselection() {
-			$this->loadModel("SiteLocations");
 			$this->loadModel("SiteGroups");
-			
-			$siteLocations = $this->SiteLocations->find('all');
-			$siteGroups = $this->SiteGroups->find('all');
-
-			$this->set(compact('siteLocations'));
-			$this->set(compact('siteGroups'));
-			$this->set('_serialize', ['siteLocations']);
+			$siteGroups = $this->SiteGroups->find("all");
+			$this->set(compact("siteGroups"));
 		}
 		
 		public function siteinfo() {
@@ -74,25 +68,25 @@
 		public function fetchsitedata() {
 			$this->render(false);
 			//Check if siteid is set
-			if (!$this->request->getData('siteid')) {
+			if (!$this->request->getData("siteid")) {
 				return;
 			}
-			$siteid = $this->request->getData('siteid');
+			$siteid = $this->request->getData("siteid");
 
 			$site = $this->SiteLocations
-				->find('all')
-				->where(['ID = ' => $siteid])
+				->find("all")
+				->where(["ID" => $siteid])
 				->first();
 
-			$json = json_encode(['sitenumber' => $site->Site_Number,
-				'monitored' => $site->Monitored,
-				'longitude' => $site->Longitude,
-				'latitude' => $site->Latitude,
-				'sitelocation' => $site->Site_Location,
-				'sitename' => $site->Site_Name]);
+			$json = json_encode(["sitenumber" => $site->Site_Number,
+				"monitored" => $site->Monitored,
+				"longitude" => $site->Longitude,
+				"latitude" => $site->Latitude,
+				"sitelocation" => $site->Site_Location,
+				"sitename" => $site->Site_Name]);
 			
 			$this->response = $this->response->withStringBody($json);
-			$this->response = $this->response->withType('json');
+			$this->response = $this->response->withType("json");
 				
 			return $this->response;
 		}
@@ -187,10 +181,7 @@
 					$data = array_merge($data, [$tableNames[$i] => $queryResult]);
 				}
 				
-				$this->response = $this->response->withStringBody(json_encode($data));
-				$this->response = $this->response->withType("json");
-				
-				return $this->response;
+				return $this->response->withType("json")->withStringBody(json_encode($data));
 			}
 		}
 	}
