@@ -40,15 +40,15 @@ function browserDetect() {
 	var upToDate = true;
 	
 	try {
-		var browsers = [['Edge', 18.17763], ['Firefox', 65], ['Chrome', 75], ['OPR', 60]]; //browser name, lowest supported version number
+		var browsers = [["Edg", "Edge", 79], ["Firefox", "Firefox", 65], ["Chrome", "Chrome", 75], ["OPR", "Opera", 60]]; //user agent identifier, browser name, lowest supported version number
 
 		for (var i=0; i<browsers.length; i++) {
 			var browser = browsers[i];
 			
 			if (ua.includes(browser[0])) {
 				var verNum = parseFloat(ua.split(browser[0] + "/")[1].split(" ")[0]);
-				if (verNum < browser[1]) {
-					showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of " + browser[0] + ", or a different browser.");
+				if (verNum < browser[2]) {
+					showError("Your browser is out of date and we cannot guarantee that all website functionality will work as expected. Please consider updating to the latest version of " + browser[1] + ", or a different browser.");
 					upToDate = false;
 					break;
 				}

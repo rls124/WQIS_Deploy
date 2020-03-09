@@ -35,16 +35,6 @@ function genericError() {
 }
 
 var template;
-const renderer = {
-	type: "simple",
-	symbol: {
-		type: "simple-marker",
-		color: "orange",
-		outline: {
-			color: "white"
-		}
-	}
-};
 
 const markerSymbol = {
 	type: "simple-marker",
@@ -350,11 +340,9 @@ $(document).ready(function () {
 		sampleSitesLayer = new FeatureLayer({
 			fields: fields,
 			objectIdField: "ObjectID",
-			geometryType: "point",
 			popupTemplate: template,
 			source: newGraphics,
-			renderer: renderer,
-			id: "sampleSites"
+			id: "sampleSites",
 		});
 	}
 	
@@ -379,15 +367,15 @@ $(document).ready(function () {
 			});
 			
 			pointGraphic.attributes.siteNumber = visibleSites[i]["Site_Number"].toString();
-			if (selected.includes(visibleSites[i]["Site_Number"].toString())) {
+			pointGraphic.attributes.siteName = visibleSites[i]["Site_Name"];
+			pointGraphic.attributes.siteLocation = visibleSites[i]["Site_Location"];
+			
+			if (selected.includes(pointGraphic.attributes.siteNumber)) {
 				pointGraphic.symbol = highlightedMarkerSymbol;
 			}
 			else {
 				pointGraphic.symbol = markerSymbol;
 			}
-			
-			pointGraphic.attributes.siteName = visibleSites[i]["Site_Name"];
-			pointGraphic.attributes.siteLocation = visibleSites[i]["Site_Location"];
 			
 			for (var shortField in measurementSettings) {
 				var field = shortField + "_samples";
@@ -528,7 +516,6 @@ $(document).ready(function () {
 		width: "resolve"
 	});
 	
-	/*
 	var easter_egg = new Konami(function() {
 		//dynamically download the needed code so we don't bog down the 99.9% of users who won't even see this
 		import('/WQIS/js/EEGS.js')
@@ -536,7 +523,6 @@ $(document).ready(function () {
 				module.start();
 			});
 	});
-	*/
 	
 	document.addEventListener("keydown", function(e) {
 		if (e.keyCode === 27) {
