@@ -24,6 +24,18 @@
 			$this->set(compact('SiteLocations'));
 		}
 		
+		public function fetchGroups() {
+			$this->render(false);
+			
+			$groups = $this->SiteGroups->find("all");
+			$json = json_encode($groups);
+			
+			$this->response = $this->response->withStringBody($json);
+			$this->response = $this->response->withType("json");
+
+			return $this->response;
+		}
+		
 		public function fetchgroupdata() {
 			$this->render(false);
 			//Check if groupkey is set

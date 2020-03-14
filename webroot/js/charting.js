@@ -4,55 +4,17 @@ var spinnerInhibited = true; //inhibit this initially so basic setup tasks that 
 $(document).ajaxStart(function() {
 	//check if loading spinner is inhibited first
 	if (!spinnerInhibited) {
-		$('.loadingspinnermain').css('visibility', 'visible');
-		$('body').css('cursor', 'wait');
+		$(".loadingspinnermain").css("visibility", "visible");
+		$("body").css("cursor", "wait");
 	}
 }).ajaxStop(function() {
-    $('.loadingspinnermain').css('visibility', 'hidden');
-    $('body').css('cursor', 'default');
+    $(".loadingspinnermain").css("visibility", "hidden");
+    $("body").css("cursor", "default");
 });
-
-//will be filled in with the contents of the MeasurementSettings table, containing category/name/alias/benchmarks/detection limits for each
-var measurementSettings;
-
-//build the fields object the map uses for the points layer
-var fields = [{
-	name: "ObjectID",
-	type: "oid"
-}, {
-	name: "siteNumber",
-	type: "string"
-}, {
-	name: "siteName",
-	type: "string"
-}, {
-	name: "siteLocation",
-	type: "string"
-}];
 
 function genericError() {
 	alert("We encountered a problem, try again later");
 }
-
-var template;
-
-const markerSymbol = {
-	type: "simple-marker",
-	color: [0, 150, 255],
-	outline: {
-		color: [255, 255, 255],
-		width: 2
-	}
-};
-
-const highlightedMarkerSymbol = {
-	type: "simple-marker",
-	color: [226, 119, 40],
-	outline: {
-		color: [255, 255, 255],
-		width: 2
-	}
-};
 
 const SITE_DATA = "SiteData";
 
@@ -65,12 +27,34 @@ var sortBy = "Date";
 var sortDirection = "Desc";
 var showBenchmarks = true;
 var charts = [];
+var measurementSettings; //will be filled in with the contents of the MeasurementSettings table, containing category/name/alias/benchmarks/detection limits for each
+var groups;
 
 //global variables used by the map
 var mapData;
 var map;
 var view;
+var template;
+var fields = [{ //fields object the map uses for the points layer
+	name: "ObjectID",
+	type: "oid"
+}, {
+	name: "siteNumber",
+	type: "string"
+}, {
+	name: "siteName",
+	type: "string"
+}, {
+	name: "siteLocation",
+	type: "string"
+}];
 var sampleSitesLayer;
+var clickedPoint;
+var selectedPoints = [];
+
+const defaultPointColor = [0,150,255];
+const selectedPointColor = [226, 119, 40];
+const clickedPointColor = [0,255,55];
 
 function ucfirst(str) {
 	//capitalize first character of a string
@@ -108,7 +92,7 @@ $(document).ready(function () {
 		$("#sites").val(preselectSite);
 	}
 	
-	//get benchmarks
+	//get measurementSettings
 	$.ajax({
 		type: "POST",
 		url: "/WQIS/measurement-settings/settingsData",
@@ -144,7 +128,21 @@ $(document).ready(function () {
 			};
 		},
 		error: function(response) {
-			alert("Failed");
+			genericError();
+		}
+	});
+	
+	//get groups
+	$.ajax({
+		type: "POST",
+		url: "/WQIS/site-groups/fetchGroups",
+		datatype: "JSON",
+		async: false,
+		success: function(response) {
+			groups = response;
+		},
+		error: function(response) {
+			genericError();
 		}
 	});
 	
@@ -156,7 +154,7 @@ $(document).ready(function () {
 		"esri/layers/FeatureLayer",
 		"esri/layers/KMLLayer",
 		"esri/widgets/Home",
-		"esri/widgets/Fullscreen"
+		"esri/widgets/Fullscreen",
 	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen) {
 		//fetches site information from the database
 		$.ajax({
@@ -175,51 +173,29 @@ $(document).ready(function () {
 					id: "watersheds"
 				});
 				
-				var drainsLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Bodies_Flowlines_Unclassified_LocalRes/MapServer",
-					id: "drains",
-					visible: false
-				});
-				var riverLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Streams/MapServer",
-					id: "rivers",
-					visible: false
-				});
-				var impairedLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Quality_Impaired_Waters_303d_2016/MapServer",
-					id: "impaired",
-					visible: false
-				});
-				var bodiesLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Lakes/MapServer",
-					id: "bodies",
-					visible: false
-				});
-				var floodLayer = new MapImageLayer({
-					url:"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Floodplains_FIRM/MapServer",
-					id: "floods",
-					visible: false
-				});
-				var damLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/ArcGIS/rest/services/Infrastructure/Dams_IDNR/MapServer",
-					id: "dams",
-					visible: false
-				});
-				var wellLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Wells_IDNR/MapServer",
-					id: "wells",
-					visible: false
-				});
-				var wetlandLayer = new MapImageLayer({
-					url: "https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer",
-					id: "wetlands",
-					visible: false
-				});
+				var urls = [
+					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Bodies_Flowlines_Unclassified_LocalRes/MapServer",
+					"https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Streams/MapServer",
+					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Quality_Impaired_Waters_303d_2016/MapServer",
+					"https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Lakes/MapServer",
+					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Floodplains_FIRM/MapServer",
+					"https://maps.indiana.edu/ArcGIS/rest/services/Infrastructure/Dams_IDNR/MapServer",
+					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Wells_IDNR/MapServer",
+					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer",
+				];
+				
+				var mapLayers = [watershedsLayer];
+				for (i=0; i<urls.length; i++) {
+					mapLayers.push(new MapImageLayer({
+						url: urls[i],
+						visible: false
+					}));
+				}
 				
 				//create the map
 				map = new Map({
 					basemap: "satellite",
-					layers: [watershedsLayer, drainsLayer, riverLayer, impairedLayer, bodiesLayer, floodLayer, damLayer, wellLayer, wetlandLayer],
+					layers: mapLayers
 				});
 				view = new MapView({
 					container: "map",
@@ -230,6 +206,33 @@ $(document).ready(function () {
 				
 				view.when(function() {
 					updateMapPoints(); //build the FeatureLayer and graphics for all our collection sites
+		
+					//highlight points when they're clicked
+					view.on("click", function(event) {
+						view.hitTest(event.screenPoint).then(function(response) {
+							var hitPoint = false; //have we hit a collection site?
+							response.results.forEach(function(graphic) {
+								if (graphic.graphic.ObjectID != null) { //if this is actually a site icon, not a watershed or something
+									clearHighlight();
+									
+									highlightPoint(graphic.graphic);
+									hitPoint = true;
+								}
+							});
+							
+							if (!hitPoint) {
+								//we clicked something other than a collection site, clear the highlight
+								clearHighlight();
+							}
+						});
+					});
+					
+					//unselect when the popup is closed
+					view.popup.watch("visible", function() {
+						if (!view.popup.visible) {
+							clearHighlight();
+						}
+					});
 				});
 				
 				//add home button to return to the default extent
@@ -258,48 +261,47 @@ $(document).ready(function () {
 				//handle the checkboxes that toggle layer visibility
 				var watershedsLayerToggle = document.getElementById("watershedsLayer");
 				watershedsLayerToggle.addEventListener("change", function() {
-					watershedsLayer.visible = watershedsLayerToggle.checked;
+					mapLayers[0].visible = watershedsLayerToggle.checked;
 				});
 				
 				var drainsLayerToggle = document.getElementById("drainsLayer");
 				drainsLayerToggle.addEventListener("change", function() {
-					drainsLayer.visible = drainsLayerToggle.checked;
-					
+					mapLayers[1].visible = drainsLayerToggle.checked;
 				});
 				
 				var riverLayerToggle = document.getElementById("riverLayer");
 				riverLayerToggle.addEventListener("change", function(){
-					riverLayer.visible = riverLayerToggle.checked;
+					mapLayers[2].visible = riverLayerToggle.checked;
 				});
 				
 				var impairedLayerToggle = document.getElementById("impairedLayer");
 				impairedLayerToggle.addEventListener("change", function(){
-					impairedLayer.visible = impairedLayerToggle.checked;
+					mapLayers[3].visible = impairedLayerToggle.checked;
 				});
 				
 				var bodiesLayerToggle = document.getElementById("bodiesLayer");
 				bodiesLayerToggle.addEventListener("change", function(){
-					bodiesLayer.visible = bodiesLayerToggle.checked;
+					mapLayers[4].visible = bodiesLayerToggle.checked;
 				});
 				
 				var floodLayerToggle = document.getElementById("floodLayer");
 				floodLayerToggle.addEventListener("change", function(){
-					floodLayer.visible = floodLayerToggle.checked;
+					mapLayers[5].visible = floodLayerToggle.checked;
 				});
 				
 				var damLayerToggle = document.getElementById("damLayer");
 				damLayerToggle.addEventListener("change", function(){
-					damLayer.visible = damLayerToggle.checked;
+					mapLayers[6].visible = damLayerToggle.checked;
 				});
 				
 				var wellLayerToggle = document.getElementById("wellLayer");
 				wellLayerToggle.addEventListener("change", function(){
-					wellLayer.visible = wellLayerToggle.checked;
+					mapLayers[7].visible = wellLayerToggle.checked;
 				});
 				
 				var wetlandLayerToggle = document.getElementById("wetlandLayer");
 				wetlandLayerToggle.addEventListener("change", function(){
-					wetlandLayer.visible = wetlandLayerToggle.checked;
+					mapLayers[8].visible = wetlandLayerToggle.checked;
 				});
 				
 				//handle the dropdown that allows basemap to be changed
@@ -310,6 +312,25 @@ $(document).ready(function () {
 			}
 		});
 	});
+	
+	function highlightPoint(point) {
+		clickedPoint = point;
+		clickedPoint.symbol.color = clickedPointColor;
+		
+		var newGraphic = clickedPoint.clone();
+		view.graphics.remove(clickedPoint);
+		view.graphics.add(newGraphic);
+	}
+	
+	function clearHighlight() {
+		if (clickedPoint != null) {
+			clickedPoint.symbol.color = defaultPointColor;
+			var newGraphic = clickedPoint.clone();
+			view.graphics.remove(clickedPoint);
+			view.graphics.add(newGraphic);
+			clickedPoint = null;
+		}
+	}
 	
 	function getVisibleSites() {
 		var groupKey = $("#selectGroupsToShow").val();
@@ -330,39 +351,21 @@ $(document).ready(function () {
 	
 	function updateMapPoints() {
 		var FeatureLayer = require("esri/layers/FeatureLayer");
+		var Graphic = require("esri/Graphic");
+		
 		view.graphics.removeAll();
 		
 		var visibleSites = getVisibleSites();
-		
-		var newGraphics = drawPoints(mapData, $("#sites").val(), visibleSites);
-		view.graphics.addMany(newGraphics);
-		
-		sampleSitesLayer = new FeatureLayer({
-			fields: fields,
-			objectIdField: "ObjectID",
-			popupTemplate: template,
-			source: newGraphics,
-			id: "sampleSites",
-		});
-	}
-	
-	function drawPoints(response, selected, visibleSites) {
-		var Graphic = require("esri/Graphic");
-		if (selected == null) {
-			selected = [];
-		}
 		var graphics = [];
 		//add markers to the map at each sites longitude and latitude
-		for (var i = 0; i < visibleSites.length; i++) {
-			var point = {
-				type: "point",
-				longitude: visibleSites[i]["Longitude"],
-				latitude: visibleSites[i]["Latitude"]
-			};
-			
+		for (var i=0; i<visibleSites.length; i++) {
 			var pointGraphic = new Graphic({
-				ObjectID: i,
-				geometry: point,
+					ObjectID: i,
+					geometry: {
+					type: "point",
+					longitude: visibleSites[i]["Longitude"],
+					latitude: visibleSites[i]["Latitude"]
+				},
 				attributes: {}
 			});
 			
@@ -370,24 +373,26 @@ $(document).ready(function () {
 			pointGraphic.attributes.siteName = visibleSites[i]["Site_Name"];
 			pointGraphic.attributes.siteLocation = visibleSites[i]["Site_Location"];
 			
-			if (selected.includes(pointGraphic.attributes.siteNumber)) {
-				pointGraphic.symbol = highlightedMarkerSymbol;
-			}
-			else {
-				pointGraphic.symbol = markerSymbol;
+			pointGraphic.symbol = {
+				type: "simple-marker",
+				color: defaultPointColor,
+				outline: {
+					color: [255,255,255],
+					width: 2
+				}
 			}
 			
 			for (var shortField in measurementSettings) {
 				var field = shortField + "_samples";
 				
-				for (rowNum=0; rowNum<response[field].length; rowNum++) {
-					var siteNumber = response[field][rowNum]["site_location_id"];
+				for (rowNum=0; rowNum<mapData[field].length; rowNum++) {
+					var siteNumber = mapData[field][rowNum]["site_location_id"];
 					if (pointGraphic.attributes.siteNumber == siteNumber) {
-						pointGraphic.attributes[shortField + "Date"] = response[field][rowNum]["Date"].split('T')[0];
+						pointGraphic.attributes[shortField + "Date"] = mapData[field][rowNum]["Date"].split("T")[0];
 						for (z=0; z<measurementSettings[shortField].length; z++) {
 							var key = measurementSettings[shortField][z].measureKey;
-							if (response[field][rowNum][key] !== null) {
-								pointGraphic.attributes[key] = response[field][rowNum][key].toString();
+							if (mapData[field][rowNum][key] !== null) {
+								pointGraphic.attributes[key] = mapData[field][rowNum][key].toString();
 							}
 						}
 						break;
@@ -395,18 +400,108 @@ $(document).ready(function () {
 				}
 			}
 			
+			visibleSites[i].graphic = pointGraphic;
+			
 			graphics.push(pointGraphic);
 		}
 		
-		return graphics;
+		
+		view.graphics.addMany(graphics);
+		
+		sampleSitesLayer = new FeatureLayer({
+			fields: fields,
+			objectIdField: "ObjectID",
+			popupTemplate: template,
+			source: graphics,
+			id: "sampleSites",
+		});
+		
+		//addLabels();
+	}
+	
+	function addLabels() {
+		var LabelClass = require("esri/layers/support/LabelClass");
+		const labels = new LabelClass({
+		  labelExpressionInfo: {
+			  expression: "$feature.siteName"
+		  },
+		  symbol: {
+			type: "text",
+			color: "black",
+			font: {
+				size: 90,
+				family: "Noto Sans"
+			},
+			horizontalAlignment: "left",
+			haloSize: 5,
+			haloColor: "blue"
+			},
+			labelPlacement: "above-right"
+		});
+		
+		sampleSitesLayer.labelingInfo = [labels];
+	}
+	
+	function highlightSelectedPoints() {
+		var points = $("#sites").val();
+		var visiblePoints = getVisibleSites();
+		var graphics = view.graphics._items;
+		
+		//first clear out the existing ones
+		for (i=0; i<selectedPoints.length; i++) {
+			selectedPoints[i].symbol.color = defaultPointColor;
+			
+			var newGraphic = selectedPoints[i].clone();
+			view.graphics.remove(selectedPoints[i]);
+			view.graphics.add(newGraphic);
+		}
+		
+		selectedPoints = [];
+		
+		for (i=0; i<points.length; i++) {
+			//get associated graphic for this point
+			var grphc;
+			for (j=0; j<visiblePoints.length; j++) {
+				if (visiblePoints[j].Site_Number.toString() == points[i]) {
+					grphc = visiblePoints[j].graphic;
+				}
+			}
+			
+			grphc.symbol.color = selectedPointColor;
+		
+			var newGraphic = grphc.clone();
+			view.graphics.remove(grphc);
+			view.graphics.add(newGraphic);
+			
+			selectedPoints.push(newGraphic);
+		}
 	}
 	
 	$("#sites").change(function() {
-		getRange();
-		updateMapPoints();
+		//check if this contains groups or just normal sites
+		var selected = $("#sites").val();
+		var valid = true;
+		for (i=0; i<selected.length; i++) {
+			if (selected[i].startsWith("group")) {
+				valid = false;
+				break;
+			}
+		}
+		if (valid) {
+			getRange();
+			highlightSelectedPoints();
+		}
+		else {
+			alert("Search by group is not yet supported");
+			$("#sites").val(null);
+		}
     });
 	
 	function buildSitesDropdown(sites) {
+		for (i=0; i<groups.length; i++) {
+			$("#sites").append(new Option(groups[i].groupName, "group" + groups[i].groupKey + "all", false, false));
+		}
+		
 		for (i=0; i<sites.length; i++) {
 			$("#sites").append(new Option(sites[i].Site_Number + " " + sites[i].Site_Name, sites[i].Site_Number, false, false));
 		}
@@ -419,6 +514,8 @@ $(document).ready(function () {
 		buildSitesDropdown(getVisibleSites());
 
 		view.popup.close()
+		clickedPoint = null;
+		selectedPoints = [];
 		updateMapPoints();
 		resetAll();
 	});
@@ -491,7 +588,7 @@ $(document).ready(function () {
 		changeMeasures();
 	});
 	
-	document.getElementById('measurementSelect').addEventListener("change", function(){
+	document.getElementById("measurementSelect").addEventListener("change", function() {
 		changeBenchmark();
 	});
 	
@@ -590,7 +687,7 @@ $(document).ready(function () {
 		
 		for (i=0; i<categoryData.length; i++) {
 			//fill in the measurementSelect dropdown
-			var option = document.createElement('option');
+			var option = document.createElement("option");
 			option.value = categoryData[i].measureKey;
 			option.text = categoryData[i]["measureName"];
 			measureSelect.appendChild(option);
@@ -802,14 +899,14 @@ $(document).ready(function () {
 			datatype: "JSON",
 			async: false,
 			data: {
-				'sites': $("#sites").val(),
-				'startDate': $("#startDate").val(),
-				'endDate': $("#endDate").val(),
-				'category': document.getElementById("categorySelect").value,
-				'amountEnter': document.getElementById("amountEnter").value,
-				'overUnderSelect': document.getElementById("overUnderSelect").value,
-				'measurementSearch': document.getElementById("measurementSelect").value,
-				'selectedMeasures': getSelectedMeasures(),
+				"sites": $("#sites").val(),
+				"startDate": $("#startDate").val(),
+				"endDate": $("#endDate").val(),
+				"category": document.getElementById("categorySelect").value,
+				"amountEnter": document.getElementById("amountEnter").value,
+				"overUnderSelect": document.getElementById("overUnderSelect").value,
+				"measurementSearch": document.getElementById("measurementSelect").value,
+				"selectedMeasures": getSelectedMeasures(),
 			},
 			success: function(response) {
 				numResults = response[0];
@@ -1028,11 +1125,11 @@ $(document).ready(function () {
 								}
 							
 								if (admin) {
-									var textDiv = document.createElement('div');
+									var textDiv = document.createElement("div");
 									textDiv.setAttribute("class", "input text");
 									newCell.appendChild(textDiv);
 									
-									var label = document.createElement('label');
+									var label = document.createElement("label");
 									label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
 									label.setAttribute("class", "btn btn-thin inputHide");
 									label.setAttribute("for", key + "-" + i);
@@ -1042,8 +1139,8 @@ $(document).ready(function () {
 										var label = $(this);
 										var input = $("#" + label.attr("for"));
 										input.trigger("click");
-										label.attr("style", 'display: none');
-										input.attr('style', 'display: in-line');
+										label.attr("style", "display: none");
+										input.attr('style', "display: in-line");
 									};
 								
 									textDiv.appendChild(label);
