@@ -28,15 +28,6 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		<div id="searchBox">
 		<fieldset>
 			<h6>Sites:</h6>
-			Show sites from groups
-			<select id="selectGroupsToShow" style="width:100%">
-				<option value="all">All</option>
-				<?php
-				foreach ($siteGroups as $siteGroup) {
-					echo "<option value=\"" . $siteGroup->groupKey . "\">" . $siteGroup->groupName . "</option>";
-				}
-				?>
-			</select>
 			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%"></select>
 		
 			<hr/>
@@ -181,6 +172,11 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 							<option value="osm">Streets</option>
 							<option value="hybrid">Hybrid</option>
 							<option value="terrain">Terrain</option>
+						</select>
+						Show sites from groups
+						<select id="selectGroupsToShow">
+							<option value="all">All</option>
+							
 						</select>
 					</div>
 				</div>

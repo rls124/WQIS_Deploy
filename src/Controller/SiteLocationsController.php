@@ -2,7 +2,6 @@
 	namespace App\Controller;
 
 	use App\Controller\AppController;
-	use Cake\Log\Log;
 	use Cake\Datasource\ConnectionManager;
 	/**
 	 * SiteLocations Controller
@@ -12,10 +11,7 @@
 	 * @method \App\Model\Entity\SiteLocation[] paginate($object = null, array $settings = [])
 	 */
 	class SiteLocationsController extends AppController {
-		public function chartselection() {
-			$this->loadModel("SiteGroups");
-			$siteGroups = $this->SiteGroups->find("all");
-			$this->set(compact("siteGroups"));
+		public function chartselection() { //do nothing, we don't need any data retrieved until the client-side js requests it
 		}
 		
 		public function siteinfo() {

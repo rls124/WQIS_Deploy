@@ -166,6 +166,7 @@ $(document).ready(function () {
 				mapData = response;
 				
 				buildSitesDropdown(mapData["SiteData"]);
+				buildGroupsDropdown();
 				
 				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
 				var watershedsLayer = new KMLLayer({
@@ -504,6 +505,12 @@ $(document).ready(function () {
 		
 		for (i=0; i<sites.length; i++) {
 			$("#sites").append(new Option(sites[i].Site_Number + " " + sites[i].Site_Name, sites[i].Site_Number, false, false));
+		}
+	}
+	
+	function buildGroupsDropdown() {
+		for (i=0; i<groups.length; i++) {
+			$("#selectGroupsToShow").append(new Option(groups[i].groupName, groups[i].groupKey, false, false))
 		}
 	}
 	
