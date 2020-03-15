@@ -37,26 +37,5 @@
 			//Save changes
 			$this->MeasurementSettings->save($settings);
 		}
-		
-		public function settingsData() {
-			$this->render(false);
-			
-			$bacteria = $this->MeasurementSettings->find("all")
-				->where(["Category" => "Bacteria"]);
-				
-			$pesticide = $this->MeasurementSettings->find("all")
-				->where(["Category" => "Pesticide"]);
-				
-			$nutrient = $this->MeasurementSettings->find("all")
-				->where(["Category" => "Nutrient"]);
-				
-			$physical = $this->MeasurementSettings->find("all")
-				->where(["Category" => "Physical"]);
-			
-			$this->response = $this->response->withStringBody(json_encode(["bacteria" => $bacteria, "nutrient" => $nutrient, "pesticide" => $pesticide, "physical" => $physical]));
-			$this->response = $this->response->withType("json");
-		
-			return $this->response;
-		}
 	}
 ?>

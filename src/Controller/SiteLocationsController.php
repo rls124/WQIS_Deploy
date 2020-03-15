@@ -11,7 +11,58 @@
 	 * @method \App\Model\Entity\SiteLocation[] paginate($object = null, array $settings = [])
 	 */
 	class SiteLocationsController extends AppController {
-		public function chartselection() { //do nothing, we don't need any data retrieved until the client-side js requests it
+		public function chartselection() {
+			//do nothing, we don't need any data retrieved until the client-side js requests it
+		}
+		
+		public function chartsInitData() {
+			//get measurementSettings, sites, and groups all in a single query to reduce loading time
+			$this->render(false);
+			$this->loadModel("MeasurementSettings");
+			$this->loadModel("SiteGroups");
+			
+			$bacteriaSettings = $this->MeasurementSettings->find("all")
+				->where(["Category" => "Bacteria"]);
+				
+			$pesticideSettings = $this->MeasurementSettings->find("all")
+				->where(["Category" => "Pesticide"]);
+				
+			$nutrientSettings = $this->MeasurementSettings->find("all")
+				->where(["Category" => "Nutrient"]);
+				
+			$physicalSettings = $this->MeasurementSettings->find("all")
+				->where(["Category" => "Physical"]);
+			
+			$groups = $this->SiteGroups->find("all");
+			
+			//get the sites
+			$sites = $this->SiteLocations->find("all")->order("Site_Number");
+			$connection = ConnectionManager::get("default");
+			
+			$mapData = ["SiteData" => $sites];
+			$tableNames = ["bacteria_samples", "nutrient_samples", "pesticide_samples", "physical_samples"];
+			
+			for ($i=0; $i<sizeof($tableNames); $i++) {
+				$query = "select * from (select site_location_id, max(Date) as maxdate from " .
+					$tableNames[$i] .
+					" group by site_location_id) as x inner join " .
+					$tableNames[$i] .
+					" as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
+					
+				$queryResult = $connection->execute($query)->fetchAll("assoc");
+				$mapData = array_merge($mapData, [$tableNames[$i] => $queryResult]);
+			}
+			
+			$json = json_encode([
+				"settings" => ["bacteria" => $bacteriaSettings, "nutrient" => $nutrientSettings, "pesticide" => $pesticideSettings, "physical" => $physicalSettings],
+				"groups" => $groups,
+				"mapData" => $mapData
+			]);
+			
+			$this->response = $this->response->withStringBody($json);
+			$this->response = $this->response->withType("json");
+		
+			return $this->response;
 		}
 		
 		public function siteinfo() {
@@ -150,34 +201,5 @@
 				->first();
 			//delete the site
 			$this->SiteLocations->delete($site);
-		}
-
-		public function fetchSites() {
-			$this->render(false);
-			
-			$this->loadModel("SiteLocations");
-			
-			if ($this->request->is("POST")) {
-				//get the sites
-				$sites = $this->SiteLocations->find("all")->order("Site_Number");
-
-				$connection = ConnectionManager::get("default");
-				
-				$data = ["SiteData" => $sites];
-				$tableNames = ["bacteria_samples", "nutrient_samples", "pesticide_samples", "physical_samples"];
-				
-				for ($i=0; $i<sizeof($tableNames); $i++) {
-					$query = "select * from (select site_location_id, max(Date) as maxdate from " .
-						$tableNames[$i] .
-						" group by site_location_id) as x inner join " .
-						$tableNames[$i] .
-						" as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
-						
-					$queryResult = $connection->execute($query)->fetchAll("assoc");
-					$data = array_merge($data, [$tableNames[$i] => $queryResult]);
-				}
-				
-				return $this->response->withType("json")->withStringBody(json_encode($data));
-			}
 		}
 	}

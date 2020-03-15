@@ -83,6 +83,19 @@ function benchmarkLine(val, color) {
 	};
 }
 
+//get all data needed for initial page loading
+$.ajax({
+	type: "POST",
+	url: "chartsInitData",
+	datatype: "JSON",
+	async: false,
+	success: function(response) {
+		measurementSettings = response.settings;
+		groups = response.groups;
+		mapData = response.mapData;
+	}
+});
+
 $(document).ready(function () {
 	if (typeof admin == "undefined") {
 		admin = false;
@@ -92,59 +105,32 @@ $(document).ready(function () {
 		$("#sites").val(preselectSite);
 	}
 	
-	//get measurementSettings
-	$.ajax({
-		type: "POST",
-		url: "/WQIS/measurement-settings/settingsData",
-		datatype: "JSON",
-		async: false,
-		success: function(response) {
-			measurementSettings = response;
-			//build the table template we use to display all the data associated with a point on the map
-			var templateContent = "<table>";
-			for (var category in measurementSettings) {
-				fields.push({
-					name: category + "Date",
-					type: "string",
-					defaultValue: "No Records Found"
-				});
-		
-				templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
-				for (i=0; i<measurementSettings[category].length; i++) {
-					fields.push({
-						name: measurementSettings[category][i].measureKey,
-						type: "string",
-						defaultValue: "No Data"
-					});
-			
-					templateContent = templateContent + "<tr><th>" + measurementSettings[category][i].measureName + "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
-				}
-			}
-			templateContent = templateContent + "</table>";
-
-			template = {
-				title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
-				content: templateContent
-			};
-		},
-		error: function(response) {
-			genericError();
-		}
-	});
+	//build the table template we use to display all the data associated with a point on the map
+	var templateContent = "<table>";
+	for (var category in measurementSettings) {
+		fields.push({
+			name: category + "Date",
+			type: "string",
+			defaultValue: "No Records Found"
+		});
 	
-	//get groups
-	$.ajax({
-		type: "POST",
-		url: "/WQIS/site-groups/fetchGroups",
-		datatype: "JSON",
-		async: false,
-		success: function(response) {
-			groups = response;
-		},
-		error: function(response) {
-			genericError();
+		templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
+		for (i=0; i<measurementSettings[category].length; i++) {
+			fields.push({
+				name: measurementSettings[category][i].measureKey,
+				type: "string",
+				defaultValue: "No Data"
+			});
+	
+			templateContent = templateContent + "<tr><th>" + measurementSettings[category][i].measureName + "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
 		}
-	});
+	}
+	templateContent = templateContent + "</table>";
+	
+	template = {
+		title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
+		content: templateContent
+	};
 	
 	//map code
 	require([
@@ -156,180 +142,168 @@ $(document).ready(function () {
 		"esri/widgets/Home",
 		"esri/widgets/Fullscreen",
 	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen) {
-		//fetches site information from the database
-		$.ajax({
-			type: "POST",
-			url: "fetchSites",
-			datatype: "JSON",
-			async: false,
-			success: function(response) {
-				mapData = response;
-				
-				buildSitesDropdown(mapData["SiteData"]);
-				buildGroupsDropdown();
-				
-				var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
-				var watershedsLayer = new KMLLayer({
-					url: kmlurl,
-					id: "watersheds"
-				});
-				
-				var urls = [
-					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Bodies_Flowlines_Unclassified_LocalRes/MapServer",
-					"https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Streams/MapServer",
-					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Quality_Impaired_Waters_303d_2016/MapServer",
-					"https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Lakes/MapServer",
-					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Floodplains_FIRM/MapServer",
-					"https://maps.indiana.edu/ArcGIS/rest/services/Infrastructure/Dams_IDNR/MapServer",
-					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Wells_IDNR/MapServer",
-					"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer",
-				];
-				
-				var mapLayers = [watershedsLayer];
-				for (i=0; i<urls.length; i++) {
-					mapLayers.push(new MapImageLayer({
-						url: urls[i],
-						visible: false
-					}));
-				}
-				
-				//create the map
-				map = new Map({
-					basemap: "satellite",
-					layers: mapLayers
-				});
-				view = new MapView({
-					container: "map",
-					center: [-85, 41],
-					zoom: 8,
-					map: map
-				});
-				
-				view.when(function() {
-					updateMapPoints(); //build the FeatureLayer and graphics for all our collection sites
+		buildSitesDropdown(mapData["SiteData"]);
+		buildGroupsDropdown();
 		
-					//highlight points when they're clicked
-					view.on("click", function(event) {
-						view.hitTest(event.screenPoint).then(function(response) {
-							var hitPoint = false; //have we hit a collection site?
-							response.results.forEach(function(graphic) {
-								if (graphic.graphic.ObjectID != null) { //if this is actually a site icon, not a watershed or something
-									clearHighlight();
-									
-									highlightPoint(graphic.graphic);
-									hitPoint = true;
-								}
-							});
-							
-							if (!hitPoint) {
-								//we clicked something other than a collection site, clear the highlight
-								clearHighlight();
-							}
-						});
-					});
-					
-					//unselect when the popup is closed
-					view.popup.watch("visible", function() {
-						if (!view.popup.visible) {
+		var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
+		var watershedsLayer = new KMLLayer({
+			url: kmlurl,
+			id: "watersheds"
+		});
+		
+		var urls = [
+			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Bodies_Flowlines_Unclassified_LocalRes/MapServer",
+			"https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Streams/MapServer",
+			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Quality_Impaired_Waters_303d_2016/MapServer",
+			"https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Lakes/MapServer",
+			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Floodplains_FIRM/MapServer",
+			"https://maps.indiana.edu/ArcGIS/rest/services/Infrastructure/Dams_IDNR/MapServer",
+			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Wells_IDNR/MapServer",
+			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer",
+		];
+		
+		var mapLayers = [watershedsLayer];
+		for (i=0; i<urls.length; i++) {
+			mapLayers.push(new MapImageLayer({
+				url: urls[i],
+				visible: false
+			}));
+		}
+		
+		//create the map
+		map = new Map({
+			basemap: "satellite",
+			layers: mapLayers
+		});
+		view = new MapView({
+			container: "map",
+			center: [-85, 41],
+			zoom: 8,
+			map: map
+		});
+		
+		view.when(function() {
+			updateMapPoints(); //build the FeatureLayer and graphics for all our collection sites
+
+			//highlight points when they're clicked
+			view.on("click", function(event) {
+				view.hitTest(event.screenPoint).then(function(response) {
+					var hitPoint = false; //have we hit a collection site?
+					response.results.forEach(function(graphic) {
+						if (graphic.graphic.ObjectID != null) { //if this is actually a site icon, not a watershed or something
 							clearHighlight();
+							
+							highlightPoint(graphic.graphic);
+							hitPoint = true;
 						}
 					});
-				});
-				
-				//add home button to return to the default extent
-				var homeButton = new Home({
-					view: view
-				});
-				view.ui.add(homeButton, "top-left");
-				
-				//add fullscreen button
-				var fullscreenButton = new Fullscreen({
-					view: view
-				});
-				view.ui.add(fullscreenButton, "bottom-left");
-				
-				//dock the popup permanently to the bottom right, so its not hidden if the user pans away from that point on the map
-				view.popup = {
-					dockEnabled: true,
-					dockOptions: {
-						//disables the dock button from the popup
-						buttonEnabled: false,
-						breakpoint: false,
-						position: "bottom-right"
+										
+					if (!hitPoint) {
+						//we clicked something other than a collection site, clear the highlight
+						clearHighlight();
 					}
-				};
+				});
+			});
+					
+			//unselect when the popup is closed
+			view.popup.watch("visible", function() {
+				if (!view.popup.visible) {
+					clearHighlight();
+				}
+			});
+		});
 		
-				//handle the checkboxes that toggle layer visibility
-				var watershedsLayerToggle = document.getElementById("watershedsLayer");
-				watershedsLayerToggle.addEventListener("change", function() {
-					mapLayers[0].visible = watershedsLayerToggle.checked;
-				});
-				
-				var drainsLayerToggle = document.getElementById("drainsLayer");
-				drainsLayerToggle.addEventListener("change", function() {
-					mapLayers[1].visible = drainsLayerToggle.checked;
-				});
-				
-				var riverLayerToggle = document.getElementById("riverLayer");
-				riverLayerToggle.addEventListener("change", function(){
-					mapLayers[2].visible = riverLayerToggle.checked;
-				});
-				
-				var impairedLayerToggle = document.getElementById("impairedLayer");
-				impairedLayerToggle.addEventListener("change", function(){
-					mapLayers[3].visible = impairedLayerToggle.checked;
-				});
-				
-				var bodiesLayerToggle = document.getElementById("bodiesLayer");
-				bodiesLayerToggle.addEventListener("change", function(){
-					mapLayers[4].visible = bodiesLayerToggle.checked;
-				});
-				
-				var floodLayerToggle = document.getElementById("floodLayer");
-				floodLayerToggle.addEventListener("change", function(){
-					mapLayers[5].visible = floodLayerToggle.checked;
-				});
-				
-				var damLayerToggle = document.getElementById("damLayer");
-				damLayerToggle.addEventListener("change", function(){
-					mapLayers[6].visible = damLayerToggle.checked;
-				});
-				
-				var wellLayerToggle = document.getElementById("wellLayer");
-				wellLayerToggle.addEventListener("change", function(){
-					mapLayers[7].visible = wellLayerToggle.checked;
-				});
-				
-				var wetlandLayerToggle = document.getElementById("wetlandLayer");
-				wetlandLayerToggle.addEventListener("change", function(){
-					mapLayers[8].visible = wetlandLayerToggle.checked;
-				});
-				
-				//handle the dropdown that allows basemap to be changed
-				var basemapSelect = document.getElementById("selectBasemap");
-				basemapSelect.addEventListener("change", function() {
-					map.basemap = basemapSelect.value;
-				});
+		//add home button to return to the default extent
+		var homeButton = new Home({
+			view: view
+		});
+		view.ui.add(homeButton, "top-left");
+		
+		//add fullscreen button
+		var fullscreenButton = new Fullscreen({
+			view: view
+		});
+		view.ui.add(fullscreenButton, "bottom-left");
+		
+		//dock the popup permanently to the bottom right, so its not hidden if the user pans away from that point on the map
+		view.popup = {
+			dockEnabled: true,
+			dockOptions: {
+				//disables the dock button from the popup
+				buttonEnabled: false,
+				breakpoint: false,
+				position: "bottom-right"
 			}
+		};
+		
+		//handle the checkboxes that toggle layer visibility
+		var watershedsLayerToggle = document.getElementById("watershedsLayer");
+		watershedsLayerToggle.addEventListener("change", function() {
+			mapLayers[0].visible = watershedsLayerToggle.checked;
+		});
+		
+		var drainsLayerToggle = document.getElementById("drainsLayer");
+		drainsLayerToggle.addEventListener("change", function() {
+			mapLayers[1].visible = drainsLayerToggle.checked;
+		});
+		
+		var riverLayerToggle = document.getElementById("riverLayer");
+		riverLayerToggle.addEventListener("change", function(){
+			mapLayers[2].visible = riverLayerToggle.checked;
+		});
+		
+		var impairedLayerToggle = document.getElementById("impairedLayer");
+		impairedLayerToggle.addEventListener("change", function(){
+			mapLayers[3].visible = impairedLayerToggle.checked;
+		});
+		
+		var bodiesLayerToggle = document.getElementById("bodiesLayer");
+		bodiesLayerToggle.addEventListener("change", function(){
+			mapLayers[4].visible = bodiesLayerToggle.checked;
+		});
+		
+		var floodLayerToggle = document.getElementById("floodLayer");
+		floodLayerToggle.addEventListener("change", function(){
+			mapLayers[5].visible = floodLayerToggle.checked;
+		});
+		
+		var damLayerToggle = document.getElementById("damLayer");
+		damLayerToggle.addEventListener("change", function(){
+			mapLayers[6].visible = damLayerToggle.checked;
+		});
+		
+		var wellLayerToggle = document.getElementById("wellLayer");
+		wellLayerToggle.addEventListener("change", function(){
+			mapLayers[7].visible = wellLayerToggle.checked;
+		});
+		
+		var wetlandLayerToggle = document.getElementById("wetlandLayer");
+		wetlandLayerToggle.addEventListener("change", function(){
+			mapLayers[8].visible = wetlandLayerToggle.checked;
+		});
+		
+		//handle the dropdown that allows basemap to be changed
+		var basemapSelect = document.getElementById("selectBasemap");
+		basemapSelect.addEventListener("change", function() {
+			map.basemap = basemapSelect.value;
 		});
 	});
 	
+	function setColor(point, color) {
+		point.symbol.color = color;
+		
+		view.graphics.remove(point);
+		view.graphics.add(point);
+	}
+	
 	function highlightPoint(point) {
 		clickedPoint = point;
-		clickedPoint.symbol.color = clickedPointColor;
-		
-		var newGraphic = clickedPoint.clone();
-		view.graphics.remove(clickedPoint);
-		view.graphics.add(newGraphic);
+		setColor(clickedPoint, clickedPointColor)
 	}
 	
 	function clearHighlight() {
 		if (clickedPoint != null) {
-			clickedPoint.symbol.color = defaultPointColor;
-			var newGraphic = clickedPoint.clone();
-			view.graphics.remove(clickedPoint);
-			view.graphics.add(newGraphic);
-			clickedPoint = null;
+			setColor(clickedPoint, defaultPointColor);
 		}
 	}
 	
@@ -406,7 +380,6 @@ $(document).ready(function () {
 			graphics.push(pointGraphic);
 		}
 		
-		
 		view.graphics.addMany(graphics);
 		
 		sampleSitesLayer = new FeatureLayer({
@@ -416,28 +389,26 @@ $(document).ready(function () {
 			source: graphics,
 			id: "sampleSites",
 		});
-		
-		//addLabels();
 	}
 	
 	function addLabels() {
 		var LabelClass = require("esri/layers/support/LabelClass");
 		const labels = new LabelClass({
-		  labelExpressionInfo: {
-			  expression: "$feature.siteName"
-		  },
-		  symbol: {
-			type: "text",
-			color: "black",
-			font: {
-				size: 90,
-				family: "Noto Sans"
+			labelExpressionInfo: {
+				expression: "$feature.siteName"
 			},
-			horizontalAlignment: "left",
-			haloSize: 5,
-			haloColor: "blue"
+			symbol: {
+				type: "text",
+				color: "black",
+				font: {
+					size: 90,
+					font: "Playfair Display",
+				},
+				horizontalAlignment: "left",
+				haloSize: 5,
+				haloColor: "blue"
 			},
-			labelPlacement: "above-right"
+			labelPlacement: "above-center"
 		});
 		
 		sampleSitesLayer.labelingInfo = [labels];
@@ -446,15 +417,10 @@ $(document).ready(function () {
 	function highlightSelectedPoints() {
 		var points = $("#sites").val();
 		var visiblePoints = getVisibleSites();
-		var graphics = view.graphics._items;
 		
 		//first clear out the existing ones
 		for (i=0; i<selectedPoints.length; i++) {
-			selectedPoints[i].symbol.color = defaultPointColor;
-			
-			var newGraphic = selectedPoints[i].clone();
-			view.graphics.remove(selectedPoints[i]);
-			view.graphics.add(newGraphic);
+			setColor(selectedPoints[i], defaultPointColor);
 		}
 		
 		selectedPoints = [];
@@ -464,17 +430,11 @@ $(document).ready(function () {
 			var grphc;
 			for (j=0; j<visiblePoints.length; j++) {
 				if (visiblePoints[j].Site_Number.toString() == points[i]) {
-					grphc = visiblePoints[j].graphic;
+					setColor(visiblePoints[j].graphic, selectedPointColor);
+					selectedPoints.push(visiblePoints[j].graphic);
+					break;
 				}
 			}
-			
-			grphc.symbol.color = selectedPointColor;
-		
-			var newGraphic = grphc.clone();
-			view.graphics.remove(grphc);
-			view.graphics.add(newGraphic);
-			
-			selectedPoints.push(newGraphic);
 		}
 	}
 	
@@ -790,6 +750,10 @@ $(document).ready(function () {
 	
 	$("#updateButton").click(function() {
 		updateAll();
+	});
+	
+	$("#testButton").click(function() {
+		addLabels();
 	});
 	
 	function updateAll() {
