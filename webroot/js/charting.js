@@ -29,6 +29,7 @@ var showBenchmarks = true;
 var charts = [];
 var measurementSettings; //will be filled in with the contents of the MeasurementSettings table, containing category/name/alias/benchmarks/detection limits for each
 var groups;
+var advancedSiteSearch = false;
 
 //global variables used by the map
 var mapData;
@@ -419,17 +420,16 @@ $(document).ready(function () {
 		var visiblePoints = getVisibleSites();
 		
 		//first clear out the existing ones
-		for (i=0; i<selectedPoints.length; i++) {
-			setColor(selectedPoints[i], defaultPointColor);
+		for (var point of selectedPoints) {
+			setColor(point, defaultPointColor);
 		}
 		
 		selectedPoints = [];
 		
 		for (i=0; i<points.length; i++) {
 			//get associated graphic for this point
-			var grphc;
 			for (j=0; j<visiblePoints.length; j++) {
-				if (visiblePoints[j].Site_Number.toString() == points[i]) {
+				if (visiblePoints[j].Site_Number.toString() === points[i]) {
 					setColor(visiblePoints[j].graphic, selectedPointColor);
 					selectedPoints.push(visiblePoints[j].graphic);
 					break;
@@ -438,46 +438,51 @@ $(document).ready(function () {
 		}
 	}
 	
-	$("#sites").change(function() {
-		//check if this contains groups or just normal sites
-		var selected = $("#sites").val();
-		var valid = true;
-		for (i=0; i<selected.length; i++) {
-			if (selected[i].startsWith("group")) {
-				valid = false;
-				break;
-			}
-		}
-		if (valid) {
-			getRange();
-			highlightSelectedPoints();
+	$("#searchGroupsDropdown").change(function() {
+		var selected = $("#searchGroupsDropdown").val();
+		
+		if (selected == "") {
+			//reset
+			$("#sites").val(null).trigger("change");
 		}
 		else {
-			alert("Search by group is not yet supported");
-			$("#sites").val(null);
+			//get all the sites that are in this group
+			var inGroup = [];
+			for (var site of mapData.SiteData) {
+				if (site.groups.split(",").includes(selected)) {
+					//select it in the sites dropdown
+					inGroup.push(site.Site_Number);
+				}
+			}
+			$("#sites").val(inGroup).trigger("change");
 		}
+	});
+	
+	$("#sites").change(function() {
+		getRange();
+		highlightSelectedPoints();
     });
 	
 	function buildSitesDropdown(sites) {
-		for (i=0; i<groups.length; i++) {
-			$("#sites").append(new Option(groups[i].groupName, "group" + groups[i].groupKey + "all", false, false));
+		$("#searchGroupsDropdown").empty();
+		$("#searchGroupsDropdown").append(new Option("select an option", "", false, false));
+		for (var group of groups) {
+			$("#searchGroupsDropdown").append(new Option(group.groupName, group.groupKey, false, false));
 		}
 		
-		for (i=0; i<sites.length; i++) {
-			$("#sites").append(new Option(sites[i].Site_Number + " " + sites[i].Site_Name, sites[i].Site_Number, false, false));
+		$("#sites").empty();
+		for (var site of sites) {
+			$("#sites").append(new Option(site.Site_Number + " " + site.Site_Name, site.Site_Number, false, false));
 		}
 	}
 	
 	function buildGroupsDropdown() {
-		for (i=0; i<groups.length; i++) {
-			$("#selectGroupsToShow").append(new Option(groups[i].groupName, groups[i].groupKey, false, false))
+		for (var group of groups) {
+			$("#selectGroupsToShow").append(new Option(group.groupName, group.groupKey, false, false))
 		}
 	}
 	
 	$("#selectGroupsToShow").change(function() {
-		//remove all existing options from the dropdown
-		$("#sites").empty();
-		
 		buildSitesDropdown(getVisibleSites());
 
 		view.popup.close()
@@ -495,8 +500,8 @@ $(document).ready(function () {
 	
 	$("#allCheckbox").change(function() {
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
-		for (i=0; i<checkboxList.length; i++) {
-			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
+		for (var chk of checkboxList) {
+			chk.checked = document.getElementById("allCheckbox").checked;
 		}
 	});
 	
@@ -594,6 +599,19 @@ $(document).ready(function () {
 			closeSearchSidebar();
 		}
 	}, false);
+	
+	$("#advancedSitesButton").click(function () {
+		advancedSiteSearch = !advancedSiteSearch;
+		
+		if (advancedSiteSearch) {
+			document.getElementById("advancedSiteSearchContainerTop").style.display = "block";
+			document.getElementById("advancedSiteSearchContainerBottom").style.display = "block";
+		}
+		else {
+			document.getElementById("advancedSiteSearchContainerTop").style.display = "none";
+			document.getElementById("advancedSiteSearchContainerBottom").style.display = "none";
+		}
+	});
 	
 	$("#exportBtn").click(function () {
 		var startDate = $("#startDate").val();
@@ -752,10 +770,6 @@ $(document).ready(function () {
 		updateAll();
 	});
 	
-	$("#testButton").click(function() {
-		addLabels();
-	});
-	
 	function updateAll() {
 		//validation
 		//check that, if there is something in amountEnter, a measure is also selected
@@ -878,6 +892,7 @@ $(document).ready(function () {
 				"overUnderSelect": document.getElementById("overUnderSelect").value,
 				"measurementSearch": document.getElementById("measurementSelect").value,
 				"selectedMeasures": getSelectedMeasures(),
+				"aggregate": document.getElementById("aggregateGroup").checked
 			},
 			success: function(response) {
 				numResults = response[0];
@@ -1001,9 +1016,15 @@ $(document).ready(function () {
 		var measurementSearch = document.getElementById("measurementSelect").value;
 		var numRows = document.getElementById("numRowsDropdown").value;
 		var selectedMeasures = getSelectedMeasures();
+		var aggregateMode = document.getElementById("aggregateGroup").checked;
 		
 		//set up the column names and IDs to actually display
-		var columns = ["Site ID", "Date", "Sample Number"];
+		if (!aggregateMode) {
+			var columns = ["Site ID", "Date", "Sample Number"];
+		}
+		else {
+			var columns = ["Date"];
+		}
 		for (i=0; i<selectedMeasures.length; i++) {
 			//get index of this measure so we can find its printable name
 			for (j=0; j<measurementSettings[category].length; j++) {
@@ -1013,10 +1034,14 @@ $(document).ready(function () {
 				}
 			}
 		}
-		columns.push("Comments");
-		var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
-		
-		columnIDs.push(ucfirst(category) + "Comments");
+		if (!aggregateMode) {
+			columns.push("Comments");
+			var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
+			columnIDs.push(ucfirst(category) + "Comments");
+		}
+		else {
+			var columnIDs = ((["Date"]).concat(selectedMeasures));
+		}
 		
 		if (numPages > 0) { //if there is any data to display
 			document.getElementById("tableNoData").style = "display: none";
@@ -1041,7 +1066,8 @@ $(document).ready(function () {
 					"numRows": numRows,
 					"pageNum": tablePage,
 					"sortBy": sortBy,
-					"sortDirection": sortDirection
+					"sortDirection": sortDirection,
+					"aggregate": aggregateMode
 				},
 				success: function(response) {
 					//create the blank table
@@ -1075,7 +1101,7 @@ $(document).ready(function () {
 						
 						newCell.onclick = function() {setSort(event);};
 					}
-					if (admin) {
+					if (admin && !aggregateMode) {
 						var actionsCell = document.createElement("th");
 						actionsCell.innerText = "Actions";
 						tableHeader.appendChild(actionsCell);
@@ -1095,7 +1121,7 @@ $(document).ready(function () {
 									value = value.split("T")[0];
 								}
 							
-								if (admin) {
+								if (admin && !aggregateMode) {
 									var textDiv = document.createElement("div");
 									textDiv.setAttribute("class", "input text");
 									newCell.appendChild(textDiv);
@@ -1142,11 +1168,11 @@ $(document).ready(function () {
 										$.ajax({
 											type: "POST",
 											url: "/WQIS/generic-samples/updatefield",
-											datatype: 'JSON',
+											datatype: "JSON",
 											data: {
-												'sampleNumber': sampleNumber,
-												'parameter': parameter,
-												'value': value
+												"sampleNumber": sampleNumber,
+												"parameter": parameter,
+												"value": value
 											},
 											success: function () {
 												var label = $('label[for="' + input.attr('id') + '"');
@@ -1180,7 +1206,7 @@ $(document).ready(function () {
 							}
 						});
 						
-						if (admin) {
+						if (admin && !aggregateMode) {
 							//add the deletion button
 							var newCell = newRow.insertCell();
 							var delButton = document.createElement("span");
@@ -1203,10 +1229,10 @@ $(document).ready(function () {
 										$.ajax({
 											type: "POST",
 											url: "/WQIS/generic-samples/deleteRecord",
-											datatype: 'JSON',
+											datatype: "JSON",
 											data: {
-												'sampleNumber': sampleNumber,
-												'type': category
+												"sampleNumber": sampleNumber,
+												"type": category
 											},
 											success: function () {
 												//remove the row from view
@@ -1253,6 +1279,14 @@ $(document).ready(function () {
 		
 		return measures;
 	}
+	
+	function average(values) {
+		var total = 0;
+		for (i=0; i<values.length; i++) {
+			total = total + values[i];
+		}
+		return (total/values.length);
+	}
 
 	function getGraphData() {
 		charts = [];
@@ -1270,7 +1304,7 @@ $(document).ready(function () {
 		var chartDiv = document.getElementById("chartDiv");
 		var nMeasures = measures.length;
 		
-		if (chartsDisplayMode == "in-line") {
+		if (chartsDisplayMode === "in-line") {
 			for (var k=0; k<nMeasures; k++) {
 				var newCanvasContainer = document.createElement("div");
 				newCanvasContainer.style = "width: 80%; text-align: center; margin: auto";
@@ -1314,6 +1348,8 @@ $(document).ready(function () {
 			chartDiv.appendChild(chartsGrid);
 		}
 		
+		var aggregateMode = document.getElementById("aggregateGroup").checked;
+		
 		$.ajax({
 			type: "POST",
 			url: "/WQIS/generic-samples/graphdata",
@@ -1327,115 +1363,178 @@ $(document).ready(function () {
 				"category": category,
 				"amount": amountEnter,
 				"overUnderSelect": overUnderSelect,
-				"measurementSearch": measurementSearch
+				"measurementSearch": measurementSearch,
+				"aggregate": aggregateMode
 			},
 			success: function(response) {
-				var displayLine = (document.getElementById("chartType").value == "line");
-				
-				for (k=0; k<measures.length; k++) {
-					var datasets = [];
+				if (!aggregateMode) {
+					//individual mode
+					for (k=0; k<measures.length; k++) {
+						var datasets = [];
 
-					for (i=0; i<sites.length; i++) {
-						var newDataset = {
-							label: sites[i],
-							borderColor: selectColor(i, sites.length),
+						for (i=0; i<sites.length; i++) {
+							var newDataset = {
+								label: sites[i],
+								borderColor: selectColor(i, sites.length),
+								data: [],
+								lineTension: 0,
+								fill: false,
+								borderWidth: 1.5,
+								showLine: (document.getElementById("chartType").value === "line"),
+								spanGaps: true,
+							};
+							
+							datasets.push(newDataset);
+						}
+						
+						var labels = [];
+						for (i=0; i<response.length; i++) {
+							var newRow = [];
+							var date = response[i].Date.split("T")[0];
+							newRow.t = date;
+							newRow.y = response[i][measures[k]];
+							
+							for (j=0; j<sites.length; j++) {
+								if (response[i].site == sites[j]) {
+									datasets[j].data.push(newRow);
+									break;
+								}
+							}
+							
+							//make sure there isn't already a label created for this date, or things break in weird ways
+							var found = false;
+							for (j=0; j<labels.length; j++) {
+								if (labels[j] === date) {
+									found = true;
+									break;
+								}
+							}
+							
+							if (!found) {
+								labels.push(date);
+							}
+						}
+						
+						buildChart(k, category, measures, labels, datasets);
+					}
+				}
+				else {
+					//aggregate mode
+					for (k=0; k<measures.length; k++) {
+						var datasets = [];
+
+						for (i=0; i<sites.length; i++) {
+							var newDataset = {
+								label: sites[i],
+								borderColor: selectColor(i, sites.length),
+								data: [],
+								lineTension: 0,
+								fill: false,
+								borderWidth: 1.5,
+								showLine: (document.getElementById("chartType").value === "line"),
+								spanGaps: true,
+							};
+		
+							datasets.push(newDataset);
+						}
+	
+						datasets = [{
+							label: "Average",
+							borderColor: selectColor(0, 1),
 							data: [],
 							lineTension: 0,
 							fill: false,
 							borderWidth: 1.5,
-							showLine: displayLine,
+							showLine: (document.getElementById("chartType").value === "line"),
 							spanGaps: true,
-						};
-						
-						datasets.push(newDataset);
-					}
-					
-					var labels = [];
-					for (i=0; i<response.length; i++) {
-						var newRow = [];
-						var date = response[i].Date.split("T")[0];
-						newRow.t = date;
-						newRow.y = response[i][measures[k]];
-						
-						for (j=0; j<sites.length; j++) {
-							if (response[i].site == sites[j]) {
-								datasets[j].data.push(newRow);
-								break;
+						}];
+	
+						var labels = [];
+						for (i=0; i<response.length; i++) {
+							var newRow = [];
+							var date = response[i].Date.split("T")[0];
+							newRow.t = date;
+							newRow.y = response[i][measures[k]];
+		
+							datasets[0].data.push(newRow);
+		
+							//make sure there isn't already a label created for this date, or things break in weird ways
+							var found = false;
+							for (j=0; j<labels.length; j++) {
+								if (labels[j] === date) {
+									found = true;
+									break;
+								}
+							}
+		
+							if (!found) {
+								labels.push(date);
 							}
 						}
-						
-						//make sure there isn't already a label created for this date, or things break in weird ways
-						var found = false;
-						for (j=0; j<labels.length; j++) {
-							if (labels[j] === date) {
-								found = true;
-								break;
-							}
-						}
-						
-						if (!found) {
-							labels.push(date);
-						}
-					}
-					
-					var ctx = document.getElementById("chart-" + k).getContext("2d");
-					
-					var measureKey;
-					//get index of this measure so we can find its printable name
-					var measureIndex
-					for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
-						if (measurementSettings[category][measureIndex].measureKey === measures[k]) {
-							measureKey = measurementSettings[category][measureIndex].measureName;
-							break;
-						}
-					}
-					
-					var benchmarkAnnotation = {};
-					if (showBenchmarks) {
-						var benchmarkMax = measurementSettings[category][measureIndex].benchmarkMaximum;
-						var benchmarkMin = measurementSettings[category][measureIndex].benchmarkMinimum;
-						var benchmarkLines = [];
-						
-						if (benchmarkMax != null) {
-							benchmarkLines.push(benchmarkLine(benchmarkMax, "red"));
-						}
-						if (benchmarkMin != null) {
-							benchmarkLines.push(benchmarkLine(benchmarkMin, "blue"));
-						}
-						benchmarkAnnotation = {annotations: benchmarkLines};
-					}
-					
-					charts.push(new Chart(ctx, {
-						type: "line",
-						data: {
-							labels: labels,
-							datasets: datasets
-						},
-						options: {
-							annotation: benchmarkAnnotation,
-							scales: {
-								yAxes: [{
-									scaleLabel: {
-										display: true,
-										labelString: measureKey
-									}
-								}]
-							},
-							pan: {
-								enabled: true,
-								mode: "x",
-								speed: 100
-							},
-							zoom: {
-								enabled: true,         
-								mode: "x",
-							},
-							responsive: true
-						}
-					}));
+	
+						buildChart(k, category, measures, labels, datasets);
+					}	
 				}
 			}
 		});
+	}
+	
+	function buildChart(k, category, measures, labels, datasets) {
+		var ctx = document.getElementById("chart-" + k).getContext("2d");
+	
+		var measureKey;
+		//get index of this measure so we can find its printable name
+		var measureIndex;
+		for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
+			if (measurementSettings[category][measureIndex].measureKey === measures[k]) {
+				measureKey = measurementSettings[category][measureIndex].measureName;
+				break;
+			}
+		}
+	
+		var benchmarkAnnotation = {};
+		if (showBenchmarks) {
+			var benchmarkMax = measurementSettings[category][measureIndex].benchmarkMaximum;
+			var benchmarkMin = measurementSettings[category][measureIndex].benchmarkMinimum;
+			var benchmarkLines = [];
+
+			if (benchmarkMax != null) {
+				benchmarkLines.push(benchmarkLine(benchmarkMax, "red"));
+			}
+			if (benchmarkMin != null) {
+				benchmarkLines.push(benchmarkLine(benchmarkMin, "blue"));
+			}
+			benchmarkAnnotation = {annotations: benchmarkLines};
+		}
+		
+		charts.push(new Chart(ctx, {
+			type: "line",
+			data: {
+				labels: labels,
+				datasets: datasets
+			},
+			options: {
+				annotation: benchmarkAnnotation,
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: measureKey
+						}
+					}]
+				},
+				pan: {
+					enabled: true,
+					mode: "x",
+					speed: 100
+				},
+				zoom: {
+					enabled: true,         
+					mode: "x",
+				},
+				responsive: true
+			}
+		}));
 	}
 	
 	spinnerInhibited = false;

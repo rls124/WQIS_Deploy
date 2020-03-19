@@ -66,6 +66,7 @@
 		$measurementSearch = $_POST["measurementSearch"];
 		$category = $_POST["category"];
 		$selectedMeasures = $_POST["selectedMeasures"];
+		$aggregate = $_POST["aggregate"];
 		
 		//set model
 		$model = ucfirst($category) . "Samples";
@@ -84,16 +85,28 @@
 		}
 		$notAllNullString = $notAllNullString . ")";
 		$andConditions = array_merge($andConditions, array($notAllNullString));
-		
+			
 		if ($amount != "") {
 			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
 		}
 		
-		$count = $this->$model->find("all", [
-			"conditions" => [
-				"and" => $andConditions
-			]
-		])->count();
+		if ($aggregate == "false") {
+			//individual mode
+			$count = $this->$model->find("all", [
+				"conditions" => [
+					"and" => $andConditions
+				]
+			])->count();
+		}
+		else {
+			//aggregate mode
+			$count = $this->$model->find("all", [
+				"conditions" => [
+					"and" => $andConditions
+				],
+				"group" => "Date"
+			])->count();
+		}
 		
 		return $this->response->withType("json")->withStringBody(json_encode([$count]));
 	}
@@ -112,9 +125,9 @@
 		$selectedMeasures = $_POST["selectedMeasures"];
 		$sortBy = $_POST["sortBy"];
 		$sortDirection = $_POST["sortDirection"];
-		
-		$pageNum = $_POST['pageNum'];
+		$pageNum = $_POST["pageNum"];
 		$numRows = $_POST["numRows"];
+		$aggregate = $_POST["aggregate"];
 		
 		if ($numRows == -1) {
 			//just set this to a very large number. Ideally would just remove the limit entirely, but thats a bit more logic
@@ -124,10 +137,6 @@
 		//set model
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
-		
-		$fields = array_merge(['site_location_id', 'Date', 'Sample_Number'], $selectedMeasures, [(ucfirst($category) . "Comments")]);
-		
-		$numMeasures = sizeof($selectedMeasures);
 		
 		$andConditions = [
 			"site_location_id IN" => $sites,
@@ -147,16 +156,37 @@
 		$notAllNullString = $notAllNullString . ")";
 		$andConditions = array_merge($andConditions, array($notAllNullString));
 		
-		$samples = $this->$model->find("all", [
-			"fields" => $fields,
-			"conditions" => [
-				"and" => $andConditions
-			],
-			"limit" => $numRows,
-			"page" => $pageNum
-		])->order([$sortBy => $sortDirection]);
+		if ($aggregate == "false") {
+			//individual mode
+			$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]);
 		
-		return $this->response->withType("json")->withStringBody(json_encode([$samples]));
+			$query = $this->$model->find("all", [
+				"fields" => $fields,
+				"conditions" => [
+					"and" => $andConditions
+				],
+				"limit" => $numRows,
+				"page" => $pageNum
+			])->order([$sortBy => $sortDirection]);
+		}
+		else {
+			//aggregate mode
+			$query = $this->$model->find();
+			
+			$selection = ["Date"];
+			for ($i=0; $i<sizeof($selectedMeasures); $i++) {
+				$selection = array_merge($selection, [$selectedMeasures[$i] => $query->func()->avg($selectedMeasures[$i])]);
+			}
+			
+			$query->select($selection)
+				->where($andConditions)
+				->group("Date")
+				->limit($numRows)
+				->page($pageNum)
+				->order([$sortBy => $sortDirection]);
+		}
+		
+		return $this->response->withType("json")->withStringBody(json_encode([$query]));
 	}
 
 	public function uploadlog() {
@@ -642,12 +672,11 @@
 		$searchDirection = $_POST["overUnderSelect"];
 		$measurementSearch = $_POST["measurementSearch"];
 		$selectedMeasures = $_POST["selectedMeasures"];
+		$aggregate = $_POST["aggregate"];
 		
 		//set model
 		$model = ucfirst($category) . "Samples";
 		$this->loadModel($model);
-		
-		$fields = array_merge(["site" => "site_location_id", "Date"], $selectedMeasures);
 		
 		$andConditions = [
 			"site_location_id IN" => $sites,
@@ -659,14 +688,32 @@
 			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
 		}
 		
-		$samples = $this->$model->find("all", [
-			"fields" => $fields,
-			"conditions" => [
-				"and" => $andConditions
-			]
-		]);
+		if ($aggregate == "false") {
+			//individual mode
+			$fields = array_merge(["site" => "site_location_id", "Date"], $selectedMeasures);
+			
+			$query = $this->$model->find("all", [
+				"fields" => $fields,
+				"conditions" => [
+					"and" => $andConditions
+				]
+			]);
+		}
+		else {
+			//aggregate mode. Return average of all sites for each measure and each date
+			$query = $this->$model->find();
+			
+			$selection = ["Date"];
+			for ($i=0; $i<sizeof($selectedMeasures); $i++) {
+				$selection = array_merge($selection, [$selectedMeasures[$i] => $query->func()->avg($selectedMeasures[$i])]);
+			}
+			
+			$query->select($selection)
+				->where($andConditions)
+				->group("Date");
+		}
 		
-		return $this->response->withType("json")->withStringBody(json_encode($samples));
+		return $this->response->withType("json")->withStringBody(json_encode($query));
 	}
 
 	public function getmonitoredsites() {
