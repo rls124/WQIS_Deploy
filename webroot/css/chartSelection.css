@@ -9,6 +9,28 @@ body,
 	height: 500px;
 }
 
+#legend{
+	top: 80px;
+	left: 80px;
+	position: absolute;
+	z-index: 99;
+	border-radius: 8px;
+	border: 2px solid gray;
+	color: rgb(48, 48, 48);
+	background: rgba(255,255,255,.65);
+	padding: 5px;
+	font-size: 10pt;
+}
+
+.color-box{
+	width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-color: #ccc;
+    left: 5px;
+    top: 5px;
+}
+
 #main{
 	padding: 15px;
 }

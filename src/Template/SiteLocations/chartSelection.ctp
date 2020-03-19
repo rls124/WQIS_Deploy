@@ -162,6 +162,12 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		</div>
 		<div id="collapseMap" class="panel-collapse collapse show">
 			<div class="panel-body" id="mapContainer">
+				<div id="legend"><strong>Watersheds:</strong>&nbsp;
+					<div class="color-box" style="background-color: #469F8E;"></div> St. Joseph &nbsp;
+					<div class="color-box" style="background-color: #DA64DD;"></div> St. Marys &nbsp;
+					<div class="color-box" style="background-color: #84FCFC;"></div> Upper Maumee &nbsp;
+					<div class="color-box" style="background-color: #F4AC3D;"></div> Auglaize
+				</div>
 				<div id="map"></div>
 				<div>
 					<div>
@@ -176,7 +182,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 						<input type="checkbox" id="wetlandLayer" /> Wetlands and Deepwater Habitats
 					</div>
 					<div>
-						Use basemap
+						Basemap
 						<select id="selectBasemap">
 							<option value="satellite">Satellite</option>
 							<option value="gray">Gray</option>

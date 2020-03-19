@@ -178,7 +178,7 @@ $(document).ready(function () {
 		});
 		view = new MapView({
 			container: "map",
-			center: [-85, 41],
+			center: [-84.4, 41.2],
 			zoom: 8,
 			map: map
 		});
@@ -241,6 +241,7 @@ $(document).ready(function () {
 		var watershedsLayerToggle = document.getElementById("watershedsLayer");
 		watershedsLayerToggle.addEventListener("change", function() {
 			mapLayers[0].visible = watershedsLayerToggle.checked;
+			$( "#legend" ).toggle();
 		});
 		
 		var drainsLayerToggle = document.getElementById("drainsLayer");
