@@ -10,8 +10,8 @@ body,
 }
 
 #legend{
-	top: 80px;
-	left: 80px;
+	top: 78px;
+	left: 60px;
 	position: absolute;
 	z-index: 99;
 	border-radius: 8px;

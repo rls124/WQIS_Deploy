@@ -97,11 +97,15 @@ function hideBrowserCompatibilityMessage() {
 	</head>
 	<body class="h-100">
 		<div style="background-color:#5085A5">
-			<nav class="navbar navbar-expand-lg navbar-light" id="navbar" style="z-index: 1; height: 7vh;">
+			<nav class="navbar navbar-expand-lg navbar-dark" id="navbar" style="z-index: 1;">
 				<?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
+
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    				<span class="navbar-toggler-icon"></span>
+  				</button>
 				
-				<div class="navbar-collapse">
-					<ul class="navbar-nav mr-auto navbar-right">
+				<div class="collapse navbar-collapse text-right" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
 						<li class="nav-item">
 							<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Data</a>
 						</li>
@@ -138,8 +142,8 @@ function hideBrowserCompatibilityMessage() {
 					</ul>
 
 					<?php if ($userinfo) { ?>
-					<ul class="nav pull-right">
-						<li class="dropdown">
+					<ul class="text-right pull-right" style="list-style: none;">
+						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<?php
 								echo $userinfo["username"];
