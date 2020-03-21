@@ -35,6 +35,12 @@ var advancedSiteSearch = false;
 var mapData;
 var map;
 var view;
+
+var selectPointAction = {
+	title: "Select this point",
+	id: "select-point",
+}
+
 var template;
 var fields = [{ //fields object the map uses for the points layer
 	name: "ObjectID",
@@ -130,7 +136,8 @@ $(document).ready(function () {
 	
 	template = {
 		title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
-		content: templateContent
+		content: templateContent,
+		actions: [selectPointAction]
 	};
 	
 	//map code
@@ -212,6 +219,13 @@ $(document).ready(function () {
 					clearHighlight();
 				}
 			});
+			
+			//handle custom actions
+			view.popup.on("trigger-action", function(event) {
+				if (event.action.id === "select-point") {
+					selectPoint();
+				}
+			});
 		});
 		
 		//add home button to return to the default extent
@@ -241,7 +255,7 @@ $(document).ready(function () {
 		var watershedsLayerToggle = document.getElementById("watershedsLayer");
 		watershedsLayerToggle.addEventListener("change", function() {
 			mapLayers[0].visible = watershedsLayerToggle.checked;
-			$( "#watershedsLegend" ).toggle();
+			$("#watershedsLegend").toggle();
 		});
 		
 		var drainsLayerToggle = document.getElementById("drainsLayer");
@@ -266,8 +280,8 @@ $(document).ready(function () {
 		
 		var floodLayerToggle = document.getElementById("floodLayer");
 		floodLayerToggle.addEventListener("change", function(){
+			$("#floodplainsLegend").toggle();
 			mapLayers[5].visible = floodLayerToggle.checked;
-			$( "#floodplainsLegend" ).toggle();
 		});
 		
 		var damLayerToggle = document.getElementById("damLayer");
@@ -325,6 +339,17 @@ $(document).ready(function () {
 		}
 			
 		return visibleSites;
+	}
+	
+	function selectPoint() {
+		var siteNum = getVisibleSites()[view.popup.selectedFeature.ObjectID].Site_Number;
+		var currentlySelected = $("#sites").val();
+		
+		if (!currentlySelected.includes(siteNum.toString())) {
+			//add it
+			currentlySelected.push(siteNum.toString());
+			$("#sites").val(currentlySelected).trigger("change");
+		}
 	}
 	
 	function updateMapPoints() {
