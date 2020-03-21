@@ -241,7 +241,7 @@ $(document).ready(function () {
 		var watershedsLayerToggle = document.getElementById("watershedsLayer");
 		watershedsLayerToggle.addEventListener("change", function() {
 			mapLayers[0].visible = watershedsLayerToggle.checked;
-			$( "#legend" ).toggle();
+			$( "#watershedsLegend" ).toggle();
 		});
 		
 		var drainsLayerToggle = document.getElementById("drainsLayer");
@@ -267,6 +267,7 @@ $(document).ready(function () {
 		var floodLayerToggle = document.getElementById("floodLayer");
 		floodLayerToggle.addEventListener("change", function(){
 			mapLayers[5].visible = floodLayerToggle.checked;
+			$( "#floodplainsLegend" ).toggle();
 		});
 		
 		var damLayerToggle = document.getElementById("damLayer");

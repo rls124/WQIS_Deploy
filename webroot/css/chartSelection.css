@@ -22,6 +22,10 @@ body,
 	font-size: 10pt;
 }
 
+#floodplainsLegend{
+	display: none;
+}
+
 .color-box{
 	width: 10px;
     height: 10px;
