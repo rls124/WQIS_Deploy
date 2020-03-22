@@ -24,7 +24,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 
 <div class="sidebarContainer">
 	<div id="sidebarInner">
-		<div id="sidebarSpacing" style="height: 6vh"></div> <!--filler space so the sidebar doesn't get covered by the navbar-->
+		<div id="sidebarSpacing" style="height: 7vh"></div> <!--filler space so the sidebar doesn't get covered by the navbar-->
 		<div id="searchBox">
 		<fieldset>
 			<h6>Sites: (<span id="advancedSitesButton">Toggle advanced</span>)</h6>

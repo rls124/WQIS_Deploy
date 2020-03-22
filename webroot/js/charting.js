@@ -968,8 +968,9 @@ $(document).ready(function () {
 	}
 	
 	//show/hide the filler space at the top of the sidebar as needed, so its not visible when we scroll below the navbar
-	var navbarHeight = $("#navbar").outerHeight(); //gets height of header
+	//var navbarHeight = $("#navbar").outerHeight(); //gets height of header
 
+/*
 	$(window).scroll(function(){
 		if ($(window).scrollTop() > navbarHeight) {
 			//navbar is hidden, don't need the spacer
@@ -980,6 +981,7 @@ $(document).ready(function () {
 		   document.getElementById("sidebarSpacing").style.height = (navbarHeight - $(window).scrollTop()) + "px";
 		}
 	});
+*/
 	
 	//set the search sidebar open at start
 	openSearchSidebar();
@@ -1411,17 +1413,9 @@ $(document).ready(function () {
 									break;
 								}
 							}
-							
+						
 							//make sure there isn't already a label created for this date, or things break in weird ways
-							var found = false;
-							for (j=0; j<labels.length; j++) {
-								if (labels[j] === date) {
-									found = true;
-									break;
-								}
-							}
-							
-							if (!found) {
+							if (!labels.includes(date)) {
 								labels.push(date);
 							}
 						}
@@ -1453,15 +1447,7 @@ $(document).ready(function () {
 							dataset.data.push(newRow);
 		
 							//make sure there isn't already a label created for this date, or things break in weird ways
-							var found = false;
-							for (j=0; j<labels.length; j++) {
-								if (labels[j] === date) {
-									found = true;
-									break;
-								}
-							}
-		
-							if (!found) {
+							if (!labels.includes(date)) {
 								labels.push(date);
 							}
 						}

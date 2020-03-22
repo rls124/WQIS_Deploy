@@ -724,7 +724,7 @@
 				"conditions" => [
 					"and" => $andConditions
 				]
-			]);
+			])->order(["Date" => "Asc"]);
 		}
 		else {
 			//aggregate mode. Return average of all sites for each measure and each date
@@ -737,7 +737,8 @@
 			
 			$query->select($selection)
 				->where($andConditions)
-				->group("Date");
+				->group("Date")
+				->order(["Date" => "Asc"]);
 		}
 		
 		return $this->response->withType("json")->withStringBody(json_encode($query));
