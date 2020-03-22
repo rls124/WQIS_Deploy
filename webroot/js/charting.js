@@ -614,7 +614,7 @@ $(document).ready(function () {
 	
 	var easter_egg = new Konami(function() {
 		//dynamically download the needed code so we don't bog down the 99.9% of users who won't even see this
-		import('/WQIS/js/EEGS.js')
+		import("/WQIS/js/EEGS.js")
 			.then((module) => {
 				module.start();
 			});
@@ -1150,7 +1150,7 @@ $(document).ready(function () {
 										var input = $("#" + label.attr("for"));
 										input.trigger("click");
 										label.attr("style", "display: none");
-										input.attr('style', "display: in-line");
+										input.attr("style", "display: in-line");
 									};
 								
 									textDiv.appendChild(label);
@@ -1190,8 +1190,8 @@ $(document).ready(function () {
 											success: function () {
 												var label = $('label[for="' + input.attr('id') + '"');
 
-												input.attr('style', 'display: none');
-												label.attr('style', 'display: in-line; cursor: pointer');
+												input.attr("style", "display: none");
+												label.attr("style", "display: in-line; cursor: pointer");
 
 												if (value === '') {
 													label.text('  ');
@@ -1209,7 +1209,7 @@ $(document).ready(function () {
 									textDiv.appendChild(cellInput);
 								}
 								else {
-									var label = document.createElement('label');
+									var label = document.createElement("label");
 									label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
 									label.setAttribute("for", key + "-" + i);
 									label.innerText = value;
@@ -1229,22 +1229,19 @@ $(document).ready(function () {
 							delButton.onclick = function() {
 								var rowDiv = this;
 				
-								if (!$(rowDiv).attr('id')) {
+								if (!$(rowDiv).attr("id")) {
 									return;
 								}
 				
 								$.confirm("Are you sure you want to delete this record?", function (bool) {
 									if (bool) {
-										var rowNumber = ($(rowDiv).attr('id')).split("-")[1];
-										var sampleNumber = $('#Sample_Number-' + rowNumber).val();
-						
-										//Now send ajax data to a delete script
+										//delete record with this sample number and category
 										$.ajax({
 											type: "POST",
 											url: "/WQIS/generic-samples/deleteRecord",
 											datatype: "JSON",
 											data: {
-												"sampleNumber": sampleNumber,
+												"sampleNumber": $("#Sample_Number-" + ($(rowDiv).attr("id")).split("-")[1]).val(),
 												"type": category
 											},
 											success: function () {
@@ -1434,24 +1431,7 @@ $(document).ready(function () {
 				else {
 					//aggregate mode
 					for (k=0; k<measures.length; k++) {
-						var datasets = [];
-
-						for (i=0; i<sites.length; i++) {
-							var newDataset = {
-								label: sites[i],
-								borderColor: selectColor(i, sites.length),
-								data: [],
-								lineTension: 0,
-								fill: false,
-								borderWidth: 1.5,
-								showLine: (document.getElementById("chartType").value === "line"),
-								spanGaps: true,
-							};
-		
-							datasets.push(newDataset);
-						}
-	
-						datasets = [{
+						var dataset = {
 							label: "Average",
 							borderColor: selectColor(0, 1),
 							data: [],
@@ -1460,7 +1440,7 @@ $(document).ready(function () {
 							borderWidth: 1.5,
 							showLine: (document.getElementById("chartType").value === "line"),
 							spanGaps: true,
-						}];
+						};
 	
 						var labels = [];
 						for (i=0; i<response.length; i++) {
@@ -1469,7 +1449,7 @@ $(document).ready(function () {
 							newRow.t = date;
 							newRow.y = response[i][measures[k]];
 		
-							datasets[0].data.push(newRow);
+							dataset.data.push(newRow);
 		
 							//make sure there isn't already a label created for this date, or things break in weird ways
 							var found = false;
@@ -1485,7 +1465,7 @@ $(document).ready(function () {
 							}
 						}
 	
-						buildChart(k, category, measures, labels, datasets);
+						buildChart(k, category, measures, labels, [dataset]);
 					}	
 				}
 			}
