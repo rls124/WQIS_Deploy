@@ -967,22 +967,6 @@ $(document).ready(function () {
 		document.getElementById("main").style.width = "100%";
 	}
 	
-	//show/hide the filler space at the top of the sidebar as needed, so its not visible when we scroll below the navbar
-	//var navbarHeight = $("#navbar").outerHeight(); //gets height of header
-
-/*
-	$(window).scroll(function(){
-		if ($(window).scrollTop() > navbarHeight) {
-			//navbar is hidden, don't need the spacer
-			document.getElementById("sidebarSpacing").style.height = 0;
-		}
-		else {
-		   //navbar is visible, add spacer
-		   document.getElementById("sidebarSpacing").style.height = (navbarHeight - $(window).scrollTop()) + "px";
-		}
-	});
-*/
-	
 	//set the search sidebar open at start
 	openSearchSidebar();
 

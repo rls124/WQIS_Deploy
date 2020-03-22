@@ -1,5 +1,5 @@
 <?php
-$pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), '/') + 1);
+$pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), "/") + 1);
 ?>
 
 <!DOCTYPE html>
@@ -8,18 +8,18 @@ $pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), '
         <?= $this->Html->charset() ?>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Water Quality Information System</title>
-        <?= $this->Html->meta('icon') ?>
+        <?= $this->Html->meta("icon") ?>
 
-        <?= $this->fetch('meta') ?>
-        <?= $this->fetch('css') ?>
-        <?= $this->fetch('script') ?>
+        <?= $this->fetch("meta") ?>
+        <?= $this->fetch("css") ?>
+        <?= $this->fetch("script") ?>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-        <?= $this->Html->css('bootstrap-glyphicons.min.css') ?>
-        <?= $this->Html->script('jquery.msgbox.min.js') ?>
-        <?= $this->Html->css('styling.css') ?>
-        <?= $this->Html->css('cakemessages.css') ?>
+        <?= $this->Html->css("bootstrap-glyphicons.min.css") ?>
+        <?= $this->Html->script("jquery.msgbox.min.js") ?>
+        <?= $this->Html->css("styling.css") ?>
+        <?= $this->Html->css("cakemessages.css") ?>
 		<?= $this->Html->css("loading.css") ?>
 		
 		<script>
@@ -42,9 +42,7 @@ function browserDetect() {
 	try {
 		var browsers = [["Edg", "Edge", 79], ["Firefox", "Firefox", 65], ["Chrome", "Chrome", 75], ["OPR", "Opera", 60]]; //user agent identifier, browser name, lowest supported version number
 
-		for (var i=0; i<browsers.length; i++) {
-			var browser = browsers[i];
-			
+		for (var browser of browsers) {
 			if (ua.includes(browser[0])) {
 				var verNum = parseFloat(ua.split(browser[0] + "/")[1].split(" ")[0]);
 				if (verNum < browser[2]) {
@@ -97,7 +95,7 @@ function hideBrowserCompatibilityMessage() {
 	</head>
 	<body class="h-100">
 		<nav class="navbar navbar-expand navbar-dark fixed-top" id="navbar" style="background-color: #5085A5; height: 7vh">
-			<?= $this->Html->link(__('WQIS'), ['controller' => 'users', 'action' => 'login'], ['class' => 'navbar-brand']); ?>
+			<?= $this->Html->link(__("WQIS"), ["controller" => "users", "action" => "login"], ["class" => "navbar-brand"]); ?>
 				
 			<div class="collapse navbar-collapse text-right" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
@@ -149,7 +147,7 @@ function hideBrowserCompatibilityMessage() {
 						</a>
 						<div class="dropdown-menu" style="right: 0; left: auto;" aria-labelledby="userDropdownMenu">
 							<a class="dropdown-item" href="/WQIS/users/edituserinfo">User profile</a>
-							<a class="dropdown-item" href='<?php echo $this->Url->build(['controller' => 'users', 'action' => 'logout']) ?>'>Log out</a>
+							<a class="dropdown-item" href="<?php echo $this->Url->build(["controller" => "users", "action" => "logout"]) ?>">Log out</a>
 						</div>
 					</li>
 				</ul>
@@ -159,7 +157,7 @@ function hideBrowserCompatibilityMessage() {
 		        
         <?= $this->Flash->render() ?>
 		<div class="container content col-lg-12" style="top: 7vh">
-		<?= $this->fetch('content') ?>
+		<?= $this->fetch("content") ?>
 		</div>
 	
 		<!--loading spinner-->

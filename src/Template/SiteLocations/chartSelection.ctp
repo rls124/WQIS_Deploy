@@ -24,7 +24,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 
 <div class="sidebarContainer">
 	<div id="sidebarInner">
-		<div id="sidebarSpacing" style="height: 7vh"></div> <!--filler space so the sidebar doesn't get covered by the navbar-->
+		<div style="height: 7vh"></div> <!--filler space so the sidebar doesn't get covered by the navbar-->
 		<div id="searchBox">
 		<fieldset>
 			<h6>Sites: (<span id="advancedSitesButton">Toggle advanced</span>)</h6>
@@ -33,7 +33,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 				<select id="searchGroupsDropdown" style="width:100%"></select>
 			</div>
 			
-			<select class="js-example-placeholder-multiple form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%"></select>
+			<select class="form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%"></select>
 		
 			<div id="advancedSiteSearchContainerBottom" style="display: none">
 				Mode:
