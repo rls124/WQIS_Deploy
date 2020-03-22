@@ -14,45 +14,72 @@
 	}
 	
 	public function exportData() {
+		$this->render(false);
+
 		//get request data
-		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
-		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
-		$sites = $this->request->getData('sites');
+		$startDate = date("Ymd", strtotime($_POST["startDate"]));
+		$endDate = date("Ymd", strtotime($_POST["endDate"]));
+		$sites = $_POST["sites"];
 		$amount = $_POST["amountEnter"];
 		$searchDirection = $_POST["overUnderSelect"];
 		$measurementSearch = $_POST["measurementSearch"];
-		$category = $this->request->getData('category');
+		$category = $_POST["category"];
 		$selectedMeasures = $_POST["selectedMeasures"];
-		
-		$modelName = ucfirst($category) . "Samples";
-		$this->loadModel($modelName);
-		$modelBare = $this->$modelName;
-		
-		$data = "";
-		
-		$fields = ['site_location_id', 'Date', 'Sample_Number'];
-		$fields = array_merge($fields, $selectedMeasures);
+		$aggregate = $_POST["aggregate"];
 	
+		//set model
+		$model = ucfirst($category) . "Samples";
+		$this->loadModel($model);
+	
+		$query = "";
+		
 		$andConditions = [
-			'site_location_id IN' => $sites,
-			$modelName . '.Date >=' => $startDate,
-			$modelName . '.Date <= ' => $endDate
+			"site_location_id IN" => $sites,
+			$model . ".Date >=" => $startDate,
+			$model . ".Date <=" => $endDate
 		];
-	
-		if ($amount != '') {
-			$andConditions = array_merge($andConditions, [$modelName . '.' . $measurementSearch . ' ' . $searchDirection => $amount]);
+		
+		if ($amount != "") {
+			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
 		}
 	
-		$data = $this->$modelName->find('all', [
-			'fields' => $fields,
-			'conditions' => [
-				'and' => $andConditions
-			]
-		])->order(['Date' => 'Desc']);
+		//don't return rows in which none of the selected measurements actually have data in them
+		$notAllNullString = "NOT ( (" . $selectedMeasures[0] . " IS NULL)";
+		for ($i=1; $i<sizeof($selectedMeasures); $i++) {
+			$notAllNullString = $notAllNullString . " AND (" . $selectedMeasures[$i] . " IS NULL)";
+		}
+		$notAllNullString = $notAllNullString . ")";
+		$andConditions = array_merge($andConditions, array($notAllNullString));
+	
+		if ($aggregate == "false") {
+			//individual mode
+			$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]);
+	
+			$query = $this->$model->find("all", [
+				"fields" => $fields,
+				"conditions" => [
+					"and" => $andConditions
+				]
+			])->order(["Date" => "Desc"]);
+		}
+		else {
+			//aggregate mode
+			$query = $this->$model->find();
+			
+			$selection = ["Date"];
+			for ($i=0; $i<sizeof($selectedMeasures); $i++) {
+				$selection = array_merge($selection, [$selectedMeasures[$i] => $query->func()->avg($selectedMeasures[$i])]);
+			}
+		
+			$query->select($selection)
+				->where($andConditions)
+				->group("Date")
+				->order(["Date" => "Desc"]);
+		}
 
-		$this->set(compact("data"));
-		return $this->response->withType("application/json")->withStringBody(json_encode($data));
-	}
+		$this->set(compact("query"));
+		return $this->response->withType("application/json")->withStringBody(json_encode($query));
+}
 	
 	public function tablePages() {
 		$this->render(false);
@@ -115,13 +142,13 @@
 		$this->render(false);
 		
 		//get request data
-		$startDate = date('Ymd', strtotime($this->request->getData('startDate')));
-		$endDate = date('Ymd', strtotime($this->request->getData('endDate')));
-		$sites = $this->request->getData('sites');
+		$startDate = date("Ymd", strtotime($_POST["startDate"]));
+		$endDate = date("Ymd", strtotime($_POST["endDate"]));
+		$sites = $_POST["sites"];
 		$amount = $_POST["amountEnter"];
 		$searchDirection = $_POST["overUnderSelect"];
 		$measurementSearch = $_POST["measurementSearch"];
-		$category = $this->request->getData('category');
+		$category = $_POST["category"];
 		$selectedMeasures = $_POST["selectedMeasures"];
 		$sortBy = $_POST["sortBy"];
 		$sortDirection = $_POST["sortDirection"];
@@ -131,7 +158,7 @@
 		
 		if ($numRows == -1) {
 			//just set this to a very large number. Ideally would just remove the limit entirely, but thats a bit more logic
-			$numRows = 10000;
+			$numRows = 100000;
 		}
 		
 		//set model

@@ -663,7 +663,8 @@ $(document).ready(function () {
 				"amountEnter": amountEnter,
 				"overUnderSelect": overUnderSelect,
 				"measurementSearch": measurementSearch,
-				"selectedMeasures": selectedMeasures
+				"selectedMeasures": selectedMeasures,
+				"aggregate": document.getElementById("aggregateGroup").checked
 			},
 			success: function(response) {
 				downloadFile(response, category);
