@@ -45,6 +45,20 @@ textarea{
     overflow: hidden;
 }
 
+.headerSort{
+	background-repeat: no-repeat;
+	background-image: url(/WQIS/img/sort_both.svg);
+	background-position: center right;
+}
+
+.Desc{
+	background-image: url(/WQIS/img/sort_down.svg);
+}
+
+.Asc{
+	background-image: url(/WQIS/img/sort_up.svg);
+}
+
 /*control display of popup box for ArcGIS map*/
 .esri-icon-dock-right{
 	display: none !important;

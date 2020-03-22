@@ -1107,26 +1107,12 @@ $(document).ready(function () {
 					
 					for (i=0; i<columns.length; i++) {
 						var newCell = document.createElement("th");
-						
-						var arrows;
-						if (columnIDs[i] === sortBy) {
-							if (sortDirection === "Desc") {
-								arrows = "fa-sort-down";
-							}
-							else {
-								arrows = "fa-sort-up";
-							}
-						}
-						else {
-							arrows = "fa-sort";
-						}
-						
-						newCell.innerHTML = columns[i] + "<i style='float: right' class='fas " + arrows + "'></i>";
-						newCell.setAttribute("class", "sort-by");
+						newCell.innerHTML = columns[i];
+						newCell.setAttribute("class", "sort-by headerSort" + ((columnIDs[i] === sortBy) ? (" " + sortDirection) : ""));
 						newCell.id = columnIDs[i];
-						tableHeader.appendChild(newCell);
-						
 						newCell.onclick = function() {setSort(event);};
+						
+						tableHeader.appendChild(newCell);
 					}
 					if (admin && !aggregateMode) {
 						var actionsCell = document.createElement("th");
@@ -1189,7 +1175,7 @@ $(document).ready(function () {
 										var rowNumber = (input.attr("id")).split("-")[1];
 										var sampleNumber = $("#Sample_Number-" + rowNumber).val();
 			
-										var parameter = (input.attr('name')).split("-")[0];
+										var parameter = (input.attr("name")).split("-")[0];
 										var value = input.val();
 
 										$.ajax({
