@@ -23,7 +23,7 @@
 				<li>Wetlands and Deepwater Habitats</li>
 			</ul>
 			
-			Each layer can be independently turned on or off using the checkboxes below the map
+			Each layer can be independently turned on or off using the checkboxes below the map. When applicable, color or pattern keys for visible layers are shown in the top-left corner of the map.
 		</p>
 	</div>
 	
@@ -41,13 +41,17 @@
 		Use the sidebar on the left side to select the information you're interested in viewing. First, select one or more sample sites. Any number of sites can be selected simultaneously.
 	</p>
 	<p>
+		Click "Toggle advanced" next to "Sites" to view additional options to search by sites. "Search by group" fills in the Sites selection box with all of the sites contained in the selected group. You can still manually add or remove sites from the search, as normal. The "Mode" option underneath determines how the sites are displayed after a search. Individual mode displays every individual site selected, while Aggregate mode takes the average value of each site for each date and measurement. This allows patterns shared by several sites (eg, nearby points all near a common pollutant source) to be easily viewed.
+	</p>
+	
+	<p>
 		Then, select the category of data to view. Bacteria, nutrient, pesticide, and physical properties data are available. For more information on these types of data, see our about page. The selected category will determine which specific measurements can be searched for.
 	</p>
 	<p>
 		Select a start and end date over which to view records. These fields will automatically be filled in to match the full range of data available for the specified sites and category, but you can choose a different range if desired.
 	</p>
 	<p>
-		The "Where" section is optional. If used, this allows a user to select records to view where some measurement is greater than, less than, or equal to a given value. Note that the Timeline does not support searches using the Where option.
+		The "Filter by" section is optional. If used, this allows a user to select records to view where some measurement is greater than, less than, or equal to a given value. Note that the Timeline does not support searches using the Where option.
 	</p>
 	<p>
 		Finally, "Display fields" allows the user to choose which measurements they wish to see. By default, "All" is selected, but if you are only interested in a subset of measurements, selecting those measurements will result in a view which is less cluttered and loads faster. Some meta fields, such as site number, date, and comments, are present in all cases and cannot be disabled.
