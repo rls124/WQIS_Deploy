@@ -13,10 +13,10 @@
 	 */
 	class SiteGroupsController extends AppController {
 		public function sitegroups() {
-			$SiteGroups = $this->SiteGroups->find('all');
-			$this->set(compact('SiteGroups'));
+			$SiteGroups = $this->SiteGroups->find("all");
+			$this->set(compact("SiteGroups"));
 			
-			$this->SiteLocations = $this->loadModel('SiteLocations');
+			$this->SiteLocations = $this->loadModel("SiteLocations");
 			$Groupings = $this->SiteLocations->find()->select(['Site_Number', 'groups']);
 			$this->set(compact('Groupings'));
 			
@@ -27,14 +27,14 @@
 		public function fetchgroupdata() {
 			$this->render(false);
 			//Check if groupkey is set
-			if (!$this->request->getData('groupkey')) {
+			if (!$this->request->getData("groupkey")) {
 				return;
 			}
-			$groupkey = $this->request->getData('groupkey');
+			$groupkey = $this->request->getData("groupkey");
 
 			$group = $this->SiteGroups
-				->find('all')
-				->where(['groupKey = ' => $groupkey])
+				->find("all")
+				->where(["groupKey" => $groupkey])
 				->first();
 
 			$this->loadModel('SiteLocations');
@@ -69,31 +69,69 @@
 
 			$group = $this->SiteGroups
 				->find('all')
-				->where(['groupKey = ' => $groupkey])
+				->where(['groupKey' => $groupkey])
 				->first();
 
 			$this->loadModel('SiteLocations');
-			$sitesInGroup = $this->SiteLocations
-				->find('all')
-				->where(['groups LIKE' => '%' . $groupkey . '%'])
-				->select('Site_Number');
-				
+			$sitesDB = $this->SiteLocations->find('all');
 			
-
-/*
-			foreach ($sitesInGroup as $grouping) {
-				if ($this->Groupings->delete($grouping)); // delete every grouping...
-				
-			}
+			$sitesInGroup = $_POST["sites"];
 			
-			//...then add all of the new groups
-			foreach ($this->request->getData('sites') as $site) {
-				$Grouping = $this->Groupings->newEntity(['group_ID' => $group->groupKey, 'site_ID' => $site]);
-				if (!$this->Groupings->save($Grouping)) {
-					return;
+			foreach ($sitesDB as $site) {
+				$siteNum = $site->Site_Number;
+				//does it already have this group assigned in the DB?
+				$siteGroupsDB = explode(",", $site->groups);
+				if (in_array($groupkey, $siteGroupsDB)) {
+					//yes
+					//should it be?
+					if (!in_array($siteNum, $sitesInGroup)) {
+						//no, rebuild this list without this groupkey
+						$groupsForSiteNew = [];
+						for ($i=0; $i<sizeof($siteGroupsDB); $i++) {
+							if ($siteGroupsDB[$i] != $groupkey) {
+								$groupsForSiteNew[] = $siteGroupsDB[$i];
+							}
+						}
+					
+						if (sizeof($groupsForSiteNew) == 0) {
+							$groupsStringNew = "";
+						}
+						else {
+							$groupsStringNew = $groupsForSiteNew[0];
+							for ($i=1; $i<sizeof($groupsForSiteNew); $i++) {
+								$groupsStringNew = $groupsStringNew . "," . $groupsForSiteNew[$i];
+							}
+						}
+						
+						//save this
+						$site->groups = $groupsStringNew;
+						$this->SiteLocations->save($site);
+					}
+				}
+				else {
+					//no
+					//should it?
+					if (in_array($siteNum, $sitesInGroup)) {
+						//yes, rebuild this list with this groupkey
+						$siteGroupsDB[] = $groupkey;
+					
+						if (sizeof($siteGroupsDB) == 0) {
+							$groupsStringNew = "";
+						}
+						else {
+							$groupsStringNew = $siteGroupsDB[0];
+							for ($i=1; $i<sizeof($siteGroupsDB); $i++) {
+								$groupsStringNew = $groupsStringNew . "," . $siteGroupsDB[$i];
+							}
+						}
+						
+						//save this
+						$site->groups = $groupsStringNew;
+						$this->SiteLocations->save($site);
+					}
 				}
 			}
-*/			
+				
 			$group->groupName = $this->request->getData('groupname');
 			$group->groupDescription = $this->request->getData('groupdescription');
 
@@ -154,9 +192,40 @@
 			$groupkey = $this->request->getData('groupkey');
 
 			$group = $this->SiteGroups
-				->find('all')
-				->where(['groupKey = ' => $groupkey])
+				->find("all")
+				->where(["groupKey" => $groupkey])
 				->first();
+				
+			//get all existing sites with this group assigned
+			$this->loadModel("SiteLocations");
+			$sites = $this->SiteLocations->find("all");
+			foreach ($sites as $site) {
+				$groupsForSite = explode(",", $site->groups);
+				
+				if (in_array($groupkey, $groupsForSite)) {
+					//rebuild this list without this groupkey
+					$groupsForSiteNew = [];
+					for ($i=0; $i<sizeof($groupsForSite); $i++) {
+						if ($groupsForSite[$i] != $groupkey) {
+							$groupsForSiteNew[] = $groupsForSite[$i];
+						}
+					}
+					
+					if (sizeof($groupsForSiteNew) == 0) {
+						$groupsStringNew = "";
+					}
+					else {
+						$groupsStringNew = $groupsForSiteNew[0];
+						for ($i=1; $i<sizeof($groupsForSiteNew); $i++) {
+							$groupsStringNew = $groupsStringNew . "," . $groupsForSiteNew[$i];
+						}
+					}
+					
+					//save this
+					$site->groups = $groupsStringNew;
+					$this->SiteLocations->save($site);
+				}
+			}
 
 			//then delete the site_group
 			$this->SiteGroups->delete($group);
