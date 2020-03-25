@@ -32,7 +32,6 @@ if ($userinfo === NULL) {?>
 		'name' => "username",
 		'id' => "username",
 		'placeholder' => "Your Username...",
-		'oninput' => "ensureInput();",
 		'onfocus' => "toggle(this);"
 	]);
 	?>
@@ -52,7 +51,6 @@ if ($userinfo === NULL) {?>
 		'name' => "userpw",
 		'id' => "userpw",
 		'placeholder' => "Your Password...",
-		'oninput' => "ensureInput();",
 		'onfocus' => "toggle(this);"
 	]);
 	?>
