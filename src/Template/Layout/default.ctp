@@ -22,19 +22,10 @@ $pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), "
         <?= $this->Html->css("cakemessages.css") ?>
 		<?= $this->Html->css("loading.css") ?>
 		
-		<script>
-		var dojoConfig = {
-			//prevents conflicts with jquery
-			async:true,
-			packages: [{
-				name: "dojo",
-				location: "https://js.arcgis.com/4.8/dojo",
-				main: "dojo"
-			}]
-		};
 <?php
 if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session
 ?>
+<script>
 function browserDetect() {
 	var ua = navigator.userAgent;
 	var upToDate = true;
@@ -90,8 +81,8 @@ function hideBrowserCompatibilityMessage() {
 	//set a cookie so we don't keep annoying the user about this
 	document.cookie = "ignoreBrowserCompatibility";
 }
-	<?php } ?>
-	</script>
+</script>
+<?php } ?>
 	</head>
 	<body class="h-100">
 		<nav class="navbar navbar-expand navbar-dark fixed-top" id="navbar" style="background-color: #5085A5; height: 7vh">

@@ -419,29 +419,6 @@ $(document).ready(function () {
 		});
 	}
 	
-	function addLabels() {
-		var LabelClass = require("esri/layers/support/LabelClass");
-		const labels = new LabelClass({
-			labelExpressionInfo: {
-				expression: "$feature.siteName"
-			},
-			symbol: {
-				type: "text",
-				color: "black",
-				font: {
-					size: 90,
-					font: "Playfair Display",
-				},
-				horizontalAlignment: "left",
-				haloSize: 5,
-				haloColor: "blue"
-			},
-			labelPlacement: "above-center"
-		});
-		
-		sampleSitesLayer.labelingInfo = [labels];
-	}
-	
 	function highlightSelectedPoints() {
 		var points = $("#sites").val();
 		var visiblePoints = getVisibleSites();

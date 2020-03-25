@@ -7,11 +7,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
 <script defer src="../js/charting.js"></script>
-<script defer src="../js/lib/a"></script>
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
 <?= $this->Html->script('zoom.js') ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
+<link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
+<script defer src="https://js.arcgis.com/4.14/"></script>
 
 <script>
 <?php
@@ -163,44 +163,46 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		<div id="collapseMap" class="panel-collapse collapse show">
 			<div class="panel-body" id="mapContainer">
 				<div id="legend">
-					<div id="watershedsLegend"><strong>Watersheds:</strong>&nbsp;
-					<div class="color-box" style="background-color: #469F8E;"></div> St. Joseph &nbsp;
-					<div class="color-box" style="background-color: #DA64DD;"></div> St. Marys &nbsp;
-					<div class="color-box" style="background-color: #84FCFC;"></div> Upper Maumee &nbsp;
-					<div class="color-box" style="background-color: #F4AC3D;"></div> Auglaize</div>
-					<div id="floodplainsLegend"><strong>Floodplains:</strong>&nbsp;
-					<div class="color-box" style="background-color: #E7E44B;"></div> Floodway &nbsp;
-					<div class="color-box" style="background-color: #8CDDFB;"></div> 1% Annual Chance Flood Hazard&nbsp;
-					<div class="color-box" style="background-color: #F4AC3D;"></div> 0.2% Annual Chance, Protected by Levee &nbsp;
-					<div class="color-box" style="background-color: #D42C1F;"></div> 0.2% Annual Chance Flood Hazard</div>
+					<div id="watershedsLegend">
+						<strong>Watersheds:</strong>&nbsp;
+						<div class="color-box" style="background-color: #469F8E;"></div> St. Joseph &nbsp;
+						<div class="color-box" style="background-color: #DA64DD;"></div> St. Marys &nbsp;
+						<div class="color-box" style="background-color: #84FCFC;"></div> Upper Maumee &nbsp;
+						<div class="color-box" style="background-color: #F4AC3D;"></div> Auglaize
+					</div>
+					<div id="floodplainsLegend">
+						<strong>Floodplains:</strong>&nbsp;
+						<div class="color-box" style="background-color: #E7E44B;"></div> Floodway &nbsp;
+						<div class="color-box" style="background-color: #8CDDFB;"></div> 1% Annual Chance Flood Hazard&nbsp;
+						<div class="color-box" style="background-color: #F4AC3D;"></div> 0.2% Annual Chance, Protected by Levee &nbsp;
+						<div class="color-box" style="background-color: #D42C1F;"></div> 0.2% Annual Chance Flood Hazard
+					</div>
 				</div>
 				<div id="map"></div>
 				<div>
-					<div>
-						<input type="checkbox" id="watershedsLayer" checked /> Watersheds
-						<input type="checkbox" id="drainsLayer" /> Drains
-						<input type="checkbox" id="riverLayer" /> Rivers/Streams
-						<input type="checkbox" id="impairedLayer" /> IDEM - Impaired Waters
-						<input type="checkbox" id="bodiesLayer" /> Water Bodies
-						<input type="checkbox" id="floodLayer" /> Floodplains
-						<input type="checkbox" id="damLayer" /> Dams
-						<input type="checkbox" id="wellLayer" /> Wells
-						<input type="checkbox" id="wetlandLayer" /> Wetlands and Deepwater Habitats
-					</div>
-					<div>
-						Basemap
-						<select id="selectBasemap">
-							<option value="satellite">Satellite</option>
-							<option value="gray">Gray</option>
-							<option value="osm">Streets</option>
-							<option value="hybrid">Hybrid</option>
-							<option value="terrain">Terrain</option>
-						</select>
-						Show sites from groups
-						<select id="selectGroupsToShow">
-							<option value="all">All</option>
-						</select>
-					</div>
+					<input type="checkbox" id="watershedsLayer" checked /> Watersheds
+					<input type="checkbox" id="drainsLayer" /> Drains
+					<input type="checkbox" id="riverLayer" /> Rivers/Streams
+					<input type="checkbox" id="impairedLayer" /> IDEM - Impaired Waters
+					<input type="checkbox" id="bodiesLayer" /> Water Bodies
+					<input type="checkbox" id="floodLayer" /> Floodplains
+					<input type="checkbox" id="damLayer" /> Dams
+					<input type="checkbox" id="wellLayer" /> Wells
+					<input type="checkbox" id="wetlandLayer" /> Wetlands and Deepwater Habitats
+				</div>
+				<div>
+					Basemap
+					<select id="selectBasemap">
+						<option value="satellite">Satellite</option>
+						<option value="gray">Gray</option>
+						<option value="osm">Streets</option>
+						<option value="hybrid">Hybrid</option>
+						<option value="terrain">Terrain</option>
+					</select>
+					Show sites from groups
+					<select id="selectGroupsToShow">
+						<option value="all">All</option>
+					</select>
 				</div>
 			</div>
 		</div>
