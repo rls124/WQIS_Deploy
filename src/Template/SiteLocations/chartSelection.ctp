@@ -27,19 +27,11 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		<div style="height: 7vh"></div> <!--filler space so the sidebar doesn't get covered by the navbar-->
 		<div id="searchBox">
 		<fieldset>
-			<h6>Sites: (<span id="advancedSitesButton">Toggle advanced</span>)</h6>
-			<div id="advancedSiteSearchContainerTop" style="display: none">
-				Search by group:
-				<select id="searchGroupsDropdown" style="width:100%"></select>
-			</div>
-			
+			<h6>Sites:</h6>
+			Search by group:
+			<select id="searchGroupsDropdown" style="width:100%"></select>
 			<select class="form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%"></select>
-		
-			<div id="advancedSiteSearchContainerBottom" style="display: none">
-				Mode:
-				<input type="radio" name="groupMode" id="individualGroup" checked>Individual
-				<input type="radio" name="groupMode" id="aggregateGroup">Aggregate
-			</div>
+			<input type="checkbox" id="aggregateGroup">Aggregate
 		
 			<hr/>
 		
@@ -198,10 +190,6 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 						<option value="osm">Streets</option>
 						<option value="hybrid">Hybrid</option>
 						<option value="terrain">Terrain</option>
-					</select>
-					Show sites from groups
-					<select id="selectGroupsToShow">
-						<option value="all">All</option>
 					</select>
 				</div>
 			</div>

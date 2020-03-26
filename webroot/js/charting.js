@@ -29,7 +29,6 @@ var showBenchmarks = true;
 var charts = [];
 var measurementSettings; //will be filled in with the contents of the MeasurementSettings table, containing category/name/alias/benchmarks/detection limits for each
 var groups;
-var advancedSiteSearch = false;
 
 //global variables used by the map
 var mapData;
@@ -149,7 +148,9 @@ $(document).ready(function () {
 		"esri/layers/KMLLayer",
 		"esri/widgets/Home",
 		"esri/widgets/Fullscreen",
-	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen) {
+		"esri/Graphic",
+		"esri/layers/support/LabelClass"
+	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen, Graphic, LabelClass) {
 		buildSitesDropdown(mapData["SiteData"]);
 		buildGroupsDropdown();
 		
@@ -170,6 +171,83 @@ $(document).ready(function () {
 			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer",
 		];
 		
+		//build the points layer
+		var visibleSites = mapData["SiteData"];
+		var graphics = [];
+		const labels = new LabelClass({
+			labelExpressionInfo: {
+				expression: "$feature.siteName"
+			},
+			symbol: {
+				type: "text",
+				color: "white",
+				font: {
+					size: 10,
+					font: "Playfair Display",
+				},
+				horizontalAlignment: "left",
+				haloSize: 3,
+				haloColor: "black"
+			},
+			labelPlacement: "above-center"
+		});
+		//add markers to the map at each sites longitude and latitude
+		for (var i=0; i<visibleSites.length; i++) {
+			var pointGraphic = new Graphic({
+					ObjectID: i,
+					geometry: {
+					type: "point",
+					longitude: visibleSites[i]["Longitude"],
+					latitude: visibleSites[i]["Latitude"]
+				},
+				attributes: {}
+			});
+			
+			pointGraphic.attributes.siteNumber = visibleSites[i]["Site_Number"].toString();
+			pointGraphic.attributes.siteName = visibleSites[i]["Site_Name"];
+			pointGraphic.attributes.siteLocation = visibleSites[i]["Site_Location"];
+			
+			pointGraphic.symbol = {
+				type: "simple-marker",
+				color: defaultPointColor,
+				outline: {
+					color: [255,255,255],
+					width: 2
+				}
+			}
+			
+			for (var shortField in measurementSettings) {
+				var field = shortField + "_samples";
+				
+				for (rowNum=0; rowNum<mapData[field].length; rowNum++) {
+					var siteNumber = mapData[field][rowNum]["site_location_id"];
+					if (pointGraphic.attributes.siteNumber == siteNumber) {
+						pointGraphic.attributes[shortField + "Date"] = mapData[field][rowNum]["Date"].split("T")[0];
+						for (z=0; z<measurementSettings[shortField].length; z++) {
+							var key = measurementSettings[shortField][z].measureKey;
+							if (mapData[field][rowNum][key] !== null) {
+								pointGraphic.attributes[key] = mapData[field][rowNum][key].toString();
+							}
+						}
+						break;
+					}
+				}
+			}
+			
+			visibleSites[i].graphic = pointGraphic;
+			
+			graphics.push(pointGraphic);
+		}
+		
+		sampleSitesLayer = new FeatureLayer({
+			fields: fields,
+			objectIdField: "ObjectID",
+			popupTemplate: template,
+			source: graphics,
+			id: "sampleSites",
+			labelingInfo: [labels]
+		});
+		
 		var mapLayers = [watershedsLayer];
 		for (i=0; i<urls.length; i++) {
 			mapLayers.push(new MapImageLayer({
@@ -177,6 +255,7 @@ $(document).ready(function () {
 				visible: false
 			}));
 		}
+		mapLayers.push(sampleSitesLayer);
 		
 		//create the map
 		map = new Map({
@@ -191,7 +270,7 @@ $(document).ready(function () {
 		});
 		
 		view.when(function() {
-			updateMapPoints(); //build the FeatureLayer and graphics for all our collection sites
+			view.graphics.addMany(graphics);
 
 			//highlight points when they're clicked
 			view.on("click", function(event) {
@@ -324,25 +403,8 @@ $(document).ready(function () {
 		}
 	}
 	
-	function getVisibleSites() {
-		var groupKey = $("#selectGroupsToShow").val();
-		if (groupKey === "all") {
-			return mapData["SiteData"];
-		}
-		
-		var visibleSites = [];
-		for (i=0; i<mapData["SiteData"].length; i++) {
-			var siteGroups = mapData["SiteData"][i].groups;
-			if (siteGroups != null && siteGroups.split(",").includes(groupKey)) {
-				visibleSites.push(mapData["SiteData"][i]);
-			}
-		}
-			
-		return visibleSites;
-	}
-	
 	function selectPoint() {
-		var siteNum = getVisibleSites()[view.popup.selectedFeature.ObjectID].Site_Number;
+		var siteNum = mapData["SiteData"][view.popup.selectedFeature.ObjectID].Site_Number;
 		var currentlySelected = $("#sites").val();
 		
 		if (!currentlySelected.includes(siteNum.toString())) {
@@ -352,76 +414,9 @@ $(document).ready(function () {
 		}
 	}
 	
-	function updateMapPoints() {
-		var FeatureLayer = require("esri/layers/FeatureLayer");
-		var Graphic = require("esri/Graphic");
-		
-		view.graphics.removeAll();
-		
-		var visibleSites = getVisibleSites();
-		var graphics = [];
-		//add markers to the map at each sites longitude and latitude
-		for (var i=0; i<visibleSites.length; i++) {
-			var pointGraphic = new Graphic({
-					ObjectID: i,
-					geometry: {
-					type: "point",
-					longitude: visibleSites[i]["Longitude"],
-					latitude: visibleSites[i]["Latitude"]
-				},
-				attributes: {}
-			});
-			
-			pointGraphic.attributes.siteNumber = visibleSites[i]["Site_Number"].toString();
-			pointGraphic.attributes.siteName = visibleSites[i]["Site_Name"];
-			pointGraphic.attributes.siteLocation = visibleSites[i]["Site_Location"];
-			
-			pointGraphic.symbol = {
-				type: "simple-marker",
-				color: defaultPointColor,
-				outline: {
-					color: [255,255,255],
-					width: 2
-				}
-			}
-			
-			for (var shortField in measurementSettings) {
-				var field = shortField + "_samples";
-				
-				for (rowNum=0; rowNum<mapData[field].length; rowNum++) {
-					var siteNumber = mapData[field][rowNum]["site_location_id"];
-					if (pointGraphic.attributes.siteNumber == siteNumber) {
-						pointGraphic.attributes[shortField + "Date"] = mapData[field][rowNum]["Date"].split("T")[0];
-						for (z=0; z<measurementSettings[shortField].length; z++) {
-							var key = measurementSettings[shortField][z].measureKey;
-							if (mapData[field][rowNum][key] !== null) {
-								pointGraphic.attributes[key] = mapData[field][rowNum][key].toString();
-							}
-						}
-						break;
-					}
-				}
-			}
-			
-			visibleSites[i].graphic = pointGraphic;
-			
-			graphics.push(pointGraphic);
-		}
-		
-		view.graphics.addMany(graphics);
-		
-		sampleSitesLayer = new FeatureLayer({
-			fields: fields,
-			objectIdField: "ObjectID",
-			popupTemplate: template,
-			source: graphics,
-			id: "sampleSites",
-		});
-	}
-	
 	function highlightSelectedPoints() {
 		var points = $("#sites").val();
-		var visiblePoints = getVisibleSites();
+		var visiblePoints = mapData["SiteData"];
 		
 		//first clear out the existing ones
 		for (var point of selectedPoints) {
@@ -485,16 +480,6 @@ $(document).ready(function () {
 			$("#selectGroupsToShow").append(new Option(group.groupName, group.groupKey, false, false))
 		}
 	}
-	
-	$("#selectGroupsToShow").change(function() {
-		buildSitesDropdown(getVisibleSites());
-
-		view.popup.close()
-		clickedPoint = null;
-		selectedPoints = [];
-		updateMapPoints();
-		resetAll();
-	});
 	
 	$("#showBenchmarks").change(function() {
 		showBenchmarks = !showBenchmarks;
@@ -603,19 +588,6 @@ $(document).ready(function () {
 			closeSearchSidebar();
 		}
 	}, false);
-	
-	$("#advancedSitesButton").click(function () {
-		advancedSiteSearch = !advancedSiteSearch;
-		
-		if (advancedSiteSearch) {
-			document.getElementById("advancedSiteSearchContainerTop").style.display = "block";
-			document.getElementById("advancedSiteSearchContainerBottom").style.display = "block";
-		}
-		else {
-			document.getElementById("advancedSiteSearchContainerTop").style.display = "none";
-			document.getElementById("advancedSiteSearchContainerBottom").style.display = "none";
-		}
-	});
 	
 	$("#exportBtn").click(function () {
 		var startDate = $("#startDate").val();
