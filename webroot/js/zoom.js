@@ -120,6 +120,14 @@ function addButtons(node, chartInstance) {
 		doZoom(chartInstance, -1);
 	}
 	node.parentElement.appendChild(zoomOutButton);
+	
+	var resetButton = document.createElement("button");
+	resetButton.innerText = "reset";
+	resetButton.id = "resetButton-" + chartNum;
+	resetButton.onclick = function() {
+		chartInstance.resetZoom();
+	}
+	node.parentElement.appendChild(resetButton);
 }
 
 function doZoom(chartInstance, zoom, center) {
@@ -240,12 +248,11 @@ var zoomPlugin = {
 				dataset._meta = null;
 			});
 
-			chartInstance.update();
+			chartInstance.update(0);
 		};
 		
 		var node = chartInstance.chart.ctx.canvas;
 		addButtons(node, chartInstance);
-
 	},
 	beforeInit: function(chartInstance) {
 		var node = chartInstance.chart.ctx.canvas;
