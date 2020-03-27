@@ -472,8 +472,8 @@ $(document).ready(function () {
 	
 	$("#allCheckbox").change(function() {
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
-		for (var chk of checkboxList) {
-			chk.checked = document.getElementById("allCheckbox").checked;
+		for (i=0; i<checkboxList.length; i++) {
+			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
 		}
 	});
 	
@@ -691,11 +691,6 @@ $(document).ready(function () {
 		for (var i = 0; i < fileData.length; i++) {
 			fileData[i]["Date"] = fileData[i]["Date"].substring(0, 10);
 		}
-
-		//if ID field exists, remove it
-		if (fields[0] === "ID") {
-			fields = fields.splice(1, fields.length);
-		}
 		
 		//make null values not have text
 		var replacer = function (key, value) {
@@ -713,11 +708,9 @@ $(document).ready(function () {
 		csv.unshift(fields.join(','));
 
 		csvContent += csv.join('\r\n');
-		var encodedUri = encodeURI(csvContent);
 		var link = document.createElement("a");
-		link.setAttribute("href", encodedUri);
-		var name = type + "_export.csv";
-		link.setAttribute("download", name);
+		link.setAttribute("href", encodeURI(csvContent));
+		link.setAttribute("download", type + "_export.csv");
 		document.body.appendChild(link);
 		link.click();
 	}
@@ -739,7 +732,7 @@ $(document).ready(function () {
 			resetAll();
 			getNumRecords();
 			getGraphData();
-			setResultsPage(1);
+			getTableData(1);
 			$("#chartsLayoutSelect").show();
 			if (numPages > 0) {
 				document.getElementById("exportBtn").disabled = false;
@@ -776,47 +769,283 @@ $(document).ready(function () {
 		toggleSearchSidebar();
 	});
 	
-	function setResultsPage(page) {
-		tablePage = page;
-		document.getElementById("tableDiv").innerHTML = "";
-		document.getElementById("pageNumBox").value = tablePage;
+	function getTableData(page) {
+		if (numPages > 0) { //if there is any data to display
+			document.getElementById("tableNoData").style = "display: none";
+			document.getElementById("chartsNoData").style = "display: none";
+			document.getElementById("tableSettings").style = "display: block";
+			document.getElementById("tablePageSelector").style = "display: block";
+	
+			tablePage = page;
+			document.getElementById("tableDiv").innerHTML = "";
+			document.getElementById("pageNumBox").value = tablePage;
+
+			$("#firstPageButton").attr("disabled", false);
+			$("#previousPageButton").attr("disabled", false);
+			$("#lastPageButton").attr("disabled", false);
+			$("#nextPageButton").attr("disabled", false);
+
+			if (tablePage == 1) {
+				$("#previousPageButton").attr("disabled", true);
+				$("#firstPageButton").attr("disabled", true);
+			}
+			if (tablePage == numPages) {
+				$("#nextPageButton").attr("disabled", true);
+				$("#lastPageButton").attr("disabled", true);
+			}
+
+			var category = document.getElementById("categorySelect").value;
+			var amountEnter = document.getElementById("amountEnter").value;
+			var overUnderSelect = document.getElementById("overUnderSelect").value;
+			var measurementSearch = document.getElementById("measurementSelect").value;
+			var numRows = document.getElementById("numRowsDropdown").value;
+			var selectedMeasures = getSelectedMeasures();
+			var aggregateMode = document.getElementById("aggregateGroup").checked;
+
+			//set up the column names and IDs to actually display
+			if (!aggregateMode) {
+				var columns = ["Site ID", "Date", "Sample Number"];
+			}
+			else {
+				var columns = ["Date"];
+			}
+			for (i=0; i<selectedMeasures.length; i++) {
+				//get index of this measure so we can find its printable name
+				for (j=0; j<measurementSettings[category].length; j++) {
+					if (measurementSettings[category][j].measureKey === selectedMeasures[i]) {
+						columns.push(measurementSettings[category][j].measureName);
+						break;
+					}
+				}
+			}
+			if (!aggregateMode) {
+				columns.push("Comments");
+				var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
+				columnIDs.push(ucfirst(category) + "Comments");
+			}
+			else {
+				var columnIDs = ((["Date"]).concat(selectedMeasures));
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "/WQIS/generic-samples/tabledata",
+				datatype: "JSON",
+				async: false,
+				data: {
+					"sites": $("#sites").val(),
+					"startDate": $("#startDate").val(),
+					"endDate": $("#endDate").val(),
+					"category": category,
+					"amountEnter": amountEnter,
+					"overUnderSelect": overUnderSelect,
+					"measurementSearch": measurementSearch,
+					"selectedMeasures": selectedMeasures,
+					"numRows": numRows,
+					"pageNum": tablePage,
+					"sortBy": sortBy,
+					"sortDirection": sortDirection,
+					"aggregate": aggregateMode
+				},
+				success: function(response) {
+					//create the blank table
+					var table = document.createElement("table");
+					table.setAttribute("class", "table table-striped table-responsive");
+					table.id = "tableView";
+			
+					//build the header row first
+					var tableHeader = table.insertRow();
+			
+					for (i=0; i<columns.length; i++) {
+						var newCell = document.createElement("th");
+						newCell.innerHTML = columns[i];
+						newCell.setAttribute("class", "sort-by headerSort" + ((columnIDs[i] === sortBy) ? (" " + sortDirection) : ""));
+						newCell.id = columnIDs[i];
+						newCell.onclick = function() {setSort(event);};
+				
+						tableHeader.appendChild(newCell);
+					}
+					if (admin && !aggregateMode) {
+						var actionsCell = document.createElement("th");
+						actionsCell.innerText = "Actions";
+						tableHeader.appendChild(actionsCell);
+					}
+				
+					//fill in each row
+					for (var i=0; i<response[0].length; i++) {
+						var newRow = table.insertRow();
+				
+						Object.keys(response[0][i]).forEach(function(key) {
+							if (key != "ID") {
+								var newCell = newRow.insertCell();
+								var value = response[0][i][key];
+						
+								if (key === "Date") {
+									//we get the date in a weird format, parse it to something more appropriate
+									value = value.split("T")[0];
+								}
+					
+								if (admin && !aggregateMode) {
+									var textDiv = document.createElement("div");
+									textDiv.setAttribute("class", "input text");
+									newCell.appendChild(textDiv);
+							
+									var label = document.createElement("label");
+									label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
+									label.setAttribute("class", "btn btn-thin inputHide");
+									label.setAttribute("for", key + "-" + i);
+									label.innerText = value;
+							
+									label.onclick = function () {
+										var label = $(this);
+										var input = $("#" + label.attr("for"));
+										input.trigger("click");
+										label.attr("style", "display: none");
+										input.attr("style", "display: in-line");
+									};
+						
+									textDiv.appendChild(label);
+							
+									var cellInput = document.createElement("input");
+									cellInput.type = "text";
+									cellInput.name = key + "-" + i;
+									cellInput.setAttribute("maxlength", 20);
+									cellInput.size = 20;
+									cellInput.setAttribute("class", "inputfields tableInput");
+									cellInput.style = "display: none";
+									cellInput.id = key + "-" + i;
+									cellInput.setAttribute("value", value);
+						
+									cellInput.onfocusout = (function () {
+										var input = $(this);
+
+										if (!input.attr("id")) {
+											return;
+										}
 		
-		$("#firstPageButton").attr("disabled", false);
-		$("#previousPageButton").attr("disabled", false);
-		$("#lastPageButton").attr("disabled", false);
-		$("#nextPageButton").attr("disabled", false);
+										var rowNumber = (input.attr("id")).split("-")[1];
+										var sampleNumber = $("#Sample_Number-" + rowNumber).val();
+	
+										var parameter = (input.attr("name")).split("-")[0];
+										var value = input.val();
+
+										$.ajax({
+											type: "POST",
+											url: "/WQIS/generic-samples/updatefield",
+											datatype: "JSON",
+											data: {
+												"sampleNumber": sampleNumber,
+												"parameter": parameter,
+												"value": value
+											},
+											success: function () {
+												var label = $('label[for="' + input.attr('id') + '"');
+
+												input.attr("style", "display: none");
+												label.attr("style", "display: in-line; cursor: pointer");
+	
+												if (value === '') {
+													label.text('  ');
+												}
+												else {
+													label.text(value);
+												}
+											},
+											error: function() {
+												genericError();
+											}
+										});
+									});
+						
+									textDiv.appendChild(cellInput);
+								}
+								else {
+									var label = document.createElement("label");
+									label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
+									label.setAttribute("for", key + "-" + i);
+									label.innerText = value;
+							
+									newCell.appendChild(label);
+								}
+							}
+						});
+				
+						if (admin && !aggregateMode) {
+							//add the deletion button
+							var newCell = newRow.insertCell();
+							var delButton = document.createElement("span");
+							delButton.setAttribute("class", "delete glyphicon glyphicon-trash");
+							delButton.setAttribute("id", "Delete-" + i);
+							delButton.setAttribute("name", "Delete-" + i);
+							delButton.onclick = function() {
+								var rowDiv = this;
 		
-		if (tablePage == 1) {
-			$("#previousPageButton").attr("disabled", true);
-			$("#firstPageButton").attr("disabled", true);
+								if (!$(rowDiv).attr("id")) {
+									return;
+								}
+			
+								$.confirm("Are you sure you want to delete this record?", function (bool) {
+									if (bool) {
+										//delete record with this sample number and category
+										$.ajax({
+											type: "POST",
+											url: "/WQIS/generic-samples/deleteRecord",
+											datatype: "JSON",
+											data: {
+												"sampleNumber": $("#Sample_Number-" + ($(rowDiv).attr("id")).split("-")[1]).val(),
+												"type": category
+											},
+											success: function () {
+												//remove the row from view
+												rowDiv.parentNode.parentNode.style.display = "none";
+						
+												//future work: build a new table, to still maintain correct total number of rows and have correct black/white/black sequencing after deletions
+											},
+											error: function () {
+												genericError();
+											}
+										});
+									}
+								});
+							}
+							newCell.append(delButton);
+						}
+					}
+
+					document.getElementById("tableDiv").append(table);
+				},
+				error: function(response) {
+					genericError();
+				}
+			});
 		}
-		if (tablePage == numPages) {
-			$("#nextPageButton").attr("disabled", true);
-			$("#lastPageButton").attr("disabled", true);
+		else {
+			document.getElementById("tableNoData").style = "display: block";
+			document.getElementById("chartsNoData").style = "display: block";
+			document.getElementById("tableSettings").style = "display: none";
+			document.getElementById("tablePageSelector").style = "display: none";
 		}
-		
-		getTableData();
 	}
 	
 	$("#numRowsDropdown").change(function() {
 		getNumRecords();
-		setResultsPage(1);
+		getTableData(1);
 	});
 	
 	$("#firstPageButton").click(function() {
-		setResultsPage(1);
+		getTableData(1);
 	});
 	
 	$("#previousPageButton").click(function() {
-		setResultsPage(tablePage-1);
+		getTableData(tablePage-1);
 	});
 	
 	$("#nextPageButton").click(function() {
-		setResultsPage(tablePage+1);
+		getTableData(tablePage+1);
 	});
 	
 	$("#lastPageButton").click(function() {
-		setResultsPage(numPages);
+		getTableData(numPages);
 	});
 	
 	$("#chartType").change(function() {
@@ -945,255 +1174,11 @@ $(document).ready(function () {
 		resetTable();
 		sortBy = field;
 		
-		setResultsPage(1);
-	}
-	
-	function getTableData() {
-		var startDate = $("#startDate").val();
-		var endDate = $("#endDate").val();
-		var sites = $("#sites").val();
-		var category = document.getElementById("categorySelect").value;
-		var amountEnter = document.getElementById("amountEnter").value;
-		var overUnderSelect = document.getElementById("overUnderSelect").value;
-		var measurementSearch = document.getElementById("measurementSelect").value;
-		var numRows = document.getElementById("numRowsDropdown").value;
-		var selectedMeasures = getSelectedMeasures();
-		var aggregateMode = document.getElementById("aggregateGroup").checked;
-		
-		//set up the column names and IDs to actually display
-		if (!aggregateMode) {
-			var columns = ["Site ID", "Date", "Sample Number"];
-		}
-		else {
-			var columns = ["Date"];
-		}
-		for (i=0; i<selectedMeasures.length; i++) {
-			//get index of this measure so we can find its printable name
-			for (j=0; j<measurementSettings[category].length; j++) {
-				if (measurementSettings[category][j].measureKey === selectedMeasures[i]) {
-					columns.push(measurementSettings[category][j].measureName);
-					break;
-				}
-			}
-		}
-		if (!aggregateMode) {
-			columns.push("Comments");
-			var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
-			columnIDs.push(ucfirst(category) + "Comments");
-		}
-		else {
-			var columnIDs = ((["Date"]).concat(selectedMeasures));
-		}
-		
-		if (numPages > 0) { //if there is any data to display
-			document.getElementById("tableNoData").style = "display: none";
-			document.getElementById("chartsNoData").style = "display: none";
-			document.getElementById("tableSettings").style = "display: block";
-			document.getElementById("tablePageSelector").style = "display: block";
-		
-			$.ajax({
-				type: "POST",
-				url: "/WQIS/generic-samples/tabledata",
-				datatype: "JSON",
-				async: false,
-				data: {
-					"sites": sites,
-					"startDate": startDate,
-					"endDate": endDate,
-					"category": category,
-					"amountEnter": amountEnter,
-					"overUnderSelect": overUnderSelect,
-					"measurementSearch": measurementSearch,
-					"selectedMeasures": selectedMeasures,
-					"numRows": numRows,
-					"pageNum": tablePage,
-					"sortBy": sortBy,
-					"sortDirection": sortDirection,
-					"aggregate": aggregateMode
-				},
-				success: function(response) {
-					//create the blank table
-					var table = document.createElement("table");
-					table.setAttribute("class", "table table-striped table-responsive");
-					table.id = "tableView";
-					
-					//build the header row first
-					var tableHeader = table.insertRow();
-					
-					for (i=0; i<columns.length; i++) {
-						var newCell = document.createElement("th");
-						newCell.innerHTML = columns[i];
-						newCell.setAttribute("class", "sort-by headerSort" + ((columnIDs[i] === sortBy) ? (" " + sortDirection) : ""));
-						newCell.id = columnIDs[i];
-						newCell.onclick = function() {setSort(event);};
-						
-						tableHeader.appendChild(newCell);
-					}
-					if (admin && !aggregateMode) {
-						var actionsCell = document.createElement("th");
-						actionsCell.innerText = "Actions";
-						tableHeader.appendChild(actionsCell);
-					}
-					
-					//fill in each row
-					for (var i=0; i<response[0].length; i++) {
-						var newRow = table.insertRow();
-						
-						Object.keys(response[0][i]).forEach(function(key) {
-							if (key != "ID") {
-								var newCell = newRow.insertCell();
-								var value = response[0][i][key];
-								
-								if (key === "Date") {
-									//we get the date in a weird format, parse it to something more appropriate
-									value = value.split("T")[0];
-								}
-							
-								if (admin && !aggregateMode) {
-									var textDiv = document.createElement("div");
-									textDiv.setAttribute("class", "input text");
-									newCell.appendChild(textDiv);
-									
-									var label = document.createElement("label");
-									label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
-									label.setAttribute("class", "btn btn-thin inputHide");
-									label.setAttribute("for", key + "-" + i);
-									label.innerText = value;
-									
-									label.onclick = function () {
-										var label = $(this);
-										var input = $("#" + label.attr("for"));
-										input.trigger("click");
-										label.attr("style", "display: none");
-										input.attr("style", "display: in-line");
-									};
-								
-									textDiv.appendChild(label);
-									
-									var cellInput = document.createElement("input");
-									cellInput.type = "text";
-									cellInput.name = key + "-" + i;
-									cellInput.setAttribute("maxlength", 20);
-									cellInput.size = 20;
-									cellInput.setAttribute("class", "inputfields tableInput");
-									cellInput.style = "display: none";
-									cellInput.id = key + "-" + i;
-									cellInput.setAttribute("value", value);
-								
-									cellInput.onfocusout = (function () {
-										var input = $(this);
-
-										if (!input.attr("id")) {
-											return;
-										}
-			
-										var rowNumber = (input.attr("id")).split("-")[1];
-										var sampleNumber = $("#Sample_Number-" + rowNumber).val();
-			
-										var parameter = (input.attr("name")).split("-")[0];
-										var value = input.val();
-
-										$.ajax({
-											type: "POST",
-											url: "/WQIS/generic-samples/updatefield",
-											datatype: "JSON",
-											data: {
-												"sampleNumber": sampleNumber,
-												"parameter": parameter,
-												"value": value
-											},
-											success: function () {
-												var label = $('label[for="' + input.attr('id') + '"');
-
-												input.attr("style", "display: none");
-												label.attr("style", "display: in-line; cursor: pointer");
-
-												if (value === '') {
-													label.text('  ');
-												}
-												else {
-													label.text(value);
-												}
-											},
-											error: function() {
-												genericError();
-											}
-										});
-									});
-								
-									textDiv.appendChild(cellInput);
-								}
-								else {
-									var label = document.createElement("label");
-									label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
-									label.setAttribute("for", key + "-" + i);
-									label.innerText = value;
-									
-									newCell.appendChild(label);
-								}
-							}
-						});
-						
-						if (admin && !aggregateMode) {
-							//add the deletion button
-							var newCell = newRow.insertCell();
-							var delButton = document.createElement("span");
-							delButton.setAttribute("class", "delete glyphicon glyphicon-trash");
-							delButton.setAttribute("id", "Delete-" + i);
-							delButton.setAttribute("name", "Delete-" + i);
-							delButton.onclick = function() {
-								var rowDiv = this;
-				
-								if (!$(rowDiv).attr("id")) {
-									return;
-								}
-				
-								$.confirm("Are you sure you want to delete this record?", function (bool) {
-									if (bool) {
-										//delete record with this sample number and category
-										$.ajax({
-											type: "POST",
-											url: "/WQIS/generic-samples/deleteRecord",
-											datatype: "JSON",
-											data: {
-												"sampleNumber": $("#Sample_Number-" + ($(rowDiv).attr("id")).split("-")[1]).val(),
-												"type": category
-											},
-											success: function () {
-												//remove the row from view
-												rowDiv.parentNode.parentNode.style.display = "none";
-								
-												//future work: build a new table, to still maintain correct total number of rows and have correct black/white/black sequencing after deletions
-											},
-											error: function () {
-												genericError();
-											}
-										});
-									}
-								});
-							}
-							newCell.append(delButton);
-						}
-					}
-		
-					document.getElementById("tableDiv").append(table);
-				},
-				error: function(response) {
-					genericError();
-				}
-			});
-		}
-		else {
-			document.getElementById("tableNoData").style = "display: block";
-			document.getElementById("chartsNoData").style = "display: block";
-			document.getElementById("tableSettings").style = "display: none";
-			document.getElementById("tablePageSelector").style = "display: none";
-		}
+		getTableData(1);
 	}
 	
 	function getSelectedMeasures() {
 		var measures = [];
-		
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
 		
 		for (var i=0; i<checkboxList.length; i++) {
@@ -1203,14 +1188,6 @@ $(document).ready(function () {
 		}
 		
 		return measures;
-	}
-	
-	function average(values) {
-		var total = 0;
-		for (i=0; i<values.length; i++) {
-			total = total + values[i];
-		}
-		return (total/values.length);
 	}
 
 	function getGraphData() {
