@@ -54,7 +54,6 @@ var fields = [{ //fields object the map uses for the points layer
 	name: "siteLocation",
 	type: "string"
 }];
-var sampleSitesLayer;
 var clickedPoint;
 var selectedPoints = [];
 
@@ -151,8 +150,15 @@ $(document).ready(function () {
 		"esri/Graphic",
 		"esri/layers/support/LabelClass"
 	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen, Graphic, LabelClass) {
-		buildSitesDropdown(mapData["SiteData"]);
-		buildGroupsDropdown();
+		//build the site and group dropdowns in the sidebar
+		$("#searchGroupsDropdown").append(new Option("select an option", "", false, false));
+		for (var group of groups) {
+			$("#searchGroupsDropdown").append(new Option(group.groupName, group.groupKey, false, false));
+		}
+		
+		for (var site of mapData["SiteData"]) {
+			$("#sites").append(new Option(site.Site_Number + " " + site.Site_Name, site.Site_Number, false, false));
+		}
 		
 		var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
 		var watershedsLayer = new KMLLayer({
@@ -239,7 +245,7 @@ $(document).ready(function () {
 			graphics.push(pointGraphic);
 		}
 		
-		sampleSitesLayer = new FeatureLayer({
+		var sampleSitesLayer = new FeatureLayer({
 			fields: fields,
 			objectIdField: "ObjectID",
 			popupTemplate: template,
@@ -414,29 +420,6 @@ $(document).ready(function () {
 		}
 	}
 	
-	function highlightSelectedPoints() {
-		var points = $("#sites").val();
-		var visiblePoints = mapData["SiteData"];
-		
-		//first clear out the existing ones
-		for (var point of selectedPoints) {
-			setColor(point, defaultPointColor);
-		}
-		
-		selectedPoints = [];
-		
-		for (i=0; i<points.length; i++) {
-			//get associated graphic for this point
-			for (j=0; j<visiblePoints.length; j++) {
-				if (visiblePoints[j].Site_Number.toString() === points[i]) {
-					setColor(visiblePoints[j].graphic, selectedPointColor);
-					selectedPoints.push(visiblePoints[j].graphic);
-					break;
-				}
-			}
-		}
-	}
-	
 	$("#searchGroupsDropdown").change(function() {
 		var selected = $("#searchGroupsDropdown").val();
 		
@@ -459,27 +442,27 @@ $(document).ready(function () {
 	
 	$("#sites").change(function() {
 		getRange();
-		highlightSelectedPoints();
-    });
-	
-	function buildSitesDropdown(sites) {
-		$("#searchGroupsDropdown").empty();
-		$("#searchGroupsDropdown").append(new Option("select an option", "", false, false));
-		for (var group of groups) {
-			$("#searchGroupsDropdown").append(new Option(group.groupName, group.groupKey, false, false));
+		
+		var points = $("#sites").val();
+		
+		//first clear out the existing ones
+		for (var point of selectedPoints) {
+			setColor(point, defaultPointColor);
 		}
 		
-		$("#sites").empty();
-		for (var site of sites) {
-			$("#sites").append(new Option(site.Site_Number + " " + site.Site_Name, site.Site_Number, false, false));
+		selectedPoints = [];
+		
+		for (i=0; i<points.length; i++) {
+			//get associated graphic for this point
+			for (j=0; j<mapData["SiteData"].length; j++) {
+				if (mapData["SiteData"][j].Site_Number.toString() === points[i]) {
+					setColor(mapData["SiteData"][j].graphic, selectedPointColor);
+					selectedPoints.push(mapData["SiteData"][j].graphic);
+					break;
+				}
+			}
 		}
-	}
-	
-	function buildGroupsDropdown() {
-		for (var group of groups) {
-			$("#selectGroupsToShow").append(new Option(group.groupName, group.groupKey, false, false))
-		}
-	}
+    });
 	
 	$("#showBenchmarks").change(function() {
 		showBenchmarks = !showBenchmarks;
@@ -550,7 +533,19 @@ $(document).ready(function () {
 	});
 	
 	document.getElementById("measurementSelect").addEventListener("change", function() {
-		changeBenchmark();
+		var category = $("#categorySelect").val();
+		var measureIndex
+			for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
+				if (measurementSettings[category][measureIndex].measureKey === document.getElementById("measurementSelect").value) {
+					break;
+				}
+			}	
+		if (measurementSettings[category][measureIndex].benchmarkMaximum == null) {
+			document.getElementById("amountEnter").placeholder = "No Benchmark Available";
+		}
+		else {
+			document.getElementById("amountEnter").placeholder = "Benchmark: " + measurementSettings[category][measureIndex].benchmarkMaximum;
+		}
 	});
 	
     $(".date-picker").datepicker({
@@ -685,22 +680,6 @@ $(document).ready(function () {
 		//reset the sortBy field to Date, since none of the other measures will be valid anymore
 		sortBy = "Date";
 	}
-	
-	function changeBenchmark(){
-		var category = $("#categorySelect").val();
-		var measureIndex
-			for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
-				if (measurementSettings[category][measureIndex].measureKey === document.getElementById("measurementSelect").value) {
-					break;
-				}
-			}	
-		if (measurementSettings[category][measureIndex].benchmarkMaximum == null) {
-			document.getElementById("amountEnter").placeholder = "No Benchmark Available";
-		}
-		else {
-			document.getElementById("amountEnter").placeholder = "Benchmark: " + measurementSettings[category][measureIndex].benchmarkMaximum;
-		}
-	};
 	
 	function downloadFile(fileData, type) {
 		if (fileData.length < 1) {
