@@ -8,6 +8,8 @@
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
 <script defer src="../js/charting.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+<script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
 <?= $this->Html->script('zoom.js') ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
@@ -149,7 +151,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 
 <div class="col-lg-12" id="main">
 	<div class="card">
-		<div class="card-header">
+		<div class="card-header" id="mapCard">
 			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseMap">Map</a></h4>
 		</div>
 		<div id="collapseMap" class="panel-collapse collapse show">
@@ -171,7 +173,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 					</div>
 				</div>
 				<div id="map"></div>
-				<div>
+				<div id="layerBar">
 					<input type="checkbox" id="watershedsLayer" checked /> Watersheds
 					<input type="checkbox" id="drainsLayer" /> Drains
 					<input type="checkbox" id="riverLayer" /> Rivers/Streams
@@ -197,7 +199,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 	</div>
 		
 	<div class="card">
-		<div class="card-header">
+		<div class="card-header" id="timelineCard">
 			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseTimeline">Timeline</a></h4>
 		</div>
 		<div id="collapseTimeline" class="panel-collapse collapse show">
@@ -218,7 +220,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 	</div>
 		
 	<div class="card">
-		<div class="card-header">
+		<div class="card-header" id="tableCard">
 			<h4><a class="collapsible-panel card-link" data-toggle="collapse" href="#collapseTable">Table</a></h4>
 		</div>
 		<div id="collapseTable" class="panel-collapse collapse show">
