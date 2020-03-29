@@ -88,6 +88,195 @@ function benchmarkLine(val, color) {
 	};
 }
 
+const driver = new Driver({
+	animate: true, 
+	doneBtnText: 'Finish Tour',
+	closeBtnText: 'Exit Tour', 
+	keyboardControl: true,
+	allowClose: false,
+	opacity: .75,
+
+});
+
+driver.defineSteps([
+{
+  element: '.h-100',
+  stageBackground: '#00000000',
+  popover: {
+	className: 'first-popover-class',
+    title: 'Welcome!',
+    description: 'Welcome to the Water Quality Information System. This is a resource dedicated to analyzing and cataloging water quality samples taken within various watersheds located in Indiana, Michigan, and Ohio. More Can Be found in our About Page.',
+	position: 'mid-center',
+  }
+},{
+  element: '#navbar',
+  stageBackground: '#BF000000',
+  popover: {
+	className: 'second-popover-class',
+	
+	title: 'Located Here!',
+    description: 'The "about" page may help answer various questions you may have about the initiative or aspects of the project.',
+	position: 'bottom-left',
+	offset: 180
+  }
+},{
+  element: '#mapCard',
+  popover: {
+	className: 'third-popover-class',
+    title: 'The Map',
+    description: 'This is the Map, Here you will see several blue points and colored outlines. The colorful outlines signify different watersheds, and the blue dots represent water collection sites.',
+	position: 'left',
+  }
+
+},{
+  element: '#map',
+  popover: {
+	className: 'fourth-popover-class',
+    title: 'Try Selecting One!',
+    description: 'Try Selecting one of the collection sites by clicking on any of the blue dots on the map. Doing so will provide all the data from the last collected water sample at that selected site.',
+	position: 'left',
+  }
+},{
+  element: '#layerBar',
+  popover: {
+	className: 'fifth-popover-class',
+    title: 'Layers',
+    description: 'These are the different layers. They can be toggled on or off by clicking the checkboxes. Selecting these layers will result in additional highlighted features on the map that were not present before.',
+	position: 'left',
+  }
+},{
+  element: '#selectBasemap',
+  popover: {
+	className: 'sixth-popover-class',
+    title: 'Basemaps',
+    description: 'This dropdown menu contains a list of different basemap views that are available. Selecting one of these will cause the background view of the map to change depending on which basemap is selected.',
+	position: 'left',
+  }, onNext: () => {
+	  document.getElementById("driver-page-overlay").style.opacity = '0';
+	  },
+},{
+  element: '.sidebarContainer',
+  stageBackground: '#BF000000',
+  popover: {
+	className: 'seventh-popover-class',
+    title: 'Sidebar Menu',
+    description: 'This is the sidebar container. This is where we will be able to search the system for more specific data.',
+	position: 'right',
+  }
+},{
+ element: '#sidebarToggle', 
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'eighth-popover-class',
+    title: 'Sidebar Toggle',
+    description: 'This is the button that allows you to close and open the sidebar at will.',
+	position: 'right',
+  }
+},{
+  element: '#searchGroupsDropdown',
+  stageBackground: '#BF000000',
+  popover: {
+	className: 'ninth-popover-class',
+    title: 'Selecting Sites and Groups',
+    description: 'Here is where you will select which sites or groups of sites you would like to search for data over.',
+	position: 'right',
+	offset: 35
+  }
+},{
+  element: '#categorySelect',
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'tenth-popover-class',
+    title: 'Selecting a Category',
+    description: 'Here is where you will select a measurement category you would like to search by, all water quality data is classified under these four measurement categories.',
+	position: 'right',
+  },
+   
+},{
+  element: '#checkboxList',
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'eleventh-popover-class',
+    title: 'Selecting a Measurement',
+    description: 'Here is where you will select a measurement you would like to search by, you may select as many checkboxes as there are available. These selections will determine the type of data you recieve.',
+	position: 'right',
+  }
+},{
+  element: '#startDate',
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'twelveth-popover-class',
+    title: 'Selecting a Date Range',
+    description: 'Here is where you will select a date range you would like to view data over. You will only recieve data that falls within this provided date range',
+	position: 'right',
+  }
+},{
+  element: '#measurementSelect',
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'thirteenth-popover-class',
+    title: 'Additionally filtering your search results',
+    description: 'This section is completely optional, but here is where you will be able to refine the data you will recieve. The measurement box will already be filled in and always match the same measurement criteria set above.',
+	position: 'right',
+  }
+},{
+  element: '#overUnderSelect',
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'fourteenth-popover-class',
+    title: 'Searching Over, Under, or Equal to a specified amount',
+    description: 'This is where we will specify if we would like to serach over, under, or equal to a certain amount of a measure. For example, if we search for Ecoli Over 2000, we would only recieve data where ecoli was over 2000,',
+	position: 'right',
+  }
+},{
+  element: '#amountEnter',
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'fifteenth-popover-class',
+    title: 'Entering an amount',
+    description: 'Here we can enter the amount we would like to search by. The number that appears in this textbox by default is the set benchmark for that given measure, this is to give the user a better sense of the range they should be searching by.',
+	position: 'right',
+  }
+},{
+  element: '#updateButton',
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'sixteenth-popover-class',
+    title: 'Updating the graphs based on your search criteria',
+    description: 'When you are completely finished filling out the form in the side panel, click the update function to get a visual and numerical representation of the data.',
+	position: 'right',
+  }
+},{
+  element: '#resetButton',
+ stageBackground: '#BF000000',
+  popover: {
+	className: 'seventeenth-popover-class',
+    title: 'Reseting the forum',
+    description: 'If you would like to start the forum over, click the reset button and everything will be reset to its default state.',
+	position: 'right',
+  }, onNext: () => {
+	  document.getElementById("driver-page-overlay").style.opacity = '.75';
+	  },
+},{
+  element: '#timelineCard',
+  popover: {
+	className: 'eighteenth-popover-class',
+    title: 'VIewing your Graphs',
+    description: 'A visual represnetation of your searched data will appear here in the timeline section',
+	position: 'left',
+  }
+},{
+  element: '#tableCard',
+  popover: {
+	className: 'ninteenth-popover-class',
+    title: 'VIewing your Data Numerically ',
+    description: 'All enteries in the system that match your search criteria will appear here in Chronological Descending order. This can be changed by clicking on the table headers.',
+	position: 'left',
+  }
+},
+
+]);
+
 //get all data needed for initial page loading
 $.ajax({
 	type: "POST",
@@ -1406,5 +1595,11 @@ $(document).ready(function () {
 		}));
 	}
 	
+	if(!localStorage.getItem("visited")){
+		driver.start();
+		localStorage.setItem("visited",true);
+	}
+	
+
 	spinnerInhibited = false;
 });
