@@ -41,7 +41,10 @@
 		Use the sidebar on the left side to select the information you're interested in viewing. First, select one or more sample sites. Any number of sites can be selected simultaneously.
 	</p>
 	<p>
-		Click "Toggle advanced" next to "Sites" to view additional options to search by sites. "Search by group" fills in the Sites selection box with all of the sites contained in the selected group. You can still manually add or remove sites from the search, as normal. The "Mode" option underneath determines how the sites are displayed after a search. Individual mode displays every individual site selected, while Aggregate mode takes the average value of each site for each date and measurement. This allows patterns shared by several sites (eg, nearby points all near a common pollutant source) to be easily viewed.
+		"Search by group" is an optional parameter which fills in the Sites selection box with all of the sites contained in the selected group. You can still manually add or remove sites from the search, as normal.
+	</p>
+	<p>
+		The "Aggregate Mode" option underneath determines how the sites are displayed after a search. If enabled, Aggregate Mode takes the average value of each site for each date and measurement. This allows patterns shared by several sites (eg, nearby points all near a common pollutant source) to be easily viewed.
 	</p>
 	
 	<p>
