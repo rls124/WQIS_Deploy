@@ -295,10 +295,6 @@ $(document).ready(function () {
 		admin = false;
 	}
 	
-	if (preselectSite) {
-		$("#sites").val(preselectSite);
-	}
-	
 	//build the table template we use to display all the data associated with a point on the map
 	var templateContent = "<table>";
 	for (var category in measurementSettings) {
@@ -578,6 +574,11 @@ $(document).ready(function () {
 		basemapSelect.addEventListener("change", function() {
 			map.basemap = basemapSelect.value;
 		});
+		
+		//if theres a preselected site defined in the GET data, set it
+		if (preselectSite) {
+			$("#sites").val(preselectSite).trigger("change");
+		}
 	});
 	
 	function setColor(point, color) {

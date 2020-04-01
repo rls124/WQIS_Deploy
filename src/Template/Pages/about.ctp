@@ -80,5 +80,5 @@
 
 <h2>Sample Sites</h2>
 <p>
-For a list of all supported sample sites, click <a href="/WQIS/site-locations/siteinfo">here</a>
+For a list of all supported sample sites, click <a href="/WQIS/site-locations/sitemanagement">here</a>
 </p>

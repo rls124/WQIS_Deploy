@@ -2,14 +2,18 @@
 <?= $this->Html->css('loading.css') ?>
 
 <div id="message" class="message hidden"></div>
-    
-<p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Site Management
+
+<p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Sites
+<?php if ($admin) {?>
 	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
 		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
 	</a>
+<?php }?>
 </p>
 
 <hr>
+<?php
+if ($admin) { ?>
 <div class="collapse" id="collapseInfo">
 	<div class="card card-body">
 		<p>This page is used to add, edit, or delete sites.</p>
@@ -21,15 +25,19 @@
 	</div>
 </div>
 <input type="button" class="addSitebtn btn-basic btn mt-2 mb-2 btn-md" value="Add Site" id="addSiteBtn" name="addSiteBtn" data-toggle="modal" data-target="#addSiteModal"/>
+<?php }?>
+<p>
+	WQIS maintains sample data from <?=$numSites?> collection sites
+</p>
 <table id="tableView" class="table table-striped table-responsive">
 	<thead>
 		<tr>
 			<th>Site Number</th>
-			<th>Monitored</th>
+			<?php if ($admin) {?><th>Monitored</th><?php }?>
 			<th>Longitude</th>
 			<th>Latitude</th>
-			<th>Site Location</th>
 			<th>Site Name</th>
+			<th>Site Location</th>
 			<th>Groups</th>
 			<th>Actions</th>
 		</tr>
@@ -41,27 +49,29 @@
 		    ?>
 		    <tr id='tr-<?= $siteData->ID ?>'>
 			<td class='sitenum' id='<?php echo 'td-' . $siteData->ID . '-siteNum'; ?>'><?= $siteData->Site_Number ?></td>
-			<td id='<?php echo 'td-' . $siteData->ID . '-monitored'; ?>'>
-			<?=
-				$this->Form->create(false, [
+			
+			<?php
+			if ($admin) {
+				echo "<td id=\"td-" . $siteData->ID . "-monitored\">";
+				echo $this->Form->create(false, [
 					'id' => 'checkboxForm'
 				]);
-			?>
-			<?=
-				$this->Form->checkbox('monitored-' . $siteData->ID, [
+				echo $this->Form->checkbox('monitored-' . $siteData->ID, [
 					'class' => "form-control checkbox",
 					'checked' => $siteData->Monitored,
 					'value' => $siteData->Monitored,
 					'id' => 'td-' . $siteData->ID . '-monitoredcheckbox'
 				]);
+			}
 			?>
 			</td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-longitude'; ?>'><?= $siteData->Longitude ?></td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-latitude'; ?>'><?= $siteData->Latitude ?></td>
-			<td id='<?php echo 'td-' . $siteData->ID . '-siteLoc'; ?>'><?= $siteData->Site_Location ?></td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-siteName'; ?>'><?= $siteData->Site_Name ?></td>
+			<td id='<?php echo 'td-' . $siteData->ID . '-siteLoc'; ?>'><?= $siteData->Site_Location ?></td>
 			<td id='<?php echo 'td-' . $siteData->ID . '-groups'; ?>'><?= $siteData->groups ?></td>
 			<td>
+			<?php if ($admin) {?>
 				<a id="edit-tooltip" data-toggle="tooltip" title="Edit Site">
 			    <?=
 			    $this->Html->tag('span', "", [
@@ -82,6 +92,8 @@
 			    ]);
 				?>
 				</a>
+			<?php }?>
+			<a href="chartselection?site=<?=$siteData->Site_Number?>">View</a>
 			</td>
 			<?php
 			$row++;
@@ -90,6 +102,7 @@
 	<?php endforeach; ?>
 	</tbody>
 </table>
+<?php if ($admin) {?>
 <input type='button' class='addSitebtn btn-basic btn mb-3 btn-md' value='Add Site' id='addSiteBtn' name='addSiteBtn' style='float: right;' data-toggle="modal" data-target="#addSiteModal"/>
 
 <!-- Modal Stuff for edit button -->
@@ -276,6 +289,6 @@
             </div>
         </div>
 	<?= $this->Form->end() ?>
-        
-    </div>
+	</div>
 </div>
+<?php } ?>

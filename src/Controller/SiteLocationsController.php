@@ -64,16 +64,6 @@
 		
 			return $this->response;
 		}
-		
-		public function siteinfo() {
-			$this->loadModel("SiteLocations");
-			
-			$SiteLocations = $this->SiteLocations->find("all")->order(["Site_Number" => "ASC"]);
-			$numSites = $SiteLocations->count();
-			
-			$this->set(compact("SiteLocations"));
-			$this->set(compact("numSites"));
-		}
 
 		public function daterange() {
 			$this->render(false);
@@ -107,9 +97,11 @@
 		}
 
 		public function sitemanagement() {
-			$SiteLocations = $this->SiteLocations->find("all")
-				->order(["Site_Number" => "ASC"]);
+			$SiteLocations = $this->SiteLocations->find("all")->order(["Site_Number" => "ASC"]);
+			$numSites = $SiteLocations->count();
+			
 			$this->set(compact("SiteLocations"));
+			$this->set(compact("numSites"));
 		}
 
 		public function fetchsitedata() {
