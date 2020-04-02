@@ -579,6 +579,10 @@ $(document).ready(function () {
 		if (preselectSite) {
 			$("#sites").val(preselectSite).trigger("change");
 		}
+		else {
+			//trigger change anyway, to make "Select sites" show since for some reason that doesn't work by default
+			$("#sites").trigger("change");
+		}
 	});
 	
 	function setColor(point, color) {
@@ -1009,9 +1013,11 @@ $(document).ready(function () {
 				}
 			}
 			if (!aggregateMode) {
-				columns.push("Comments");
 				var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
-				columnIDs.push(ucfirst(category) + "Comments");
+				if (admin) {
+					columns.push("Comments");
+					columnIDs.push(ucfirst(category) + "Comments");
+				}
 			}
 			else {
 				var columnIDs = ((["Date"]).concat(selectedMeasures));
@@ -1079,83 +1085,157 @@ $(document).ready(function () {
 									var textDiv = document.createElement("div");
 									textDiv.setAttribute("class", "input text");
 									newCell.appendChild(textDiv);
-							
-									var label = document.createElement("label");
-									label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
-									label.setAttribute("class", "btn btn-thin inputHide");
-									label.setAttribute("for", key + "-" + i);
-									label.innerText = value;
-							
-									label.onclick = function () {
-										var label = $(this);
-										var input = $("#" + label.attr("for"));
-										input.trigger("click");
-										label.attr("style", "display: none");
-										input.attr("style", "display: in-line");
-									};
+										
+									if (!key.includes("Comment")) {
+										var label = document.createElement("label");
+										label.style = "display: table-cell; cursor: pointer; white-space:normal !important";
+										label.setAttribute("class", "btn btn-thin inputHide");
+										label.setAttribute("for", key + "-" + i);
+										label.innerText = value;
+										
+										label.onclick = function () {
+											var label = $(this);
+											var input = $("#" + label.attr("for"));
+											input.trigger("click");
+											label.attr("style", "display: none");
+											input.attr("style", "display: in-line");
+										};
 						
-									textDiv.appendChild(label);
+										textDiv.appendChild(label);
+								
+										var cellInput = document.createElement("input");
+										cellInput.type = "text";
+										cellInput.name = key + "-" + i;
+										cellInput.setAttribute("maxlength", 20);
+										cellInput.size = 20;
+										cellInput.setAttribute("class", "inputfields tableInput");
+										cellInput.style = "display: none";
+										cellInput.id = key + "-" + i;
+										cellInput.setAttribute("value", value);
 							
-									var cellInput = document.createElement("input");
-									cellInput.type = "text";
-									cellInput.name = key + "-" + i;
-									cellInput.setAttribute("maxlength", 20);
-									cellInput.size = 20;
-									cellInput.setAttribute("class", "inputfields tableInput");
-									cellInput.style = "display: none";
-									cellInput.id = key + "-" + i;
-									cellInput.setAttribute("value", value);
-						
-									cellInput.onfocusout = (function () {
-										var input = $(this);
+										cellInput.onfocusout = (function () {
+											var input = $(this);
 
-										if (!input.attr("id")) {
-											return;
-										}
-		
-										var rowNumber = (input.attr("id")).split("-")[1];
-										var sampleNumber = $("#Sample_Number-" + rowNumber).val();
-	
-										var parameter = (input.attr("name")).split("-")[0];
-										var value = input.val();
-
-										$.ajax({
-											type: "POST",
-											url: "/WQIS/generic-samples/updatefield",
-											datatype: "JSON",
-											data: {
-												"sampleNumber": sampleNumber,
-												"parameter": parameter,
-												"value": value
-											},
-											success: function () {
-												var label = $('label[for="' + input.attr('id') + '"');
-
-												input.attr("style", "display: none");
-												label.attr("style", "display: in-line; cursor: pointer");
-	
-												if (value === '') {
-													label.text('  ');
-												}
-												else {
-													label.text(value);
-												}
-											},
-											error: function() {
-												genericError();
+											if (!input.attr("id")) {
+												return;
 											}
+			
+											var rowNumber = (input.attr("id")).split("-")[1];
+											var sampleNumber = $("#Sample_Number-" + rowNumber).val();
+		
+											var parameter = (input.attr("name")).split("-")[0];
+											var value = input.val();
+	
+											$.ajax({
+												type: "POST",
+												url: "/WQIS/generic-samples/updatefield",
+												datatype: "JSON",
+												data: {
+													"sampleNumber": sampleNumber,
+													"parameter": parameter,
+													"value": value
+												},
+												success: function () {
+													var label = $('label[for="' + input.attr('id') + '"');
+
+													input.attr("style", "display: none");
+													label.attr("style", "display: in-line; cursor: pointer");
+	
+													if (value === '') {
+														label.text('  ');
+													}
+													else {
+														label.text(value);
+													}
+												},
+												error: function() {
+													genericError();
+												}
+											});
 										});
-									});
 						
-									textDiv.appendChild(cellInput);
+										textDiv.appendChild(cellInput);
+									}
+									else {
+										//handle comments column separately because its a larger amount of text that needs to be displayed in multiple lines
+										var label = document.createElement("label");
+										label.style = "display: table-cell; cursor: pointer; white-space:normal !important; overflow-wrap: anywhere";
+										label.setAttribute("class", "btn btn-thin inputHide");
+										label.setAttribute("for", key + "-" + i);
+										label.innerText = value;
+										
+										label.onclick = function () {
+											var label = $(this);
+											var input = $("#" + label.attr("for"));
+											input.trigger("click");
+											label.attr("style", "display: none");
+											input.attr("style", "display: in-line");
+										};
+										
+										textDiv.appendChild(label);
+										
+										var textArea = document.createElement("textarea");
+										textArea.setAttribute("rows", "4");
+										textArea.setAttribute("cols", "50");
+										textArea.setAttribute("class", "tableInput");
+										textArea.setAttribute("name", key + "-" + i);
+										textArea.setAttribute("style", "display: none");
+										textArea.setAttribute("id", key + "-" + i);
+										textArea.innerText = value;
+										
+										textArea.onfocusout = (function () {
+											var input = $(this);
+
+											if (!input.attr("id")) {
+												return;
+											}
+			
+											var rowNumber = (input.attr("id")).split("-")[1];
+											var sampleNumber = $("#Sample_Number-" + rowNumber).val();
+		
+											var parameter = (input.attr("name")).split("-")[0];
+											var value = input.val();
+	
+											$.ajax({
+												type: "POST",
+												url: "/WQIS/generic-samples/updatefield",
+												datatype: "JSON",
+												data: {
+													"sampleNumber": sampleNumber,
+													"parameter": parameter,
+													"value": value
+												},
+												success: function () {
+													var label = $('label[for="' + input.attr('id') + '"');
+
+													input.attr("style", "display: none");
+													label.attr("style", "display: in-line; cursor: pointer");
+	
+													if (value === '') {
+														label.text('  ');
+													}
+													else {
+														label.text(value);
+													}
+												},
+												error: function() {
+													genericError();
+												}
+											});
+										});
+										
+										textDiv.appendChild(textArea);
+									}
 								}
 								else {
-									var label = document.createElement("label");
-									label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
-									label.setAttribute("for", key + "-" + i);
-									label.innerText = value;
+									if (!key.includes("Comment")) {
+										var label = document.createElement("label");
+										label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
+										label.setAttribute("for", key + "-" + i);
+										label.innerText = value;
 							
-									newCell.appendChild(label);
+										newCell.appendChild(label);
+									}
 								}
 							}
 						});

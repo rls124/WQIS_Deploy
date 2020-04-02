@@ -1,4 +1,5 @@
 <?= $this->Html->script('siteManagement.js') ?>
+<?= $this->Html->css('measurementBenchmarks.css') ?>
 <?= $this->Html->css('loading.css') ?>
 
 <div id="message" class="message hidden"></div>
@@ -51,24 +52,86 @@ if ($admin) { ?>
 			<td class='sitenum' id='<?php echo 'td-' . $siteData->ID . '-siteNum'; ?>'><?= $siteData->Site_Number ?></td>
 			
 			<?php
-			if ($admin) {
-				echo "<td id=\"td-" . $siteData->ID . "-monitored\">";
-				echo $this->Form->create(false, [
-					'id' => 'checkboxForm'
-				]);
-				echo $this->Form->checkbox('monitored-' . $siteData->ID, [
-					'class' => "form-control checkbox",
-					'checked' => $siteData->Monitored,
-					'value' => $siteData->Monitored,
-					'id' => 'td-' . $siteData->ID . '-monitoredcheckbox'
-				]);
-			}
+			echo "<td id=\"td-" . $siteData->ID . "-monitored\">";
+			echo $this->Form->create(false, [
+				'id' => 'checkboxForm'
+			]);
+			echo $this->Form->checkbox('monitored-' . $siteData->ID, [
+				'class' => "form-control checkbox",
+				'checked' => $siteData->Monitored,
+				'value' => $siteData->Monitored,
+				'id' => 'td-' . $siteData->ID . '-monitoredcheckbox'
+			]);
 			?>
 			</td>
-			<td id='<?php echo 'td-' . $siteData->ID . '-longitude'; ?>'><?= $siteData->Longitude ?></td>
-			<td id='<?php echo 'td-' . $siteData->ID . '-latitude'; ?>'><?= $siteData->Latitude ?></td>
-			<td id='<?php echo 'td-' . $siteData->ID . '-siteName'; ?>'><?= $siteData->Site_Name ?></td>
-			<td id='<?php echo 'td-' . $siteData->ID . '-siteLoc'; ?>'><?= $siteData->Site_Location ?></td>
+			<td>
+			<?php
+			echo $this->Form->control('longitude', ['maxlength' => '12',
+				'id' => 'longitude-' . $row,
+				'class' => 'inputfields tableInput',
+				'size' => '11',
+				'value' => $siteData->Longitude,
+				'style' => 'display: none',
+				'label' => [
+					'style' => 'display: in-line; cursor: pointer',
+					'class' => 'btn btn-thin inputHide',
+					'text' => $siteData->Longitude . ' '
+				]
+			]);
+			?>
+			</td>
+			
+			<td>
+			<?php
+			echo $this->Form->control('latitude', ['maxlength' => '12',
+				'id' => 'latitude-' . $row,
+				'class' => 'inputfields tableInput',
+				'size' => '11',
+				'value' => $siteData->Latitude,
+				'style' => 'display: none',
+				'label' => [
+					'style' => 'display: in-line; cursor: pointer',
+					'class' => 'btn btn-thin inputHide',
+					'text' => $siteData->Latitude . ' '
+				]
+			]);
+			?>
+			</td>
+			
+			<td>
+			<?php
+			echo $this->Form->control('siteName', ['maxlength' => '12',
+				'id' => 'siteName-' . $row,
+				'class' => 'inputfields tableInput',
+				'size' => '11',
+				'value' => $siteData->Site_Name,
+				'style' => 'display: none',
+				'label' => [
+					'style' => 'display: in-line; cursor: pointer',
+					'class' => 'btn btn-thin inputHide',
+					'text' => $siteData->Site_Name . ' '
+				]
+			]);
+			?>
+			</td>
+			
+			<td>
+			<?php
+			echo $this->Form->control('siteLoc', ['maxlength' => '12',
+				'id' => 'siteLoc-' . $row,
+				'class' => 'inputfields tableInput',
+				'size' => '11',
+				'value' => $siteData->Site_Location,
+				'style' => 'display: none',
+				'label' => [
+					'style' => 'display: in-line; cursor: pointer',
+					'class' => 'btn btn-thin inputHide',
+					'text' => $siteData->Site_Location . ' '
+				]
+			]);
+			?>
+			</td>
+			
 			<td id='<?php echo 'td-' . $siteData->ID . '-groups'; ?>'><?= $siteData->groups ?></td>
 			<td>
 			<?php if ($admin) {?>
@@ -195,15 +258,12 @@ if ($admin) { ?>
 	<?=
 	    $this->Form->create(false, [
 		'id' => 'addSiteForm'//,
-		//'onsubmit' => 'return validate()'
 		]
 	    )
 	?>
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <!--button type="button" class="close" data-dismiss="modal">&times;</button-->
-                
                 <h4 class="modal-title">Add New Site</h4>
             </div>
             <div class="modal-body">
