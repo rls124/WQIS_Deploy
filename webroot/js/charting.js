@@ -443,7 +443,8 @@ $(document).ready(function () {
 		for (i=0; i<urls.length; i++) {
 			mapLayers.push(new MapImageLayer({
 				url: urls[i],
-				visible: false
+				visible: false,
+				opacity: 0.6
 			}));
 		}
 		mapLayers.push(sampleSitesLayer);
@@ -550,8 +551,8 @@ $(document).ready(function () {
 		
 		var floodLayerToggle = document.getElementById("floodLayer");
 		floodLayerToggle.addEventListener("change", function(){
-			$("#floodplainsLegend").toggle();
 			mapLayers[5].visible = floodLayerToggle.checked;
+			$("#floodplainsLegend").toggle();
 		});
 		
 		var damLayerToggle = document.getElementById("damLayer");
