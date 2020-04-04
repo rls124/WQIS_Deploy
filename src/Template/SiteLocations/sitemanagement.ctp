@@ -159,92 +159,7 @@ if ($admin) { ?>
 	</tbody>
 </table>
 <?php if ($admin) {?>
-<input type='button' class='addSitebtn btn-basic btn mb-3 btn-md' value='Add Site' id='addSiteBtn' name='addSiteBtn' style='float: right;' data-toggle="modal" data-target="#addSiteModal"/>
-
-<!-- Modal Stuff for edit button -->
-<div id="editSiteModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-	<form id="updateSiteForm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="edit-header">Edit Site: </h4>
-                <p hidden id="edit-site"></p>
-                <p hidden id="edit-sitenumber"></p>
-            </div>
-            <div class="modal-body">
-		<?=
-		    $this->Form->control('longitude', [
-			'label' => [
-			    'text' => 'Longitude',
-			    'class' => 'label-reg lol'
-			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "longitude",
-			'id' => "edit-longitude",
-			'placeholder' => "Longitude..."
-		    ]);
-		?>
-		<?=
-		    $this->Form->control('latitude', [
-			'label' => [
-			    'text' => 'Latitude',
-			    'class' => 'label-reg lol'
-			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "latitude",
-			'id' => "edit-latitude",
-			'placeholder' => "Latitude..."
-		    ]);
-		?>				
-		
-		
-		<?=
-		    $this->Form->control('sitelocation', [
-			'label' => [
-			    'text' => 'Site Location',
-			    'class' => 'label-reg lol'
-			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "sitelocation",
-			'id' => "edit-sitelocation",
-			'placeholder' => "Site Location..."
-		    ]);
-		?>
-		<?=
-		    $this->Form->control('sitename', [
-			'label' => [
-			    'text' => 'Site Name',
-			    'class' => 'label-reg lol'
-			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "sitename",
-			'id' => "edit-sitename",
-			'placeholder' => "Site Name..."
-		    ]);
-		?>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id='update-btn' name='update-btn' class="btn btn-default btn-basic btn btn-sm" onclick="updateButton()">Save</button>
-                <button type="button" id="edit-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-	</form>
-    </div>
-</div>
-
+<input type="button" class="addSitebtn btn-basic btn mb-3 btn-md" value="Add Site" id="addSiteBtn" name="addSiteBtn" style="float: right;" data-toggle="modal" data-target="#addSiteModal"/>
 
 <!-- Modal Stuff for Add Site button -->
 <div id="addSiteModal" class="modal fade" role="dialog">
@@ -252,9 +167,8 @@ if ($admin) { ?>
         
 	<?=
 	    $this->Form->create(false, [
-		'id' => 'addSiteForm'//,
-		]
-	    )
+			'id' => 'addSiteForm'
+		])
 	?>
         <!-- Modal content-->
         <div class="modal-content">
