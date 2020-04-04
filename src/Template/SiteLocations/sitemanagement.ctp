@@ -1,3 +1,5 @@
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <?= $this->Html->script('siteManagement.js') ?>
 <?= $this->Html->css('measurementBenchmarks.css') ?>
 <?= $this->Html->css('loading.css') ?>
@@ -115,24 +117,15 @@ if ($admin) { ?>
 			?>
 			</td>
 			
-			<td>
-			<?php
-			echo $this->Form->control('siteLoc', ['maxlength' => '12',
-				'id' => 'siteLoc-' . $row,
-				'class' => 'inputfields tableInput',
-				'size' => '11',
-				'value' => $siteData->Site_Location,
-				'style' => 'display: none',
-				'label' => [
-					'style' => 'display: in-line; cursor: pointer',
-					'class' => 'btn btn-thin inputHide',
-					'text' => $siteData->Site_Location . ' '
-				]
-			]);
-			?>
+			<td>			
+				<label style="display: table-cell; cursor: pointer; white-space:normal !important; overflow-wrap: anywhere" class="btn btn-thin inputHide" for="<?php echo 'siteLoc-' . $row;?>"><?php echo $siteData->Site_Location;?> </label>
+				<textarea rows="4" cols="50" class="tableInput" name="siteLoc-<?php echo $row;?>" style="display: none" id="siteLoc-<?php echo $row;?>"><?php echo $siteData->Site_Location;?></textarea>		
 			</td>
 			
-			<td id='<?php echo 'td-' . $siteData->ID . '-groups'; ?>'><?= $siteData->groups ?></td>
+			<td>
+				<select class="form-control groupSelect" id="<?php echo $siteData->Site_Number . "-groups"; ?>" name="<?php echo $siteData->Site_Number . "-groups[]";?>" multiple="multiple" style="width: 100%"></select>
+			</td>
+		
 			<td>
 			<?php if ($admin) {?>
 				<a id="edit-tooltip" data-toggle="tooltip" title="Edit Site">
@@ -209,7 +202,9 @@ if ($admin) { ?>
 			'id' => "edit-latitude",
 			'placeholder' => "Latitude..."
 		    ]);
-		?>
+		?>				
+		
+		
 		<?=
 		    $this->Form->control('sitelocation', [
 			'label' => [

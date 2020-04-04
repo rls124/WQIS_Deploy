@@ -7,7 +7,47 @@ $(document).ajaxStart(function() {
     $('body').css('cursor', 'default');
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
+	$.ajax({
+		type: "POST",
+		url: "/WQIS/sitegroups/fetchGroups",
+		datatype: "JSON",
+		async: false,
+		success: function (data) {
+			var groups = data[0];
+			var groupings = data[1];
+			
+			$(".groupSelect").select2({
+				closeOnSelect: false,
+				placeholder: "Select sites",
+				width: "resolve"
+			});
+			
+			//add groups list to all dropdowns
+			for (i=0; i<groups.length; i++) {
+				$(".groupSelect").append(new Option(groups[i].groupName, groups[i].groupKey, false, false));
+			}
+			
+			//now add the groups assigned to each individual site
+			for (i=0; i<groupings.length; i++) {
+				var groupsForSiteBase = groupings[i].groups.split(",");
+				
+				//sanitize this. In theory there should never be a group ID without a name, but it is possible, especially in development
+				var groupsForSite = [];
+				for (j=0; j<groupsForSiteBase.length; j++) {
+					for (k=0; k<groups.length; k++) {
+						if (groups[k].groupKey == groupsForSiteBase[j]) {
+							groupsForSite.push(parseInt(groupsForSiteBase[j]));
+							break;
+						}
+					}
+				}
+				
+				$("#" + groupings[i].Site_Number + "-groups").val(groupsForSite).trigger("change");
+			}
+		}
+	});
+
 	$('#message').on('click', function(){
 		$(this).addClass("hidden");
 	});
@@ -37,12 +77,6 @@ $(document).ready(function() {
 		var measure = $('#measure-' + rowNumber).text();
 		var parameter = (input.attr('name')).split('-')[1];
 		var value = input.val();
-
-		//quick fix for invalid input
-		if (isNaN(parseFloat(value))) {
-			location.reload();
-			return false;
-		}
 
 		$.ajax({
 			type: "POST",
