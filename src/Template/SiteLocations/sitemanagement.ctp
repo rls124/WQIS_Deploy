@@ -114,17 +114,6 @@ if ($admin) { ?>
 		
 			<td>
 			<?php if ($admin) {?>
-				<a id="edit-tooltip" data-toggle="tooltip" title="Edit Site">
-			    <?=
-			    $this->Html->tag('span', "", [
-					'class' => "edit glyphicon glyphicon-pencil",
-					'id' => 'edit-' . $siteData->ID,
-					'name' => 'edit-' . $siteData->ID,
-					'data-toggle' => "modal",
-					'data-target' => "#editSiteModal"
-			    ]);
-			    ?>
-				</a>
 				<a id="delete-tooltip" data-toggle="tooltip" title="Delete Site">
 			    <?=
 			    $this->Html->tag('span', "", [
@@ -135,7 +124,7 @@ if ($admin) { ?>
 				?>
 				</a>
 			<?php }?>
-			<a href="chartselection?site=<?=$siteData->Site_Number?>">View</a>
+				<a href="chartselection?site=<?=$siteData->Site_Number?>">View</a>
 			</td>
 			<?php
 			$row++;
