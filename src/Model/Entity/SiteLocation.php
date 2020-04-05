@@ -8,7 +8,6 @@
      * SiteLocation Entity
      *
      * @property int $Site_Number
-     * @property boolean $Monitored
      * @property float $Longitude
      * @property float $Latitude
      * @property string $Site_Location
@@ -33,7 +32,6 @@
          */
         protected $_accessible = [
             'Site_Number' => true,
-            'Monitored' => true,
             'Longitude' => true,
             'Latitude' => true,
             'Site_Location' => true,

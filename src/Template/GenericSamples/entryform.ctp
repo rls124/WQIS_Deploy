@@ -133,14 +133,6 @@ else if ($mode == "entry") {?>
 			?>
 
 			<?=
-				$this->Form->button('Add Monitored Sites', [
-					'class' => 'btn btn-basic mb-3 mr-2',
-					'type' => 'button',
-					'id' => 'addMonitoredSites',
-					'style' => 'float: right;'
-				])
-			?>
-			<?=
 				$this->Form->button('Add a Site', [
 					'class' => 'btn btn-basic mb-3 mr-2',
 					'type' => 'button',

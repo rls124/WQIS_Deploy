@@ -146,7 +146,6 @@
 				->first();
 
 			$json = json_encode(["sitenumber" => $site->Site_Number,
-				"monitored" => $site->Monitored,
 				"longitude" => $site->Longitude,
 				"latitude" => $site->Latitude,
 				"sitelocation" => $site->Site_Location,
@@ -172,10 +171,7 @@
 				->where(["ID" => $siteid])
 				->first();
 
-			//Update all the fields			
-			$monitored = $this->request->getData("monitored");
-			$site->Monitored = ($monitored == "1" || $monitored == "true");
-			
+			//Update all the fields
 			$site->Longitude = $this->request->getData("longitude");
 			$site->Latitude = $this->request->getData("latitude");
 			$site->Site_Location = $this->request->getData("location");

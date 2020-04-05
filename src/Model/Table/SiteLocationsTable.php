@@ -71,11 +71,6 @@
                 ->integer('Site_Number')
                 ->requirePresence('Site_Number', 'create')
                 ->notEmpty('Site_Number');
-
-            $validator
-                ->boolean('Monitored')
-                ->requirePresence('Monitored', 'create')
-                ->notEmpty('Monitored');
             
             $validator
                 ->numeric('Longitude')

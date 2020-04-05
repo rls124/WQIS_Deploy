@@ -37,58 +37,6 @@ $(document).ready(function () {
 		$table.append($clone);
     });
 
-    $("#addMonitoredSites").click(function () {
-		$.ajax({
-			type: "POST",
-			url: "getmonitoredsites",
-			datatype: 'JSON',
-			success: function (response) {
-				var data = JSON.parse(response);
-				addMonitoredSites(data);
-			}
-		});
-    });
-
-    function addMonitoredSites(sites) {
-		var $table = $("#tableBody");
-
-		for (var i = 0; i < sites.length; i++) {
-			var rowCounter = $("#totalrows");
-			var rowNumber = parseInt(rowCounter.val()) + 1;
-			rowCounter.val(rowNumber);
-			var $clone = $("#row-0").clone();
-
-			$clone.find('td').each(function () {
-				var el = $(this).find(':first-child');
-
-				var id = el.attr('id') || null;
-				if (id) {
-					var prefix = id.substr(0, (id.length - 2));
-
-					prefix = prefix.replace('-', '_');
-
-					el.attr('id', prefix + '-' + rowNumber);
-					el.attr('name', prefix + '-' + rowNumber);
-				}
-			});
-
-			$clone.find(':input').val('');
-
-			$clone.attr('id', "row-" + rowNumber);
-			$clone.find('span').removeAttr('hidden');
-			$table.append($clone);
-
-			var siteNumber = sites[i]["Site_Number"];
-			$('select[id="site_location_id-' + rowNumber + '"] option[value="' + siteNumber + '"]').prop("selected", true);
-		}
-
-		if ($('#sample_number-0').val() === "") {
-			deleteRow(0);
-			$('#Delete-0').attr("hidden", "hidden");
-		}
-		$("#date").trigger("change");
-    }
-
     $("#date").change(function () {
 		//We must update all the site rows currently in play.
 		var rowCounter = parseInt($("#totalrows").val()) + 1;

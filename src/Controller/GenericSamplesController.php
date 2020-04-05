@@ -275,7 +275,7 @@
 			else if ($fileType == 5) {
 				//site information
 				$model = "SiteLocations";
-				$columnIDs = array('Site_Number', 'Monitored', 'Longitude', 'Latitude', 'Site_Location', 'Site_Name');
+				$columnIDs = array('Site_Number', 'Longitude', 'Latitude', 'Site_Location', 'Site_Name');
 				$columnText = array("Site Number", "Longitude", "Latitude", "Site Location", "Site Name");
 				
 				$this->set("fileTypeName", "Site info");
@@ -742,20 +742,5 @@
 		}
 		
 		return $this->response->withType("json")->withStringBody(json_encode($query));
-	}
-
-	public function getmonitoredsites() {
-		$this->render(false);
-		$this->loadModel("SiteLocations");
-		
-		$monitoredSites = $this->SiteLocations->find("all", [
-			"conditions" => [
-				"Monitored" => "1"
-			],
-			"fields" => [
-				"Site_Number"
-			]
-		]);
-		return $this->response->withType("json")->withStringBody(json_encode($monitoredSites));
 	}
 }
