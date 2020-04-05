@@ -40,8 +40,8 @@ else if ($mode == "entry") {?>
                         <tr>
 						<?php
 						if ($formType == "bacteria") {
-							$colHeaders = ["Site", "Sample Number", "Ecoli Raw Count", "Ecoli<br>(CFU/100 ml)", "Total Coliform<br>Raw Count", "Total Coliform<br>(CFU/100 ml)", "Comments", "Actions"];
-							$controlNames = ["ecolirawcount-0", "ecoli-0", "totalcoliformrawcount-0", "totalcoliform-0", "bacteriacomments-0"];
+							$colHeaders = ["Site", "Sample Number", "Ecoli<br>(CFU/100 ml)", "Total Coliform<br>(CFU/100 ml)", "Comments", "Actions"];
+							$controlNames = ["ecoli-0", "totalcoliform-0", "bacteriacomments-0"];
 						}
 						elseif ($formType == "nutrient") {
 							$colHeaders = ["Site", "Sample Number", "Nitrate/Nitrite<br>(mg/L)", "Total Phosphorus<br>(mg/L)", "Dissolved Reactive Phosphorus<br>(mg/L)", "Ammonia<br>(mg/L)", "Comments", "Actions"];
