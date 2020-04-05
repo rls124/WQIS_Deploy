@@ -4,6 +4,14 @@
 <?= $this->Html->css('measurementBenchmarks.css') ?>
 <?= $this->Html->css('loading.css') ?>
 
+<script>
+<?php
+if ($admin) {
+	echo "var admin = true;";
+}
+?>
+</script>
+
 <div id="message" class="message hidden"></div>
 
 <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Sites
@@ -54,62 +62,91 @@ if ($admin) { ?>
 			
 			<td>
 			<?php
-			echo $this->Form->control('Longitude', ['maxlength' => '12',
-				'id' => 'Longitude-' . $row,
-				'class' => 'inputfields tableInput',
-				'size' => '11',
-				'value' => $siteData->Longitude,
-				'style' => 'display: none',
-				'label' => [
-					'style' => 'display: in-line; cursor: pointer',
-					'class' => 'btn btn-thin inputHide',
-					'text' => $siteData->Longitude . ' '
-				]
-			]);
+			if ($admin) {
+				echo $this->Form->control('Longitude', ['maxlength' => '12',
+					'id' => 'Longitude-' . $row,
+					'class' => 'inputfields tableInput',
+					'size' => '11',
+					'value' => $siteData->Longitude,
+					'style' => 'display: none',
+					'label' => [
+						'style' => 'display: in-line; cursor: pointer',
+						'class' => 'btn btn-thin inputHide',
+						'text' => $siteData->Longitude . ' '
+					]
+				]);
+			}
+			else {
+				echo $siteData->Longitude;
+			}
 			?>
 			</td>
 			
 			<td>
 			<?php
-			echo $this->Form->control('Latitude', ['maxlength' => '12',
-				'id' => 'Latitude-' . $row,
-				'class' => 'inputfields tableInput',
-				'size' => '11',
-				'value' => $siteData->Latitude,
-				'style' => 'display: none',
-				'label' => [
-					'style' => 'display: in-line; cursor: pointer',
-					'class' => 'btn btn-thin inputHide',
-					'text' => $siteData->Latitude . ' '
-				]
-			]);
+			if ($admin) {
+				echo $this->Form->control('Latitude', ['maxlength' => '12',
+					'id' => 'Latitude-' . $row,
+					'class' => 'inputfields tableInput',
+					'size' => '11',
+					'value' => $siteData->Latitude,
+					'style' => 'display: none',
+					'label' => [
+						'style' => 'display: in-line; cursor: pointer',
+						'class' => 'btn btn-thin inputHide',
+						'text' => $siteData->Latitude . ' '
+					]
+				]);
+			}
+			else {
+				echo $siteData->Latitude;
+			}
 			?>
 			</td>
 			
 			<td>
 			<?php
-			echo $this->Form->control('Site_Name', ['maxlength' => '12',
-				'id' => 'Site_Name-' . $row,
-				'class' => 'inputfields tableInput',
-				'size' => '11',
-				'value' => $siteData->Site_Name,
-				'style' => 'display: none',
-				'label' => [
-					'style' => 'display: in-line; cursor: pointer',
-					'class' => 'btn btn-thin inputHide',
-					'text' => $siteData->Site_Name . ' '
-				]
-			]);
+			if ($admin) {
+				echo $this->Form->control('Site_Name', ['maxlength' => '12',
+					'id' => 'Site_Name-' . $row,
+					'class' => 'inputfields tableInput',
+					'size' => '11',
+					'value' => $siteData->Site_Name,
+					'style' => 'display: none',
+					'label' => [
+						'style' => 'display: in-line; cursor: pointer',
+						'class' => 'btn btn-thin inputHide',
+						'text' => $siteData->Site_Name . ' '
+					]
+				]);
+			}
+			else {
+				echo $siteData->Site_Name;
+			}
 			?>
 			</td>
 			
-			<td>			
+			<td>
+				<?php if ($admin) { ?>
 				<label style="display: table-cell; cursor: pointer; white-space:normal !important; overflow-wrap: anywhere" class="btn btn-thin inputHide" for="<?php echo 'siteLoc-' . $row;?>"><?php echo $siteData->Site_Location;?> </label>
 				<textarea rows="4" cols="50" class="tableInput" name="siteLoc-<?php echo $row;?>" style="display: none" id="siteLoc-<?php echo $row;?>"><?php echo $siteData->Site_Location;?></textarea>		
+				<?php
+				}
+				else {
+					echo $siteData->Site_Location;
+				}
+				?>
 			</td>
 			
 			<td>
+				<?php if ($admin) { ?>
 				<select class="form-control groupSelect" id="<?php echo $siteData->Site_Number . "-groups"; ?>" name="<?php echo $siteData->Site_Number . "-groups[]";?>" multiple="multiple" style="width: 100%"></select>
+				<?php
+				}
+				else {
+					echo "<span id=\"groups-" . $siteData->Site_Number . "\"></span>";
+				}
+				?>
 			</td>
 		
 			<td>

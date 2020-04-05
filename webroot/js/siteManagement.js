@@ -8,6 +8,10 @@ $(document).ajaxStart(function() {
 });
 
 $(document).ready(function () {
+	if (typeof admin == "undefined") {
+		admin = false;
+	}
+	
 	$.ajax({
 		type: "POST",
 		url: "/WQIS/sitegroups/fetchGroups",
@@ -43,7 +47,16 @@ $(document).ready(function () {
 					}
 				}
 				
-				$("#" + groupings[i].Site_Number + "-groups").val(groupsForSite).trigger("change");
+				if (admin) {
+					$("#" + groupings[i].Site_Number + "-groups").val(groupsForSite).trigger("change");
+				}
+				else {
+					var groupsString = groupsForSite[0].toString();
+					for (j=1; j<groupsForSite.length; j++) {
+						groupsString = groupsString + ", " + groupsForSite[j];
+					}
+					document.getElementById("groups-" + groupings[i].Site_Number).innerText = groupsString;
+				}
 			}
 		}
 	});
