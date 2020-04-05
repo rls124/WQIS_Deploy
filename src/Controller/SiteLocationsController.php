@@ -103,6 +103,34 @@
 			$this->set(compact("SiteLocations"));
 			$this->set(compact("numSites"));
 		}
+		
+		public function updatefield() {
+			$this->render(false);
+		
+			//Ensure sample number data was included
+			if (!$this->request->getData("siteNumber")) {
+				return;
+			}
+			$siteNumber = $this->request->getData("siteNumber");
+		
+			$parameter = $this->request->getData("parameter");
+			$value = $this->request->getData("value");
+			
+			if ($parameter != "groups") {
+				//Get the site we are editing
+				$site = $this->SiteLocations
+					->find("all")
+					->where(["Site_Number" => $siteNumber])
+					->first();
+				//Set the edited field
+				$site->$parameter = $value;
+				//Save changes
+				$this->SiteLocations->save($site);
+			}
+			else {
+				//need to handle groups separately, because we get the value as an array but need to convert to comma-separated values for DB storage
+			}
+		}
 
 		public function fetchsitedata() {
 			$this->render(false);

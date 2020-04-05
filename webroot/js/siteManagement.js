@@ -73,17 +73,19 @@ $(document).ready(function () {
 			return;
 		}
 
-		var rowNumber = (input.attr('id')).split("-")[1];
-		var measure = $('#measure-' + rowNumber).text();
-		var parameter = (input.attr('name')).split('-')[1];
+		var rowNumber = parseInt((input.attr('id')).split("-")[1]) + 1;
+		var siteNumber = document.getElementById("td-" + rowNumber + "-siteNum").innerText;
+		var parameter = (input.attr('id')).split('-')[0];
+		console.log(parameter);
 		var value = input.val();
+		console.log(siteNumber);
 
 		$.ajax({
 			type: "POST",
 			url: "updatefield",
 			datatype: 'JSON',
 			data: {
-				'measure': measure,
+				'siteNumber': siteNumber,
 				'parameter': parameter,
 				'value': value
 			},
@@ -99,7 +101,7 @@ $(document).ready(function () {
 				else {
 					label.text(value);
 				}
-				$('.message').html('<strong>'+ parameter +'</strong> for <strong>' + measure +' </strong> has been updated to <strong>' + value +'</strong>');
+				$('.message').html('<strong>'+ parameter +'</strong> for <strong>' + siteNumber +' </strong> has been updated to <strong>' + value +'</strong>');
 				$('.message').removeClass('error');
 				$('.message').removeClass('hidden');
 				$('.message').removeClass('success');
@@ -107,7 +109,7 @@ $(document).ready(function () {
 			},
 			error: function() {
 				alert('data unable to be updated');
-				$('.message').html('<strong>'+ parameter +'</strong> for <strong>' + measure +' </strong> was unable to be updated');
+				$('.message').html('<strong>'+ parameter +'</strong> for <strong>' + siteNumber +' </strong> was unable to be updated');
 				$('.message').removeClass('error');
 				$('.message').removeClass('hidden');
 				$('.message').removeClass('success');

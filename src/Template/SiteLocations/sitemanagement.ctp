@@ -36,7 +36,6 @@ if ($admin) { ?>
 	<thead>
 		<tr>
 			<th>Site Number</th>
-			<?php if ($admin) {?><th>Monitored</th><?php }?>
 			<th>Longitude</th>
 			<th>Latitude</th>
 			<th>Site Name</th>
@@ -53,23 +52,10 @@ if ($admin) { ?>
 		    <tr id='tr-<?= $siteData->ID ?>'>
 			<td class='sitenum' id='<?php echo 'td-' . $siteData->ID . '-siteNum'; ?>'><?= $siteData->Site_Number ?></td>
 			
-			<?php
-			echo "<td id=\"td-" . $siteData->ID . "-monitored\">";
-			echo $this->Form->create(false, [
-				'id' => 'checkboxForm'
-			]);
-			echo $this->Form->checkbox('monitored-' . $siteData->ID, [
-				'class' => "form-control checkbox",
-				'checked' => $siteData->Monitored,
-				'value' => $siteData->Monitored,
-				'id' => 'td-' . $siteData->ID . '-monitoredcheckbox'
-			]);
-			?>
-			</td>
 			<td>
 			<?php
-			echo $this->Form->control('longitude', ['maxlength' => '12',
-				'id' => 'longitude-' . $row,
+			echo $this->Form->control('Longitude', ['maxlength' => '12',
+				'id' => 'Longitude-' . $row,
 				'class' => 'inputfields tableInput',
 				'size' => '11',
 				'value' => $siteData->Longitude,
@@ -85,8 +71,8 @@ if ($admin) { ?>
 			
 			<td>
 			<?php
-			echo $this->Form->control('latitude', ['maxlength' => '12',
-				'id' => 'latitude-' . $row,
+			echo $this->Form->control('Latitude', ['maxlength' => '12',
+				'id' => 'Latitude-' . $row,
 				'class' => 'inputfields tableInput',
 				'size' => '11',
 				'value' => $siteData->Latitude,
@@ -102,8 +88,8 @@ if ($admin) { ?>
 			
 			<td>
 			<?php
-			echo $this->Form->control('siteName', ['maxlength' => '12',
-				'id' => 'siteName-' . $row,
+			echo $this->Form->control('Site_Name', ['maxlength' => '12',
+				'id' => 'Site_Name-' . $row,
 				'class' => 'inputfields tableInput',
 				'size' => '11',
 				'value' => $siteData->Site_Name,
