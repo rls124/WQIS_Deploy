@@ -179,6 +179,6 @@
 </div>
 
 <br>
-<button onclick="localStorage.removeItem('visited'); location.href='/WQIS/site-locations/chartselection';" id="helpPageButton" type="button" class="btn btn-success btn-lg btn-block">Try going through the guided walkthrough again!</button>
-
 <?php } ?>
+
+<button onclick="localStorage.removeItem('visited'); location.href='/WQIS/site-locations/chartselection';" id="helpPageButton" type="button" class="btn btn-success btn-lg btn-block">Try going through the guided walkthrough again!</button>
