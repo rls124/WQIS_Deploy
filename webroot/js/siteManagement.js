@@ -72,58 +72,6 @@ $(document).ready(function () {
 			return;
 		}
 
-		update(input);
-	});
-	
-	$(".groupSelect").change(function() {
-		var input = $(this);
-		if (!input.attr("id")) {
-			return;
-		}
-
-		var siteNumber = parseInt((input.attr("id")).split("-")[0]);
-		var parameter = "groups";
-		var value = input.val();
-		
-		$.ajax({
-			type: "POST",
-			url: "updatefield",
-			datatype: "JSON",
-			data: {
-				"siteNumber": siteNumber,
-				"parameter": parameter,
-				"value": value
-			},
-			success: function () {
-				var label = $('label[for="' + input.attr('id') + '"');
-
-				input.attr("style", "display: none");
-				label.attr("style", "display: in-line; cursor: pointer");
-
-				if (value === '') {
-					label.text('  ');
-				}
-				else {
-					label.text(value);
-				}
-				$('.message').html('<strong>'+ parameter +'</strong> for <strong>' + siteNumber +' </strong> has been updated to <strong>' + value +'</strong>');
-				$('.message').removeClass('error');
-				$('.message').removeClass('hidden');
-				$('.message').removeClass('success');
-				$('.message').addClass('success');
-			},
-			error: function() {
-				alert('data unable to be updated');
-				$('.message').html('<strong>'+ parameter +'</strong> for <strong>' + siteNumber +' </strong> was unable to be updated');
-				$('.message').removeClass('error');
-				$('.message').removeClass('hidden');
-				$('.message').removeClass('success');
-				$('.message').addClass('error');
-			}
-		});
-	});
-	
-	function update(input) {
 		var rowNumber = parseInt((input.attr("id")).split("-")[1]) + 1;
 		var siteNumber = document.getElementById("td-" + rowNumber + "-siteNum").innerText;
 		var parameter = (input.attr("id")).split("-")[0];
@@ -150,7 +98,7 @@ $(document).ready(function () {
 				else {
 					label.text(value);
 				}
-				$('.message').html('<strong>'+ parameter +'</strong> for <strong>' + siteNumber +' </strong> has been updated to <strong>' + value +'</strong>');
+				$('.message').html('<strong>' + parameter + '</strong> for <strong>' + siteNumber + ' </strong> has been updated to <strong>' + value + '</strong>');
 				$('.message').removeClass('error');
 				$('.message').removeClass('hidden');
 				$('.message').removeClass('success');
@@ -158,12 +106,59 @@ $(document).ready(function () {
 			},
 			error: function() {
 				alert('data unable to be updated');
-				$('.message').html('<strong>'+ parameter +'</strong> for <strong>' + siteNumber +' </strong> was unable to be updated');
+				$('.message').html('<strong>' + parameter + '</strong> for <strong>' + siteNumber + ' </strong> was unable to be updated');
 				$('.message').removeClass('error');
 				$('.message').removeClass('hidden');
 				$('.message').removeClass('success');
 				$('.message').addClass('error');
 			}
 		});
-	}
+	});
+	
+	$(".groupSelect").change(function() {
+		var input = $(this);
+		if (!input.attr("id")) {
+			return;
+		}
+
+		var siteNumber = parseInt((input.attr("id")).split("-")[0]);
+		var value = input.val();
+		
+		$.ajax({
+			type: "POST",
+			url: "updatefield",
+			datatype: "JSON",
+			data: {
+				"siteNumber": siteNumber,
+				"parameter": "groups",
+				"value": value
+			},
+			success: function () {
+				var label = $('label[for="' + input.attr('id') + '"');
+
+				input.attr("style", "display: none");
+				label.attr("style", "display: in-line; cursor: pointer");
+
+				if (value === '') {
+					label.text('  ');
+				}
+				else {
+					label.text(value);
+				}
+				$('.message').html('<strong>Groups</strong> for <strong>' + siteNumber + ' </strong> has been updated to <strong>' + value + '</strong>');
+				$('.message').removeClass('error');
+				$('.message').removeClass('hidden');
+				$('.message').removeClass('success');
+				$('.message').addClass('success');
+			},
+			error: function() {
+				alert('data unable to be updated');
+				$('.message').html('<strong>Groups</strong> for <strong>' + siteNumber + ' </strong> was unable to be updated');
+				$('.message').removeClass('error');
+				$('.message').removeClass('hidden');
+				$('.message').removeClass('success');
+				$('.message').addClass('error');
+			}
+		});
+	});
 });
