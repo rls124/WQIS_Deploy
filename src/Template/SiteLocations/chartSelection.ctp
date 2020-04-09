@@ -30,8 +30,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		<div id="searchBox">
 		<fieldset>
 			<h6>Sites:</h6>
-			Search by group:
-			<select id="searchGroupsDropdown" style="width:100%"></select>
+			Search sites:
 			<select class="form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%"></select>
 			<input type="checkbox" id="aggregateGroup">Aggregate
 		
