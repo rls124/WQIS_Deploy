@@ -335,15 +335,18 @@ $(document).ready(function () {
 		"esri/Graphic",
 		"esri/layers/support/LabelClass"
 	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen, Graphic, LabelClass) {
-		//build the site and group dropdowns in the sidebar
-		$("#searchGroupsDropdown").append(new Option("select an option", "", false, false));
+		
+		$("#sites").append('<optgroup label="Select a Group"  id="groupOpt"> </optgroup>');
+	//	$("#groupOpt").append(new Option("Reset Group", "", false, false));
 		for (var group of groups) {
-			$("#searchGroupsDropdown").append(new Option(group.groupName, group.groupKey, false, false));
+			$("#groupOpt").append(new Option(group.groupName, group.groupKey, false, false));
 		}
 		
+		$("#sites").append('<optgroup label="Select Site(s)" id="siteOpt"> </optgroup>');
 		for (var site of mapData["SiteData"]) {
-			$("#sites").append(new Option(site.Site_Number + " " + site.Site_Name, site.Site_Number, false, false));
+			$("#siteOpt").append(new Option(site.Site_Number + " " + site.Site_Name, site.Site_Number, false, false));
 		}
+		
 		
 		var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
 		var watershedsLayer = new KMLLayer({
@@ -636,27 +639,56 @@ $(document).ready(function () {
 	});
 	
 	$("#sites").change(function() {
-		getRange();
+	
+		var optSelected = $("option:selected", this);
+		var selected = $("#sites").val();
 		
-		var points = $("#sites").val();
-		
-		//first clear out the existing ones
-		for (var point of selectedPoints) {
-			setColor(point, defaultPointColor);
+/*		if (selected == "") {
+				//reset
+				$("#sites").val(null).trigger("change");
+			}
+		*/
+		if(optSelected.parent()[0].id == "groupOpt"){
+
+				
+				//get all the sites that are in this group
+				var inGroup = [];
+				for (var site of mapData.SiteData) {
+			
+					if (site.groups.includes(selected)) {
+						//select it in the sites dropdown
+						inGroup.push(site.Site_Number);
+					}
+				}
+			
+				$("#sites").val(inGroup).trigger("change");
+
+			
 		}
+		else if(optSelected.parent()[0].id == "siteOpt"){
+			getRange();
 		
-		selectedPoints = [];
-		
-		for (i=0; i<points.length; i++) {
-			//get associated graphic for this point
-			for (j=0; j<mapData["SiteData"].length; j++) {
-				if (mapData["SiteData"][j].Site_Number.toString() === points[i]) {
-					setColor(mapData["SiteData"][j].graphic, selectedPointColor);
-					selectedPoints.push(mapData["SiteData"][j].graphic);
-					break;
+			var points = $("#sites").val();
+			
+			//first clear out the existing ones
+			for (var point of selectedPoints) {
+				setColor(point, defaultPointColor);
+			}
+			
+			selectedPoints = [];
+			
+			for (i=0; i<points.length; i++) {
+				//get associated graphic for this point
+				for (j=0; j<mapData["SiteData"].length; j++) {
+					if (mapData["SiteData"][j].Site_Number.toString() === points[i]) {
+						setColor(mapData["SiteData"][j].graphic, selectedPointColor);
+						selectedPoints.push(mapData["SiteData"][j].graphic);
+						break;
+					}
 				}
 			}
 		}
+	
     });
 	
 	$("#showBenchmarks").change(function() {
@@ -1424,6 +1456,7 @@ $(document).ready(function () {
 		resetTable();
 	}
 	
+	
 	function setSort(e) {
 		var field = e.srcElement.id;
 		
@@ -1618,7 +1651,7 @@ $(document).ready(function () {
 			}
 		});
 	}
-	
+
 	function buildChart(k, category, measures, labels, datasets) {
 		var ctx = document.getElementById("chart-" + k).getContext("2d");
 	
