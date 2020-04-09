@@ -105,7 +105,7 @@ driver.defineSteps([
   popover: {
 	className: 'first-popover-class',
     title: 'Welcome!',
-    description: 'Welcome to the Water Quality Information System. This is a resource dedicated to analyzing and cataloging water quality samples taken within various watersheds located in Indiana, Michigan, and Ohio. More Can Be found in our About Page.',
+    description: 'Welcome to the Water Quality Information System. This is a resource dedicated to analyzing and cataloging water quality samples taken within various watersheds located in Indiana, Michigan, and Ohio. More can Be found in our About page.',
 	position: 'mid-center',
   }
 },{
@@ -113,9 +113,8 @@ driver.defineSteps([
   stageBackground: '#BF000000',
   popover: {
 	className: 'second-popover-class',
-	
 	title: 'Located Here!',
-    description: 'The "about" page may help answer various questions you may have about the initiative or aspects of the project.',
+    description: 'The About page may help answer various questions you may have about the initiative or aspects of the project',
 	position: 'bottom-left',
 	offset: 180
   }
@@ -124,16 +123,15 @@ driver.defineSteps([
   popover: {
 	className: 'third-popover-class',
     title: 'The Map',
-    description: 'This is the Map, Here you will see several blue points and colored outlines. The colorful outlines signify different watersheds, and the blue dots represent water collection sites.',
+    description: 'This is the Map, Here you will see several blue points and colored outlines. The colorful outlines signify different watersheds, and the blue dots represent water collection sites',
 	position: 'left',
   }
-
 },{
   element: '#map',
   popover: {
 	className: 'fourth-popover-class',
-    title: 'Try Selecting One!',
-    description: 'Try Selecting one of the collection sites by clicking on any of the blue dots on the map. Doing so will provide all the data from the last collected water sample at that selected site.',
+    title: 'Try selecting one!',
+    description: 'Try selecting one of the collection sites by clicking on any of the blue dots on the map. Doing so will display all the data from the last collected water sample at that selected site',
 	position: 'left',
   }
 },{
@@ -141,7 +139,7 @@ driver.defineSteps([
   popover: {
 	className: 'fifth-popover-class',
     title: 'Layers',
-    description: 'These are the different layers. They can be toggled on or off by clicking the checkboxes. Selecting these layers will result in additional highlighted features on the map that were not present before.',
+    description: 'These are the different layers. They can be toggled on or off by clicking the checkboxes. Selecting these layers will show additional highlighted features on the map',
 	position: 'left',
   }
 },{
@@ -149,7 +147,7 @@ driver.defineSteps([
   popover: {
 	className: 'sixth-popover-class',
     title: 'Basemaps',
-    description: 'This dropdown menu contains a list of different basemap views that are available. Selecting one of these will cause the background view of the map to change depending on which basemap is selected.',
+    description: 'This dropdown menu contains a list of different basemap views that are available. These contain different types of geographical information displayed in the map',
 	position: 'left',
   }, onNext: () => {
 	  document.getElementById("driver-page-overlay").style.opacity = '0';
@@ -169,18 +167,8 @@ driver.defineSteps([
   popover: {
 	className: 'eighth-popover-class',
     title: 'Sidebar Toggle',
-    description: 'This is the button that allows you to close and open the sidebar at will.',
+    description: 'The sidebar can be opened and closed',
 	position: 'right',
-  }
-},{
-  element: '#searchGroupsDropdown',
-  stageBackground: '#BF000000',
-  popover: {
-	className: 'ninth-popover-class',
-    title: 'Selecting Sites and Groups',
-    description: 'Here is where you will select which sites or groups of sites you would like to search for data over.',
-	position: 'right',
-	offset: 35
   }
 },{
   element: '#categorySelect',
@@ -188,7 +176,7 @@ driver.defineSteps([
   popover: {
 	className: 'tenth-popover-class',
     title: 'Selecting a Category',
-    description: 'Here is where you will select a measurement category you would like to search by, all water quality data is classified under these four measurement categories.',
+    description: 'Here is where you will select a measurement category you would like to search by. All water quality data is classified under these four measurement categories',
 	position: 'right',
   },
    
@@ -198,7 +186,7 @@ driver.defineSteps([
   popover: {
 	className: 'eleventh-popover-class',
     title: 'Selecting a Measurement',
-    description: 'Here is where you will select a measurement you would like to search by, you may select as many checkboxes as there are available. These selections will determine the type of data you recieve.',
+    description: 'Here is where you will select a measurement you would like to search by, you may select as many checkboxes as there are available. These selections will determine the type of data you recieve',
 	position: 'right',
   }
 },{
@@ -207,7 +195,7 @@ driver.defineSteps([
   popover: {
 	className: 'twelveth-popover-class',
     title: 'Selecting a Date Range',
-    description: 'Here is where you will select a date range you would like to view data over. You will only recieve data that falls within this provided date range',
+    description: 'You may define a date range to view records within. This is automatically filled with the maximum range for the sites selected, but you can select a different date range if needed',
 	position: 'right',
   }
 },{
@@ -216,7 +204,7 @@ driver.defineSteps([
   popover: {
 	className: 'thirteenth-popover-class',
     title: 'Additionally filtering your search results',
-    description: 'This section is completely optional, but here is where you will be able to refine the data you will recieve. The measurement box will already be filled in and always match the same measurement criteria set above.',
+    description: 'This section is completely optional. Here is where you will be able to refine the data you will recieve. The measurement box will already be filled in and always match the same measurement criteria set above',
 	position: 'right',
   }
 },{
@@ -225,7 +213,7 @@ driver.defineSteps([
   popover: {
 	className: 'fourteenth-popover-class',
     title: 'Searching Over, Under, or Equal to a specified amount',
-    description: 'This is where we will specify if we would like to serach over, under, or equal to a certain amount of a measure. For example, if we search for Ecoli Over 2000, we would only recieve data where ecoli was over 2000,',
+    description: 'This is where you will specify if we would like to search over, under, or equal to a certain amount of a measure. For example, if you search for Ecoli Over 2000, we would only recieve data where ecoli was over 2000',
 	position: 'right',
   }
 },{
@@ -234,7 +222,7 @@ driver.defineSteps([
   popover: {
 	className: 'fifteenth-popover-class',
     title: 'Entering an amount',
-    description: 'Here we can enter the amount we would like to search by. The number that appears in this textbox by default is the set benchmark for that given measure, this is to give the user a better sense of the range they should be searching by.',
+    description: 'Here you can enter the amount you would like to search by. The number that appears in this textbox by default is the set benchmark for that given measure, this is to give the user a better sense of the range they should be searching by',
 	position: 'right',
   }
 },{
@@ -243,7 +231,7 @@ driver.defineSteps([
   popover: {
 	className: 'sixteenth-popover-class',
     title: 'Updating the graphs based on your search criteria',
-    description: 'When you are completely finished filling out the form in the side panel, click the update function to get a visual and numerical representation of the data.',
+    description: 'When you are completely finished filling out the form in the side panel, click the update function to get a visual and numerical representation of the data',
 	position: 'right',
   }
 },{
@@ -251,8 +239,8 @@ driver.defineSteps([
  stageBackground: '#BF000000',
   popover: {
 	className: 'seventeenth-popover-class',
-    title: 'Reseting the forum',
-    description: 'If you would like to start the forum over, click the reset button and everything will be reset to its default state.',
+    title: 'Reseting the form',
+    description: 'If you would like to start a new blank search, click the reset button and everything will be reset to its default state',
 	position: 'right',
   }, onNext: () => {
 	  document.getElementById("driver-page-overlay").style.opacity = '.75';
@@ -270,11 +258,10 @@ driver.defineSteps([
   popover: {
 	className: 'ninteenth-popover-class',
     title: 'VIewing your Data Numerically ',
-    description: 'All enteries in the system that match your search criteria will appear here in Chronological Descending order. This can be changed by clicking on the table headers.',
+    description: 'All enteries in the system that match your search criteria will appear here in chronological descending order. This can be changed by clicking on the table headers',
 	position: 'left',
   }
 },
-
 ]);
 
 //get all data needed for initial page loading
@@ -639,56 +626,46 @@ $(document).ready(function () {
 	});
 	
 	$("#sites").change(function() {
-	
 		var optSelected = $("option:selected", this);
-		var selected = $("#sites").val();
-		
-/*		if (selected == "") {
-				//reset
-				$("#sites").val(null).trigger("change");
-			}
-		*/
-		if(optSelected.parent()[0].id == "groupOpt"){
+		if (optSelected.length > 0) {
+			var selected = $("#sites").val();
 
-				
+			if (optSelected.parent()[0].id == "groupOpt") {		
 				//get all the sites that are in this group
 				var inGroup = [];
 				for (var site of mapData.SiteData) {
-			
 					if (site.groups.includes(selected)) {
 						//select it in the sites dropdown
 						inGroup.push(site.Site_Number);
 					}
 				}
-			
+				
 				$("#sites").val(inGroup).trigger("change");
-
-			
-		}
-		else if(optSelected.parent()[0].id == "siteOpt"){
-			getRange();
-		
-			var points = $("#sites").val();
-			
-			//first clear out the existing ones
-			for (var point of selectedPoints) {
-				setColor(point, defaultPointColor);
 			}
+			else if(optSelected.parent()[0].id == "siteOpt"){
+				getRange();
 			
-			selectedPoints = [];
-			
-			for (i=0; i<points.length; i++) {
-				//get associated graphic for this point
-				for (j=0; j<mapData["SiteData"].length; j++) {
-					if (mapData["SiteData"][j].Site_Number.toString() === points[i]) {
-						setColor(mapData["SiteData"][j].graphic, selectedPointColor);
-						selectedPoints.push(mapData["SiteData"][j].graphic);
-						break;
+				var points = $("#sites").val();
+				
+				//first clear out the existing ones
+				for (var point of selectedPoints) {
+					setColor(point, defaultPointColor);
+				}
+				
+				selectedPoints = [];
+				
+				for (i=0; i<points.length; i++) {
+					//get associated graphic for this point
+					for (j=0; j<mapData["SiteData"].length; j++) {
+						if (mapData["SiteData"][j].Site_Number.toString() === points[i]) {
+							setColor(mapData["SiteData"][j].graphic, selectedPointColor);
+							selectedPoints.push(mapData["SiteData"][j].graphic);
+							break;
+						}
 					}
 				}
 			}
 		}
-	
     });
 	
 	$("#showBenchmarks").change(function() {
@@ -1714,7 +1691,6 @@ $(document).ready(function () {
 		driver.start();
 		localStorage.setItem("visited",true);
 	}
-	
 
 	spinnerInhibited = false;
 });
