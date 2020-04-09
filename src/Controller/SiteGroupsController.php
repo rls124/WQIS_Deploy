@@ -17,23 +17,23 @@
 			$this->set(compact("SiteGroups"));
 			
 			$this->SiteLocations = $this->loadModel("SiteLocations");
-			$Groupings = $this->SiteLocations->find()->select(['Site_Number', 'groups']);
-			$this->set(compact('Groupings'));
+			$Groupings = $this->SiteLocations->find()->select(["Site_Number", "groups"]);
+			$this->set(compact("Groupings"));
 			
-			$SiteLocations = $this->SiteLocations->find('all');
-			$this->set(compact('SiteLocations'));
+			$SiteLocations = $this->SiteLocations->find("all");
+			$this->set(compact("SiteLocations"));
 		}
 		
 		public function fetchGroups() {
 			$this->loadModel("SiteGroups");
 			$SiteGroups = $this->SiteGroups->find("all");
 			$this->loadModel("SiteLocations");
-			$Groupings = $this->SiteLocations->find()->select(['Site_Number', 'groups']);
+			$Groupings = $this->SiteLocations->find()->select(["Site_Number", "groups"]);
 			
 			$json = json_encode([$SiteGroups, $Groupings]);
 
 			$this->response = $this->response->withStringBody($json);
-			$this->response = $this->response->withType('json');
+			$this->response = $this->response->withType("json");
 
 			return $this->response;
 		}
@@ -51,23 +51,23 @@
 				->where(["groupKey" => $groupkey])
 				->first();
 
-			$this->loadModel('SiteLocations');
+			$this->loadModel("SiteLocations");
 			$sitesInGroup = $this->SiteLocations
-				->find('all')
-				->where(['groups LIKE' => '%' . $groupkey . '%'])
-				->select('Site_Number');
+				->find("all")
+				->where(["groups LIKE" => "%" . $groupkey . "%"])
+				->select("Site_Number");
 
 			$sites = array();
 			foreach ($sitesInGroup as $grouping) {
 				$sites[] = $grouping->Site_Number;
 			}
 
-			$json = json_encode(['groupname' => $group->groupName,
-				'groupdescription' => $group->groupDescription,
-				'sites' => $sites]);
+			$json = json_encode(["groupname" => $group->groupName,
+				"groupdescription" => $group->groupDescription,
+				"sites" => $sites]);
 
 			$this->response = $this->response->withStringBody($json);
-			$this->response = $this->response->withType('json');
+			$this->response = $this->response->withType("json");
 
 			return $this->response;
 		}
@@ -75,19 +75,19 @@
 		public function updategroupdata() {
 			$this->render(false);
 
-			if (!$this->request->getData('groupkey')) {
+			if (!$this->request->getData("groupkey")) {
 				return;
 			}
 
-			$groupkey = $this->request->getData('groupkey');
+			$groupkey = $this->request->getData("groupkey");
 
 			$group = $this->SiteGroups
-				->find('all')
-				->where(['groupKey' => $groupkey])
+				->find("all")
+				->where(["groupKey" => $groupkey])
 				->first();
 
-			$this->loadModel('SiteLocations');
-			$sitesDB = $this->SiteLocations->find('all');
+			$this->loadModel("SiteLocations");
+			$sitesDB = $this->SiteLocations->find("all");
 			
 			$sitesInGroup = $_POST["sites"];
 			
@@ -157,23 +157,23 @@
 		public function addgroup() {
 			$this->render(false);
 
-			if ($this->request->is('post')) {
-				$SiteGroup = $this->SiteGroups->newEntity(['groupName' => $this->request->getData('groupname'), 'groupDescription' => $this->request->getData('groupdescription')]);
-				$groupName = $this->request->getData('groupname');
+			if ($this->request->is("post")) {
+				$SiteGroup = $this->SiteGroups->newEntity(["groupName" => $this->request->getData("groupname"), "groupDescription" => $this->request->getData("groupdescription")]);
+				$groupName = $this->request->getData("groupname");
 				
 				if ($this->SiteGroups->save($SiteGroup)) {
 					$group = $this->SiteGroups
-						->find('all')
-						->where(['groupName = ' => $groupName])
+						->find("all")
+						->where(["groupName" => $groupName])
 						->first();
 
-					$this->loadModel('SiteLocations');
-					foreach ($this->request->getData('sites') as $site) {
+					$this->loadModel("SiteLocations");
+					foreach ($this->request->getData("sites") as $site) {
 						//add this group to the sites group list
 						//first get the site
 						$siteObj = $this->SiteLocations
-							->find('all')
-							->where(['Site_Number = ' => $site])
+							->find("all")
+							->where(["Site_Number" => $site])
 							->first();
 						
 						//get its existing list of groups
@@ -189,8 +189,8 @@
 						$this->SiteLocations->save($siteObj);
 					}
 
-					$this->response->type('json');
-					$json = json_encode(['groupKey' => $group->groupKey]);
+					$this->response->type("json");
+					$json = json_encode(["groupKey" => $group->groupKey]);
 					$this->response->body($json);
 					return;
 				}
@@ -200,10 +200,10 @@
 		public function deletegroup() {
 			$this->render(false);
 			//Check if groupKey is set
-			if (!$this->request->getData('groupkey')) {
+			if (!$this->request->getData("groupkey")) {
 				return;
 			}
-			$groupkey = $this->request->getData('groupkey');
+			$groupkey = $this->request->getData("groupkey");
 
 			$group = $this->SiteGroups
 				->find("all")

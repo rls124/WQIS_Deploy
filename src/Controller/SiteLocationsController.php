@@ -169,31 +169,6 @@
 			return $this->response;
 		}
 
-		public function updatesitedata() {
-			$this->render(false);
-
-			//Check if siteid is set
-			if (!$this->request->getData("siteid")) {
-				return;
-			}
-			$siteid = $this->request->getData("siteid");
-
-			$site = $this->SiteLocations
-				->find("all")
-				->where(["ID" => $siteid])
-				->first();
-
-			//Update all the fields
-			$site->Longitude = $this->request->getData("longitude");
-			$site->Latitude = $this->request->getData("latitude");
-			$site->Site_Location = $this->request->getData("location");
-			$site->Site_Name = $this->request->getData("sitename");
-
-			if ($this->SiteLocations->save($site)) {
-				return;
-			}
-		}
-
 		public function addsite() {
 			$this->render(false);
 			$SiteLocation = $this->SiteLocations->newEntity();

@@ -1,12 +1,10 @@
 <?php
-
 	namespace App\Controller;
 
 	use App\Controller\AppController;
 	use Cake\Log\Log;
 
 	class FeedbackController extends AppController {
-
 		public function userFeedback() {
 			$Feedback = $this->Feedback->newEntity();
 			if ($this->request->is('post')) {
