@@ -1,23 +1,11 @@
-/*
-Ben Color Scheme
-    Alabaster - #f4f6fa
-    Anakiwa - #8eceff
-    Cornflower Blue - #638de2
-    Waterloo - #6e7393
-    Astronaut - #2a5171
-*/
-
-
 .edit:hover {
     color: #00F;
     cursor: pointer;
 }
-
 .delete:hover {
     color: #FF0000;
     cursor: pointer;
 }
-
 .checkbox:hover {
     color: #FF0000;
     cursor: pointer;
@@ -25,33 +13,27 @@ Ben Color Scheme
 table{
     border: thin solid #FFF;
 }
-
 #infoGlyph{
     color: #2a5171;
 }
-
 #infoGlyph:hover{
     color: #638de2;
 }
-
 .btn-close{
     background-color: #868E96;
     border: medium solid #868E96;
     color: white;
 }
-
 .btn-close:hover{
     background-color: #d4d8db;
     text-shadow: 1px 1px 3px black;
     color:black;
 }
-
 .btn-close:active{
     background-color: #dddddd;
     border: medium solid #77b0d9;
     color: black;
 }
-
 .btn-close:disabled:hover{
     background-color: #2a5171;
     border-color: #2a5171;
@@ -59,16 +41,13 @@ table{
     color: white;
     cursor: auto;
 }
-
 .modal-content{
     border: solid medium #2a5171;
 }
-
 .popover{
     border: solid medium #2a5171;
     font-size: 10pt;
 }
-
 .textinput:focus{
     transition: .1s;
     outline: solid #2a5171;

@@ -393,22 +393,18 @@ fieldset legend {
     width: 100%;
     line-height: 2rem;
 }
-
 .form button[type="submit"] {
     float: right;
     text-transform: uppercase;
     box-shadow: none;
 }
-
 .form button:hover, .form button:focus {
     background: #BE840B;
     box-shadow: none;
 }
-
 button {
     background: #966600;
 }
-
 div.message {
     text-align: center;
     cursor: pointer;
@@ -426,7 +422,6 @@ div.message {
     line-height: 2.5em;
     box-radius: 5px;
 }
-
 div.message:before {
     line-height: 0px;
     font-size: 20px;
@@ -443,12 +438,10 @@ div.message:before {
     content: "i";
     color: #a0d3e8;
 }
-
 div.message.error {
     background-color: #C3232D;
     color: #FFF;
 }
-
 div.message.error:before {
     padding: 11px 16px 14px 7px;
     color: #C3232D;
@@ -457,8 +450,6 @@ div.message.error:before {
 div.message.hidden {
     height: 0;
 }
-
-
 .vertical-table th {
     padding: 0.5625rem 0.625rem;
     font-size: 0.875rem;
@@ -466,15 +457,12 @@ div.message.hidden {
     border: none;
     text-align: left;
 }
-
 .vertical-table {
     vertical-align: middle;
 }
-
 .vertical-table td {
     text-align: right;
 }
-
 .content {
     padding: 2rem;
 }
@@ -497,20 +485,17 @@ div.message.hidden {
         margin-bottom: 0;
     }
 }
-
 .content h3 {
     color: #be140b;
     padding-bottom: 0.5rem;
     margin-bottom: 20px;
 }
-
 .content h4 {
     color: #be140b;
     padding-bottom: 0.5rem;
     margin-bottom: 20px;
     border-bottom: 2px solid #be140b;
 }
-
 .content .related h4 {
     color: #4d8f97;
     padding-bottom: 0.5rem;
@@ -518,7 +503,6 @@ div.message.hidden {
     margin-bottom: 10px;
     border-bottom: 0px;
 }
-
 table td {
     vertical-align: top;
     word-break: break-all;

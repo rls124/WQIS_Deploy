@@ -3,7 +3,6 @@
     visibility: hidden;
     position: fixed;
 }
-
 .csscssload-load-frame {
 	z-index: 1;
     top: 0;
@@ -233,35 +232,30 @@
     -webkit-animation: cssload-load 0.35s linear -2.88s infinite alternate;
     -moz-animation: cssload-load 0.35s linear -2.88s infinite alternate;
 }
-
 @keyframes cssload-load {
     100% {
         opacity: 0;
         transform: scale(0.5);
     }
 }
-
 @-o-keyframes cssload-load {
     100% {
         opacity: 0;
         -o-transform: scale(0.5);
     }
 }
-
 @-ms-keyframes cssload-load {
     100% {
         opacity: 0;
         -ms-transform: scale(0.5);
     }
 }
-
 @-webkit-keyframes cssload-load {
     100% {
         opacity: 0;
         -webkit-transform: scale(0.5);
     }
 }
-
 @-moz-keyframes cssload-load {
     100% {
         opacity: 0;

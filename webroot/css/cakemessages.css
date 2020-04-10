@@ -15,7 +15,6 @@ div.message {
     line-height: 2.5em;
     box-radius: 5px;
 }
-
 div.message:before {
     line-height: 0px;
     font-size: 20px;
@@ -32,12 +31,10 @@ div.message:before {
     content: "i";
     color: #a0d3e8;
 }
-
 div.message.error {
     background-color: #C3232D;
     color: #FFF;
 }
-
 div.message.error:before {
     padding: 11px 16px 14px 7px;
     color: #C3232D;

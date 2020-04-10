@@ -16,55 +16,38 @@
     outline: solid #2a5171;
     cursor: pointer;
 }
-
 .infoPanel{
     background-color: #f4f6fa;
     border: solid thin #2a5171;
 }
-
-.requiredText{
-    font-style: italic;
-    font-weight: bolder;
-    color: #2a5171;
-}
-
-
 .delete:hover {
     color: #FF0000;
     cursor: pointer;
 }
-
-
 .centerLabel {
     margin-top: 9px;
 }
-
 #infoGlyph{
     color: #2a5171;
 }
-
 #infoGlyph:hover{
     color: #638de2;
 }
-
 .btn-close{
     background-color: #1fa83d;
     border: medium solid #1fa83d;
     color: white;
 }
-
 .btn-close:hover{
     background-color: #5cf77e;
     text-shadow: 1px 1px 3px black;
     color: black;
 }
-
 .btn-close:active{
     background-color: #dddddd;
     border: medium solid #77b0d9;
     color: black;
 }
-
 .popover{
     border: solid medium #2a5171;
     font-size: 10pt;

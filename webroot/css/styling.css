@@ -2,43 +2,35 @@ body{
     background-color: #e2f0f5;
     color:#373737;
 }
-
 .content{
     background-color: #e2f0f5;
     margin-bottom: 10%;
 }
-
 .centeredText{
     text-align:center;
     position:relative;
 }
-
 .btn{
     cursor: pointer;
 }
-
 ::selection{
     background: #8eceff;
     color: black;
 }
-
 .btn-basic{
     background-color: #2a5171;
     border: medium solid #2a5171;
     color: white;
 }
-
 .btn-basic:hover{
     text-shadow: 1px 1px 3px black;
     color:black;
 }
-
 .btn-basic:active{
     background-color: #dddddd;
     border: medium solid #77b0d9;
     color: black;
 }
-
 .btn-basic:disabled:hover{
     background-color: #2a5171;
     border-color: #2a5171;
@@ -46,19 +38,15 @@ body{
     color: white;
     cursor: auto;
 }
-
 .nav-link{
 	color: #F7F9FB !important;
 }
-
 .nav-link:hover{
 	color: lightgrey !important;
 }
-
 .navbar-brand{
 	color: #F7F9FB !important;
 }
-
 .active{
 	color: white !important;
 }

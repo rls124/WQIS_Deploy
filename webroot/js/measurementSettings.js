@@ -47,11 +47,11 @@ $(document).ready(function() {
 		$.ajax({
 			type: "POST",
 			url: "updatefield",
-			datatype: 'JSON',
+			datatype: "JSON",
 			data: {
-				'measure': measure,
-				'parameter': parameter,
-				'value': value
+				"measure": measure,
+				"parameter": parameter,
+				"value": value
 			},
 			success: function () {
 				var label = $('label[for="' + input.attr('id') + '"');

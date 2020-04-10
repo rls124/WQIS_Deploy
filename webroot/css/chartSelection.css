@@ -4,11 +4,9 @@ body,
 	padding: 0;
 	margin: 0;
 }
-
 #map{
 	height: 500px;
 }
-
 #legend{
 	top: 78px;
 	left: 60px;
@@ -21,11 +19,9 @@ body,
 	padding: 5px;
 	font-size: 10pt;
 }
-
 #floodplainsLegend{
 	display: none;
 }
-
 .color-box{
 	width: 10px;
     height: 10px;
@@ -34,27 +30,24 @@ body,
     left: 5px;
     top: 5px;
 }
-
 #main{
 	padding: 15px;
 }
-
 textarea{
     width: 100%;
     resize: both;
     overflow: hidden;
 }
 
+/*icons for sortable table headers*/
 .headerSort{
 	background-repeat: no-repeat;
 	background-image: url(/WQIS/img/sort_both.svg);
 	background-position: center right;
 }
-
 .Desc{
 	background-image: url(/WQIS/img/sort_down.svg);
 }
-
 .Asc{
 	background-image: url(/WQIS/img/sort_up.svg);
 }
@@ -63,15 +56,12 @@ textarea{
 .esri-icon-dock-right{
 	display: none !important;
 }
-
 .esri-popup__feature-menu-button{
 	display: none !important;
 }
-
 .esri-popup__pagination-previous{
 	display: none !important;
 }
-
 .esri-popup__pagination-next{
 	display: none !important;
 }
@@ -81,19 +71,16 @@ textarea{
     border: medium solid #2a5171;
     color: white;
 }
-
 .btn-basic:hover{
     background-color: #8eceff;
     text-shadow: 1px 1px 3px black;
     color:black;
 }
-
 .btn-basic:active{
     background-color: #dddddd;
     border: medium solid #77b0d9;
     color: black;
 }
-
 .btn-basic:disabled:hover{
     background-color: #2a5171;
     border-color: #2a5171;
@@ -101,25 +88,21 @@ textarea{
     color: white;
     cursor: auto;
 }
-
 .btn-close{
     background-color: #868E96;
     border: medium solid #868E96;
     color: white;
 }
-
 .btn-close:hover{
     background-color: #d4d8db;
     text-shadow: 1px 1px 3px black;
     color:black;
 }
-
 .btn-close:active{
     background-color: #dddddd;
     border: medium solid #77b0d9;
     color: black;
 }
-
 .btn-close:disabled:hover{
     background-color: #2a5171;
     border-color: #2a5171;
@@ -127,34 +110,24 @@ textarea{
     color: white;
     cursor: auto;
 }
-
 .inputHide{
     background-color: #bdbdbd;
     min-width: 90px;
     white-space: pre;
 }
-
 .btn-thin{
     margin:0 auto;
     padding-top:1px;
     padding-bottom:1px;
     height:26px;
 }
-
 .btn-thin:hover{
     border-color: rgb(57, 156, 255);
 }
-
-.comment:hover {
-    color: #00F;
-    cursor: pointer;
-}
-
 .delete:hover {
     color: #FF0000;
     cursor: pointer;
 }
-
 .panel-heading .colpsible-panel:after {
     font-family: 'Glyphicons Halflings'; 
     content: "\e114";    
@@ -164,7 +137,6 @@ textarea{
 .panel-heading .colpsible-panel.collapsed:after {
     content: "\e080"; 
 }
-
 .collapsible-panel:before{
 	content: '\2212';
 	font-size: 36px;
@@ -247,7 +219,6 @@ textarea{
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 }
-
 #sidebarInner{
 	height: 100%;
 	width: 0;
@@ -258,19 +229,15 @@ textarea{
 	flex-direction: column;
 	overflow: hidden;
 }
-
 #sidebarToggleLabel{
 	color: #F7F9FB;
 }
-
 #searchBox{
 	overflow-y: auto;
 }
-
 .select2-selection__choice{
 	color: black;
 }
-
 .select:focus, .date-picker:focus{
     transition: .1s;
     outline: solid #2a5171;
@@ -295,7 +262,6 @@ th{
 	background-color: #e2f0f5; 
 	font-weight: 400;
 }
-
 #tableDiv{
 	text-align: center;
 	overflow: auto;
@@ -306,12 +272,10 @@ th{
     font-size: 12pt;
     height: 38px;
 }
-
 #startDate:focus, #endDate:focus{
     transition: .1s;
     outline: solid #2a5171;
 }
-
 .datepicker{
     border: solid medium #2a5171;
     background-color: #f4f6fa;

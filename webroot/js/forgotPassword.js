@@ -1,19 +1,19 @@
 $(document).ready(function () {
-    $('#message').on('click', function () {
-        $(this).addClass("hidden");
-    });
-    
-    $('body').on('focus', '.mainPage', function(){
-        $(this).css({'backgroundColor':'white', 'border':'none'});
-    });
-    
-    $('body').on('click', '#confirmUsername-btn', function () {
-	removeErrorMessages();
-        
-        if ($('#username').val() === '') {
-            displayError('#username', '#usernameError', 'No username was provided');
-            return false;
-        }
+	$("#message").on("click", function () {
+		$(this).addClass("hidden");
+	});
+
+	$('body').on('focus', '.mainPage', function(){
+		$(this).css({'backgroundColor':'white', 'border':'none'});
+	});
+
+	$('body').on('click', '#confirmUsername-btn', function () {
+		removeErrorMessages();
+
+		if ($('#username').val() === '') {
+			displayError('#username', '#usernameError', 'No username was provided');
+			return false;
+		}
         
         var username = $('#username').val();
         $.ajax({

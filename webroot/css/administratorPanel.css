@@ -1,7 +1,6 @@
 body{
     color:#373737;
 }
-
 .btn-close{
     background-color: #868E96;
     border: medium solid #868E96;
@@ -12,13 +11,11 @@ body{
     text-shadow: 1px 1px 3px black;
     color:black;
 }
-
 .btn-close:active{
     background-color: #dddddd;
     border: medium solid #77b0d9;
     color: black;
 }
-
 .btn-close:disabled:hover{
     background-color: #2a5171;
     border-color: #2a5171;
@@ -26,30 +23,23 @@ body{
     color: white;
     cursor: auto;
 }
-
-/*
-    Page specific css
-*/
+/*Page specific css*/
 .panel{
     border-radius: 5px;
     border: solid thin rgb(150, 150, 150);
 }
-
 .panel-title{
     color: black;
     font-weight: normal;
     margin-left: 10px;
 }
-
 .list-group-item{
     border: solid thin #312f32;
 }
-
 .btn-file {
     position: relative;
     overflow: hidden;
 }
-
 .btn-file input[type=file] {
     position: absolute;
     top: 0;
@@ -65,12 +55,9 @@ body{
     cursor: inherit;
     display: block;
 }
-
 .spacer{
     margin-top:60px;
 }
-
-/* New Changes admin panel */
 .card{
     border: solid medium #868E96;
     border-radius: 5px;
@@ -85,92 +72,73 @@ body{
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
-
 .card:hover{
     transition: .2s;
     background-color: #e5f1fc;
     border: solid medium #367fc8;
 }
-
 .card:active{
     border: solid medium #83c4f0;
     outline: solid medium #8eceff;
 }
-
 .big-card{
     border: solid medium #2a5171;
 }
-
 .big-card:hover{
     border: solid medium #2a5171;
     background-color: white;
     cursor: default;
 }
-
 .big-card:active{
     border: solid medium #2a5171;
     outline: none;
 }
-
 .card-info {
     border: none;
     width: 100%;
     margin-bottom: 5px;
 }
-
 .card-info:hover{
     border: none;
     background-color: white;
     cursor: default;
 }
-
 .card-info:active{
     border: none;
     outline: none;
 }
-
 .card-block{
     padding: 10px 10px 5px 10px;
 }
-
 .cardCollapse, .cardModal{
     color: black;
 }
-
 .cardModal:hover{
     text-decoration: none;
     color: black;
 }
-
 .modal-content{
     border: solid medium #2a5171;
 }
-
 #fileType, #entryType{
     border: solid thin #868E96 !important;
 }
-
 #infoGlyph{
     color: #2a5171;
 }
-
 #infoGlyph:hover{
     color: #638de2;
 }
-
 ul{
     list-style-type:none;
 }
-
 .info-li{
     margin-bottom: 10px;
 }
-
 #FileUploadDiv{
     border: solid thin #868E96;
     background-color: #eaeaea;
 }
-
 .center{
     margin-left: 0px;
     margin-right: 0px;

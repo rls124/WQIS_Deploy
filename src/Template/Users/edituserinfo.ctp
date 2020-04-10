@@ -3,44 +3,45 @@
 
 <div id ='message' class="message hidden"></div>
 
-    <div class="mt-3">
-        <h1 class="centeredText" id="wqisHeading"><span class="glyphicon glyphicon-user" style="font-size: 20pt;"></span>  Edit User Info</h1>
-    </div>
-    <hr>
+<div class="mt-3">
+	<h1 class="centeredText" id="wqisHeading"><span class="glyphicon glyphicon-user" style="font-size: 20pt;"></span>  Edit User Info</h1>
+</div>
+<hr>
     
-    <div class="container">
-        <?=
-            $this->Form->create(false, [
+<div class="container">
+	<?=
+	$this->Form->create(false, [
 		'id' => 'updateUserForm'
 		]
-	    )
+	)
 	?>
-        <div class="form-group row">
-            <?php 
-                $uname = '';
-                if($userinfo !== NULL) {
-                    $uname = $user->username;
-                } else {
-                    $uname = $username;
-                }
-            ?>
-            <?=
-                $this->Form->control('Username', [
-                    'label' => [
-                        'text' => 'Username',
-                        'class' => 'col-lg-2 label-reg lol'
-                    ],
-                    'templates' => [
-                        'inputContainer' => '{{content}}'
-                    ],
-                    'class' => "col-lg-10 form-control textinput mainPage",
-                    'name' => "username",
-                    'default' => $uname,
-                    'id' => "username",
-                    'placeholder' => "Your Username...",
-                    'readonly' => 'readonly'
-                ]);
-            ?>
+	<div class="form-group row">
+		<?php 
+		$uname = '';
+		if ($userinfo !== NULL) {
+			$uname = $user->username;
+		}
+		else {
+			$uname = $username;
+		}
+		?>
+		<?=
+		$this->Form->control('Username', [
+			'label' => [
+				'text' => 'Username',
+				'class' => 'col-lg-2 label-reg lol'
+			],
+			'templates' => [
+				'inputContainer' => '{{content}}'
+			],
+			'class' => "col-lg-10 form-control textinput mainPage",
+			'name' => "username",
+			'default' => $uname,
+			'id' => "username",
+			'placeholder' => "Your Username...",
+			'readonly' => 'readonly'
+		]);
+		?>
             <p class="errorMessage" id="usernameError"></p>
         </div>
         
@@ -270,6 +271,3 @@
     <input type="submit" class="btn mb-3 btn-basic" id="changePass-btn" value="Submit Changes" style="float: right">
 
     <?= $this->Form->end() ?>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>

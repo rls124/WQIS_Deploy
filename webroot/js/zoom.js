@@ -10,11 +10,8 @@
  */
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
-},{}],2:[function(require,module,exports){
-/*jslint browser:true, devel:true, white:true, vars:true */
-/*global require*/
-
-// hammer JS for touch support
+},{}],2:[function(require,module,exports) {
+//hammer JS for touch support
 var Hammer = require("hammerjs");
 Hammer = typeof(Hammer) === "function" ? Hammer : window.Hammer;
 
@@ -41,17 +38,6 @@ var defaultOptions = zoomNS.defaults = {
 	}
 };
 
-function directionEnabled(mode, dir) {
-	if (mode === undefined) {
-		return true;
-	}
-	else if (typeof mode === "string") {
-		return mode.indexOf(dir) !== -1;
-	}
-
-	return false;
-}
-
 function zoomIndexScale(scale, zoom, center, zoomOptions) {
 	var labels = scale.chart.data.labels;
 	var minIndex = scale.minIndex;
@@ -68,28 +54,31 @@ function zoomIndexScale(scale, zoom, center, zoomOptions) {
 		zoomNS.zoomCumulativeDelta-=1;
 	}
 
-	if (Math.abs(zoomNS.zoomCumulativeDelta) > sensitivity){
-		if(zoomNS.zoomCumulativeDelta < 0){
-			if(centerPointer <= chartCenter){
+	if (Math.abs(zoomNS.zoomCumulativeDelta) > sensitivity) {
+		if (zoomNS.zoomCumulativeDelta < 0) {
+			if (centerPointer <= chartCenter) {
 				if (minIndex <= 0){
 					maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
-				} else{
+				}
+				else {
 					minIndex = Math.max(0, minIndex - 10);
 				}
-			} else if(centerPointer > chartCenter){
+			}
+			else {
 				if (maxIndex >= lastLabelIndex){
 					minIndex = Math.max(0, minIndex - 10);
-				} else{
+				}
+				else{
 					maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
 				}
 			}
 			zoomNS.zoomCumulativeDelta = 0;
 		}
-		else if(zoomNS.zoomCumulativeDelta > 0){
-			if (centerPointer <= chartCenter){
+		else if (zoomNS.zoomCumulativeDelta > 0) {
+			if (centerPointer <= chartCenter) {
 				minIndex = minIndex < maxIndex ? minIndex = Math.min(maxIndex, minIndex + 10) : minIndex;
 			}
-			else if(centerPointer > chartCenter){
+			else if (centerPointer > chartCenter) {
 				maxIndex = maxIndex > minIndex ? maxIndex = Math.max(minIndex, maxIndex - 10) : maxIndex;
 			}
 			zoomNS.zoomCumulativeDelta = 0;
@@ -189,7 +178,7 @@ function doPan(chartInstance, deltaX, deltaY) {
 		panOptions.speed = helpers.getValueOrDefault(chartInstance.options.pan.speed, defaultOptions.pan.speed);
 
 		helpers.each(chartInstance.scales, function(scale, id) {
-			if (scale.isHorizontal() && directionEnabled(panMode, 'x') && deltaX !== 0) {
+			if (deltaX !== 0) {
 				panIndexScale(scale, deltaX, panOptions)
 			}
 		});
@@ -215,11 +204,11 @@ function getYAxis(chartInstance) {
 	}
 }
 
-// Globals for catergory pan and zoom
+//globals for catergory pan and zoom
 zoomNS.panCumulativeDelta = 0;
 zoomNS.zoomCumulativeDelta = 0;
 
-// Chartjs Zoom Plugin
+//Chartjs Zoom Plugin
 var zoomPlugin = {
 	afterInit: function(chartInstance) {
 		helpers.each(chartInstance.scales, function(scale) {
@@ -260,7 +249,7 @@ var zoomPlugin = {
 		var panThreshold = helpers.getValueOrDefault(options.pan ? options.pan.threshold : undefined, zoomNS.defaults.pan.threshold);
 
 		if (options.zoom && options.zoom.drag) {
-			//Only want to zoom horizontal axis
+			//only want to zoom horizontal axis
 			options.zoom.mode = 'x';
 
 			node.addEventListener('mousedown', function(event){
@@ -322,7 +311,7 @@ var zoomPlugin = {
 			};
 			chartInstance._wheelHandler = wheelHandler;
 
-			node.addEventListener('wheel', wheelHandler);
+			node.addEventListener("wheel", wheelHandler);
 		}
 
 		if (Hammer) {
@@ -332,23 +321,23 @@ var zoomPlugin = {
 				threshold: panThreshold
 			}));
 
-			// Hammer reports the total scaling. We need the incremental amount
+			//Hammer reports the total scaling. We need the incremental amount
 			var currentPinchScaling;
 			var handlePinch = function handlePinch(e) {
 				var diff = 1 / (currentPinchScaling) * e.scale;
 				doZoom(chartInstance, diff, e.center);
 
-				// Keep track of overall scale
+				//keep track of overall scale
 				currentPinchScaling = e.scale;
 			};
 
-			mc.on('pinchstart', function(e) {
-				currentPinchScaling = 1; // reset tracker
+			mc.on("pinchstart", function(e) {
+				currentPinchScaling = 1; //reset tracker
 			});
-			mc.on('pinch', handlePinch);
-			mc.on('pinchend', function(e) {
+			mc.on("pinch", handlePinch);
+			mc.on("pinchend", function(e) {
 				handlePinch(e);
-				currentPinchScaling = null; // reset
+				currentPinchScaling = null; //reset
 				zoomNS.zoomCumulativeDelta = 0;
 			});
 
@@ -363,13 +352,13 @@ var zoomPlugin = {
 				}
 			};
 
-			mc.on('panstart', function(e) {
+			mc.on("panstart", function(e) {
 				currentDeltaX = 0;
 				currentDeltaY = 0;
 				handlePan(e);
 			});
-			mc.on('panmove', handlePan);
-			mc.on('panend', function(e) {
+			mc.on("panmove", handlePan);
+			mc.on("panend", function(e) {
 				currentDeltaX = null;
 				currentDeltaY = null;
 				zoomNS.panCumulativeDelta = 0;
@@ -393,7 +382,7 @@ var zoomPlugin = {
 			var endX = Math.max(beginPoint.x, endPoint.x) - offsetX;
 			var rectWidth = endX - startX;
 
-			ctx.fillStyle = 'rgba(225,225,225,0.3)';
+			ctx.fillStyle = "rgba(225,225,225,0.3)";
 			ctx.lineWidth = 5;
 			ctx.fillRect(startX, yAxis.top, rectWidth, yAxis.bottom - yAxis.top);
 		}
@@ -401,23 +390,20 @@ var zoomPlugin = {
 		ctx.rect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
 		ctx.clip();
 	},
-
 	afterDatasetsDraw: function(chartInstance) {
 		chartInstance.chart.ctx.restore();
 	},
-
 	destroy: function(chartInstance) {
-		var node = chartInstance.chart.ctx.canvas;
-		node.removeEventListener('wheel', chartInstance._wheelHandler);
+		var node = chartInstance.chart.ctx.canvas.removeEventListener('wheel', chartInstance._wheelHandler);
 
 		var mc = chartInstance._mc;
 		if (mc) {
-			mc.remove('pinchstart');
-			mc.remove('pinch');
-			mc.remove('pinchend');
-			mc.remove('panstart');
-			mc.remove('pan');
-			mc.remove('panend');
+			mc.remove("pinchstart");
+			mc.remove("pinch");
+			mc.remove("pinchend");
+			mc.remove("panstart");
+			mc.remove("pan");
+			mc.remove("panend");
 		}
 	}
 };
