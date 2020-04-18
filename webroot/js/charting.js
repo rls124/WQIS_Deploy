@@ -409,67 +409,80 @@ function addButtons(node, chartInstance) {
 				}
 			}
 			
-			for (i=0; i<measures.length; i++) {
-				//add a button for it
-				var measureButton = document.createElement("button");
-				measureButton.innerText = measures[i].measureKey;
-				measureButton.setAttribute("value", measures[i].measureKey);
-				measureButton.onclick = function() {
-					var val = $(this)[0].attributes.value.value;
-			
-					//get the chart index for this
-					for (j=0; j<measures.length; j++) {
-						if (measures[j].measureKey == val) {
-							//build new dataset from charts[j]
-							var newDataset = {
-								label: val,
-								yAxisID: "comparison",
-								borderColor: selectColor(2,2),
-								data: charts[j].data.datasets[0].data,
-								lineTension: 0,
-								fill: false,
-								borderWidth: 1.5,
-								showLine: (document.getElementById("chartType").value === "line"),
-								spanGaps: true
+			//for (i=0; i<measures.length; i++) {
+			for (category in measurementSettings) {
+				console.log(measurementSettings[category]);
+				for (j=0; j<measurementSettings[category].length; j++) {
+					//add a button for it
+					var measureButton = document.createElement("button");
+					measureButton.innerText = measurementSettings[category][j].measureKey;
+					measureButton.setAttribute("measure", measurementSettings[category][j].measureKey);
+					measureButton.setAttribute("category", category);
+					measureButton.setAttribute("measureName", measurementSettings[category][j].measureName);
+					measureButton.onclick = function() {
+						var measure = $(this)[0].attributes.measure.value;
+						var category = $(this)[0].attributes.category.value;
+						var measureName = $(this)[0].attributes.measureName.value;
+					
+						var startDate = $("#startDate").val();
+						var endDate = $("#endDate").val();
+						var sites = $("#sites").val();
+						var amountEnter = document.getElementById("amountEnter").value;
+						var overUnderSelect = document.getElementById("overUnderSelect").value;
+						var measurementSearch = document.getElementById("measurementSelect").value;
+						
+						//retrieve data from the server
+						$.ajax({
+							type: "POST",
+							url: "/WQIS/generic-samples/graphdata",
+							datatype: "JSON",
+							async: false,
+							data: {
+								"sites": sites,
+								"startDate": startDate,
+								"endDate": endDate,
+								"selectedMeasures": [measure],
+								"category": category,
+								"amount": amountEnter,
+								"overUnderSelect": overUnderSelect,
+								"measurementSearch": measurementSearch,
+								"aggregate": false
+							},
+							success: function(response) {
+								var newDataset = {
+									label: measureName,
+									yAxisID: "comparison",
+									borderColor: selectColor(2,2),
+									data: [],
+									lineTension: 0,
+									fill: false,
+									borderWidth: 1.5,
+									showLine: ($("#chartType").val() === "line"),
+									spanGaps: true
+								}
+
+								for (i=0; i<response.length; i++) {
+									var newRow = [];
+									var date = response[i].Date.split("T")[0];
+									newRow.t = date;
+									newRow.y = response[i][measure];
+		
+									newDataset.data.push(newRow);
+								}
+								
+								chartInstance.data.datasets.push(newDataset);
 							}
-							
-							chartInstance.data.datasets.push(newDataset);
-						}
+						});
+						
+						//add new y-axis
+						chartInstance.options.scales.yAxes[1].scaleLabel.labelString = measureName;
+						chartInstance.options.scales.yAxes[1].display = true;
+						
+						chartInstance.update();
 					}
 					
-					
-					/*
-					//retrieve data from the server
-					$.ajax({
-						type: "POST",
-						url: "/WQIS/generic-samples/graphdata",
-						datatype: "JSON",
-						async: false,
-						data: {
-							"sites": sites,
-							"startDate": startDate,
-							"endDate": endDate,
-							"selectedMeasures": [val],
-							"category": category,
-							"amount": amountEnter,
-							"overUnderSelect": overUnderSelect,
-							"measurementSearch": measurementSearch,
-							"aggregate": false
-						},
-						success: function(response) {
-							
-						}
-					});
-					*/
-					
-					//add new y-axis
-					chartInstance.options.scales.yAxes[1].scaleLabel.labelString = val;
-					chartInstance.options.scales.yAxes[1].display = true;
-					
-					chartInstance.update();
+					optionsDiv.appendChild(measureButton);
 				}
-					
-				optionsDiv.appendChild(measureButton);
 			}
 		}
 		node.parentElement.appendChild(compareButton);
