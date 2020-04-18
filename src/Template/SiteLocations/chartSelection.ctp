@@ -10,7 +10,6 @@
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
 <script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
-<?= $this->Html->script('zoom.js') ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
 <script defer src="https://js.arcgis.com/4.14/"></script>
@@ -257,4 +256,21 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		'disabled' => true
 	])
 	?>
+</div>
+
+<!-- measurement selection modal for single-graph comparisons -->
+<div class="modal" id="compareToModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Compare to:</h4>
+				<div id="compareTargetOptions"></div>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
