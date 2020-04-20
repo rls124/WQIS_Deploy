@@ -357,142 +357,6 @@ function zoomIndexScale(scale, zoom, center, zoomOptions) {
 	}
 }
 
-function addButtons(node, chartInstance) {
-	var node = chartInstance.chart.ctx.canvas;
-	var chartNum = node.id.split("-")[1];
-	
-	var zoomInButton = document.createElement("button");
-	zoomInButton.innerText = "+";
-	zoomInButton.id = "zoomInButton-" + chartNum;
-	zoomInButton.onclick = function() {
-		//zoom in
-		doZoom(chartInstance, 1.1);
-	};
-	node.parentElement.appendChild(zoomInButton);
-	
-	var zoomOutButton = document.createElement("button");
-	zoomOutButton.innerText = "-";
-	zoomOutButton.id = "zoomOutButton-" + chartNum;
-	zoomOutButton.onclick = function() {
-		//zoom out
-		doZoom(chartInstance, -1);
-	}
-	node.parentElement.appendChild(zoomOutButton);
-	
-	var resetButton = document.createElement("button");
-	resetButton.innerText = "reset";
-	resetButton.id = "resetButton-" + chartNum;
-	resetButton.onclick = function() {
-		chartInstance.resetZoom();
-	}
-	node.parentElement.appendChild(resetButton);
-	
-	if ($("#sites").val().length == 1 || document.getElementById("aggregateGroup").checked) {
-		//we don't want to show this button if theres multiple sites, because it'd complicate coloring
-		var compareButton = document.createElement("button");
-		compareButton.type = "button";
-		compareButton.setAttribute("data-toggle", "modal");
-		compareButton.setAttribute("data-target", "#compareToModal");
-		compareButton.innerText = "Compare to other measure";
-		compareButton.id = "compareButton-" + chartNum;
-		compareButton.onclick = function() {
-			//first set options available in the modal
-			var optionsDiv = document.getElementById("compareTargetOptions");
-			optionsDiv.innerHTML = "";
-			
-			//build up a single array with all the measurement settings
-			var measures = [];
-			for (category in measurementSettings) {
-				for (j=0; j<measurementSettings[category].length; j++) {
-					measures.push(measurementSettings[category][j]);
-				}
-			}
-			
-			for (category in measurementSettings) {
-				for (j=0; j<measurementSettings[category].length; j++) {
-					//add a button for it
-					var measureButton = document.createElement("button");
-					measureButton.innerText = measurementSettings[category][j].measureKey;
-					measureButton.setAttribute("measure", measurementSettings[category][j].measureKey);
-					measureButton.setAttribute("category", category);
-					measureButton.setAttribute("measureName", measurementSettings[category][j].measureName);
-					measureButton.onclick = function() {
-						var measure = $(this)[0].attributes.measure.value;
-						var category = $(this)[0].attributes.category.value;
-						var measureName = $(this)[0].attributes.measureName.value;
-						
-						//first remove the second dataset if present from beforeDatasetsDraw
-						chartInstance.data.datasets = [chartInstance.data.datasets[0]];
-						
-						//also make sure the label for that dataset is the measure, not the site number, which is the default for single-measure graphing
-						chartInstance.data.datasets[0].label = chartInstance.options.scales.yAxes[0].scaleLabel.labelString;
-						
-						//retrieve data from the server
-						$.ajax({
-							type: "POST",
-							url: "/WQIS/generic-samples/graphdata",
-							datatype: "JSON",
-							async: false,
-							data: {
-								"sites": $("#sites").val(),
-								"startDate": $("#startDate").val(),
-								"endDate": $("#endDate").val(),
-								"selectedMeasures": [measure],
-								"category": category,
-								"amount": null,
-								"overUnderSelect": null,
-								"measurementSearch": null,
-								"aggregate": document.getElementById("aggregateGroup").checked
-							},
-							success: function(response) {
-								if (response.length == 0) {
-									alert("No data for this measure over this range");
-								}
-								else {
-									var newDataset = {
-										label: measureName,
-										yAxisID: "comparison",
-										borderColor: selectColor(2,2),
-										data: [],
-										lineTension: 0,
-										fill: false,
-										borderWidth: 1.5,
-										showLine: ($("#chartType").val() === "line"),
-										spanGaps: true
-									}
-
-									for (i=0; i<response.length; i++) {
-										var newRow = [];
-										var date = response[i].Date.split("T")[0];
-										newRow.t = date;
-										newRow.y = response[i][measure];
-			
-										newDataset.data.push(newRow);
-									}
-									
-									chartInstance.data.datasets.push(newDataset);
-									
-									//add new y-axis
-									chartInstance.options.scales.yAxes[1].scaleLabel.labelString = measureName;
-									chartInstance.options.scales.yAxes[1].display = true;
-								}
-							},
-							error: function(response) {
-								genericError();
-							}
-						});
-						
-						chartInstance.update();
-					}
-					
-					optionsDiv.appendChild(measureButton);
-				}
-			}
-		}
-		node.parentElement.appendChild(compareButton);
-	}
-}
-
 function doZoom(chartInstance, zoom, center) {
 	var ca = chartInstance.chartArea;
 	if (!center) {
@@ -504,17 +368,15 @@ function doZoom(chartInstance, zoom, center) {
 
 	var zoomOptions = chartInstance.options.zoom;
 
-	if (zoomOptions && helpers.getValueOrDefault(zoomOptions.enabled, defaultOptions.zoom.enabled)) {
-		//do the zoom here
-		var zoomMode = helpers.getValueOrDefault(chartInstance.options.zoom.mode, defaultOptions.zoom.mode);
-		zoomOptions.sensitivity = helpers.getValueOrDefault(chartInstance.options.zoom.sensitivity, defaultOptions.zoom.sensitivity);
+	//do the zoom here
+	var zoomMode = helpers.getValueOrDefault(chartInstance.options.zoom.mode, defaultOptions.zoom.mode);
+	zoomOptions.sensitivity = helpers.getValueOrDefault(chartInstance.options.zoom.sensitivity, defaultOptions.zoom.sensitivity);
 
-		helpers.each(chartInstance.scales, function(scale, id) {
-			zoomIndexScale(scale, zoom, center, zoomOptions)
-		});
-
-		chartInstance.update(0);
-	}
+	helpers.each(chartInstance.scales, function(scale, id) {
+		zoomIndexScale(scale, zoom, center, zoomOptions)
+	});
+	
+	chartInstance.update(0);
 }
 
 function panIndexScale(scale, delta, panOptions) {
@@ -547,23 +409,20 @@ function panIndexScale(scale, delta, panOptions) {
 
 function doPan(chartInstance, deltaX, deltaY) {
 	var panOptions = chartInstance.options.pan;
-	if (panOptions && helpers.getValueOrDefault(panOptions.enabled, defaultOptions.pan.enabled)) {
-		var panMode = helpers.getValueOrDefault(chartInstance.options.pan.mode, defaultOptions.pan.mode);
-		panOptions.speed = helpers.getValueOrDefault(chartInstance.options.pan.speed, defaultOptions.pan.speed);
+	var panMode = helpers.getValueOrDefault(chartInstance.options.pan.mode, defaultOptions.pan.mode);
+	panOptions.speed = helpers.getValueOrDefault(chartInstance.options.pan.speed, defaultOptions.pan.speed);
 
-		helpers.each(chartInstance.scales, function(scale, id) {
-			if (deltaX !== 0) {
-				panIndexScale(scale, deltaX, panOptions)
-			}
-		});
-
-		chartInstance.update(0);
-	}
+	helpers.each(chartInstance.scales, function(scale, id) {
+		if (deltaX !== 0) {
+			panIndexScale(scale, deltaX, panOptions)
+		}
+	});
+	
+	chartInstance.update(0);
 }
 
 function positionInChartArea(chartInstance, position) {
-	return (position.x >= chartInstance.chartArea.left && position.x <= chartInstance.chartArea.right) &&
-		(position.y >= chartInstance.chartArea.top && position.y <= chartInstance.chartArea.bottom);
+	return (position.x >= chartInstance.chartArea.left && position.x <= chartInstance.chartArea.right) && (position.y >= chartInstance.chartArea.top && position.y <= chartInstance.chartArea.bottom);
 }
 
 function getYAxis(chartInstance) {
@@ -614,7 +473,140 @@ var zoomPlugin = {
 		};
 		
 		var node = chartInstance.chart.ctx.canvas;
-		addButtons(node, chartInstance);
+		
+		//add buttons
+		var chartNum = node.id.split("-")[1];
+	
+		var zoomInButton = document.createElement("button");
+		zoomInButton.innerText = "+";
+		zoomInButton.id = "zoomInButton-" + chartNum;
+		zoomInButton.onclick = function() {
+			//zoom in
+			doZoom(chartInstance, 1.1);
+		};
+		node.parentElement.appendChild(zoomInButton);
+	
+		var zoomOutButton = document.createElement("button");
+		zoomOutButton.innerText = "-";
+		zoomOutButton.id = "zoomOutButton-" + chartNum;
+		zoomOutButton.onclick = function() {
+			//zoom out
+			doZoom(chartInstance, -1);
+		}
+		node.parentElement.appendChild(zoomOutButton);
+	
+		var resetButton = document.createElement("button");
+		resetButton.innerText = "reset";
+		resetButton.id = "resetButton-" + chartNum;
+		resetButton.onclick = function() {
+			chartInstance.resetZoom();
+		}
+		node.parentElement.appendChild(resetButton);
+	
+		if ($("#sites").val().length == 1 || document.getElementById("aggregateGroup").checked) {
+			//we don't want to show this button if theres multiple sites, because it'd complicate coloring
+			var compareButton = document.createElement("button");
+			compareButton.type = "button";
+			compareButton.setAttribute("data-toggle", "modal");
+			compareButton.setAttribute("data-target", "#compareToModal");
+			compareButton.innerText = "Compare to other measure";
+			compareButton.id = "compareButton-" + chartNum;
+			compareButton.onclick = function() {
+				//first set options available in the modal
+				var optionsDiv = document.getElementById("compareTargetOptions");
+				optionsDiv.innerHTML = "";
+			
+				//build up a single array with all the measurement settings
+				var measures = [];
+				for (category in measurementSettings) {
+					for (j=0; j<measurementSettings[category].length; j++) {
+						measures.push(measurementSettings[category][j]);
+					}
+				}
+			
+				for (category in measurementSettings) {
+					for (j=0; j<measurementSettings[category].length; j++) {
+						//add a button for it
+						var measureButton = document.createElement("button");
+						measureButton.innerText = measurementSettings[category][j].measureKey;
+						measureButton.setAttribute("measure", measurementSettings[category][j].measureKey);
+						measureButton.setAttribute("category", category);
+						measureButton.setAttribute("measureName", measurementSettings[category][j].measureName);
+						measureButton.onclick = function() {
+							var measure = $(this)[0].attributes.measure.value;
+							var category = $(this)[0].attributes.category.value;
+							var measureName = $(this)[0].attributes.measureName.value;
+						
+							//first remove the second dataset if present from beforeDatasetsDraw
+							chartInstance.data.datasets = [chartInstance.data.datasets[0]];
+						
+							//also make sure the label for that dataset is the measure, not the site number, which is the default for single-measure graphing
+							chartInstance.data.datasets[0].label = chartInstance.options.scales.yAxes[0].scaleLabel.labelString;
+						
+							//retrieve data from the server
+							$.ajax({
+								type: "POST",
+								url: "/WQIS/generic-samples/graphdata",
+								datatype: "JSON",
+								async: false,
+								data: {
+									"sites": $("#sites").val(),
+									"startDate": $("#startDate").val(),
+									"endDate": $("#endDate").val(),
+									"selectedMeasures": [measure],
+									"category": category,
+									"amount": null,
+									"overUnderSelect": null,
+									"measurementSearch": null,
+									"aggregate": document.getElementById("aggregateGroup").checked
+								},
+								success: function(response) {
+									if (response.length == 0) {
+										alert("No data for this measure over this range");
+									}
+									else {
+										var newDataset = {
+											label: measureName,
+											yAxisID: "comparison",
+											borderColor: selectColor(2,2),
+											data: [],
+											lineTension: 0,
+											fill: false,
+											borderWidth: 1.5,
+											showLine: ($("#chartType").val() === "line"),
+											spanGaps: true
+										}
+
+										for (i=0; i<response.length; i++) {
+											var newRow = [];
+											var date = response[i].Date.split("T")[0];
+											newRow.t = date;
+											newRow.y = response[i][measure];
+				
+											newDataset.data.push(newRow);
+										}
+										
+										chartInstance.data.datasets.push(newDataset);
+									
+										//add new y-axis
+										chartInstance.options.scales.yAxes[1].scaleLabel.labelString = measureName;
+										chartInstance.options.scales.yAxes[1].display = true;
+									}
+								},
+								error: function(response) {
+									genericError();
+								}
+							});
+						
+							chartInstance.update();
+						}
+					
+						optionsDiv.appendChild(measureButton);
+					}
+				}
+			}
+			node.parentElement.appendChild(compareButton);
+		}
 	},
 	beforeInit: function(chartInstance) {
 		var node = chartInstance.chart.ctx.canvas;
@@ -1944,7 +1936,6 @@ $(document).ready(function () {
 		resetCharts();
 		resetTable();
 	}
-	
 	
 	function setSort(e) {
 		var field = e.srcElement.id;
