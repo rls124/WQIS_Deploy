@@ -409,9 +409,7 @@ function addButtons(node, chartInstance) {
 				}
 			}
 			
-			//for (i=0; i<measures.length; i++) {
 			for (category in measurementSettings) {
-				console.log(measurementSettings[category]);
 				for (j=0; j<measurementSettings[category].length; j++) {
 					//add a button for it
 					var measureButton = document.createElement("button");
@@ -423,6 +421,12 @@ function addButtons(node, chartInstance) {
 						var measure = $(this)[0].attributes.measure.value;
 						var category = $(this)[0].attributes.category.value;
 						var measureName = $(this)[0].attributes.measureName.value;
+						
+						//first remove the second dataset if present from beforeDatasetsDraw
+						chartInstance.data.datasets = [chartInstance.data.datasets[0]];
+						
+						//also make sure the label for that dataset is the measure, not the site number, which is the default for single-measure graphing
+						chartInstance.data.datasets[0].label = chartInstance.options.scales.yAxes[0].scaleLabel.labelString;
 						
 						//retrieve data from the server
 						$.ajax({
@@ -442,34 +446,42 @@ function addButtons(node, chartInstance) {
 								"aggregate": document.getElementById("aggregateGroup").checked
 							},
 							success: function(response) {
-								var newDataset = {
-									label: measureName,
-									yAxisID: "comparison",
-									borderColor: selectColor(2,2),
-									data: [],
-									lineTension: 0,
-									fill: false,
-									borderWidth: 1.5,
-									showLine: ($("#chartType").val() === "line"),
-									spanGaps: true
+								if (response.length == 0) {
+									alert("No data for this measure over this range");
 								}
+								else {
+									var newDataset = {
+										label: measureName,
+										yAxisID: "comparison",
+										borderColor: selectColor(2,2),
+										data: [],
+										lineTension: 0,
+										fill: false,
+										borderWidth: 1.5,
+										showLine: ($("#chartType").val() === "line"),
+										spanGaps: true
+									}
 
-								for (i=0; i<response.length; i++) {
-									var newRow = [];
-									var date = response[i].Date.split("T")[0];
-									newRow.t = date;
-									newRow.y = response[i][measure];
-		
-									newDataset.data.push(newRow);
+									for (i=0; i<response.length; i++) {
+										var newRow = [];
+										var date = response[i].Date.split("T")[0];
+										newRow.t = date;
+										newRow.y = response[i][measure];
+			
+										newDataset.data.push(newRow);
+									}
+									
+									chartInstance.data.datasets.push(newDataset);
+									
+									//add new y-axis
+									chartInstance.options.scales.yAxes[1].scaleLabel.labelString = measureName;
+									chartInstance.options.scales.yAxes[1].display = true;
 								}
-								
-								chartInstance.data.datasets.push(newDataset);
+							},
+							error: function(response) {
+								genericError();
 							}
 						});
-						
-						//add new y-axis
-						chartInstance.options.scales.yAxes[1].scaleLabel.labelString = measureName;
-						chartInstance.options.scales.yAxes[1].display = true;
 						
 						chartInstance.update();
 					}
