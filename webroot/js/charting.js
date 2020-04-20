@@ -90,12 +90,11 @@ function benchmarkLine(val, color) {
 
 const driver = new Driver({
 	animate: true, 
-	doneBtnText: 'Finish Tour',
-	closeBtnText: 'Exit Tour', 
+	doneBtnText: "Finish Tour",
+	closeBtnText: "Exit Tour", 
 	keyboardControl: true,
 	allowClose: false,
 	opacity: .75,
-
 });
 
 driver.defineSteps([
@@ -119,20 +118,20 @@ driver.defineSteps([
 	offset: 180
   }
 },{
-  element: '#mapCard',
+  element: "#mapCard",
   popover: {
-	className: 'third-popover-class',
-    title: 'The Map',
-    description: 'This is the Map, Here you will see several blue points and colored outlines. The colorful outlines signify different watersheds, and the blue dots represent water collection sites',
-	position: 'left',
+	className: "third-popover-class",
+    title: "The Map",
+    description: "In the map you will see several blue points and colored outlines. The colorful outlines signify different watersheds, and the blue dots represent water collection sites",
+	position: "left",
   }
 },{
-  element: '#map',
+  element: "#map",
   popover: {
-	className: 'fourth-popover-class',
-    title: 'Try selecting one!',
-    description: 'Try selecting one of the collection sites by clicking on any of the blue dots on the map. Doing so will display all the data from the last collected water sample at that selected site',
-	position: 'left',
+	className: "fourth-popover-class",
+    title: "Try selecting one!",
+    description: "Try selecting one of the collection sites by clicking on any of the blue dots on the map. Doing so will display all the data from the last collected water sample at that selected site",
+	position: "left",
   }
 },{
   element: '#layerBar',
@@ -591,22 +590,21 @@ var zoomPlugin = {
 		});
 
 		chartInstance.resetZoom = function() {
-			helpers.each(chartInstance.scales, function(scale, id) {
-				var timeOptions = scale.options.time;
-				var tickOptions = scale.options.ticks;
+			var scale = chartInstance.scales["x-axis-0"];
+			var timeOptions = scale.options.time;
+			var tickOptions = scale.options.ticks;
+			
+			if (timeOptions) {
+				delete timeOptions.min;
+				delete timeOptions.max;
+			}
 
-				if (timeOptions) {
-					delete timeOptions.min;
-					delete timeOptions.max;
-				}
-
-				if (tickOptions) {
-					delete tickOptions.min;
-					delete tickOptions.max;
-				}
-
-				scale.options = helpers.configMerge(scale.options, scale.originalOptions);
-			});
+			if (tickOptions) {
+				delete tickOptions.min;
+				delete tickOptions.max;
+			}
+			
+			scale.options = helpers.configMerge(scale.options, scale.originalOptions);
 
 			helpers.each(chartInstance.data.datasets, function(dataset, id) {
 				dataset._meta = null;
@@ -1027,6 +1025,8 @@ $(document).ready(function () {
 		watershedsLayerToggle.addEventListener("change", function() {
 			mapLayers[0].visible = watershedsLayerToggle.checked;
 			$("#watershedsLegend").toggle();
+			
+			$("#legend").toggle(mapLayers[0].visible || mapLayers[5].visible);
 		});
 		
 		var drainsLayerToggle = document.getElementById("drainsLayer");
@@ -1053,6 +1053,8 @@ $(document).ready(function () {
 		floodLayerToggle.addEventListener("change", function(){
 			mapLayers[5].visible = floodLayerToggle.checked;
 			$("#floodplainsLegend").toggle();
+			
+			$("#legend").toggle(mapLayers[0].visible || mapLayers[5].visible);
 		});
 		
 		var damLayerToggle = document.getElementById("damLayer");
@@ -2188,7 +2190,6 @@ $(document).ready(function () {
 							id: "comparison",
 							scaleLabel: {
 								display: true,
-								labelString: "testUndefined",
 							},
 							gridLines: {
 								display: false
