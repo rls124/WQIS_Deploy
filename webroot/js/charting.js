@@ -388,7 +388,7 @@ function addButtons(node, chartInstance) {
 	}
 	node.parentElement.appendChild(resetButton);
 	
-	if ($("#sites").val().length == 1) {
+	if ($("#sites").val().length == 1 || document.getElementById("aggregateGroup").checked) {
 		//we don't want to show this button if theres multiple sites, because it'd complicate coloring
 		var compareButton = document.createElement("button");
 		compareButton.type = "button";
@@ -423,13 +423,6 @@ function addButtons(node, chartInstance) {
 						var measure = $(this)[0].attributes.measure.value;
 						var category = $(this)[0].attributes.category.value;
 						var measureName = $(this)[0].attributes.measureName.value;
-					
-						var startDate = $("#startDate").val();
-						var endDate = $("#endDate").val();
-						var sites = $("#sites").val();
-						var amountEnter = document.getElementById("amountEnter").value;
-						var overUnderSelect = document.getElementById("overUnderSelect").value;
-						var measurementSearch = document.getElementById("measurementSelect").value;
 						
 						//retrieve data from the server
 						$.ajax({
@@ -438,15 +431,15 @@ function addButtons(node, chartInstance) {
 							datatype: "JSON",
 							async: false,
 							data: {
-								"sites": sites,
-								"startDate": startDate,
-								"endDate": endDate,
+								"sites": $("#sites").val(),
+								"startDate": $("#startDate").val(),
+								"endDate": $("#endDate").val(),
 								"selectedMeasures": [measure],
 								"category": category,
-								"amount": amountEnter,
-								"overUnderSelect": overUnderSelect,
-								"measurementSearch": measurementSearch,
-								"aggregate": false
+								"amount": null,
+								"overUnderSelect": null,
+								"measurementSearch": null,
+								"aggregate": document.getElementById("aggregateGroup").checked
 							},
 							success: function(response) {
 								var newDataset = {
