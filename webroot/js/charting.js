@@ -810,9 +810,7 @@ $(document).ready(function () {
 		"esri/Graphic",
 		"esri/layers/support/LabelClass"
 	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen, Graphic, LabelClass) {
-		
 		$("#sites").append('<optgroup label="Select a Group"  id="groupOpt"> </optgroup>');
-	//	$("#groupOpt").append(new Option("Reset Group", "", false, false));
 		for (var group of groups) {
 			$("#groupOpt").append(new Option(group.groupName, group.groupKey, false, false));
 		}
@@ -821,7 +819,6 @@ $(document).ready(function () {
 		for (var site of mapData["SiteData"]) {
 			$("#siteOpt").append(new Option(site.Site_Number + " " + site.Site_Name, site.Site_Number, false, false));
 		}
-		
 		
 		var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
 		var watershedsLayer = new KMLLayer({
@@ -1134,10 +1131,8 @@ $(document).ready(function () {
 				
 				$("#sites").val(inGroup).trigger("change");
 			}
-			else if(optSelected.parent()[0].id == "siteOpt"){
+			else if (optSelected.parent()[0].id == "siteOpt") {
 				getRange();
-			
-				var points = $("#sites").val();
 				
 				//first clear out the existing ones
 				for (var point of selectedPoints) {
@@ -1146,10 +1141,10 @@ $(document).ready(function () {
 				
 				selectedPoints = [];
 				
-				for (i=0; i<points.length; i++) {
+				for (i=0; i<selected.length; i++) {
 					//get associated graphic for this point
 					for (j=0; j<mapData["SiteData"].length; j++) {
-						if (mapData["SiteData"][j].Site_Number.toString() === points[i]) {
+						if (mapData["SiteData"][j].Site_Number.toString() === selected[i]) {
 							setColor(mapData["SiteData"][j].graphic, selectedPointColor);
 							selectedPoints.push(mapData["SiteData"][j].graphic);
 							break;

@@ -43,13 +43,7 @@
 			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
 		}
 	
-		//don't return rows in which none of the selected measurements actually have data in them
-		$notAllNullString = "NOT ( (" . $selectedMeasures[0] . " IS NULL)";
-		for ($i=1; $i<sizeof($selectedMeasures); $i++) {
-			$notAllNullString = $notAllNullString . " AND (" . $selectedMeasures[$i] . " IS NULL)";
-		}
-		$notAllNullString = $notAllNullString . ")";
-		$andConditions = array_merge($andConditions, array($notAllNullString));
+		$andConditions = GenericSamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
 	
 		if ($aggregate == "false") {
 			//individual mode
@@ -105,13 +99,7 @@
 			$model . ".Date <=" => $endDate
 		];
 		
-		//don't count rows in which none of the selected measurements actually have data in them
-		$notAllNullString = "NOT ( (" . $selectedMeasures[0] . " IS NULL)";
-		for ($i=1; $i<sizeof($selectedMeasures); $i++) {
-			$notAllNullString = $notAllNullString . " AND (" . $selectedMeasures[$i] . " IS NULL)";
-		}
-		$notAllNullString = $notAllNullString . ")";
-		$andConditions = array_merge($andConditions, array($notAllNullString));
+		$andConditions = GenericSamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
 			
 		if ($amount != "") {
 			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
@@ -175,13 +163,7 @@
 			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
 		}
 		
-		//don't return rows in which none of the selected measurements actually have data in them
-		$notAllNullString = "NOT ( (" . $selectedMeasures[0] . " IS NULL)";
-		for ($i=1; $i<sizeof($selectedMeasures); $i++) {
-			$notAllNullString = $notAllNullString . " AND (" . $selectedMeasures[$i] . " IS NULL)";
-		}
-		$notAllNullString = $notAllNullString . ")";
-		$andConditions = array_merge($andConditions, array($notAllNullString));
+		$andConditions = GenericSamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
 		
 		if ($aggregate == "false") {
 			//individual mode
@@ -687,6 +669,16 @@
 		$this->$model->save($sample);
 	}
 	
+	public function ensureNotNullCondition($conditionsList, $selectedMeasures) {
+		//don't return rows in which none of the selected measurements actually have data in them
+		$notAllNullString = "NOT ( (" . $selectedMeasures[0] . " IS NULL)";
+		for ($i=1; $i<sizeof($selectedMeasures); $i++) {
+			$notAllNullString = $notAllNullString . " AND (" . $selectedMeasures[$i] . " IS NULL)";
+		}
+		$notAllNullString = $notAllNullString . ")";
+		return array_merge($conditionsList, array($notAllNullString));
+	}
+	
 	public function graphdata() {
 		$this->render(false);
 		
@@ -710,6 +702,8 @@
 			$model . ".Date >=" => $startDate,
 			$model . ".Date <= " => $endDate
 		];
+		
+		$andConditions = GenericSamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
 		
 		if ($amount != "") {
 			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
