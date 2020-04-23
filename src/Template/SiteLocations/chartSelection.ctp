@@ -8,17 +8,15 @@
 <?= $this->Html->script('chartjs-plugin-annotation.js') ?>
 <script defer src="../js/charting.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
-<script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
 <script defer src="https://js.arcgis.com/4.14/"></script>
 
-<?php
-if (isset($runTutorial)) {
-	echo "<script defer src='../js/tutorial.js'></script>";
-}
-?>
+<?php if (isset($runTutorial)) { ?>
+	<script defer src="../js/tutorial.js"></script>
+	<script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
+<?php } ?>
 
 <script>
 <?php
