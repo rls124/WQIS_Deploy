@@ -12,7 +12,26 @@
 	 */
 	class SiteLocationsController extends AppController {
 		public function chartselection() {
-			//do nothing, we don't need any data retrieved until the client-side js requests it
+			//check if tutorial should be run
+			if (!$this->Auth->user("hasTakenTutorial")) {
+				$this->set("runTutorial", true);
+			
+				//user will now have taken the tutorial, so set that flag true
+				$this->loadModel("Users");
+				$user = $this->Users
+					->find("all")
+					->where(["username" => $this->Auth->user("username")])
+					->first();
+				
+				$user->hasTakenTutorial = 1;
+				$this->Users->save($user);
+			
+				//changing db value doesn't update Auth object that contains info about currently-logged in user, so we need to change that object to match this $user object
+				$this->Auth->setUser($user);
+			}
+			else if (isset($_GET["runTutorial"])) {
+				$this->set("runTutorial", true);
+			}
 		}
 		
 		public function chartsInitData() {

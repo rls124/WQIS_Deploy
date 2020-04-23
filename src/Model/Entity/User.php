@@ -24,6 +24,7 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string $securityanswer2
  * @property string $securityquestion3
  * @property string $securityanswer3
+ * @property bool $hasTakenTutorial
  */
 class User extends Entity {
 
@@ -51,7 +52,8 @@ class User extends Entity {
         'securityquestion2' => true,
         'securityanswer2' => true,
         'securityquestion3' => true,
-        'securityanswer3' => true
+        'securityanswer3' => true,
+		'hasTakenTutorial' => true
     ];
 
     protected function _setuserpw($password) {

@@ -127,6 +127,9 @@ class UsersTable extends Table {
             ->scalar('securityanswer3')
             ->maxLength('securityanswer3', 120)
             ->allowEmpty('securityanswer3');
+			
+        $validator
+            ->boolean("hasTakenTutorial");
 
         return $validator;
     }

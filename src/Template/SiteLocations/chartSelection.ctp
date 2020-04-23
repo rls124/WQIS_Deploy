@@ -14,6 +14,12 @@
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
 <script defer src="https://js.arcgis.com/4.14/"></script>
 
+<?php
+if (isset($runTutorial)) {
+	echo "<script defer src='../js/tutorial.js'></script>";
+}
+?>
+
 <script>
 <?php
 if ($admin) {
