@@ -17,12 +17,6 @@ let searchBoxToggleTest =
         //make sure its now open for the rest of the tests to proceed
         click "#sidebarToggle"
 
-let searchBoxToggleDemo () =
-    printfn "Search box toggle demo"
-    click "#sidebarToggle"
-    sleep 1
-    click "#sidebarToggle"
-
 let changeCategoryTest =
     "changing category sets correct measurement options" &&& fun _ ->
         "#categorySelect" << "Nutrient"
@@ -34,16 +28,9 @@ let changeCategoryTest =
         //display fields should contain that as well
         displayed "#NitrateNitriteCheckbox"
 
-let searchDemo () =
-    printfn "Search demo"
-    "#sites" << "100 Cedar Creek"
-    sleep 1 //wait for the date fields to autopopulate
-    click "#updateButton"
-    sleep 1 //wait to populate
-
 let searchTest =
     "search works" &&& fun _ ->
-        "#sites" << "100 Cedar Creek"
+        "#sites" << "100 Cedar test"
         sleep 1 //wait for the date fields to autopopulate
         click "#updateButton"
         sleep 1 //wait to populate
@@ -82,13 +69,15 @@ let tableSortTest =
         click sampleNumberCol
         //TODO: validate that this actually works, all we do for now is click on the column
 
+        sleep 1 //wait to populate
+
 let tableEditTest persistEdits verbose =
     //table edit works
     "table edit works" &&& fun _ ->
         let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
         let row = el.[1]
         let cells = row |> elementsWithin "td"
-        let cell = cells.[3] |> elementWithin "div"
+        let cell = cells.[4] |> elementWithin "div"
         let label = cell |> elementWithin "label"
         let input = cell |> elementWithin "input"
 
@@ -97,12 +86,17 @@ let tableEditTest persistEdits verbose =
         if inputText = "null" then
             inputText <- ""
 
-        label.Text == inputText //these should be the same
-        let originalValue = label.Text
+        let mutable originalValue = "null"
 
-        if verbose then
-            printfn "Label = %s, input = %s" label.Text (read input)
+        if inputText <> "" then
+            let lText = label.Text
 
+            lText == inputText //these should be the same
+            originalValue <- lText
+
+            if verbose then
+                printfn "Label=%s, input=%s," lText inputText
+    
         //validate that the label is visible to start with
         displayed label
         click label
@@ -112,6 +106,8 @@ let tableEditTest persistEdits verbose =
         input << "50"
         click "body"
         sleep 1 //wait for the AJAX query to update the db
+
+        label.Text == "50" //these should be the same
 
         if not persistEdits then
             //now put the original value back in

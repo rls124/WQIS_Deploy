@@ -19,10 +19,6 @@ let loginTest baseUrl username password =
     
         on (baseUrl + "site-locations/chartselection") //validate we were redirected correctly
 
-let loginDemo baseUrl username password =
-    printf "Login demo\r\n"
-    loginAction baseUrl username password
-
 let logoutTest baseUrl =
     "Logout test" &&& fun _ ->
         click "#userDropdownMenu"

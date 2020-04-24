@@ -13,9 +13,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="canopy" Version="2.1.1" />
+    <PackageReference Include="canopy" Version="2.1.5" />
     <PackageReference Include="CommandLineParser.FSharp" Version="2.7.82" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="79.0.3945.3600" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="81.0.4044.6900" />
+    <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.26.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.7.1" />
   </ItemGroup>
 
 </Project>

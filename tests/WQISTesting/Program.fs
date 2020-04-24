@@ -7,13 +7,13 @@ open CommandLine
 open System
 
 type options = {
-    [<Option('P', HelpText = "Use production environment")>] prodEnvironment : bool;
-    [<Option('B', HelpText = "Use beta environment")>] betaEnvironment : bool;
-    [<Option('U', HelpText = "Type of users to test with (admin, normal)")>] userType : String;
+    [<Option('P', HelpText = "Use production environment")>] prodEnvironment: bool;
+    [<Option('B', HelpText = "Use beta environment")>] betaEnvironment: bool;
+    [<Option('U', HelpText = "Type of users to test with (admin, normal)")>] userType: String;
     [<Option('V', HelpText = "Verbose")>] verbose: bool;
     [<Option("override", HelpText = "Override safety precautions on live site")>] overrideSafety: bool;
     [<Option("persistedits", HelpText = "Do not revert changes made to the database")>] persistEdits: bool;
-    [<Option("demo", HelpText = "Live demo mode. Runs through site functionality without performing tests")>] demoMode: bool;
+    [<Option("browser", HelpText = "Browser to use for testing. Supports Chrome and Firefox")>] browserChoice: String;
     }
 
 let inline (|Success|Help|Version|Fail|) (result : ParserResult<'a>) =
@@ -26,12 +26,6 @@ let inline (|Success|Help|Version|Fail|) (result : ParserResult<'a>) =
 
 let args = Environment.GetCommandLineArgs()
 let result = Parser.Default.ParseArguments<options>(args)
-
-let withWait action =
-    //get user to confirm the program should proceed. For use with the live demo functionality
-    printfn "press [ENTER] to proceed"
-    System.Console.ReadLine() |> ignore
-    action()
 
 let runTests(opts) =
     let admin = [|"root"; "waterquality"|]
@@ -49,35 +43,32 @@ let runTests(opts) =
         else normalUser
 
     //start an instance of chrome
-    start chrome
+    if (opts.browserChoice = "firefox") then
+        start firefox
+    else
+        start chrome
     pin FullScreen
 
-    if (opts.demoMode = false) then
-        UserTests.loginTest baseUrl user.[0] user.[1]
+    UserTests.loginTest baseUrl user.[0] user.[1]
 
-        ChartSelectionTests.mapDisplayTest
-        ChartSelectionTests.searchBoxToggleTest
-        ChartSelectionTests.changeCategoryTest
-        ChartSelectionTests.searchTest
-        ChartSelectionTests.tablePaginationTest
-        ChartSelectionTests.tableSortTest
-        if (not opts.prodEnvironment) || (opts.prodEnvironment && opts.overrideSafety) then
-            if (opts.userType = "admin") then
-                ChartSelectionTests.tableEditTest opts.persistEdits opts.verbose
-            else if (opts.verbose) then
-                printf("Skipping table edit test because it must be run as an administrator\r\n")
+    ChartSelectionTests.mapDisplayTest
+    ChartSelectionTests.searchBoxToggleTest
+    ChartSelectionTests.changeCategoryTest
+    ChartSelectionTests.searchTest
+    ChartSelectionTests.tablePaginationTest
+    ChartSelectionTests.tableSortTest
+    if (not opts.prodEnvironment) || (opts.prodEnvironment && opts.overrideSafety) then
+        if (opts.userType = "admin") then
+            ChartSelectionTests.tableEditTest opts.persistEdits opts.verbose
         else if (opts.verbose) then
-            printf("Skipping table edit test because we are targetting production. Use --override to force\r\n")
+            printf("Skipping table edit test because it must be run as an administrator\r\n")
+    else if (opts.verbose) then
+        printf("Skipping table edit test because we are targetting production. Use --override to force\r\n")
 
-        NavigationTests.navbarLinksWorkTest baseUrl opts.userType
+    NavigationTests.navbarLinksWorkTest baseUrl opts.userType
 
-        //logout works
-        UserTests.logoutTest baseUrl
-    else
-        printf("Demo mode\r\n")
-        UserTests.loginDemo baseUrl user.[0] user.[1]
-        withWait (fun _ -> ChartSelectionTests.searchBoxToggleDemo())
-        withWait (fun _ -> ChartSelectionTests.searchDemo())
+    //logout works
+    UserTests.logoutTest baseUrl
 
     //run all tests
     run()
