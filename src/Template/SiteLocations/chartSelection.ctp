@@ -226,26 +226,45 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		</div>
 		<div id="collapseTable" class="panel-collapse collapse show">
 			<div class="panel-body">
-				<div id="tableSettings" style="display: none">
-					Show 
-					<select id="numRowsDropdown">
+				<div id="tableSettingsTop" style="display: none">
+					<span class="totalResults">x</span> Results &nbsp;&nbsp;&nbsp; Show
+					<select id="numRowsDropdownTop">
 						<option value=10>10</option>
 						<option value=25 selected="selected">25</option>
 						<option value=100>100</option>
 						<option value=500>500</option>
 						<option value=-1>All</option>
 					</select>
-					results
+					
+					&nbsp;&nbsp;&nbsp;
+					
+					<button type="button" class="firstPageButton"><<</button>
+					<button type="button" class="previousPageButton"><</button>
+					<select id="pageSelectorTop"></select>
+					<button type="button" class="nextPageButton">></button>
+					<button type="button" class="lastPageButton">>></button>
 				</div>
+				
 				<div id="tableDiv"></div>
 				<span id="tableNoData">No data to display</span>
 
-				<div id="tablePageSelector" style="display: none">
-					<button type="button" id="firstPageButton">First</button>
-					<button type="button" id="previousPageButton">Previous</button>
-					Page <input type="text" id="pageNumBox" name="pageNumBox" value="1" size=3></input> of <span id="totalPages">x</span>
-					<button type="button" id="nextPageButton">Next</button>
-					<button type="button" id="lastPageButton">Last</button>
+				<div id="tableSettingsBottom" style="display: none">
+					<span class="totalResults">x</span> Results &nbsp;&nbsp;&nbsp; Show
+					<select id="numRowsDropdownBottom">
+						<option value=10>10</option>
+						<option value=25 selected="selected">25</option>
+						<option value=100>100</option>
+						<option value=500>500</option>
+						<option value=-1>All</option>
+					</select>
+					
+					&nbsp;&nbsp;&nbsp;
+					
+					<button type="button" class="firstPageButton"><<</button>
+					<button type="button" class="previousPageButton"><</button>
+					<select id="pageSelectorBottom"></select>
+					<button type="button" class="nextPageButton">></button>
+					<button type="button" class="lastPageButton">>></button>
 				</div>
 			</div>
 		</div>

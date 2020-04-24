@@ -1351,32 +1351,33 @@ $(document).ready(function () {
 		if (numPages > 0) { //if there is any data to display
 			document.getElementById("tableNoData").style = "display: none";
 			document.getElementById("chartsNoData").style = "display: none";
-			document.getElementById("tableSettings").style = "display: block";
-			document.getElementById("tablePageSelector").style = "display: block";
+			document.getElementById("tableSettingsTop").style = "display: block";
+			document.getElementById("tableSettingsBottom").style = "display: block";
 	
 			tablePage = page;
 			document.getElementById("tableDiv").innerHTML = "";
-			document.getElementById("pageNumBox").value = tablePage;
+			$("#pageSelectorTop").val(tablePage);
+			$("#pageSelectorBottom").val(tablePage);
 
-			$("#firstPageButton").attr("disabled", false);
-			$("#previousPageButton").attr("disabled", false);
-			$("#lastPageButton").attr("disabled", false);
-			$("#nextPageButton").attr("disabled", false);
+			$(".firstPageButton").attr("disabled", false);
+			$(".previousPageButton").attr("disabled", false);
+			$(".lastPageButton").attr("disabled", false);
+			$(".nextPageButton").attr("disabled", false);
 
 			if (tablePage == 1) {
-				$("#previousPageButton").attr("disabled", true);
-				$("#firstPageButton").attr("disabled", true);
+				$(".previousPageButton").attr("disabled", true);
+				$(".firstPageButton").attr("disabled", true);
 			}
 			if (tablePage == numPages) {
-				$("#nextPageButton").attr("disabled", true);
-				$("#lastPageButton").attr("disabled", true);
+				$(".nextPageButton").attr("disabled", true);
+				$(".lastPageButton").attr("disabled", true);
 			}
 
 			var category = document.getElementById("categorySelect").value;
 			var amountEnter = document.getElementById("amountEnter").value;
 			var overUnderSelect = document.getElementById("overUnderSelect").value;
 			var measurementSearch = document.getElementById("measurementSelect").value;
-			var numRows = document.getElementById("numRowsDropdown").value;
+			var numRows = document.getElementById("numRowsDropdownTop").value;
 			var selectedMeasures = getSelectedMeasures();
 			var aggregateMode = document.getElementById("aggregateGroup").checked;
 
@@ -1456,7 +1457,7 @@ $(document).ready(function () {
 						var newRow = table.insertRow();
 				
 						Object.keys(response[0][i]).forEach(function(key) {
-							if (key != "ID") {
+							if (key != "ID" && !(key.includes("Comment") && !admin)) { //this logic can be cleaned up a lot
 								var newCell = newRow.insertCell();
 								var value = response[0][i][key];
 						
@@ -1676,30 +1677,45 @@ $(document).ready(function () {
 		else {
 			document.getElementById("tableNoData").style = "display: block";
 			document.getElementById("chartsNoData").style = "display: block";
-			document.getElementById("tableSettings").style = "display: none";
-			document.getElementById("tablePageSelector").style = "display: none";
+			document.getElementById("tableSettingsTop").style = "display: none";
+			document.getElementById("tableSettingsBottom").style = "display: none";
 		}
 	}
 	
-	$("#numRowsDropdown").change(function() {
+	$("#numRowsDropdownTop").change(function() {
+		$("#numRowsDropdownBottom").val($("#numRowsDropdownTop").val());
 		getNumRecords();
 		getTableData(1);
 	});
 	
-	$("#firstPageButton").click(function() {
+	$("#numRowsDropdownBottom").change(function() {
+		$("#numRowsDropdownTop").val($("#numRowsDropdownBottom").val());
+		getNumRecords();
 		getTableData(1);
 	});
 	
-	$("#previousPageButton").click(function() {
+	$(".firstPageButton").click(function() {
+		getTableData(1);
+	});
+	
+	$(".previousPageButton").click(function() {
 		getTableData(tablePage-1);
 	});
 	
-	$("#nextPageButton").click(function() {
+	$(".nextPageButton").click(function() {
 		getTableData(tablePage+1);
 	});
 	
-	$("#lastPageButton").click(function() {
+	$(".lastPageButton").click(function() {
 		getTableData(numPages);
+	});
+	
+	$("#pageSelectorTop").change(function() {
+		getTableData($("#pageSelectorTop").val());
+	});
+	
+	$("#pageSelectorBottom").change(function() {
+		getTableData($("#pageSelectorBottom").val());
 	});
 	
 	$("#chartType").change(function() {
@@ -1735,14 +1751,31 @@ $(document).ready(function () {
 			},
 			success: function(response) {
 				numResults = response[0];
-				var numRows = document.getElementById("numRowsDropdown").value;
+				var numRows = document.getElementById("numRowsDropdownTop").value;
 				if (numRows > -1) {
 					numPages = Math.ceil(numResults / numRows);
 				}
 				else {
 					numPages = 1;
 				}
-				document.getElementById("totalPages").innerText = numPages;
+				$(".totalResults").text(numResults);
+				
+				//build up options for the page selector dropdowns
+				var topSelect = document.getElementById("pageSelectorTop");
+				topSelect.innerHTML = "";
+				
+				var bottomSelect = document.getElementById("pageSelectorBottom");
+				bottomSelect.innerHTML = "";
+				
+				for (i=0; i<numPages; i++) {
+					var opt = document.createElement("option");
+					opt.text = i+1;
+					topSelect.add(opt);
+					
+					var opt2 = document.createElement("option");
+					opt2.text = i+1;
+					bottomSelect.add(opt2);
+				}
 			},
 			error: function(response) {
 				genericError();
@@ -1798,8 +1831,8 @@ $(document).ready(function () {
 		}
 		
 		document.getElementById("tableNoData").style = "display: block";
-		document.getElementById("tableSettings").style = "display: none";
-		document.getElementById("tablePageSelector").style = "display: none";
+		document.getElementById("tableSettingsTop").style = "display: none";
+		document.getElementById("tableSettingsBottom").style = "display: none";
 	}
 	
 	function resetAll() {
