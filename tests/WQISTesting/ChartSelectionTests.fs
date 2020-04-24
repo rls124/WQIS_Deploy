@@ -30,7 +30,7 @@ let changeCategoryTest =
 
 let searchTest =
     "search works" &&& fun _ ->
-        "#sites" << "100 Cedar test"
+        "#sites" << "100 Cedar Creek"
         sleep 1 //wait for the date fields to autopopulate
         click "#updateButton"
         sleep 1 //wait to populate
@@ -42,22 +42,33 @@ let numRows () =
 let tablePaginationTest =
     //"Show ___ results" dropdown correctly works, prev/next page buttons work, and number of rows and pages displayed is correct
     "table pagination works" &&& fun _ ->
-        //should always start on page 1
-        "1" === read "#pageNumBox"
+        //should always start on page 1, and these should always match
+        "1" === read "#pageSelectorTop"
+        "1" === read "#pageSelectorBottom"
 
         //change numRowsDropdown to all to get true number of total rows (future work: directly access the db and run queries ourselves for this sort of thing)
-        "#numRowsDropdown" << "All"
+        "#numRowsDropdownTop" << "All"
+        "All" === read "#numRowsDropdownBottom" //changing the top one should also affect the bottom
         sleep 1 //wait to populate
-        let totalRows = numRows()
+        let totalRowsCounted = numRows()
 
         let recordsPerPage = 10
         //change back to 10 rows
-        "#numRowsDropdown" << recordsPerPage.ToString()
+        "#numRowsDropdownTop" << recordsPerPage.ToString()
         sleep 1 //wait to populate
 
+        let numPagesReturned = read((element "#pageSelectorTop" |> elementWithin "option:last-child"))
+        printfn "Last page = %s" numPagesReturned
+
+        let numRecordsDisplayed = read(".totalResults")
+        printfn "Shows %s results" numRecordsDisplayed
+
+        //check number of results is correct
+        (totalRowsCounted-1).ToString() == read(".totalResults")
+
         //check number of pages is correct
-        let correctNumPages = (totalRows + recordsPerPage - 1) / recordsPerPage;
-        assert (correctNumPages.ToString() = read("#totalPages"))
+        let correctNumPages = (totalRowsCounted + recordsPerPage - 1) / recordsPerPage;
+        assert (correctNumPages.ToString() = numPagesReturned)
 
 let tableSortTest =
     //table sort works
