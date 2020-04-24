@@ -676,8 +676,12 @@ $(document).ready(function () {
 			"https://maps.indiana.edu/ArcGIS/rest/services/Hydrology/Water_Bodies_Lakes/MapServer",
 			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Floodplains_FIRM/MapServer",
 			"https://maps.indiana.edu/ArcGIS/rest/services/Infrastructure/Dams_IDNR/MapServer",
+			"https://gis.ohiodnr.gov/arcgis/rest/services/DSW_Services/Ohio_Dams/MapServer",
 			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Water_Wells_IDNR/MapServer",
+			"https://gisago.mcgi.state.mi.us/arcgis/rest/services/OpenData/public_health/MapServer",
+			"https://gis.ohiodnr.gov/arcgis/rest/services/DSW_Services/waterwells/MapServer",
 			"https://maps.indiana.edu/arcgis/rest/services/Hydrology/Wetlands_NWI/MapServer",
+			"https://gis.ohiodnr.gov/ArcGIS_site2/rest/services/OIT_Services/ODNR_Lakes/MapServer",
 		];
 		
 		//build the points layer
@@ -763,8 +767,40 @@ $(document).ready(function () {
 				url: urls[i],
 				visible: false,
 				opacity: 0.6
-			}));
+			}));	
 		}
+		//Michigan Streams
+		mapLayers.push(new MapImageLayer({
+			url: "https://gisago.mcgi.state.mi.us/arcgis/rest/services/OpenData/hydro/MapServer/",
+			sublayers:[{
+				id:5,
+				}],
+			visible: false	
+		}));
+		//Michigan Wetlands
+		mapLayers.push(new MapImageLayer({
+			url: "https://gisago.mcgi.state.mi.us/arcgis/rest/services/OpenData/hydro/MapServer/",
+			sublayers:[{
+				id:18,
+				}],
+			visible: false	
+		}));
+		//Michigan Lakes
+		mapLayers.push(new MapImageLayer({
+			url: "https://gisago.mcgi.state.mi.us/arcgis/rest/services/OpenData/hydro/MapServer/",
+			sublayers:[{
+				id:23,
+				}],
+			visible: false	
+		}));
+		//Ohio Dams
+		mapLayers.push(new MapImageLayer({
+			url: "https://gis.ohiodnr.gov/arcgis/rest/services/DSW_Services/Ohio_Dams/MapServer",
+			sublayers:[{
+				id:6,
+				}],
+			visible: false	
+		}));
 		mapLayers.push(sampleSitesLayer);
 		
 		//create the map
@@ -857,6 +893,8 @@ $(document).ready(function () {
 		var riverLayerToggle = document.getElementById("riverLayer");
 		riverLayerToggle.addEventListener("change", function(){
 			mapLayers[2].visible = riverLayerToggle.checked;
+			mapLayers[13].visible = riverLayerToggle.checked;
+			mapLayers[16].visible = riverLayerToggle.checked;
 		});
 		
 		var impairedLayerToggle = document.getElementById("impairedLayer");
@@ -867,6 +905,8 @@ $(document).ready(function () {
 		var bodiesLayerToggle = document.getElementById("bodiesLayer");
 		bodiesLayerToggle.addEventListener("change", function(){
 			mapLayers[4].visible = bodiesLayerToggle.checked;
+			mapLayers[15].visible = bodiesLayerToggle.checked;
+			mapLayers[12].visible = bodiesLayerToggle.checked;
 		});
 		
 		var floodLayerToggle = document.getElementById("floodLayer");
@@ -880,16 +920,20 @@ $(document).ready(function () {
 		var damLayerToggle = document.getElementById("damLayer");
 		damLayerToggle.addEventListener("change", function(){
 			mapLayers[6].visible = damLayerToggle.checked;
+			mapLayers[7].visible = damLayerToggle.checked;
 		});
 		
 		var wellLayerToggle = document.getElementById("wellLayer");
 		wellLayerToggle.addEventListener("change", function(){
-			mapLayers[7].visible = wellLayerToggle.checked;
+			mapLayers[8].visible = wellLayerToggle.checked;
+			mapLayers[9].visible = wellLayerToggle.checked;
+			mapLayers[10].visible = wellLayerToggle.checked;
 		});
 		
 		var wetlandLayerToggle = document.getElementById("wetlandLayer");
 		wetlandLayerToggle.addEventListener("change", function(){
-			mapLayers[8].visible = wetlandLayerToggle.checked;
+			mapLayers[11].visible = wetlandLayerToggle.checked;
+			mapLayers[14].visible = wetlandLayerToggle.checked;
 		});
 		
 		//handle the dropdown that allows basemap to be changed
