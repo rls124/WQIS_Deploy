@@ -34,7 +34,7 @@ let runTests(opts) =
 
     //settings
     let baseUrl =
-        if (opts.prodEnvironment) then "http://emerald.pfw.edu/WQIS/" //actual production environment is currently incompatible with this tool, so don't use this
+        if (opts.prodEnvironment) then "http://wqis.cityoffortwayne.org/"
         else if (opts.betaEnvironment) then "http://emerald.pfw.edu/WQISBeta/"
         else "http://localhost/WQIS/"
 
@@ -42,11 +42,12 @@ let runTests(opts) =
         if (opts.userType = "admin") then admin
         else normalUser
 
-    //start an instance of chrome
+    //start browser
     if (opts.browserChoice = "firefox") then
         start firefox
     else
         start chrome
+
     pin FullScreen
 
     UserTests.loginTest baseUrl user.[0] user.[1]
@@ -64,6 +65,8 @@ let runTests(opts) =
             printf("Skipping table edit test because it must be run as an administrator\r\n")
     else if (opts.verbose) then
         printf("Skipping table edit test because we are targetting production. Use --override to force\r\n")
+
+    ChartSelectionTests.preselectSiteTest baseUrl
 
     NavigationTests.navbarLinksWorkTest baseUrl opts.userType
 

@@ -115,3 +115,11 @@ let tableEditTest persistEdits verbose =
             input << originalValue
             click "body"
             sleep 1
+
+let preselectSiteTest baseUrl =
+    //preselecting a site via GET request works
+    "preselecting site works" &&& fun _ ->
+        url (baseUrl + "site-locations/chartselection?site=401")
+
+        //validate that this site is selected
+        "401 Flatrock Creek/Auglaize River" == read("#sites")
