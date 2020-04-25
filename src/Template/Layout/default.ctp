@@ -21,11 +21,17 @@ $pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), "
         <?= $this->Html->css("styling.css") ?>
         <?= $this->Html->css("cakemessages.css") ?>
 		<?= $this->Html->css("loading.css") ?>
-		
+
+<style>
+li.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+</style>
+
+<script>
 <?php
 if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session
 ?>
-<script>
 function browserDetect() {
 	var ua = navigator.userAgent;
 	var upToDate = true;
@@ -77,25 +83,36 @@ function showError(text) {
 function hideBrowserCompatibilityMessage() {
 	//close the message
 	document.getElementById("browserCompatibilityMessage").style.display = "none";
-	
+
 	//set a cookie so we don't keep annoying the user about this
 	document.cookie = "ignoreBrowserCompatibility";
 }
-</script>
 <?php } ?>
+
+$(document).ready(function () {
+	$(".dropdown").click(function(event) {
+		location.href = event.target.href;
+	});
+});
+</script>
 	</head>
 	<body class="h-100">
 		<nav class="navbar navbar-expand navbar-dark fixed-top" id="navbar" style="background-color: #5085A5; height: 7vh">
 			<?= $this->Html->link(__("WQIS"), ["controller" => "users", "action" => "login"], ["class" => "navbar-brand"]); ?>
-				
+			
 			<div class="collapse navbar-collapse text-right" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
 						<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Data</a>
 					</li>
-						
-					<li class="nav-item">
-						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>">About</a>
+					
+					<li class="nav-item dropdown">
+						<a href="/WQIS/pages/about" class="nav-link" data-toggle="dropdown">About</a>
+						<ul class="dropdown-menu">
+							<li><a href="/WQIS/site-locations/sitemanagement">Sites</a></li>
+							<li><a href="/WQIS/measurement-settings/measurementsettings">Measurement settings</a></li>
+							<li><a href="/WQIS/site-groups/sitegroups">Groups</a></li>
+						</ul>
 					</li>
 						
 					<li class="nav-item">
@@ -160,8 +177,8 @@ function hideBrowserCompatibilityMessage() {
 			?>
 		</div>
 		<?php if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { ?><script>browserDetect();</script><?php } ?>
-		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-    </body>
+	</body>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 </html>
