@@ -129,21 +129,21 @@ $(document).ready(function () {
 						
 					<?php if ($admin) { ?>
 					<li class="nav-item">
-						<a href="/WQIS/feedback/adminfeedback" class="nav-link <?php if ($pageName == "adminfeedback" || $pageName == "userfeedback") { echo "active"; }?>">Contact</a>
+						<a href="/WQIS/contact/viewfeedback" class="nav-link <?php if ($pageName == "viewfeedback" || $pageName == "contact") { echo "active"; }?>">Contact</a>
 					</li>
 				<?php
 				} 
 				else { ?>
 					<li class="nav-item">
-						<a href="/WQIS/feedback/userfeedback" class="nav-link <?php if ($pageName == "userfeedback") { echo "active"; }?>">Contact</a>
+						<a href="/WQIS/contact/contact" class="nav-link <?php if ($pageName == "contact") { echo "active"; }?>">Contact</a>
 					</li>
 				<?php
 				}
 				?>
 				</ul>
 
+				<ul class="navbar-nav text-right pull-right" style="list-style: none;">
 				<?php if ($userinfo) { ?>
-				<ul class="text-right pull-right" style="list-style: none;">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<?php
@@ -158,8 +158,14 @@ $(document).ready(function () {
 							<a class="dropdown-item" href="<?php echo $this->Url->build(["controller" => "users", "action" => "logout"]) ?>">Log out</a>
 						</div>
 					</li>
-				</ul>
+				<?php
+				}
+				else { ?>
+					<li class="nav-item">
+						<a href="/WQIS/" class="nav-link">Log in</a>
+					</li>
 				<?php } ?>
+				</ul>
 			</div>
 		</nav>
 		        

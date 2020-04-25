@@ -7,6 +7,7 @@ div.message {
     transition: height 300ms ease-out 0s;
     background-color: #a0d3e8;
     color: #626262;
+	margin-top: 7vh;
     top: 15px;
     right: 15px;
     z-index: 999;

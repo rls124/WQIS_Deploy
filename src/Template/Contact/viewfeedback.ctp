@@ -1,24 +1,11 @@
 <?php
 if ($admin) {
 ?>
-<?= $this->Html->script("feedback.js") ?>
+<?= $this->Html->script("contact.js") ?>
 <?= $this->Html->css("userManagement.css") ?>
 <?= $this->Html->css("loading.css") ?>
 
-<p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-list-alt" style="font-size: 20pt;"></span>  Feedback
-	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
-	</a>
-</p>
-    
-<div class="collapse" id="collapseInfo">
-	<div class="card card-body">
-		<p>This page is used to view feedback that non-admin users have left.</p>
-		<ul>
-			<li>To delete a comment, click the delete icon in the row containing the comment to delete.</li>
-		</ul>
-	</div>
-</div>
+<p class="centeredText" id="wqisHeading" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size: 20pt;"></span>  Feedback</p>
 <hr>
 <table id="tableView" class="table table-striped table-responsive">
 	<thead>

@@ -1,8 +1,10 @@
-<?= $this->Html->css("feedback.css") ?>
+<div id="message" class="message hidden"></div>
 
-<br/>
-<center><h1>Feedback</h1></center>
-<center><p>We appreciate you taking the time to visit our site. If you have any suggestions on how to improve it, please leave a comment below!</p></center>
+<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-home" style="font-size:20pt;"></span>  Contact us</p>
+<p class="centeredText">
+We appreciate you taking the time to visit our site. If you have any suggestions on how to improve it, or have a question, please contact us using the form below!</p></center>
+</p>
+<hr>
 
 <form>
 	<div style="text-align: center">
