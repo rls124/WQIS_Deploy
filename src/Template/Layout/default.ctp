@@ -101,7 +101,8 @@ $(document).ready(function () {
 						<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Data</a>
 					</li>
 					<?php } ?>
-					
+
+					<?php if ($userinfo) {?>
 					<li class="nav-item dropdown hoverDropdown">
 						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>" data-toggle="dropdown">About</a>
 						<ul class="dropdown-menu">
@@ -110,6 +111,14 @@ $(document).ready(function () {
 							<li><a class="dropdown-item" href="/WQIS/site-groups/sitegroups">Groups</a></li>
 						</ul>
 					</li>
+					<?php
+					}
+					else {
+					?>
+					<li class="nav-item">
+						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>">About</a>
+					</li>
+					<?php } ?>
 					
 					<?php if ($userinfo) {?>
 					<li class="nav-item">
