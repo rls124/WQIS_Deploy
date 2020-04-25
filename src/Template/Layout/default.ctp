@@ -100,9 +100,10 @@ $(document).ready(function () {
 					<li class="nav-item">
 						<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Data</a>
 					</li>
-					<?php } ?>
+					<?php
+					}
 
-					<?php if ($userinfo) {?>
+					if ($userinfo) {?>
 					<li class="nav-item dropdown hoverDropdown">
 						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>" data-toggle="dropdown">About</a>
 						<ul class="dropdown-menu">
@@ -118,23 +119,24 @@ $(document).ready(function () {
 					<li class="nav-item">
 						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>">About</a>
 					</li>
-					<?php } ?>
+					<?php
+					}
 					
-					<?php if ($userinfo) {?>
+					if ($userinfo) {?>
 					<li class="nav-item">
 						<a href="/WQIS/pages/help" class="nav-link <?php if ($pageName == "help") { echo "active"; }?>">Help</a>
 					</li>
-					<?php } ?>
+					<?php
+					}
 					
-					<?php if ($admin) { ?>
+					if ($admin) { ?>
 					<li class="nav-item">
 						<a href="/WQIS/pages/administratorpanel" class="nav-link <?php if ($pageName == "administratorpanel") { echo "active"; }?>">Administration</a>
 					</li>
 					<?php
 					}
-					?>
 					
-					<?php if ($admin) { ?>
+					if ($admin) {?>
 					<li class="nav-item">
 						<a href="/WQIS/contact/viewfeedback" class="nav-link <?php if ($pageName == "viewfeedback" || $pageName == "contact") { echo "active"; }?>">Contact</a>
 					</li>
