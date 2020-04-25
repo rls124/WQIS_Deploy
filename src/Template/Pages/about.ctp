@@ -1,4 +1,4 @@
-<?= $this->Html->css('about.css') ?>
+<?= $this->Html->css("about.css") ?>
 <h1>The Water Quality Information System </h1>
 <p>
 	The Water Quality Information Service is a resource for researchers, agency officials, and the general public for organizing and presenting water quality data from the St. Joseph, St. Marys, Auglaize and Upper Maumee River watersheds. It is maintained by the St. Joseph River Watershed Initiative in collaboration with the Environmental Resources Center at Purdue University Fort Wayne.
@@ -18,9 +18,13 @@
 	<li>USEPA Ecoregion Reference values calculated from the average concentration of the best 25% of streams sampled</li>
 </ol>
 
+<p>
+	The information in this page is intended to be a broad overview of the parameters monitored by the St Joseph River Watershed Initiative and the City of Fort Wayne. For a list of the specific benchmarks and detection limits used for each measure, see our <a href="/WQIS/measurement-settings/measurementsettings">measurement settings page</a>.
+</p>
+
 <h2>Ammonia</h2>
 <p>
-	Ammonia is a colorless form of nitrogen that is highly soluble in water. Unlike other forms of nitrogen that are beneficial to an aquatic ecosystem, ammonia is toxic to aquatic life. Ammonia can enter an aquatic environment through various ways, including runoff of commericial fertilizer or decomposition of organic waste. At high levels, aquatic organisms are unable to properly dispose of ammonia causing a toxic buiildup than can lead to death. Other physical properties of the water such as pH or temperature can affect ammonia toxicity to aquatic life. The Indiana Department of Environmental Management has set a benchmark range for Ammonia of 0.0 to 0.21 mg/L depedning upon temperature and PH.
+	Ammonia is a colorless form of nitrogen that is highly soluble in water. Unlike other forms of nitrogen that are beneficial to an aquatic ecosystem, ammonia is toxic to aquatic life. Ammonia can enter an aquatic environment through various ways, including runoff of commericial fertilizer or decomposition of organic waste. At high levels, aquatic organisms are unable to properly dispose of ammonia causing a toxic buiildup than can lead to death. Other physical properties of the water such as pH or temperature can affect ammonia toxicity to aquatic life. The Indiana Department of Environmental Management has set a benchmark range for Ammonia of 0.0 to 0.21 mg/L depending upon temperature and pH.
 </p>
 
 <h2>Bridge to Water Height</h2>
