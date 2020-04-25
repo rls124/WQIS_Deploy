@@ -57,7 +57,7 @@
 		The "Filter by" section is optional. If used, this allows a user to select records to view where some measurement is greater than, less than, or equal to a given value. Note that the Timeline does not support searches using the Where option.
 	</p>
 	<p>
-		Finally, "Display fields" allows the user to choose which measurements they wish to see. By default, "All" is selected, but if you are only interested in a subset of measurements, selecting those measurements will result in a view which is less cluttered and loads faster. Some meta fields, such as site number, date, and comments, are present in all cases and cannot be disabled.
+		Finally, "Display fields" allows the user to choose which measurements they wish to see. By default, "All" is selected, but if you are only interested in a subset of measurements, selecting those measurements will result in a view which is less cluttered and loads faster. Some meta fields, such as site number and date, are present in all cases and cannot be disabled.
 	</p>
 	<p>
 		Use the "Update" button at the bottom to perform the search, the results of which will display in the Timeline and Table.
@@ -79,15 +79,26 @@
 		Each graph will display benchmark lines, indicating the upper (red) and lower (blue) bounds for acceptable values for the measure. For information on how these benchmarks are defined, see our About page. These lines can be toggled on or off using the "Show benchmark lines" checkbox at the top of the Timeline panel
 	</p>
 	<p>
-		By default the Timeline graphs display as scatterplots, but the user may choose to display them as a line graph instead.
+		By default the Timeline graphs display as scatterplots, but the user may choose to display them as a line graph instead. Note that, while line graph view can still be used even with a filter enabled, this may be misleading, as it implies continuity in the measurements despite measures not fitting the filter being hidden.
+	</p>
+	<p>
+		
 	</p>
 </div>
 
 <h2>Table</h2>
 <div class="indent">
 	<p>
-		The Table displays, row-by-row, all queried data associated with each sample record. As with the Timeline, the Table displays all the measurements selected in the "View data" section of the search panel. Additionally, the site number, sample number, date, and any associated comments are always displayed.
+		The Table displays, row-by-row, all queried data associated with each sample record. As with the Timeline, the Table displays all the measurements selected in the "View data" section of the search panel. Additionally, the site number, sample number, and date are alway shown if searching by one or more discrete sites. If aggregate mode is used, the site and sample numbers are not shown, only the date, because these fields cannot be averaged.
 	</p>
+	<?php if ($admin) { ?>
+	<div class="adminInfo">
+		<p>
+			Comment fields associated with all measures are also present and are always displayed if searching by one or more discrete sites. These comments contain additional information, usually from the people who collected the samples in the field, that may be relevant to interpreting the data. If aggregate mode is enabled, the comment fields are not shown, for the same reason as above. Comment data is not currently available to non-administrator users, but may be made available upon request.
+		</p>
+	</div>
+	<?php } ?>
+	
 	<p>
 		By default, the Table displays 25 records at a time, with more results on additional pages. The user can choose to view results in chunks of 10, 25, 100, 500, or all results.
 	</p>
@@ -117,6 +128,23 @@
 	<p>
 		The arrangement of the data in the exported CSV is very similar to that displayed on the Table above. All of the same search functionality works as it does for the table as well. However, there are two differences: Firstly, there is no pagination in the exported file. All records are exported, regardless of the number of sample records the Table is set to display or its current page number. Secondly, sorting by a particular column is not supported; all exported files are sorted in descending order by the Date field.
 	</p>
+</div>
+
+<h2>Sites info</h2>
+<div class="indent">
+	<p>
+		The <a href="/WQIS/site-locations/sitemanagement">Site Info</a> page lists meta-information about every site the WQIS program monitors, including its site number, latitude and longitude, name, a description of its location, and what groups it belongs to.
+	</p>
+	<p>
+		The "view" button next to each row will take you to the main page, and automatically select this site in the map.
+	</p>
+	<?php if ($admin) { ?>
+		<div class="adminInfo">
+			<p>
+				For administrators, this page also serves as the site management page. All fields, except for the site number, can be edited by clicking on each cell. Clicking the "Add Site" button at the top or bottom of the page opens a pop-up window which can be filled in to create a new site. Existing sites may also be deleted.
+			</p>
+		</div>
+	<?php } ?>
 </div>
 
 <?php if ($admin) { ?>
@@ -164,17 +192,10 @@
 	</p>
 </div>
 
-<h2>Site management</h2>
-<div class="indent">
-	<p>
-		[TBD]
-	</p>
-</div>
-
 <h2>View feedback</h2>
 <div class="indent">
 	<p>
-		[TBD]
+		The <b>View Feedback</b> page displays all user-provided feedback on the site. The date, message, and (if provided) response email address are shown. Feedback which has been viewed already can be deleted using the trashcan icon.
 	</p>
 </div>
 
