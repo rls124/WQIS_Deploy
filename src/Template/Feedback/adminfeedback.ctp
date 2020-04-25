@@ -1,9 +1,9 @@
 <?php
 if ($admin) {
 ?>
-<?= $this->Html->script('feedback.js') ?>
-<?= $this->Html->css('userManagement.css') ?>
-<?= $this->Html->css('loading.css') ?>
+<?= $this->Html->script("feedback.js") ?>
+<?= $this->Html->css("userManagement.css") ?>
+<?= $this->Html->css("loading.css") ?>
 
 <p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-list-alt" style="font-size: 20pt;"></span>  Feedback
 	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
@@ -13,17 +13,20 @@ if ($admin) {
     
 <div class="collapse" id="collapseInfo">
 	<div class="card card-body">
-		<p> This page is used to view feedback that non-admin users have left. </p>
+		<p>This page is used to view feedback that non-admin users have left.</p>
 		<ul>
 			<li>To delete a comment, click the delete icon in the row containing the comment to delete.</li>
 		</ul>
 	</div>
 </div>
 <hr>
-<table id='tableView'  class="table table-striped table-responsive">
+<table id="tableView" class="table table-striped table-responsive">
 	<thead>
 		<tr>
 			<th>Date</th>
+			<th>User</th>
+			<th>Name</th>
+			<th>Email</th>
 			<th>Feedback</th>
 			<th>Actions</th>
 		</tr>
@@ -33,16 +36,27 @@ if ($admin) {
 		$row = 0;
 		foreach ($FeedbackText as $feedbackData):
 			?>
-			<tr id='tr-<?= $feedbackData->ID ?>'>
-				<td id='<?php echo 'td-' . $feedbackData->ID . '-date'; ?>'><?= $feedbackData->Date ?></td>
-				<td id='<?php echo 'td-' . $feedbackData->ID . '-feedback'; ?>'><?= $feedbackData->Feedback ?></td>
+			<tr id="tr-<?= $feedbackData->ID ?>">
+				<td><?= $feedbackData->Date ?></td>
 				<td>
-					<a id="delete-tooltip" data-toggle="tooltip" title="Delete Feedback">
+					<?php
+					if ($feedbackData->User) {
+						echo $feedbackData->User;
+					}
+					else {
+						echo "<i>Not logged in</i>";
+					}
+					?>
+				</td>
+				<td><?= $feedbackData->Name ?></td>
+				<td><?= $feedbackData->Email ?></td>
+				<td><?= $feedbackData->Feedback ?></td>
+				<td>
+					<a data-toggle="tooltip" title="Delete Feedback">
 					<?=
-						$this->Html->tag('span', "", [
-							'class' => "delete glyphicon glyphicon-trash",
-							'id' => 'delete-' . $feedbackData->ID,
-							'name' => 'delete-' . $feedbackData->ID
+						$this->Html->tag("span", "", [
+							"class" => "delete glyphicon glyphicon-trash",
+							"id" => "delete-" . $feedbackData->ID,
 						])
 					?>
 					</a>

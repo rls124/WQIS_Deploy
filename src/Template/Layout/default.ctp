@@ -129,13 +129,13 @@ $(document).ready(function () {
 						
 					<?php if ($admin) { ?>
 					<li class="nav-item">
-						<a href="/WQIS/feedback/adminfeedback" class="nav-link <?php if ($pageName == "adminfeedback" || $pageName == "userfeedback") { echo "active"; }?>">Feedback</a>
+						<a href="/WQIS/feedback/adminfeedback" class="nav-link <?php if ($pageName == "adminfeedback" || $pageName == "userfeedback") { echo "active"; }?>">Contact</a>
 					</li>
 				<?php
 				} 
 				else { ?>
 					<li class="nav-item">
-						<a href="/WQIS/feedback/userfeedback" class="nav-link <?php if ($pageName == "userfeedback") { echo "active"; }?>">Feedback</a>
+						<a href="/WQIS/feedback/userfeedback" class="nav-link <?php if ($pageName == "userfeedback") { echo "active"; }?>">Contact</a>
 					</li>
 				<?php
 				}
@@ -177,6 +177,11 @@ $(document).ready(function () {
 			?>
 		</div>
 		<?php if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { ?><script>browserDetect();</script><?php } ?>
+		
+		<!--
+		Produced with love by the students of IPFW/PFW.
+		Bobby Nicola, Mackenzie Crawford, Seth Snider, Nicholas Tayloe
+		-->
 	</body>
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>

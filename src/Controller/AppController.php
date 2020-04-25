@@ -42,7 +42,7 @@
                 ],
                 'storage' => 'Session'
             ]);
-
+			
             //$this->loadComponent('Csrf'); //disabled because it breaks AJAX. Need to handle the token for this, evaluating impact
         }
 
