@@ -22,12 +22,6 @@ $pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), "
         <?= $this->Html->css("cakemessages.css") ?>
 		<?= $this->Html->css("loading.css") ?>
 
-<style>
-li.dropdown:hover > .dropdown-menu {
-    display: block;
-}
-</style>
-
 <script>
 <?php
 if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session
@@ -100,33 +94,37 @@ $(document).ready(function () {
 		<nav class="navbar navbar-expand navbar-dark fixed-top" id="navbar" style="background-color: #5085A5; height: 7vh">
 			<?= $this->Html->link(__("WQIS"), ["controller" => "users", "action" => "login"], ["class" => "navbar-brand"]); ?>
 			
-			<div class="collapse navbar-collapse text-right" id="navbarSupportedContent">
+			<div class="navbar-collapse">
 				<ul class="navbar-nav mr-auto">
+					<?php if ($userinfo) {?>
 					<li class="nav-item">
 						<a href="/WQIS/site-locations/chartselection" class="nav-link <?php if ($pageName == "chartselection") { echo "active"; }?>">View Data</a>
 					</li>
+					<?php } ?>
 					
-					<li class="nav-item dropdown">
-						<a href="/WQIS/pages/about" class="nav-link" data-toggle="dropdown">About</a>
+					<li class="nav-item dropdown hoverDropdown">
+						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>" data-toggle="dropdown">About</a>
 						<ul class="dropdown-menu">
-							<li><a href="/WQIS/site-locations/sitemanagement">Sites</a></li>
-							<li><a href="/WQIS/measurement-settings/measurementsettings">Measurement settings</a></li>
-							<li><a href="/WQIS/site-groups/sitegroups">Groups</a></li>
+							<li><a class="dropdown-item" href="/WQIS/site-locations/sitemanagement">Sites</a></li>
+							<li><a class="dropdown-item" href="/WQIS/measurement-settings/measurementsettings">Measurement settings</a></li>
+							<li><a class="dropdown-item" href="/WQIS/site-groups/sitegroups">Groups</a></li>
 						</ul>
 					</li>
-						
+					
+					<?php if ($userinfo) {?>
 					<li class="nav-item">
 						<a href="/WQIS/pages/help" class="nav-link <?php if ($pageName == "help") { echo "active"; }?>">Help</a>
 					</li>
-						
+					<?php } ?>
+					
 					<?php if ($admin) { ?>
 					<li class="nav-item">
-						<a href="/WQIS/pages/administratorpanel" class="nav-link <?php if ($pageName == "administratorpanel") { echo "active"; }?>">Admin Panel</a>
+						<a href="/WQIS/pages/administratorpanel" class="nav-link <?php if ($pageName == "administratorpanel") { echo "active"; }?>">Administration</a>
 					</li>
 					<?php
 					}
 					?>
-						
+					
 					<?php if ($admin) { ?>
 					<li class="nav-item">
 						<a href="/WQIS/contact/viewfeedback" class="nav-link <?php if ($pageName == "viewfeedback" || $pageName == "contact") { echo "active"; }?>">Contact</a>
@@ -186,7 +184,7 @@ $(document).ready(function () {
 		
 		<!--
 		Produced with love by the students of IPFW/PFW.
-		Bobby Nicola, Mackenzie Crawford, Seth Snider, Nicholas Tayloe
+		Bobby Nicola, Mack Crawford, Seth Snider, Nicholas Tayloe
 		-->
 	</body>
 	

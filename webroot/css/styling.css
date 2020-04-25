@@ -38,15 +38,15 @@ body{
     color: white;
     cursor: auto;
 }
+li.hoverDropdown:hover > .dropdown-menu {
+    display: block;
+}
 .nav-link{
 	color: #F7F9FB !important;
 }
 .nav-link:hover{
 	color: lightgrey !important;
 }
-.navbar-brand{
-	color: #F7F9FB !important;
-}
 .active{
-	color: white !important;
+	font-weight: bold;
 }
