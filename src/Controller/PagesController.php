@@ -1,4 +1,7 @@
 <?php
+/*
+Pages controller. Handles (ideally) static pages in the /pages/ path
+*/
 namespace App\Controller;
 
 use Cake\Core\Configure;
@@ -14,6 +17,7 @@ class PagesController extends AppController {
 		$this->Auth->allow(["display"]);
 	}
 	
+	//this is what gets run before each page loads. Every page in /pages/ uses this, not separate controller methods
 	public function display(...$path) {
 		$count = count($path);
 		if (!$count) {

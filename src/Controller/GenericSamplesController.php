@@ -1,10 +1,9 @@
 <?php
-    namespace App\Controller;
+namespace App\Controller;
 
-    use App\Controller\AppController;
+use App\Controller\AppController;
 
-    class GenericSamplesController extends AppController {
-	
+class GenericSamplesController extends AppController {	
 	public function removeBOM($str) {
 		//remove the UTF-8 byte order mark (BOM). Excel exports CSVs with this, its unneeded and breaks our importer, so remove it
 		if(substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
