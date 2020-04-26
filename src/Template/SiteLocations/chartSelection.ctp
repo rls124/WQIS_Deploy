@@ -293,6 +293,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			<div id="compareTargetOptions"></div>
 
 			<div class="modal-footer">
+				<button type="button" class="btn" id="clearCompare">Clear</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
 		</div>

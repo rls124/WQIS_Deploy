@@ -350,10 +350,11 @@ var zoomPlugin = {
 			compareButton.innerText = "Compare to other measure";
 			compareButton.id = "compareButton-" + chartNum;
 			compareButton.onclick = function() {
-				//first set options available in the modal
+				//first clear the existing contents
 				var optionsDiv = document.getElementById("compareTargetOptions");
 				optionsDiv.innerHTML = "";
-			
+				
+				//set options available in the modal
 				for (category in measurementSettings) {
 					for (j=0; j<measurementSettings[category].length; j++) {
 						//add a button for it
@@ -434,6 +435,15 @@ var zoomPlugin = {
 					
 						optionsDiv.appendChild(measureButton);
 					}
+				}
+				
+				//set up the clear button
+				var clearBtn = document.getElementById("clearCompare");
+				clearBtn.onclick = function() {
+					//remove the second dataset and hide its axis label
+					chartInstance.data.datasets = [chartInstance.data.datasets[0]];
+					chartInstance.options.scales.yAxes[1].display = false;
+					chartInstance.update();
 				}
 			}
 			node.parentElement.appendChild(compareButton);
