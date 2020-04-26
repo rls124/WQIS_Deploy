@@ -6,38 +6,38 @@ else if ($admin == false) { ?>
 	<h3>You must be an administrator to access this page</h3>
 	<a href="javascript:history.back()">Go Back</a>
 <?php }
-else if ($mode == "entry") {?>
+else {?>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-	<?= $this->Html->css('entryForm.css') ?>
-	<?= $this->Html->script('entryForm.js') ?>
-	
+	<?= $this->Html->css("entryForm.css") ?>
+	<?= $this->Html->script("entryForm.js") ?>
+
 	<?= $this->Form->create($sample) ?>
 	<fieldset>
 		<p class="centeredText" style="font-size:2.5rem;">
-			<span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  <?php echo $formType; ?> entry form
+			<span class="glyphicon glyphicon-list-alt" style="font-size:20pt;"></span>  <?php echo ucfirst($formType); ?> entry form
 		</p>
 		<hr/>
 		<div class="form-group row">
-			<?=
-				$this->Form->control('Date', [
-					'label' => [
-						'class' => 'col-lg-1 label-reg text-right centerLabel mt-4'
-					],
-					'templates' => [
-						'inputContainer' => '{{content}}'
-					],
-					'type' => 'text',
-					'class' => "form-control date-picker entryControl col-lg-2 textinput mt-3",
-					'placeholder' => 'mm/dd/yyyy'
-				])
-			?>
-        </div>
-        <div class="container-fluid">
-            <div class="mb-3 infoPanel">
-                <table class="table table-responsive">
-                    <thead>
-                        <tr>
+		<?=
+		$this->Form->control("Date", [
+			"label" => [
+				"class" => "col-lg-1 label-reg text-right centerLabel mt-4"
+			],
+			"templates" => [
+				"inputContainer" => "{{content}}"
+			],
+			"type" => "text",
+			"class" => "form-control date-picker entryControl col-lg-2 textinput mt-3",
+			"placeholder" => "mm/dd/yyyy"
+		])
+		?>
+		</div>
+		<div class="container-fluid">
+			<div class="mb-3 infoPanel">
+				<table class="table table-responsive">
+					<thead>
+						<tr>
 						<?php
 						if ($formType == "bacteria") {
 							$colHeaders = ["Site", "Sample Number", "Ecoli<br>(CFU/100 ml)", "Total Coliform<br>(CFU/100 ml)", "Comments", "Actions"];
@@ -59,88 +59,84 @@ else if ($mode == "entry") {?>
 						for ($i=0; $i<sizeof($colHeaders); $i++) {
 							echo "<th>" . $colHeaders[$i] . "</th>";
 						}
-						?>	
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <tr id="row-0">
-                            <td>
-                                <select class="form-control entryControl siteselect" id="site_location_id-0" name="site_location_id-0">
-                                    <option value="" selected="selected">Site</option>
+						?>
+						</tr>
+					</thead>
+					<tbody id="tableBody">
+						<tr id="row-0">
+							<td>
+								<select class="form-control entryControl siteselect" id="site_location_id-0" name="site_location_id-0">
+									<option value="" selected="selected">Site</option>
 									<?php
-										foreach ($siteLocations as $siteLocation) {
-											$siteNumber = $this->Number->format($siteLocation->Site_Number);
-											$siteName = h($siteLocation->Site_Name);
-											$siteLocation = h($siteLocation->Site_Location);
-											echo "<option value=$siteNumber>$siteNumber $siteName - $siteLocation</option>";
-										}
+									foreach ($siteLocations as $siteLocation) {
+										$siteNumber = $this->Number->format($siteLocation->Site_Number);
+										$siteName = h($siteLocation->Site_Name);
+										$siteLocation = h($siteLocation->Site_Location);
+										echo "<option value=$siteNumber>$siteNumber $siteName - $siteLocation</option>";
+									}
 									?>
-                                </select>
-                            </td>
+								</select>
+							</td>
 							<?=
-								$this->Form->control('sample_number-0', [
-									'templates' => [
-										'inputContainer' => '<td>{{content}}</td>',
-										'label' => false
-									],
-									'type' => 'number',
-									'id' => 'sample_number-0',
-									'class' => 'form-control entryControl samplenumber',
-									'readonly' => true
-								])
+							$this->Form->control("sample_number-0", [
+								"templates" => [
+									"inputContainer" => "<td>{{content}}</td>",
+									"label" => false
+								],
+								"type" => "number",
+								"id" => "sample_number-0",
+								"class" => "form-control entryControl samplenumber",
+								"readonly" => true
+							])
 							?>
-	
+
 							<?php
 							for ($i=0; $i<sizeof($controlNames); $i++) {
 								echo $this->Form->control($controlNames[$i], [
-									'templates' => [
-										'inputContainer' => '<td>{{content}}</td>',
-										'label' => false
+									"templates" => [
+										"inputContainer" => "<td>{{content}}</td>",
+										"label" => false
 									],
-									'type' => 'text',
-									'class' => 'form-control entryControl'
+									"type" => "text",
+									"class" => "form-control entryControl"
 								]);
 							}
 							?>
-	
+
 							<td>
-								<?=
-								$this->Html->tag('span', "", [
-									'class' => "delete glyphicon glyphicon-trash",
-									'id' => 'Delete-0',
-									'name' => 'Delete-0',
-									'hidden'
-								])
-								?>
+							<?=
+							$this->Html->tag("span", "", [
+								"class" => "delete glyphicon glyphicon-trash",
+								"id" => "Delete-0",
+								"name" => "Delete-0",
+								"hidden"
+							])
+							?>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-	
-			<?=
-				$this->Form->hidden('totalrows', [
-					'value' => '0',
-					'id' => 'totalrows'
-				])
-			?>
 
-			<?=
-				$this->Form->button('Submit ' . $formType . ' Measurements', [
-					'class' => 'btn btn-basic mb-3',
-					'style' => 'float: right;'
-				])
-			?>
+			<?php
+			echo $this->Form->hidden("totalrows", [
+				"value" => "0",
+				"id" => "totalrows"
+			]);
 
-			<?=
-				$this->Form->button('Add a Site', [
-					'class' => 'btn btn-basic mb-3 mr-2',
-					'type' => 'button',
-					'id' => 'addSite',
-					'style' => 'float: right;'
-				])
+			echo $this->Form->button("Submit " . $formType . " Measurements", [
+				"class" => "btn btn-basic mb-3",
+				"style" => "float: right;"
+			]);
+
+			echo $this->Form->button("Add a Site", [
+				"class" => "btn btn-basic mb-3 mr-2",
+				"type" => "button",
+				"id" => "addSite",
+				"style" => "float: right;"
+			]);
 			?>
-        </div>
+		</div>
 	</fieldset>
 	<?= $this->Form->end() ?>
 <?php } ?>
