@@ -52,7 +52,9 @@
 			$physicalSettings = $this->MeasurementSettings->find("all")
 				->where(["Category" => "Physical"]);
 			
-			$groups = $this->SiteGroups->find("all");
+			//show only groups that are either public or owned by this user
+			$groups = $this->SiteGroups->find("all", ["conditions" =>
+					["visibleTo IN " => ["all", $this->Auth->user("userid")]]]);
 			
 			//get the sites
 			$sites = $this->SiteLocations->find("all")->order("Site_Number");

@@ -1,35 +1,26 @@
-<?= $this->Html->script('siteGroups.js') ?>
-<?= $this->Html->css('loading.css') ?>
+<?= $this->Html->script("siteGroups.js") ?>
+<?= $this->Html->css("loading.css") ?>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 
-<div id='message' class="message hidden"></div>
-    
-<p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-folder-open" style="font-size: 20pt;"></span>  Site Groups
-	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
-	</a>
-</p>
+<div id="message" class="message hidden"></div>
+
+<p class="centeredText" id="wqisHeading" style="font-size:2.5rem;"><span class="glyphicon glyphicon-folder-open" style="font-size: 20pt;"></span>  Site Groups</p>
 
 <hr>
-<div class="collapse" id="collapseInfo">
-	<div class="card card-body">
-		<p> This page is used to create, modify, or delete site groups.</p>
-		<ul>
-			<li>To add a group, click the 'Add Group' button.</li>
-			<li>To delete a group, click the delete icon in the row containing the group to delete.</li>
-			<li>To edit a group, click the edit icon in the row containing the group to edit.</li>
-		</ul>
-	</div>
-</div>
 
-<input type='button' class='addGroupbtn btn-basic btn mt-2 mb-2 btn-md' value='Add Group' id='addGroupBtn' name='addGroupBtn' data-toggle="modal" data-target="#addGroupModal"/>
-<table id='tableView' class="table table-striped table-responsive">
+<input type="button" class="btn-basic btn mt-2 mb-2 btn-md" value="Add <?php if (!$admin) { echo "Custom"; }?> Group" id="addGroupBtn" data-toggle="modal" data-target="#addGroupModal"/>
+<table id="tableView" class="table table-striped table-responsive">
 	<thead>
 		<tr>
 			<th>Group Name</th>
 			<th>Description</th>
 			<th>Sites</th>
+			<?php if ($admin) { ?>
+			<th>Visible to</th>
+			<?php } else { ?>
+			<th>Type</th>
+			<?php } ?>
 			<th>Actions</th>
 		</tr>
 	</thead>
@@ -38,52 +29,67 @@
 		$row = 0;
 		foreach ($SiteGroups as $siteGroup) {
 		    ?>
-			<tr id='tr-<?= $siteGroup->groupKey ?>'>
-				<td class='groupkey' id='<?php echo 'td-' . $siteGroup->groupKey . '-groupKey'; ?>'><?= $siteGroup->groupName ?></td>
-				<td id='<?php echo 'td-' . $siteGroup->groupDescription . '-groupDescription'; ?>'><?= $siteGroup->groupDescription ?></td>
+			<tr id="tr-<?= $siteGroup->groupKey ?>">
+				<td class="groupkey" id="<?php echo "td-" . $siteGroup->groupKey . "-groupKey"; ?>"><?= $siteGroup->groupName ?></td>
+				<td id="<?php echo "td-" . $siteGroup->groupDescription . "-groupDescription"; ?>"><?= $siteGroup->groupDescription ?></td>
 
-				<!-- Display all sites in this group -->
-				<td id='<?php echo 'td-' . $siteGroup->groupKey . '-sites'; ?>'>
+				<!-- display all sites in this group -->
+				<td id="<?= "td-" . $siteGroup->groupKey . "-sites"; ?>">
 					<?php
 					foreach ($Groupings as $grouping) {
-						$groups = explode(',', $grouping->groups);
+						$groups = explode(",", $grouping->groups);
 						if (in_array($siteGroup->groupKey, $groups)) {
 							echo $grouping->Site_Number . " ";
 						}
-					} 
+					}
+					?>
+				</td>
+				
+				<td id="<?= "td-" . $siteGroup->groupKey . "-visibility"?>">
+					<?php
+					if ($siteGroup->visibleTo == "all") {
+						echo "Public";
+					}
+					else if (!$admin) {
+						echo "Private";
+					}
+					else {
+						echo $siteGroup->visibleTo;
+					}
 					?>
 				</td>
 				
 				<td>
+				<?php if ($admin || $siteGroup->visibleTo == $userinfo["userid"]) { ?>
 					<a id="edit-tooltip" data-toggle="tooltip" title="Edit Group">
 					<?=
-					$this->Html->tag('span', "", [
-						'class' => "edit glyphicon glyphicon-pencil",
-						'id' => 'edit-' . $siteGroup->groupKey,
-						'name' => 'edit-' . $siteGroup->groupKey,
-						'data-toggle' => "modal",
-						'data-target' => "#editGroupModal"
+					$this->Html->tag("span", "", [
+						"class" => "edit glyphicon glyphicon-pencil",
+						"id" => "edit-" . $siteGroup->groupKey,
+						"name" => "edit-" . $siteGroup->groupKey,
+						"data-toggle" => "modal",
+						"data-target" => "#editGroupModal"
 					]);
 					?>
 					</a>
 					<a id="delete-tooltip" data-toggle="tooltip" title="Delete Group">
 					<?=
-					$this->Html->tag('span', "", [
-						'class' => "delete glyphicon glyphicon-trash",
-						'id' => 'delete-' . $siteGroup->groupKey,
-						'name' => 'delete-' . $siteGroup->groupKey
+					$this->Html->tag("span", "", [
+						"class" => "delete glyphicon glyphicon-trash",
+						"id" => "delete-" . $siteGroup->groupKey,
+						"name" => "delete-" . $siteGroup->groupKey
 					]);
 					?>
 					</a>
+				
+				<?php } ?>
 				</td>
-				<?php
-				$row++;
-				?>
+				<?php $row++; ?>
 			</tr>
 		<?php } ?>
 	</tbody>
 </table>
-<input type='button' class='addGroupbtn btn-basic btn mb-3 btn-md' value='Add Group' id='addGroupBtn' name='addGroupBtn' style='float: right;' data-toggle="modal" data-target="#addGroupModal"/>
+<input type="button" class="btn-basic btn mb-3 btn-md" value="Add Group" id="addGroupBtn" style="float: right;" data-toggle="modal" data-target="#addGroupModal"/>
 
 <!-- Modal for edit button -->
 <div id="editGroupModal" class="modal fade" role="dialog">
@@ -98,33 +104,33 @@
             <div class="modal-body">
 				<p hidden id="edit-groupkey"></p>
 			<?=
-				$this->Form->control('groupname', [
-				'label' => [
-					'text' => 'Group Name',
-					'class' => 'label-reg lol'
+				$this->Form->control("groupname", [
+				"label" => [
+					"text" => "Group Name",
+					"class" => "label-reg lol"
 				],
-				'templates' => [
-					'inputContainer' => '{{content}}'
+				"templates" => [
+					"inputContainer" => "{{content}}"
 				],
-				'class' => "form-control",
-				'name' => "groupname",
-				'id' => "edit-groupname",
-				'placeholder' => "Give the group a clear name..."
+				"class" => "form-control",
+				"name" => "groupname",
+				"id" => "edit-groupname",
+				"placeholder" => "Give the group a clear name..."
 				]);
 			?>
 			<?=
-				$this->Form->control('groupdescription', [
-				'label' => [
-					'text' => 'Group Description',
-					'class' => 'label-reg lol'
+				$this->Form->control("groupdescription", [
+				"label" => [
+					"text" => "Group Description",
+					"class" => "label-reg lol"
 				],
-				'templates' => [
-					'inputContainer' => '{{content}}'
+				"templates" => [
+					"inputContainer" => "{{content}}"
 				],
-				'class' => "form-control",
-				'name' => "groupdescription",
-				'id' => "edit-groupdescription",
-				'placeholder' => "Describe the group..."
+				"class" => "form-control",
+				"name" => "groupdescription",
+				"id" => "edit-groupdescription",
+				"placeholder" => "Describe the group..."
 				]);
 			?>
 				<label for="edit-site[]">Sites</label>
@@ -141,14 +147,13 @@
 				</select>
             </div>
             <div class="modal-footer">
-                <button type="button" id='update-btn' name='update-btn' class="btn btn-default btn-basic btn btn-sm" onclick="updateButton()">Save</button>
+                <button type="button" id="update-btn" name="update-btn" class="btn btn-default btn-basic btn btn-sm" onclick="updateButton()">Save</button>
                 <button type="button" id="edit-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
             </div>
-        </div>
+		</div>
 	</form>
     </div>
 </div>
-
 
 <!-- Modal for Add Site button -->
 <div id="addGroupModal" class="modal fade" role="dialog">
@@ -156,9 +161,8 @@
         
 	<?=
 	    $this->Form->create(false, [
-		'id' => 'addGroupForm'
-		]
-	    )
+			"id" => "addGroupForm"
+		])
 	?>
         <!-- Modal content-->
         <div class="modal-content">
@@ -166,34 +170,34 @@
                 <h4 class="modal-title">Add New Group</h4>
             </div>
             <div class="modal-body">
-			<?=
-				$this->Form->control('groupname', [
-				'label' => [
-					'text' => 'Group Name',
-					'class' => 'label-reg lol'
+			<?php if (!$admin) {
+				echo "<p>This custom group will only be visible to you</p>";
+			}
+			echo $this->Form->control("groupname", [
+				"label" => [
+					"text" => "Group Name",
+					"class" => "label-reg lol"
 				],
-				'templates' => [
-					'inputContainer' => '{{content}}'
+				"templates" => [
+					"inputContainer" => "{{content}}"
 				],
-				'class' => "form-control textinput addinput",
-				'name' => "groupname",
-				'id' => "add-groupname",
-				'placeholder' => "Give the group a clear name..."
+				"class" => "form-control textinput addinput",
+				"name" => "groupname",
+				"id" => "add-groupname",
+				"placeholder" => "Give the group a clear name..."
 				]);
-			?>
-			<?=
-				$this->Form->control('groupdescription', [
-				'label' => [
-					'text' => 'Group Description',
-					'class' => 'label-reg lol'
+			echo $this->Form->control("groupdescription", [
+				"label" => [
+					"text" => "Group Description",
+					"class" => "label-reg lol"
 				],
-				'templates' => [
-					'inputContainer' => '{{content}}'
+				"templates" => [
+					"inputContainer" => "{{content}}"
 				],
-				'class' => "form-control textinput addinput",
-				'name' => "groupdescription",
-				'id' => "add-groupdescription",
-				'placeholder' => "Describe the group..."
+				"class" => "form-control textinput addinput",
+				"name" => "groupdescription",
+				"id" => "add-groupdescription",
+				"placeholder" => "Describe the group..."
 				]);
 			?>
 				<label for="add-site[]">Sites</label>
@@ -207,13 +211,16 @@
 					}
 					?>
 				</select>
+				<?php if ($admin) {?>
+					<input type="checkbox" name="makePrivate" id="makePrivate" value="true">
+					<label class="ml-3 mr-1" for="makePrivate">Make private</label>
+				<?php } ?>
             </div>
             <div class="modal-footer">
-                <button type="submit" id='add-btn' name='add-btn' class="btn btn-default btn-basic btn btn-sm">Add Group</button>
-                <button type="button" id='add-close' class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
+                <button type="submit" id="add-btn" name="add-btn" class="btn btn-default btn-basic btn btn-sm">Add Group</button>
+                <button type="button" id="add-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
             </div>
         </div>
 	<?= $this->Form->end() ?>
-        
     </div>
 </div>

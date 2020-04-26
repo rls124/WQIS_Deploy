@@ -13,7 +13,14 @@
 	 */
 	class SiteGroupsController extends AppController {
 		public function sitegroups() {
-			$SiteGroups = $this->SiteGroups->find("all");
+			//for administrators, get all groups. Otherwise, only show groups that are either public or visible to this user
+			if ($this->Auth->user("admin")) {
+				$SiteGroups = $this->SiteGroups->find("all");
+			}
+			else {
+				$SiteGroups = $this->SiteGroups->find("all", ["conditions" =>
+					["visibleTo IN " => ["all", $this->Auth->user("userid")]]]);
+			}
 			$this->set(compact("SiteGroups"));
 			
 			$this->SiteLocations = $this->loadModel("SiteLocations");
@@ -26,7 +33,9 @@
 		
 		public function fetchGroups() {
 			$this->loadModel("SiteGroups");
-			$SiteGroups = $this->SiteGroups->find("all");
+			$SiteGroups = $this->SiteGroups->find("all", ["conditions" =>
+					["visibleTo IN " => ["all", $this->Auth->user("userid")]]]);
+			
 			$this->loadModel("SiteLocations");
 			$Groupings = $this->SiteLocations->find()->select(["Site_Number", "groups"]);
 			
@@ -146,8 +155,8 @@
 				}
 			}
 				
-			$group->groupName = $this->request->getData('groupname');
-			$group->groupDescription = $this->request->getData('groupdescription');
+			$group->groupName = $this->request->getData("groupname");
+			$group->groupDescription = $this->request->getData("groupdescription");
 
 			if ($this->SiteGroups->save($group)) {
 				return;
@@ -158,8 +167,15 @@
 			$this->render(false);
 
 			if ($this->request->is("post")) {
-				$SiteGroup = $this->SiteGroups->newEntity(["groupName" => $this->request->getData("groupname"), "groupDescription" => $this->request->getData("groupdescription")]);
 				$groupName = $this->request->getData("groupname");
+				$SiteGroup = $this->SiteGroups->newEntity(["groupName" => $groupName, "groupDescription" => $this->request->getData("groupdescription")]);
+				
+				if ($this->Auth->user("admin") && $this->request->getData("makePrivate") == "false") {
+					$SiteGroup->visibleTo = "all";
+				}
+				else {
+					$SiteGroup->visibleTo = $this->Auth->user("userid");
+				}
 				
 				if ($this->SiteGroups->save($SiteGroup)) {
 					$group = $this->SiteGroups
@@ -189,10 +205,7 @@
 						$this->SiteLocations->save($siteObj);
 					}
 
-					$this->response->type("json");
-					$json = json_encode(["groupKey" => $group->groupKey]);
-					$this->response->body($json);
-					return;
+					return $this->response->withType("json")->withStringBody(json_encode(["groupKey" => $group->groupKey]));
 				}
 			}
 		}
