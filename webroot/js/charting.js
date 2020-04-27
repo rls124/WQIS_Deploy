@@ -130,71 +130,6 @@ var helpers = Chart.helpers;
 //take the zoom namespace of Chart
 var zoomNS = Chart.Zoom = Chart.Zoom || {};
 
-//default options if none are provided
-var defaultOptions = zoomNS.defaults = {
-	pan: {
-		enabled: true,
-		mode: 'xy',
-		speed: 20,
-		threshold: 10,
-	},
-	zoom: {
-		enabled: true,
-		mode: 'xy',
-		sensitivity: 0,
-	}
-};
-
-function zoomIndexScale(scale, zoom, center, zoomOptions) {
-	var labels = scale.chart.data.labels;
-	var minIndex = scale.minIndex;
-	var lastLabelIndex = labels.length - 1;
-	var maxIndex = scale.maxIndex;
-	var sensitivity = zoomOptions.sensitivity;
-	var chartCenter =  scale.isHorizontal() ? scale.left + (scale.width/2) : scale.top + (scale.height/2);
-	var centerPointer = scale.isHorizontal() ? center.x : center.y;
-
-	if (zoom > 1) {
-		zoomNS.zoomCumulativeDelta+=1;
-	}
-	else {
-		zoomNS.zoomCumulativeDelta-=1;
-	}
-
-	if (Math.abs(zoomNS.zoomCumulativeDelta) > sensitivity) {
-		if (zoomNS.zoomCumulativeDelta < 0) {
-			if (centerPointer <= chartCenter) {
-				if (minIndex <= 0){
-					maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
-				}
-				else {
-					minIndex = Math.max(0, minIndex - 10);
-				}
-			}
-			else {
-				if (maxIndex >= lastLabelIndex){
-					minIndex = Math.max(0, minIndex - 10);
-				}
-				else{
-					maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
-				}
-			}
-			zoomNS.zoomCumulativeDelta = 0;
-		}
-		else if (zoomNS.zoomCumulativeDelta > 0) {
-			if (centerPointer <= chartCenter) {
-				minIndex = minIndex < maxIndex ? minIndex = Math.min(maxIndex, minIndex + 10) : minIndex;
-			}
-			else if (centerPointer > chartCenter) {
-				maxIndex = maxIndex > minIndex ? maxIndex = Math.max(minIndex, maxIndex - 10) : maxIndex;
-			}
-			zoomNS.zoomCumulativeDelta = 0;
-		}
-		scale.options.ticks.min = labels[minIndex];
-		scale.options.ticks.max = labels[maxIndex];
-	}
-}
-
 function doZoom(chartInstance, zoom, center) {
 	var ca = chartInstance.chartArea;
 	if (!center) {
@@ -204,63 +139,90 @@ function doZoom(chartInstance, zoom, center) {
 		};
 	}
 
-	var zoomOptions = chartInstance.options.zoom;
-
 	//do the zoom here
-	var zoomMode = helpers.getValueOrDefault(chartInstance.options.zoom.mode, defaultOptions.zoom.mode);
-	zoomOptions.sensitivity = helpers.getValueOrDefault(chartInstance.options.zoom.sensitivity, defaultOptions.zoom.sensitivity);
-
 	helpers.each(chartInstance.scales, function(scale, id) {
-		zoomIndexScale(scale, zoom, center, zoomOptions)
-	});
-	
-	chartInstance.update(0);
-}
+		var labels = scale.chart.data.labels;
+		var minIndex = scale.minIndex;
+		var lastLabelIndex = labels.length - 1;
+		var maxIndex = scale.maxIndex;
+		var sensitivity = 0;
+		var chartCenter =  scale.isHorizontal() ? scale.left + (scale.width/2) : scale.top + (scale.height/2);
+		var centerPointer = scale.isHorizontal() ? center.x : center.y;
 
-function panIndexScale(scale, delta, panOptions) {
-	var labels = scale.chart.data.labels;
-	var lastLabelIndex = labels.length - 1;
-	var offsetAmt = Math.max((scale.ticks.length - ((scale.options.gridLines.offsetGridLines) ? 0 : 1)), 1);
-	var panSpeed = panOptions.speed;
-	var minIndex = scale.minIndex;
-	var step = Math.round(scale.width / (offsetAmt * panSpeed));
-	var maxIndex = scale.maxIndex;
+		if (zoom > 1) {
+			zoomNS.zoomCumulativeDelta+=1;
+		}
+		else {
+			zoomNS.zoomCumulativeDelta-=1;
+		}
 
-	zoomNS.panCumulativeDelta += delta;
-	
-	if (zoomNS.panCumulativeDelta > step && minIndex > 0) {
-		//dragging to lower values		
-		minIndex--;
-		maxIndex--;
-	}
-	else if (zoomNS.panCumulativeDelta < -step && maxIndex < lastLabelIndex - 1) {
-		//dragging to higher values
-		minIndex++;
-		maxIndex++;
-	}
-	
-	zoomNS.panCumulativeDelta = minIndex !== scale.minIndex ? 0 : zoomNS.panCumulativeDelta;
-
-	scale.options.ticks.min = labels[minIndex];
-	scale.options.ticks.max = labels[maxIndex];
-}
-
-function doPan(chartInstance, deltaX, deltaY) {
-	var panOptions = chartInstance.options.pan;
-	var panMode = helpers.getValueOrDefault(chartInstance.options.pan.mode, defaultOptions.pan.mode);
-	panOptions.speed = helpers.getValueOrDefault(chartInstance.options.pan.speed, defaultOptions.pan.speed);
-
-	helpers.each(chartInstance.scales, function(scale, id) {
-		if (deltaX !== 0) {
-			panIndexScale(scale, deltaX, panOptions)
+		if (Math.abs(zoomNS.zoomCumulativeDelta) > sensitivity) {
+			if (zoomNS.zoomCumulativeDelta < 0) {
+				if (centerPointer <= chartCenter) {
+					if (minIndex <= 0){
+						maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
+					}
+					else {
+						minIndex = Math.max(0, minIndex - 10);
+					}
+				}
+				else {
+					if (maxIndex >= lastLabelIndex) {
+						minIndex = Math.max(0, minIndex - 10);
+					}
+					else {
+						maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
+					}
+				}
+			}
+			else if (zoomNS.zoomCumulativeDelta > 0) {
+				if (centerPointer <= chartCenter) {
+					minIndex = minIndex < maxIndex ? minIndex = Math.min(maxIndex, minIndex + 10) : minIndex;
+				}
+				else if (centerPointer > chartCenter) {
+					maxIndex = maxIndex > minIndex ? maxIndex = Math.max(minIndex, maxIndex - 10) : maxIndex;
+				}
+			}
+		
+			zoomNS.zoomCumulativeDelta = 0;
+			scale.options.ticks.min = labels[minIndex];
+			scale.options.ticks.max = labels[maxIndex];
 		}
 	});
 	
 	chartInstance.update(0);
 }
 
-function positionInChartArea(chartInstance, position) {
-	return (position.x >= chartInstance.chartArea.left && position.x <= chartInstance.chartArea.right) && (position.y >= chartInstance.chartArea.top && position.y <= chartInstance.chartArea.bottom);
+function doPan(chartInstance, deltaX, deltaY) {
+	helpers.each(chartInstance.scales, function(scale, id) {
+		var labels = scale.chart.data.labels;
+		var lastLabelIndex = labels.length - 1;
+		var offsetAmt = Math.max((scale.ticks.length - ((scale.options.gridLines.offsetGridLines) ? 0 : 1)), 1);
+		var panSpeed = 100;
+		var minIndex = scale.minIndex;
+		var step = Math.round(scale.width / (offsetAmt * panSpeed));
+		var maxIndex = scale.maxIndex;
+
+		zoomNS.panCumulativeDelta += deltaX;
+		
+		if (zoomNS.panCumulativeDelta > step && minIndex > 0) {
+			//dragging to lower values		
+			minIndex--;
+			maxIndex--;
+		}
+		else if (zoomNS.panCumulativeDelta < -step && maxIndex < lastLabelIndex - 1) {
+			//dragging to higher values
+			minIndex++;
+			maxIndex++;
+		}
+	
+		zoomNS.panCumulativeDelta = minIndex !== scale.minIndex ? 0 : zoomNS.panCumulativeDelta;
+	
+		scale.options.ticks.min = labels[minIndex];
+		scale.options.ticks.max = labels[maxIndex];
+	});
+	
+	chartInstance.update(0);
 }
 
 function getYAxis(chartInstance) {
@@ -452,7 +414,6 @@ var zoomPlugin = {
 	beforeInit: function(chartInstance) {
 		var node = chartInstance.chart.ctx.canvas;
 		var options = chartInstance.options;
-		var panThreshold = helpers.getValueOrDefault(options.pan ? options.pan.threshold : undefined, zoomNS.defaults.pan.threshold);
 
 		if (options.zoom && options.zoom.drag) {
 			//only want to zoom horizontal axis
@@ -523,9 +484,7 @@ var zoomPlugin = {
 		if (Hammer) {
 			var mc = new Hammer.Manager(node);
 			mc.add(new Hammer.Pinch());
-			mc.add(new Hammer.Pan({
-				threshold: panThreshold
-			}));
+			mc.add(new Hammer.Pan());
 
 			//Hammer reports the total scaling. We need the incremental amount
 			var currentPinchScaling;
@@ -2089,15 +2048,6 @@ $(document).ready(function () {
 							position: "right"
 						}
 					]
-				},
-				pan: {
-					enabled: true,
-					mode: "x",
-					speed: 100
-				},
-				zoom: {
-					enabled: true,         
-					mode: "x",
 				},
 				responsive: true
 			}
