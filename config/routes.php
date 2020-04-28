@@ -43,6 +43,17 @@
      */
     Router::defaultRouteClass(DashedRoute::class);
 
+    /**
+     * This is the router to provide an API for our mobile collector app.
+     */
+    Router::scope('/', function (RouteBuilder $routes) {
+        $routes->setExtensions(['json']);
+        $routes->resources('GenericSamples', [
+            'path' => 'api',
+            'only' => 'create',
+            'actions' => ['create' => 'add']
+        ]);
+    });
 
     Router::scope('/', function (RouteBuilder $routes) {
 	/**

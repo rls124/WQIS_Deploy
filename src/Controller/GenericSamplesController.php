@@ -628,6 +628,51 @@ class GenericSamplesController extends AppController {
 		$this->set("formType", $name);
 	}
 
+	public function add() {
+		//api handler for mobile collector app
+		$this->render(false);
+		$this->request->allowMethod(['post', 'put']);
+		$modelName = "PhysicalSamples";
+		$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+		
+		$this->loadModel($modelName);
+		$model = $this->$modelName;
+		$request = $this->request;
+		$sample = $model->newEntity();
+		
+		//go through each column and find the postdata name that is associated
+		for ($col = 0; $col < sizeof($columns); $col++) {
+			$requestField = "";
+			$requestField = $columns[$col];
+			if ($request->getData($requestField) == null) {
+				$rowData[$columns[$col]] = null;
+				if ($col == 12) {
+					$rowData[$columns[12]] = " "; //physical comments can't be null in db
+				}
+			} else {
+				$rowData[$columns[$col]] = $request->getData($requestField);
+			}
+		}
+
+		//create the entity to save
+		$sample = $model->patchEntity($model->newEntity(), $rowData);
+		if ($model->save($sample)) {
+			$message = "Sample data was saved!";
+		}
+		else {
+			$message = "Error saving sample data";
+		}
+
+		$this->set([
+			'message' => $message,
+			'_serialize' => ['message']
+		]);
+
+		$this->response = $this->response->withType('text');
+		$this->response->getBody()->write($message);
+		return $this->response; // return success or error message to the app
+	}
+
 	public function updatefield() {
 		$this->render(false);
 		
