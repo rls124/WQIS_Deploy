@@ -142,7 +142,7 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			$this->Form->select('overUnderSelect', [
 				'>=' => 'Over',
 				'<=' => 'Under',
-				'==' => 'Equal To'
+				'=' => 'Equal To'
 				], [
 				'label' => 'Search',
 				'id' => 'overUnderSelect',
