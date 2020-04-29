@@ -12,6 +12,33 @@
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
 <script defer src="https://js.arcgis.com/4.14/"></script>
 
+<style>
+.bar1, .bar2, .bar3 {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 6px 0;
+  transition: 0.2s;
+}
+
+/* Rotate first bar */
+.change .bar1 {
+  -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+  transform: rotate(-45deg) translate(-5px, 6px) ;
+}
+
+/* Fade out the second bar */
+.change .bar2 {
+  opacity: 0;
+}
+
+/* Rotate last bar */
+.change .bar3 {
+  -webkit-transform: rotate(45deg) translate(-6px, -8px) ;
+  transform: rotate(45deg) translate(-6px, -8px) ;
+}
+</style>
+
 <?php if (isset($runTutorial)) { ?>
 	<script defer src="../js/tutorial.js"></script>
 	<script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
@@ -145,8 +172,10 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		</div>
 	</div>
 	
-	<div class="sidebarToggle" id="sidebarToggle" style="margin-top: 70px; z-index: 1">
-		<b id="sidebarToggleLabel">CLOSE</b>
+	<div class="sidebarToggle" id="sidebarToggle" style="margin-top: 70px; z-index: 1; cursor: pointer;">
+		<div class="bar1"></div>
+		<div class="bar2"></div>
+		<div class="bar3"></div>
 	</div>
 </div>
 

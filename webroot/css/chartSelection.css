@@ -31,7 +31,8 @@ body,
     top: 5px;
 }
 #main{
-	padding: 15px;
+	padding-left: 20px;
+	top: 10px;
 }
 textarea{
     width: 100%;
@@ -210,14 +211,11 @@ textarea{
 	left: 0;
 	transition: 0.5s;
 }
-
 .sidebarToggle{
 	float: left;
 	background-color: #5085A5;
 	padding: 5px;
 	border-radius: 0px 10px 10px 0px;
-	writing-mode: vertical-lr;
-	text-orientation: upright;
 }
 #sidebarInner{
 	height: 100%;
@@ -228,9 +226,6 @@ textarea{
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-}
-#sidebarToggleLabel{
-	color: #F7F9FB;
 }
 #searchBox{
 	overflow-y: auto;

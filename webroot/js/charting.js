@@ -30,6 +30,18 @@ var charts = [];
 var measurementSettings; //will be filled in with the contents of the MeasurementSettings table, containing category/name/alias/benchmarks/detection limits for each
 var groups;
 
+//pointers to static page elements
+const sidebarInner = document.getElementById("sidebarInner");
+const main = document.getElementById("main");
+const sidebarToggle = document.getElementById("sidebarToggle");
+const chartDiv = document.getElementById("chartDiv");
+const amountEnter = document.getElementById("amountEnter");
+const measurementSelect = document.getElementById("measurementSelect");
+const exportBtn = document.getElementById("exportBtn");
+const aggregateGroup = document.getElementById("aggregateGroup");
+const categorySelect = document.getElementById("categorySelect");
+const overUnderSelect = document.getElementById("overUnderSelect");
+
 //global variables used by the map
 var mapData;
 var map;
@@ -303,7 +315,7 @@ var zoomPlugin = {
 		}
 		node.parentElement.appendChild(resetButton);
 	
-		if ($("#sites").val().length == 1 || document.getElementById("aggregateGroup").checked) {
+		if ($("#sites").val().length == 1 || aggregateGroup.checked) {
 			//we don't want to show this button if theres multiple sites, because it'd complicate coloring
 			var compareButton = document.createElement("button");
 			compareButton.type = "button";
@@ -352,7 +364,7 @@ var zoomPlugin = {
 									"amount": null,
 									"overUnderSelect": null,
 									"measurementSearch": null,
-									"aggregate": document.getElementById("aggregateGroup").checked
+									"aggregate": aggregateGroup.checked
 								},
 								success: function(response) {
 									if (response.length == 0) {
@@ -1043,14 +1055,13 @@ $(document).ready(function () {
 		spinnerInhibited = true;
 		
 		var sites = $("#sites").val();
-        var categoryData = $("#categorySelect").val();
         if (sites.length != 0) { //no point making a request if no sites are selected
             $.ajax({
                 type: "POST",
                 url: "daterange",
                 data: {
                     "sites": sites,
-                    "category": categoryData
+                    "category": categorySelect.value
                 },
                 datatype: "JSON",
 				async: false,
@@ -1075,23 +1086,23 @@ $(document).ready(function () {
 		$("#endDate").datepicker("update", endDate);
 	}
 	
-    document.getElementById("categorySelect").addEventListener("change", function() {
+    categorySelect.addEventListener("change", function() {
 		changeMeasures();
 	});
 	
-	document.getElementById("measurementSelect").addEventListener("change", function() {
-		var category = $("#categorySelect").val();
+	measurementSelect.addEventListener("change", function() {
+		var category = categorySelect.value;
 		var measureIndex
 			for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
-				if (measurementSettings[category][measureIndex].measureKey === document.getElementById("measurementSelect").value) {
+				if (measurementSettings[category][measureIndex].measureKey === measurementSelect.value) {
 					break;
 				}
 			}	
 		if (measurementSettings[category][measureIndex].benchmarkMaximum == null) {
-			document.getElementById("amountEnter").placeholder = "No Benchmark Available";
+			amountEnter.placeholder = "No Benchmark Available";
 		}
 		else {
-			document.getElementById("amountEnter").placeholder = "Benchmark: " + measurementSettings[category][measureIndex].benchmarkMaximum;
+			amountEnter.placeholder = "Benchmark: " + measurementSettings[category][measureIndex].benchmarkMaximum;
 		}
 	});
 	
@@ -1135,10 +1146,8 @@ $(document).ready(function () {
 		var startDate = $("#startDate").val();
 		var endDate = $("#endDate").val();
 		var sites = $("#sites").val();
-		var category = document.getElementById("categorySelect").value;
-		var amountEnter = document.getElementById("amountEnter").value;
-		var overUnderSelect = document.getElementById("overUnderSelect").value;
-		var measurementSearch = document.getElementById("measurementSelect").value;
+		var category = categorySelect.value;
+		var measurementSearch = measurementSelect.value;
 		var selectedMeasures = getSelectedMeasures();
 		selectedMeasures.push(ucfirst(category) + "Comments");
 
@@ -1151,11 +1160,11 @@ $(document).ready(function () {
 				"startDate": startDate,
 				"endDate": endDate,
 				"category": category,
-				"amountEnter": amountEnter,
-				"overUnderSelect": overUnderSelect,
+				"amountEnter": amountEnter.value,
+				"overUnderSelect": overUnderSelect.value,
 				"measurementSearch": measurementSearch,
 				"selectedMeasures": selectedMeasures,
-				"aggregate": document.getElementById("aggregateGroup").checked
+				"aggregate": aggregateGroup.checked
 			},
 			success: function(response) {
 				downloadFile(response, category);
@@ -1168,14 +1177,13 @@ $(document).ready(function () {
 	
 	function changeMeasures() {
 		//when the measurement category is changed, change both lists of available measurements to match
-		var measureSelect = document.getElementById("measurementSelect");
 		var checkboxList = document.getElementById("checkboxList");
 		var measurementCheckboxes = document.getElementsByClassName("measurementCheckbox");
-		var categoryData = measurementSettings[document.getElementById("categorySelect").value];
+		var categoryData = measurementSettings[categorySelect.value];
 		
 		//first clear all the measures currently listed
-		while (measureSelect.options.length > 0) {
-			measureSelect.remove(0);
+		while (measurementSelect.options.length > 0) {
+			measurementSelect.remove(0);
 		}
 		
 		for (i=measurementCheckboxes.length-1; i>=0; i--) {
@@ -1187,14 +1195,14 @@ $(document).ready(function () {
 		var option = document.createElement("option");
 		option.value = "select";
 		option.text = "Select a measure";
-		measureSelect.appendChild(option);
+		measurementSelect.appendChild(option);
 		
 		for (i=0; i<categoryData.length; i++) {
 			//fill in the measurementSelect dropdown
 			var option = document.createElement("option");
 			option.value = categoryData[i].measureKey;
 			option.text = categoryData[i]["measureName"];
-			measureSelect.appendChild(option);
+			measurementSelect.appendChild(option);
 			
 			//now create the checkboxes as well
 			var listItem = document.createElement("li");
@@ -1216,7 +1224,7 @@ $(document).ready(function () {
 			checkboxList.appendChild(listItem);
 		}
 		
-		document.getElementById("amountEnter").value = "";
+		amountEnter.value = "";
 		
 		$(".measurementCheckbox").change(function() {
 			checkboxesChanged();
@@ -1269,10 +1277,7 @@ $(document).ready(function () {
 	function updateAll() {
 		//validation
 		//check that, if there is something in amountEnter, a measure is also selected
-		var amountEnter = document.getElementById("amountEnter").value;
-		var measurementSelect = document.getElementById("measurementSelect").value;
-		
-		if (amountEnter != "" && measurementSelect === "select") {
+		if (amountEnter.value != "" && measurementSelect.value === "select") {
 			alert("You must specify a measure to search by");
 		}
 		else {
@@ -1282,10 +1287,10 @@ $(document).ready(function () {
 			getTableData(1);
 			$("#chartsLayoutSelect").show();
 			if (numPages > 0) {
-				document.getElementById("exportBtn").disabled = false;
+				exportBtn.disabled = false;
 			}
 			else {
-				document.getElementById("exportBtn").disabled = true;
+				exportBtn.disabled = true;
 			}
 		}
 	}
@@ -1297,7 +1302,7 @@ $(document).ready(function () {
 		$("#categorySelect").val("bacteria");
 		changeMeasures();
 		$("#chartsLayoutSelect").hide();
-		document.getElementById("exportBtn").disabled = true;
+		exportBtn.disabled = true;
 	});
 	
 	$("#chartsInlineButton").click(function() {
@@ -1342,13 +1347,11 @@ $(document).ready(function () {
 				$(".lastPageButton").attr("disabled", true);
 			}
 
-			var category = document.getElementById("categorySelect").value;
-			var amountEnter = document.getElementById("amountEnter").value;
-			var overUnderSelect = document.getElementById("overUnderSelect").value;
-			var measurementSearch = document.getElementById("measurementSelect").value;
+			var category = categorySelect.value;
+			var measurementSearch = measurementSelect.value;
 			var numRows = document.getElementById("numRowsDropdownTop").value;
 			var selectedMeasures = getSelectedMeasures();
-			var aggregateMode = document.getElementById("aggregateGroup").checked;
+			var aggregateMode = aggregateGroup.checked;
 
 			//set up the column names and IDs to actually display
 			if (!aggregateMode) {
@@ -1387,8 +1390,8 @@ $(document).ready(function () {
 					"startDate": $("#startDate").val(),
 					"endDate": $("#endDate").val(),
 					"category": category,
-					"amountEnter": amountEnter,
-					"overUnderSelect": overUnderSelect,
+					"amountEnter": amountEnter.value,
+					"overUnderSelect": overUnderSelect.value,
 					"measurementSearch": measurementSearch,
 					"selectedMeasures": selectedMeasures,
 					"numRows": numRows,
@@ -1711,12 +1714,12 @@ $(document).ready(function () {
 				"sites": $("#sites").val(),
 				"startDate": $("#startDate").val(),
 				"endDate": $("#endDate").val(),
-				"category": document.getElementById("categorySelect").value,
-				"amountEnter": document.getElementById("amountEnter").value,
-				"overUnderSelect": document.getElementById("overUnderSelect").value,
-				"measurementSearch": document.getElementById("measurementSelect").value,
+				"category": categorySelect.value,
+				"amountEnter": amountEnter.value,
+				"overUnderSelect": overUnderSelect.value,
+				"measurementSearch": measurementSelect.value,
 				"selectedMeasures": getSelectedMeasures(),
-				"aggregate": document.getElementById("aggregateGroup").checked
+				"aggregate": aggregateGroup.checked
 			},
 			success: function(response) {
 				numResults = response[0];
@@ -1754,7 +1757,7 @@ $(document).ready(function () {
 	
 	function toggleSearchSidebar() {
 		//expand the search sidebar and shift the rest of the page over, or the opposite
-		if (document.getElementById("sidebarInner").style.width == "20vw") {
+		if (sidebarInner.style.width == "20vw") {
 			closeSearchSidebar();
 		}
 		else {
@@ -1763,21 +1766,21 @@ $(document).ready(function () {
 	}
 	
 	function openSearchSidebar() {
-		document.getElementById("sidebarInner").style.width = "20vw";
-		document.getElementById("sidebarInner").style.paddingLeft = "10px";
-		document.getElementById("sidebarInner").style.paddingRight = "10px";
-		document.getElementById("main").style.marginLeft = "20.5vw";
-		document.getElementById("sidebarToggleLabel").innerText = "CLOSE";
-		document.getElementById("main").style.width = "77vw";
+		sidebarInner.style.width = "20vw";
+		sidebarInner.style.paddingLeft = "10px";
+		sidebarInner.style.paddingRight = "10px";
+		main.style.marginLeft = "20.5vw";
+		main.style.width = "77.5vw";
+		sidebarToggle.classList.toggle("change");
 	}
 	
 	function closeSearchSidebar() {
-		document.getElementById("sidebarInner").style.width = 0;
-		document.getElementById("sidebarInner").style.paddingLeft = 0;
-		document.getElementById("sidebarInner").style.paddingRight = 0;
-		document.getElementById("main").style.marginLeft = "15px";
-		document.getElementById("sidebarToggleLabel").innerText = "OPEN";
-		document.getElementById("main").style.width = "100%";
+		sidebarInner.style.width = 0;
+		sidebarInner.style.paddingLeft = 0;
+		sidebarInner.style.paddingRight = 0;
+		main.style.marginLeft = "15px";
+		main.style.width = "100%";
+		sidebarToggle.classList.toggle("change");
 	}
 	
 	//set the search sidebar open at start
@@ -1785,7 +1788,7 @@ $(document).ready(function () {
 
 	function resetCharts() {
 		//remove the old chart
-		document.getElementById("chartDiv").innerHTML = "";
+		chartDiv.innerHTML = "";
 		
 		document.getElementById("chartsNoData").style = "display: block";
 	}
@@ -1840,13 +1843,10 @@ $(document).ready(function () {
 		var endDate = $("#endDate").val();
 		var sites = $("#sites").val();
 		var measures = getSelectedMeasures();
-		var category = $("#categorySelect").val();
-		var amountEnter = document.getElementById("amountEnter").value;
-		var overUnderSelect = document.getElementById("overUnderSelect").value;
-		var measurementSearch = document.getElementById("measurementSelect").value;
+		var category = categorySelect.value;
+		var measurementSearch = measurementSelect.value;
 		
 		//build the necessary canvases
-		var chartDiv = document.getElementById("chartDiv");
 		var nMeasures = measures.length;
 		
 		if (chartsDisplayMode === "in-line") {
@@ -1893,7 +1893,7 @@ $(document).ready(function () {
 			chartDiv.appendChild(chartsGrid);
 		}
 		
-		var aggregateMode = document.getElementById("aggregateGroup").checked;
+		var aggregateMode = aggregateGroup.checked;
 		
 		$.ajax({
 			type: "POST",
@@ -1906,8 +1906,8 @@ $(document).ready(function () {
 				"endDate": endDate,
 				"selectedMeasures": measures,
 				"category": category,
-				"amount": amountEnter,
-				"overUnderSelect": overUnderSelect,
+				"amount": amountEnter.value,
+				"overUnderSelect": overUnderSelect.value,
 				"measurementSearch": measurementSearch,
 				"aggregate": aggregateMode
 			},
