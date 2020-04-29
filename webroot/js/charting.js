@@ -41,6 +41,12 @@ const exportBtn = document.getElementById("exportBtn");
 const aggregateGroup = document.getElementById("aggregateGroup");
 const categorySelect = document.getElementById("categorySelect");
 const overUnderSelect = document.getElementById("overUnderSelect");
+const chartType = document.getElementById("chartType");
+const allCheckbox = document.getElementById("allCheckbox");
+const tableNoData = document.getElementById("tableNoData");
+const chartsNoData = document.getElementById("chartsNoData");
+const tableSettingsTop = document.getElementById("tableSettingsTop");
+const tableSettingsBottom = document.getElementById("tableSettingsBottom");
 
 //global variables used by the map
 var mapData;
@@ -379,7 +385,7 @@ var zoomPlugin = {
 											lineTension: 0,
 											fill: false,
 											borderWidth: 1.5,
-											showLine: ($("#chartType").val() === "line"),
+											showLine: (chartType.value === "line"),
 											spanGaps: true
 										}
 
@@ -1032,7 +1038,7 @@ $(document).ready(function () {
 	$("#allCheckbox").change(function() {
 		var checkboxList = document.getElementsByClassName("measurementCheckbox");
 		for (i=0; i<checkboxList.length; i++) {
-			checkboxList[i].checked = document.getElementById("allCheckbox").checked;
+			checkboxList[i].checked = allCheckbox.checked;
 		}
 	});
 	
@@ -1041,7 +1047,7 @@ $(document).ready(function () {
 		
 		for (i=0; i<checkboxList.length; i++) {
 			if (checkboxList[i].checked === false) {
-				document.getElementById("allCheckbox").checked = false; //deselect the All checkbox
+				allCheckbox.checked = false; //deselect the All checkbox
 				break;
 			}
 		}
@@ -1190,7 +1196,7 @@ $(document).ready(function () {
 			checkboxList.removeChild(measurementCheckboxes[i].parentNode);
 		}
 		
-		document.getElementById("allCheckbox").checked = true;
+		allCheckbox.checked = true;
 	
 		var option = document.createElement("option");
 		option.value = "select";
@@ -1323,10 +1329,10 @@ $(document).ready(function () {
 	
 	function getTableData(page) {
 		if (numPages > 0) { //if there is any data to display
-			document.getElementById("tableNoData").style = "display: none";
-			document.getElementById("chartsNoData").style = "display: none";
-			document.getElementById("tableSettingsTop").style = "display: block";
-			document.getElementById("tableSettingsBottom").style = "display: block";
+			tableNoData.style = "display: none";
+			chartsNoData.style = "display: none";
+			tableSettingsTop.style = "display: block";
+			tableSettingsBottom.style = "display: block";
 	
 			tablePage = page;
 			document.getElementById("tableDiv").innerHTML = "";
@@ -1647,10 +1653,10 @@ $(document).ready(function () {
 			});
 		}
 		else {
-			document.getElementById("tableNoData").style = "display: block";
-			document.getElementById("chartsNoData").style = "display: block";
-			document.getElementById("tableSettingsTop").style = "display: none";
-			document.getElementById("tableSettingsBottom").style = "display: none";
+			tableNoData.style = "display: block";
+			chartsNoData.style = "display: block";
+			tableSettingsTop.style = "display: none";
+			tableSettingsBottom.style = "display: none";
 		}
 	}
 	
@@ -1693,7 +1699,7 @@ $(document).ready(function () {
 	$("#chartType").change(function() {
 		for (i=0; i<charts.length; i++) {
 			var datasets = charts[i].data.datasets;
-			var showLine = ($("#chartType").val() === "line");
+			var showLine = (chartType.value === "line");
 			
 			for (j=0; j<datasets.length; j++) {
 				datasets[j].showLine = showLine;
@@ -1790,7 +1796,7 @@ $(document).ready(function () {
 		//remove the old chart
 		chartDiv.innerHTML = "";
 		
-		document.getElementById("chartsNoData").style = "display: block";
+		chartsNoData.style = "display: block";
 	}
 	
 	function resetTable() {
@@ -1802,9 +1808,9 @@ $(document).ready(function () {
 			sampleTable.parentNode.removeChild(sampleTable);
 		}
 		
-		document.getElementById("tableNoData").style = "display: block";
-		document.getElementById("tableSettingsTop").style = "display: none";
-		document.getElementById("tableSettingsBottom").style = "display: none";
+		tableNoData.style = "display: block";
+		tableSettingsTop.style = "display: none";
+		tableSettingsBottom.style = "display: none";
 	}
 	
 	function resetAll() {
@@ -1925,7 +1931,7 @@ $(document).ready(function () {
 								lineTension: 0,
 								fill: false,
 								borderWidth: 1.5,
-								showLine: (document.getElementById("chartType").value === "line"),
+								showLine: (chartType.value === "line"),
 								spanGaps: true,
 							};
 							
@@ -1965,7 +1971,7 @@ $(document).ready(function () {
 							lineTension: 0,
 							fill: false,
 							borderWidth: 1.5,
-							showLine: (document.getElementById("chartType").value === "line"),
+							showLine: (chartType.value === "line"),
 							spanGaps: true,
 						};
 	
