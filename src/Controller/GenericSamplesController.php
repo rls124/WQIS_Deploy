@@ -199,8 +199,7 @@ class GenericSamplesController extends AppController {
 
 	public function uploadlog() {
 		//record start time so we can figure out how long the whole page took to load, including the controller
-		$time = microtime();
-		$time = explode(' ', $time);
+		$time = explode(' ', microtime());
 		$time = $time[1] + $time[0];
 		$startTime = $time;
 
@@ -210,7 +209,7 @@ class GenericSamplesController extends AppController {
 		$this->set("fileName", $fileName);
 		
 		if ($this->request->is("post") && $file) {
-			//Check if file is valid
+			//check if file is valid
 			$valid = $this->_fileIsValid($file);
 			if (!$valid["isValid"]) {
 				$this->set(compact("valid"));
@@ -224,7 +223,7 @@ class GenericSamplesController extends AppController {
 			if ($fileType == 1) {
 				//bacteria
 				$model = "BacteriaSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Ecoli', 'TotalColiform', 'BacteriaComments');
+				$columnIDs = array("site_location_id", "Date", "Sample_Number", "Ecoli", "TotalColiform", "BacteriaComments");
 				$columnText = array("Site Number", "Date", "Sample Number", "Ecoli", "Total Coliform", "Comments");
 				
 				$this->set("fileTypeName", "Bacteria Samples");
@@ -248,18 +247,10 @@ class GenericSamplesController extends AppController {
 			else if ($fileType == 4) {
 				//physical properties
 				$model = "PhysicalSamples";
- 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time', 'Requires_Checking');
-				$columnText = array("Site Number", "Date", "Sample number", "Time", "Bridge to Water Height", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time", "Requires Checking");
+ 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time');
+				$columnText = array("Site Number", "Date", "Sample number", "Time", "Bridge to Water Height", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time");
 				
 				$this->set("fileTypeName", "Physical Property Samples");
-			}
-			else if ($fileType == 5) {
-				//site information
-				$model = "SiteLocations";
-				$columnIDs = array('Site_Number', 'Longitude', 'Latitude', 'Site_Location', 'Site_Name');
-				$columnText = array("Site Number", "Longitude", "Latitude", "Site Location", "Site Name");
-				
-				$this->set("fileTypeName", "Site info");
 			}
 			
 			$this->loadModel($model);
@@ -269,20 +260,15 @@ class GenericSamplesController extends AppController {
 			$countSuccesses = 0;
 			$countFails = 0;
 			
-			if (isset($_POST["overwrite"]) && $_POST["overwrite"] == "true") {
-				$overwrite = true;
-			} 
-			else {
-				$overwrite = false;
-			}
+			$overwrite = (isset($_POST["overwrite"]) && $_POST["overwrite"] == "true");
 		
 			//go through each non-header row
 			for ($row=1; $row<sizeof($csv); $row++) {
 				$currentRow = [];
 				$uploadData = [];
 			
-				//Get every column's data in the row
-				for ($column = 0; $column < sizeof($columnIDs); $column++) {
+				//get every column's data in the row
+				for ($column=0; $column<sizeof($columnIDs); $column++) {
 					$currentElement = $csv[$row][$column];
 					$currentColumn = $columnIDs[$column];
 					
@@ -301,23 +287,21 @@ class GenericSamplesController extends AppController {
 					else {
 						//failure (or duplicate sample number)
 						//overwrite duplicate sample number if user requested it
-						if ($entity->getError('Sample_Number') != NULL && $overwrite == true) {
+						if ($entity->getError("Sample_Number") != NULL && $overwrite) {
 							$table = $this->$model
-								->find('all')
-								->where(['Sample_Number = ' => $currentRow[2]])
+								->find("all")
+								->where(["Sample_Number" => $currentRow[2]])
 								->first();
 
+							$table->site_location_id = $currentRow[0];
+							$table->Date = $currentRow[1];
 							switch ($model) {
 								case "BacteriaSamples":
-									$table->site_location_id = $currentRow[0];
-									$table->Date = $currentRow[1];
 									$table->Ecoli = $currentRow[4];
 									$table->TotalColiform = $currentRow[6];
 									$table->BacteriaComments = $currentRow[7];
 									break;
 								case "NutrientSamples":
-									$table->site_location_id = $currentRow[0];
-									$table->Date = $currentRow[1];
 									$table->Phosphorus = $currentRow[3];
 									$table->NitrateNitrite = $currentRow[4];
 									$table->DRP = $currentRow[5];
@@ -325,16 +309,12 @@ class GenericSamplesController extends AppController {
 									$table->NutrientComments = $currentRow[7];
 									break;
 								case "PesticideSamples":
-									$table->site_location_id = $currentRow[0];
-									$table->Date = $currentRow[1];
 									$table->Atrazine = $currentRow[3];
 									$table->Alachlor = $currentRow[4];
 									$table->Metolachlor = $currentRow[5];
 									$table->PesticideComments = $currentRow[6];
 									break;
 								case "PhysicalSamples":
-									$table->site_location_id = $currentRow[0];
-									$table->Date = $currentRow[1];
 									$table->Time = $currentRow[3];
 									$table->Bridge_to_Water_Height = $currentRow[4];
 									$table->Water_Temp = $currentRow[5];
@@ -347,7 +327,6 @@ class GenericSamplesController extends AppController {
 									$table->PhysicalComments = $currentRow[12];
 									$table->Import_Date = $currentRow[13];
 									$table->Import_Time = $currentRow[14];
-									$table->Requires_Checking = $currentRow[15];
 									break;
 							}
 
@@ -375,11 +354,11 @@ class GenericSamplesController extends AppController {
 				}
 			}
 		
-			$this->set(compact('log'));
-			$this->set(compact('columnText'));
-			$this->set('countSuccesses', $countSuccesses);
-			$this->set('countFails', $countFails);
-			$this->set('startTime', $startTime);
+			$this->set(compact("log"));
+			$this->set(compact("columnText"));
+			$this->set("countSuccesses", $countSuccesses);
+			$this->set("countFails", $countFails);
+			$this->set("startTime", $startTime);
 		}
 	}
 
@@ -440,16 +419,8 @@ class GenericSamplesController extends AppController {
 			array("comments"),
 			array("import date", "import_date", "importdate"),
 			array("import time", "import_time", "importtime"),
-			array("requires checking", "requires_checking", "requireschecking"),
 		);
 		
-		$siteInfoHeader = array(
-			array("site number", "site_number", "sitenumber"),
-			array("longitude"),
-			array("latitude"),
-			array("site location", "site_location", "sitelocation"),
-			array("site name", "site_name", "sitename"),
-		);
 		$nutrientHeaderAmmonia = array(
 			array("site number", "site_number", "sitenumber"),
 			array("date"),
@@ -469,7 +440,7 @@ class GenericSamplesController extends AppController {
 			array("comments"),
 		);
 		
-		$validHeaders = array($bacteriaHeader, $nutrientHeader, $pesticideHeader, $physicalHeader, $siteInfoHeader, $nutrientHeaderNN, $nutrientHeaderAmmonia);
+		$validHeaders = array($bacteriaHeader, $nutrientHeader, $pesticideHeader, $physicalHeader, $nutrientHeaderNN, $nutrientHeaderAmmonia);
 		
 		for ($typeNumber=0; $typeNumber<sizeof($validHeaders); $typeNumber++) {
 			$correctType = true;
@@ -562,7 +533,7 @@ class GenericSamplesController extends AppController {
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'Alachlor', 'Metolachlor', 'PesticideComments');
 		}
 		elseif ($name == "physical") {
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time');
 		}
 		
 		$this->loadModel($modelName);
@@ -633,7 +604,7 @@ class GenericSamplesController extends AppController {
 		$this->render(false);
 		$this->request->allowMethod(['post', 'put']);
 		$modelName = "PhysicalSamples";
-		$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time', 'Requires_Checking');
+		$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time');
 		
 		$this->loadModel($modelName);
 		$model = $this->$modelName;

@@ -13,6 +13,6 @@ class Feedback extends Entity {
     ];
     
     protected function _setDate($date) {
-        return date('Y-m-d', strtotime($date));
+        return date("Y-m-d", strtotime($date));
     }
 }
