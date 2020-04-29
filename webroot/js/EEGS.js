@@ -1,6 +1,6 @@
 export function start() {
 	function hide(id) {
-		document.getElementById(id).style.visibility = 'hidden';
+		document.getElementById(id).style.visibility = "hidden";
 	}
 	
 	function show(id) {
@@ -22,7 +22,7 @@ export function start() {
 	//do the bit manipulation and iterate through each occupied block (x,y) for a given piece
 	function eachblock(type, x, y, dir, fn) {
 		var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
-		for (bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
+		for (bit=0x8000; bit>0; bit=bit>>1) {
 			if (blocks & bit) {
 				fn(x + col, y + row);
 			}
@@ -67,7 +67,7 @@ export function start() {
 		var now = timestamp();
 		function frame() {
 			now = timestamp();
-			update(Math.min(1, (now - last) / 1000.0)); //using requestAnimationFrame have to be able to handle large deltas caused when it hibernates in a background or non-visible tab
+			update(Math.min(1, (now - last) / 1000)); //using requestAnimationFrame have to be able to handle large deltas caused when it hibernates in a background or non-visible tab
 			draw();
 			last = now;
 			requestAnimationFrame(frame, canvas);
@@ -79,8 +79,8 @@ export function start() {
 	}
 
 	function addEvents() {
-		document.addEventListener('keydown', keydown, false);
-		window.addEventListener('resize', resize, false);
+		document.addEventListener("keydown", keydown, false);
+		window.addEventListener("resize", resize, false);
 	}
 
 	function resize(event) {
@@ -290,17 +290,39 @@ export function start() {
 	function drawCourt() {
 		if (invalid.court) {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			
+			ctx.strokeStyle = "black";
+			ctx.beginPath();
+			ctx.rect(0, 0, nx*dx - 1, ny*dy - 1); //court boundary
+			ctx.fillStyle = "rgb(237, 237, 237)";
+			ctx.fill();
+			
 			if (playing) {
 				drawPiece(ctx, current.type, current.x, current.y, current.dir);
 			}
 			var x, y, block;
-			for(y = 0 ; y < ny ; y++) {
-				for (x = 0 ; x < nx ; x++) {
-					if (block = getBlock(x,y))
-					drawBlock(ctx, x, y, block.color);
+			ctx.strokeStyle = "grey";
+			for (y=0; y<ny; y++) {
+				//horizontal guide lines
+				ctx.beginPath();
+				ctx.moveTo(0, y*canvas.height/ny);
+				ctx.lineTo(canvas.width, y*canvas.height/ny);
+				ctx.stroke();
+				
+				for (x=0; x<nx; x++) {
+					//vertical guide lines
+					ctx.beginPath();
+					ctx.moveTo(x*canvas.width/nx, 0);
+					ctx.lineTo(x*canvas.width/nx, canvas.height);
+					ctx.stroke();
+					
+					//now draw the block itself
+					if (block = getBlock(x,y)) {
+						drawBlock(ctx, x, y, block.color);
+					}
 				}
 			}
-			ctx.strokeRect(0, 0, nx*dx - 1, ny*dy - 1); //court boundary
+			
 			invalid.court = false;
 		}
 	}
@@ -328,7 +350,7 @@ export function start() {
 
 	function drawRows() {
 		if (invalid.rows) {
-			html('rows', rows);
+			html("rows", rows);
 			invalid.rows = false;
 		}
 	}
@@ -340,23 +362,23 @@ export function start() {
 	}
 
 	function drawBlock(ctx, x, y, color) {
-		var grad1 = ctx.createRadialGradient(x*dx, y*dy, 0, x*dx, y*dy, dx);
-		grad1.addColorStop(0, color);
-		grad1.addColorStop(1, 'rgba(255, 255, 255, 1)');
-
-		ctx.fillStyle = grad1;
+		ctx.fillStyle = color;
 		ctx.fillRect(x*dx, y*dy, dx, dy);
-		ctx.strokeRect(x*dx, y*dy, dx, dy)
+		ctx.strokeRect(x*dx, y*dy, dx, dy);
 	}
 	
 	function exitTetris() {
 		board.parentNode.removeChild(board);
 		
 		document.getElementById("map").style.display = "block";
+		document.getElementById("legend").style.display = "block";
+		document.getElementById("mapSettings").style.display = "block";
 	}
 	
 	//clear the map
 	document.getElementById("map").style.display = "none";
+	document.getElementById("legend").style.display = "none";
+	document.getElementById("mapSettings").style.display = "none";
 	
 	//set up the board
 	var board = document.createElement("div");
@@ -378,10 +400,10 @@ export function start() {
 	document.getElementById("mapContainer").appendChild(board);
 	
 	if (!window.requestAnimationFrame) {
-		window.requestAnimationFrame = window.webkitRequestAnimationFrame || 
-			window.mozRequestAnimationFrame    || 
-			window.oRequestAnimationFrame      || 
-			window.msRequestAnimationFrame     || 
+		window.requestAnimationFrame = window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame    ||
+			window.oRequestAnimationFrame      ||
+			window.msRequestAnimationFrame     ||
 			function(callback, element) {
 				window.setTimeout(callback, 1000 / 60);
 			}
@@ -394,14 +416,14 @@ export function start() {
 		ctx     = canvas.getContext('2d'),
 		ucanvas = document.getElementById('upcoming'),
 		uctx    = ucanvas.getContext('2d'),
-		speed   = { start: 0.6, decrement: 0.005, min: 0.1 }, // how long before piece drops by 1 row (seconds)
+		speed   = { start: 0.6, decrement: 0.01, min: 0.1 }, // how long before piece drops by 1 row (seconds)
 		nx      = 10, //width of tetris court (in blocks)
 		ny      = 20, //height of tetris court (in blocks)
 		nu      = 5;  //width/height of upcoming preview (in blocks)
 
 	//game variables (initialized during reset)
 	var dx, dy,        //pixel size of a single tetris block
-		blocks,        //2 dimensional array (nx*ny) representing tetris court - either empty block or occupied by a 'piece'
+		blocks,        //2 dimensional array (nx*ny) representing tetris court - either empty block or occupied by a piece
 		actions,       //queue of user actions (inputs)
 		playing,       //true|false - game is in progress
 		dt,            //time since starting this game
@@ -426,13 +448,13 @@ export function start() {
 								  0x44C0  
 	*/
 
-	var i = { size: 4, blocks: [0x0F00, 0x2222, 0x00F0, 0x4444], color: 'cyan'   };
-	var j = { size: 3, blocks: [0x44C0, 0x8E00, 0x6440, 0x0E20], color: 'blue'   };
-	var l = { size: 3, blocks: [0x4460, 0x0E80, 0xC440, 0x2E00], color: 'orange' };
-	var o = { size: 2, blocks: [0xCC00, 0xCC00, 0xCC00, 0xCC00], color: 'yellow' };
-	var s = { size: 3, blocks: [0x06C0, 0x8C40, 0x6C00, 0x4620], color: 'green'  };
-	var t = { size: 3, blocks: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: 'purple' };
-	var z = { size: 3, blocks: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red'    };
+	var i = { size: 4, blocks: [0x0F00, 0x2222, 0x00F0, 0x4444], color: "cyan"   };
+	var j = { size: 3, blocks: [0x44C0, 0x8E00, 0x6440, 0x0E20], color: "blue"   };
+	var l = { size: 3, blocks: [0x4460, 0x0E80, 0xC440, 0x2E00], color: "orange" };
+	var o = { size: 2, blocks: [0xCC00, 0xCC00, 0xCC00, 0xCC00], color: "yellow" };
+	var s = { size: 3, blocks: [0x06C0, 0x8C40, 0x6C00, 0x4620], color: "green"  };
+	var t = { size: 3, blocks: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: "purple" };
+	var z = { size: 3, blocks: [0x0C60, 0x4C80, 0xC600, 0x2640], color: "red"    };
 	
 	run();
 }

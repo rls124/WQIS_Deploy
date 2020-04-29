@@ -1,43 +1,15 @@
-<?= $this->Html->css('chartSelection.css') ?>
-<?= $this->Html->script('konami.js') ?>
+<?= $this->Html->css("chartSelection.css") ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
-<?= $this->Html->script('chartjs-plugin-annotation.js') ?>
+<?= $this->Html->script("chartjs-plugin-annotation.js") ?>
 <script defer src="../js/charting.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
 <script defer src="https://js.arcgis.com/4.14/"></script>
-
-<style>
-.bar1, .bar2, .bar3 {
-  width: 25px;
-  height: 3px;
-  background-color: white;
-  margin: 6px 0;
-  transition: 0.2s;
-}
-
-/* Rotate first bar */
-.change .bar1 {
-  -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
-  transform: rotate(-45deg) translate(-5px, 6px) ;
-}
-
-/* Fade out the second bar */
-.change .bar2 {
-  opacity: 0;
-}
-
-/* Rotate last bar */
-.change .bar3 {
-  -webkit-transform: rotate(45deg) translate(-6px, -8px) ;
-  transform: rotate(45deg) translate(-6px, -8px) ;
-}
-</style>
 
 <?php if (isset($runTutorial)) { ?>
 	<script defer src="../js/tutorial.js"></script>
@@ -203,26 +175,28 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 					</div>
 				</div>
 				<div id="map"></div>
-				<div id="layerBar">
-					<input type="checkbox" id="watershedsLayer" checked /> Watersheds
-					<input type="checkbox" id="drainsLayer" /> Drains
-					<input type="checkbox" id="riverLayer" /> Rivers/Streams
-					<input type="checkbox" id="impairedLayer" /> IDEM - Impaired Waters
-					<input type="checkbox" id="bodiesLayer" /> Water Bodies
-					<input type="checkbox" id="floodLayer" /> Floodplains
-					<input type="checkbox" id="damLayer" /> Dams
-					<input type="checkbox" id="wellLayer" /> Wells
-					<input type="checkbox" id="wetlandLayer" /> Wetlands and Deepwater Habitats
-				</div>
-				<div>
-					Basemap
-					<select id="selectBasemap">
-						<option value="satellite">Satellite</option>
-						<option value="gray">Gray</option>
-						<option value="osm">Streets</option>
-						<option value="hybrid">Hybrid</option>
-						<option value="terrain">Terrain</option>
-					</select>
+				<div id="mapSettings">
+					<div id="layerBar">
+						<input type="checkbox" id="watershedsLayer" checked /> Watersheds
+						<input type="checkbox" id="drainsLayer" /> Drains
+						<input type="checkbox" id="riverLayer" /> Rivers/Streams
+						<input type="checkbox" id="impairedLayer" /> IDEM - Impaired Waters
+						<input type="checkbox" id="bodiesLayer" /> Water Bodies
+						<input type="checkbox" id="floodLayer" /> Floodplains
+						<input type="checkbox" id="damLayer" /> Dams
+						<input type="checkbox" id="wellLayer" /> Wells
+						<input type="checkbox" id="wetlandLayer" /> Wetlands and Deepwater Habitats
+					</div>
+					<div>
+						Basemap
+						<select id="selectBasemap">
+							<option value="satellite">Satellite</option>
+							<option value="gray">Gray</option>
+							<option value="osm">Streets</option>
+							<option value="hybrid">Hybrid</option>
+							<option value="terrain">Terrain</option>
+						</select>
+					</div>
 				</div>
 			</div>
 		</div>
