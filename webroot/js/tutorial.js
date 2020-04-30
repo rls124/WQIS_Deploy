@@ -1,7 +1,7 @@
 const driver = new Driver({
-	animate: true, 
+	animate: true,
 	doneBtnText: "Finish Tour",
-	closeBtnText: "Exit Tour", 
+	closeBtnText: "Exit Tour",
 	keyboardControl: true,
 	allowClose: false,
 	opacity: .75,
@@ -13,7 +13,7 @@ driver.defineSteps([
 	stageBackground: "#00000000",
 	popover: {
 		title: "Welcome!",
-		description: "Welcome to the Water Quality Information System. This is a resource dedicated to analyzing and cataloging water quality samples taken within various watersheds located in Indiana, Michigan, and Ohio. More can Be found in our About page",
+		description: "Welcome to the Water Quality Information System. This is a resource dedicated to analyzing and cataloging water quality samples taken within various watersheds located in Indiana, Michigan, and Ohio. More can be found in our About page",
 		position: "mid-center",
 	}
 },{
@@ -72,6 +72,23 @@ driver.defineSteps([
 		position: "right",
 	}
 },{
+	element: "#sites",
+	stageBackground: "#BF000000",
+	popover: {
+		title: "Site selection",
+		description: "Select one or more sites to search for, or a group of sites",
+		position: "bottom-left",
+	}
+},{
+	element: "#aggregateGroup",
+	stageBackground: "#BF000000",
+	popover: {
+		title: "Aggregate tool",
+		description: "The Aggregate tool takes the average value of each selected measure for all selected sites, making it easier to see trends across multiple adjacent sites or within a group",
+		position: "bottom-left",
+	}
+	
+},{
 	element: "#categorySelect",
 	stageBackground: "#BF000000",
 	popover: {
@@ -96,28 +113,28 @@ driver.defineSteps([
 		position: "right",
 	}
 },{
-	element: '#measurementSelect',
-	stageBackground: '#BF000000',
+	element: "#measurementSelect",
+	stageBackground: "#BF000000",
 	popover: {
-		title: 'Additionally filtering your search results',
-		description: 'This section is completely optional. Here is where you will be able to refine the data you will recieve. The measurement box will already be filled in and always match the same measurement criteria set above',
-		position: 'right',
+		title: "Filtering your search results",
+		description: "This section is completely optional. Here is where you will be able to refine the data you will recieve. The measurement box will already be filled in and always match the same measurement criteria set above",
+		position: "right",
 	}
 },{
-	element: '#overUnderSelect',
-	stageBackground: '#BF000000',
+	element: "#overUnderSelect",
+	stageBackground: "#BF000000",
 	popover: {
-		title: 'Searching Over, Under, or Equal to a specified amount',
-		description: 'This is where you will specify if we would like to search over, under, or equal to a certain amount of a measure. For example, if you search for Ecoli Over 2000, we would only recieve data where ecoli was over 2000',
-		position: 'right',
+		title: "Searching Over, Under, or Equal to a specified amount",
+		description: "This is where you will specify if we would like to search over, under, or equal to a certain amount of a measure. For example, if you search for Ecoli Over 2000, we would only recieve data where ecoli was over 2000",
+		position: "right",
 	}
 },{
-	element: '#amountEnter',
-	stageBackground: '#BF000000',
+	element: "#amountEnter",
+	stageBackground: "#BF000000",
 	popover: {
-		title: 'Entering an amount',
-		description: 'Here you can enter the amount you would like to search by. The number that appears in this textbox by default is the set benchmark for that given measure, this is to give the user a better sense of the range they should be searching by',
-		position: 'right',
+		title: "Entering an amount",
+		description: "Here you can enter the amount you would like to search by. The number that appears in this textbox by default is the set benchmark for that given measure, this is to give the user a better sense of the range they should be searching by",
+		position: "right",
 	}
 },{
 	element: "#updateButton",

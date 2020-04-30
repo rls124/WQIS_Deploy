@@ -147,6 +147,20 @@
 	<?php } ?>
 </div>
 
+<h2>Measurement info</h2>
+<div class="indent">
+	<p>
+		[TBD]
+	</p>
+</div>
+
+<h2>Groups</h2>
+<div class="indent">
+	<p>
+		[TBD]
+	</p>
+</div>
+
 <?php if ($admin) { ?>
 <div class="adminInfo">
 	<h2>The following sections refer to administrator-only functionality</h2>
@@ -178,24 +192,17 @@
 	</p>
 </div>
 
-<h2>Measurement settings</h2>
-<div class="indent">
-	<p>
-		[TBD]
-	</p>
-</div>
-
 <h2>User management</h2>
 <div class="indent">
 	<p>
-		[TBD]
+		The <b><a href="/WQIS/users/usermanagement">User Management</a></b> page allows administrators to view and edit all account information about the users of WQIS. Click the pencil icon in the Actions column to edit a user's data. Users can also be deleted by clicking the trashcan icon, or created using the "Add user" button.
 	</p>
 </div>
 
 <h2>View feedback</h2>
 <div class="indent">
 	<p>
-		The <b>View Feedback</b> page displays all user-provided feedback on the site. The date, message, and (if provided) response email address are shown. Feedback which has been viewed already can be deleted using the trashcan icon.
+		The <b><a href="/WQIS/contact/viewfeedback">View Feedback</a></b> page displays all user-provided feedback on the site. The date, message, and username of the person who gave the feedback are shown. Users who are not logged in may also give feedback, they may leave a name and email address to contact them. Feedback which has been viewed already can be deleted using the trashcan icon.
 	</p>
 </div>
 
