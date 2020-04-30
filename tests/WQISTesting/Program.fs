@@ -29,7 +29,7 @@ let result = Parser.Default.ParseArguments<options>(args)
 
 let runTests(opts) =
     let admin = [|"root"; "waterquality"|]
-    let normalUser = [|"jsmith"; "Test1234"|]
+    let normalUser = [|"demo"; "Test1234"|]
     canopy.configuration.chromeDir <- System.AppContext.BaseDirectory
 
     //settings

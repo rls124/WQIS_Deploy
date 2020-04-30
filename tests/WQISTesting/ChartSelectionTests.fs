@@ -10,12 +10,13 @@ let mapDisplayTest =
 let searchBoxToggleTest =
     "search box toggles" &&& fun _ ->
         //initial state should be "open"
-        "CLOSE" == read "#sidebarToggleLabel"
+        assert (((element "#sidebarInner").GetAttribute("style")).Contains("width: 20vw")) //open
         click "#sidebarToggle"
-        "OPEN" == read "#sidebarToggleLabel"
+        assert (((element "#sidebarInner").GetAttribute("style")).Contains("width: 0px")) //closed
 
         //make sure its now open for the rest of the tests to proceed
         click "#sidebarToggle"
+        assert (((element "#sidebarInner").GetAttribute("style")).Contains("width: 20vw")) //open again
 
 let changeCategoryTest =
     "changing category sets correct measurement options" &&& fun _ ->
