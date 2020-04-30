@@ -1,457 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
-	<name>Watershed (HUC 8)</name>
-	<open>1</open>
 	<Style id="default8">
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
 		<LineStyle>
-			<color>dd00aaff</color>
+			<color>fffeff4e</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>6b0000ff</color>
+			<color>000000ff</color>
 		</PolyStyle>
 	</Style>
-	<StyleMap id="default4">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default17</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default14</styleUrl>
-		</Pair>
-	</StyleMap>
 	<Style id="default6">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
 		<LineStyle>
-			<color>dd00aaff</color>
+			<color>ff8ea200</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>dd00ffff</color>
+			<color>0000ffff</color>
 		</PolyStyle>
 	</Style>
-	<Style id="default7">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>dd0000ff</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>dd0000aa</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="default18">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default12</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default2</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="default23">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>dd0000ff</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>dd0000aa</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="default11">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default19</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default15</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="default13">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default8</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default9</styleUrl>
-		</Pair>
-	</StyleMap>
 	<Style id="default20">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
 		<LineStyle>
-			<color>dd00aaff</color>
+			<color>e355eb</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>6600aa00</color>
-		</PolyStyle>
-	</Style>
-
-	<Style id="default12">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>ddff00aa</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>dd7f00aa</color>
-		</PolyStyle>
-	</Style>
-	<Style id="default1">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>dd78d463</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>dd00ff00</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="default">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default23</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default7</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="default17">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>dd00aaff</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>dd00b1b1</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="default16">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default6</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default0</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="default22">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>dd7f0055</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>ddff55aa</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="default21">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default25</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default22</styleUrl>
-		</Pair>
-	</StyleMap>
-	<Style id="default25">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>dd7f0055</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>ddff55aa</color>
+			<color>0000aa00</color>
 		</PolyStyle>
 	</Style>
 	<Style id="default9">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-		</BalloonStyle>
 		<LineStyle>
-			<color>dd00aaff</color>
+			<color>fffeff4e</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>6b0000ff</color>
+			<color>000000ff</color>
 		</PolyStyle>
 	</Style>
 	<Style id="default0">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
 		<LineStyle>
-			<color>dd00aaff</color>
+			<color>ff8ea200</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>dd00ffff</color>
+			<color>0000ffff</color>
 		</PolyStyle>
 	</Style>
 	<Style id="default19">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
 		<LineStyle>
-			<color>dd00aaff</color>
+			<color>ff00aaff</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>dd008dd3</color>
+			<color>00008dd3</color>
 		</PolyStyle>
 	</Style>
-	<StyleMap id="default3">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default20</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default5</styleUrl>
-		</Pair>
-	</StyleMap>
 	<Style id="default5">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
 		<LineStyle>
-			<color>dd00aaff</color>
+			<color>e355eb</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>6600aa00</color>
+			<color>0000aa00</color>
 		</PolyStyle>
 	</Style>
-	<Style id="default14">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>dd00aaff</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>dd00b1b1</color>
-		</PolyStyle>
-	</Style>
-	<StyleMap id="default10">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#default24</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#default1</styleUrl>
-		</Pair>
-	</StyleMap>
 	<Style id="default2">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
 		<LineStyle>
-			<color>ddff00aa</color>
+			<color>e355eb</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>dd7f00aa</color>
+			<color>007f00aa</color>
 		</PolyStyle>
 	</Style>
 	<Style id="default15">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
 		<LabelStyle>
 			<color>00ffffff</color>
 		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
 		<LineStyle>
-			<color>dd00aaff</color>
+			<color>ff00aaff</color>
+			<width>2</width>
 		</LineStyle>
 		<PolyStyle>
-			<color>dd008dd3</color>
-		</PolyStyle>
-	</Style>
-	<Style id="default24">
-		<IconStyle>
-			<scale>0.7</scale>
-			<Icon>
-				<href>http://shape2earth.com/Documents/placemark_circle_blank.png</href>
-			</Icon>
-		</IconStyle>
-		<LabelStyle>
-			<color>00ffffff</color>
-		</LabelStyle>
-		<BalloonStyle>
-			
-		</BalloonStyle>
-		<LineStyle>
-			<color>dd78d463</color>
-		</LineStyle>
-		<PolyStyle>
-			<color>dd00ff00</color>
+			<color>00008dd3</color>
 		</PolyStyle>
 	</Style>
 	<Placemark id="2">
 		<name>St. Joseph - Maumee</name>
-		<Snippet maxLines="0"></Snippet>
-		<description><![CDATA[<br><br><table class='data' ></table>]]></description>
-		<styleUrl>#default16</styleUrl>
+		<styleUrl>#default6</styleUrl>
 		<visibility>1</visibility>
 		<Polygon>
 			<extrude>1</extrude>
@@ -467,9 +127,7 @@
 	<Placemark id="3">
 		<name>St. Marys</name>
 		<visibility>1</visibility>
-		<Snippet maxLines="0"></Snippet>
-		<description><![CDATA[<br><br><table class='data' ></table>]]></description>
-		<styleUrl>#default3</styleUrl>
+		<styleUrl>#default20</styleUrl>
 		<Polygon>
 			<extrude>1</extrude>
 			<outerBoundaryIs>
@@ -484,9 +142,7 @@
 	<Placemark id="4">
 		<name>Upper Maumee</name>
 		<visibility>1</visibility>
-		<Snippet maxLines="0"></Snippet>
-		<description><![CDATA[<br><br><table class='data' ></table>]]></description>
-		<styleUrl>#default13</styleUrl>
+		<styleUrl>#default8</styleUrl>
 		<Polygon>
 			<extrude>1</extrude>
 			<outerBoundaryIs>
@@ -501,9 +157,7 @@
 	<Placemark id="6">
 		<name>Auglaize</name>
 		<visibility>1</visibility>
-		<Snippet maxLines="0"></Snippet>
-		<description><![CDATA[<br><br><table class='data' ></table>]]></description>
-		<styleUrl>#default11</styleUrl>
+		<styleUrl>#default19</styleUrl>
 		<Polygon>
 			<extrude>1</extrude>
 			<outerBoundaryIs>

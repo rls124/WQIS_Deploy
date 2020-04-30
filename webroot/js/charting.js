@@ -718,7 +718,7 @@ $(document).ready(function () {
 			$("#siteOpt").append(new Option(site.Site_Number + " " + site.Site_Name, site.Site_Number, false, false));
 		}
 		
-		var kmlurl = "http://emerald.pfw.edu/WQIS/img/wqisDev.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
+		var kmlurl = "http://emerald.pfw.edu/WQISBeta/img/wqis.kml";// + "?_=" + new Date().getTime(); //date/time at end is to force ESRI's server to not cache it. Remove this once dev is finished				
 		var watershedsLayer = new KMLLayer({
 			url: kmlurl,
 			id: "watersheds"
