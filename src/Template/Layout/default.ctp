@@ -137,8 +137,11 @@ $(document).ready(function () {
 					}
 					
 					if ($admin) {?>
-					<li class="nav-item">
-						<a href="/WQIS/contact/viewfeedback" class="nav-link <?php if ($pageName == "viewfeedback" || $pageName == "contact") { echo "active"; }?>">Contact</a>
+					<li class="nav-item dropdown hoverDropdown">
+						<a href="/WQIS/contact/contact" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>" data-toggle="dropdown">Contact</a>
+						<ul class="dropdown-menu">
+							<li><a class="dropdown-item" href="/WQIS/contact/viewfeedback">View feedback</a></li>
+						</ul>
 					</li>
 				<?php
 				} 
