@@ -297,9 +297,9 @@ class GenericSamplesController extends AppController {
 							$table->Date = $currentRow[1];
 							switch ($model) {
 								case "BacteriaSamples":
-									$table->Ecoli = $currentRow[4];
-									$table->TotalColiform = $currentRow[6];
-									$table->BacteriaComments = $currentRow[7];
+									$table->Ecoli = $currentRow[3];
+									$table->TotalColiform = $currentRow[4];
+									$table->BacteriaComments = $currentRow[5];
 									break;
 								case "NutrientSamples":
 									$table->Phosphorus = $currentRow[3];
