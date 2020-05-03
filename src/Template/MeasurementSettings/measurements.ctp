@@ -12,7 +12,7 @@ if ($admin) {
 	<table id="tableView" class="table table-striped table-responsive">
 		<thead>
 			<tr>
-				<th>Measure Key</th>
+				<?php if ($admin) { echo "<th>Measure Key</th>"; } ?>
 				<th>Measure Name</th>
 				<th>Minimum Benchmark</th>
 				<th>Maximum Benchmark</th>
@@ -26,7 +26,7 @@ if ($admin) {
 		foreach ($MeasurementSettings as $benchmark):
 		?>
 			<tr id="tr-<?= $benchmark->measureKey?>">
-				<td id="<?php echo "measure-" . $row;?>"><?= $benchmark->measureKey ?></td>
+				<?php if ($admin) { echo "<td id=\"measure-" . $row . "\">" . $benchmark->measureKey . "</td>"; } ?>
 				<td id="<?php echo "measureName-" . $row;?>"><?= $benchmark->measureName ?></td>
 				<td id="<?php echo "td-" . $benchmark->measureKey . "-min";?>">
 				<?php

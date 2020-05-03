@@ -120,7 +120,7 @@ if ($admin) { ?>
 	<div class="row">
 		<div class="col-sm-4">
 			<div class="card" style="width:100%; margin-top:10px;">
-				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'MeasurementSettings', 'action' => 'measurementsettings']) ?>';">
+				<a class="cardModal" onclick="location.href = '<?php echo $this->Url->build(['controller' => 'MeasurementSettings', 'action' => 'measurements']) ?>';">
 					<div class="card-header" style="height: 50px;">
 						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>  Measurement Settings</h5>
 					</div>

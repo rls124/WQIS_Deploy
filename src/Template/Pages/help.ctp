@@ -133,7 +133,7 @@
 <h2>Sites info</h2>
 <div class="indent">
 	<p>
-		The <a href="/WQIS/site-locations/sitemanagement">Site Info</a> page lists meta-information about every site the WQIS program monitors, including its site number, latitude and longitude, name, a description of its location, and what groups it belongs to.
+		The <b><a href="/WQIS/site-locations/sitemanagement">Site Info</a></b> page lists meta-information about every site the WQIS program monitors, including its site number, latitude and longitude, name, a description of its location, and what groups it belongs to.
 	</p>
 	<p>
 		The "view" button next to each row will take you to the main page, and automatically select this site in the map.
@@ -150,8 +150,20 @@
 <h2>Measurement info</h2>
 <div class="indent">
 	<p>
-		[TBD]
+		The <b><a href="/WQIS/measurement-settings/measurements">Measurement Info</a></b> page provides meta-information about each measure supported by WQIS. The name and unit of each are listed. Minimum and maximum benchmarks, which represent the <i>recommended</i> range of values, are listed where such guidelines exist. Minimum and maximum detectable levels, which are limited by the capabilities of the sensors or laboratory equipment that record these measurements, are listed when appropriate as well.
 	</p>
+	
+	<?php if ($admin) { ?>
+		<div class="adminInfo">
+			<p>
+				The "Measure Key" column on the far left, visible only to administrators, is used internally by the database.
+			</p>
+			
+			<p>
+				Administrators may edit any value except for the measure key. Adding or deleting measurements will require the assistance of a database administrator.
+			</p>
+		</div>
+	<?php } ?>
 </div>
 
 <h2>Groups</h2>

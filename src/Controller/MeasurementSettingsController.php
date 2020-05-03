@@ -11,7 +11,7 @@
 	 * @method \App\Model\Entity\MeasurementSettings[] paginate($object = null, array $settings = [])
 	 */
 	class MeasurementSettingsController extends AppController {
-		public function measurementsettings() {
+		public function measurements() {
 			$MeasurementSettings = $this->MeasurementSettings->find("all");
 			$this->set(compact("MeasurementSettings"));
 		}

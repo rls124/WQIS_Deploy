@@ -19,7 +19,7 @@
 </ol>
 
 <p>
-	The information in this page is intended to be a broad overview of the parameters monitored by the St Joseph River Watershed Initiative and the City of Fort Wayne. For a list of the specific benchmarks and detection limits used for each measure, see our <a href="/WQIS/measurement-settings/measurementsettings">measurement settings page</a>.
+	The information in this page is intended to be a broad overview of the parameters monitored by the St Joseph River Watershed Initiative and the City of Fort Wayne. For a list of the specific benchmarks and detection limits used for each measure, see our <a href="/WQIS/measurement-settings/measurements">measurement settings page</a>.
 </p>
 
 <h2>Ammonia</h2>

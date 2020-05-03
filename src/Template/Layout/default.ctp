@@ -108,7 +108,7 @@ $(document).ready(function () {
 						<a href="/WQIS/pages/about" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>" data-toggle="dropdown">About</a>
 						<ul class="dropdown-menu">
 							<li><a class="dropdown-item" href="/WQIS/site-locations/sitemanagement">Sites</a></li>
-							<li><a class="dropdown-item" href="/WQIS/measurement-settings/measurementsettings">Measurement settings</a></li>
+							<li><a class="dropdown-item" href="/WQIS/measurement-settings/measurements">Measurements</a></li>
 							<li><a class="dropdown-item" href="/WQIS/site-groups/sitegroups">Groups</a></li>
 						</ul>
 					</li>
