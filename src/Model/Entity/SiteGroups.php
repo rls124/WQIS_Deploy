@@ -8,6 +8,6 @@ class SiteGroups extends Entity {
         "groupKey" => true,
         "groupName" => true,
 		"groupDescription" => true,
-		"visibleTo" => true
+		"owner" => true
     ];
 }

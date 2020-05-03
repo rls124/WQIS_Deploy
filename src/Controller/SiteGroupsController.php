@@ -11,7 +11,7 @@ class SiteGroupsController extends AppController {
 		}
 		else {
 			$SiteGroups = $this->SiteGroups->find("all", ["conditions" =>
-				["visibleTo IN " => ["all", $this->Auth->user("userid")]]]);
+				["owner IN " => ["all", $this->Auth->user("userid")]]]);
 		}
 		$this->set(compact("SiteGroups"));
 		
@@ -26,7 +26,7 @@ class SiteGroupsController extends AppController {
 	public function fetchGroups() {
 		$this->loadModel("SiteGroups");
 		$SiteGroups = $this->SiteGroups->find("all", ["conditions" =>
-				["visibleTo IN " => ["all", $this->Auth->user("userid")]]]);
+				["owner IN " => ["all", $this->Auth->user("userid")]]]);
 		
 		$this->loadModel("SiteLocations");
 		$Groupings = $this->SiteLocations->find()->select(["Site_Number", "groups"]);
@@ -163,10 +163,10 @@ class SiteGroupsController extends AppController {
 			$SiteGroup = $this->SiteGroups->newEntity(["groupName" => $groupName, "groupDescription" => $this->request->getData("groupdescription")]);
 			
 			if ($this->Auth->user("admin") && $this->request->getData("makePrivate") == "false") {
-				$SiteGroup->visibleTo = "all";
+				$SiteGroup->owner = "all";
 			}
 			else {
-				$SiteGroup->visibleTo = $this->Auth->user("userid");
+				$SiteGroup->owner = $this->Auth->user("userid");
 			}
 			
 			if ($this->SiteGroups->save($SiteGroup)) {

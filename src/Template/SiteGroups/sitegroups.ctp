@@ -17,7 +17,7 @@
 			<th>Description</th>
 			<th>Sites</th>
 			<?php if ($admin) { ?>
-			<th>Visible to</th>
+			<th>Owner</th>
 			<?php } else { ?>
 			<th>Type</th>
 			<?php } ?>
@@ -47,20 +47,20 @@
 				
 				<td id="<?= "td-" . $siteGroup->groupKey . "-visibility"?>">
 					<?php
-					if ($siteGroup->visibleTo == "all") {
+					if ($siteGroup->owner == "all") {
 						echo "Public";
 					}
 					else if (!$admin) {
 						echo "Private";
 					}
 					else {
-						echo $siteGroup->visibleTo;
+						echo $siteGroup->owner;
 					}
 					?>
 				</td>
 				
 				<td>
-				<?php if ($admin || $siteGroup->visibleTo == $userinfo["userid"]) { ?>
+				<?php if ($admin || $siteGroup->owner == $userinfo["userid"]) { ?>
 					<a id="edit-tooltip" data-toggle="tooltip" title="Edit Group">
 					<?=
 					$this->Html->tag("span", "", [
@@ -81,7 +81,6 @@
 					]);
 					?>
 					</a>
-				
 				<?php } ?>
 				</td>
 				<?php $row++; ?>
@@ -94,64 +93,63 @@
 <!-- Modal for edit button -->
 <div id="editGroupModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
-	<form id="updateGroupForm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="edit-header">Edit Group: </h4>
-                <p hidden id="edit-group"></p>
-            </div>
-            <div class="modal-body">
-				<p hidden id="edit-groupkey"></p>
-			<?=
-				$this->Form->control("groupname", [
-				"label" => [
-					"text" => "Group Name",
-					"class" => "label-reg lol"
-				],
-				"templates" => [
-					"inputContainer" => "{{content}}"
-				],
-				"class" => "form-control",
-				"name" => "groupname",
-				"id" => "edit-groupname",
-				"placeholder" => "Give the group a clear name..."
-				]);
-			?>
-			<?=
-				$this->Form->control("groupdescription", [
-				"label" => [
-					"text" => "Group Description",
-					"class" => "label-reg lol"
-				],
-				"templates" => [
-					"inputContainer" => "{{content}}"
-				],
-				"class" => "form-control",
-				"name" => "groupdescription",
-				"id" => "edit-groupdescription",
-				"placeholder" => "Describe the group..."
-				]);
-			?>
-				<label for="edit-site[]">Sites</label>
-				<select class="js-example-placeholder-multiple form-control" id="edit-sites" name="edit-site[]" multiple="multiple" style="width: 100%">
-					<?php
-					//populate the site drop down box
-					foreach ($SiteLocations as $siteLocation) {
-						$siteNumber = $this->Number->format($siteLocation->Site_Number);
-						$siteName = h($siteLocation->Site_Name);
-						$siteLocation = h($siteLocation->Site_Location);
-						echo "<option value=$siteNumber title=\"$siteLocation\">$siteNumber $siteName</option>";
-					}
-					?>
-				</select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="update-btn" name="update-btn" class="btn btn-default btn-basic btn btn-sm" onclick="updateButton()">Save</button>
-                <button type="button" id="edit-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
-            </div>
-		</div>
-	</form>
+		<form id="updateGroupForm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="edit-header">Edit Group: </h4>
+					<p hidden id="edit-group"></p>
+				</div>
+				<div class="modal-body">
+					<p hidden id="edit-groupkey"></p>
+				<?=
+					$this->Form->control("groupname", [
+					"label" => [
+						"text" => "Group Name",
+						"class" => "label-reg lol"
+					],
+					"templates" => [
+						"inputContainer" => "{{content}}"
+					],
+					"class" => "form-control",
+					"name" => "groupname",
+					"id" => "edit-groupname",
+					"placeholder" => "Give the group a clear name..."
+					]);
+				?>
+				<?=
+					$this->Form->control("groupdescription", [
+					"label" => [
+						"text" => "Group Description",
+						"class" => "label-reg lol"
+					],
+					"templates" => [
+						"inputContainer" => "{{content}}"
+					],
+					"class" => "form-control",
+					"name" => "groupdescription",
+					"id" => "edit-groupdescription",
+					"placeholder" => "Describe the group..."
+					]);
+				?>
+					<label for="edit-site[]">Sites</label>
+					<select class="js-example-placeholder-multiple form-control" id="edit-sites" name="edit-site[]" multiple="multiple" style="width: 100%">
+						<?php
+						//populate the site drop down box
+						foreach ($SiteLocations as $siteLocation) {
+							$siteNumber = $this->Number->format($siteLocation->Site_Number);
+							$siteName = h($siteLocation->Site_Name);
+							$siteLocation = h($siteLocation->Site_Location);
+							echo "<option value=$siteNumber title=\"$siteLocation\">$siteNumber $siteName</option>";
+						}
+						?>
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="update-btn" name="update-btn" class="btn btn-default btn-basic btn btn-sm" onclick="updateButton()">Save</button>
+					<button type="button" id="edit-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</form>
     </div>
 </div>
 

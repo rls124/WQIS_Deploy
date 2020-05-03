@@ -33,8 +33,8 @@ class SiteGroupsTable extends Table {
 			->allowEmpty("groupDescription");
 			
 		$validator
-			->scalar("visibleTo")
-			->maxLength("visibleTo", 100);
+			->scalar("owner")
+			->maxLength("owner", 100);
 
 		return $validator;
 	}
