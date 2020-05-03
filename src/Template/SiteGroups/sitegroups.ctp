@@ -89,7 +89,7 @@
 		<?php } ?>
 	</tbody>
 </table>
-<input type="button" class="btn-basic btn mb-3 btn-md" value="Add Group" id="addGroupBtn" style="float: right;" data-toggle="modal" data-target="#addGroupModal"/>
+<input type="button" class="btn-basic btn mt-2 mb-2 btn-md" value="Add <?php if (!$admin) { echo "Custom"; }?> Group" id="addGroupBtn" data-toggle="modal" data-target="#addGroupModal"/>
 
 <!-- Modal for edit button -->
 <div id="editGroupModal" class="modal fade" role="dialog">
