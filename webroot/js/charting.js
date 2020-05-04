@@ -2048,7 +2048,7 @@ $(document).ready(function () {
 						}
 	
 						buildChart(k, category, measures, labels, [dataset]);
-					}	
+					}
 				}
 			}
 		});

@@ -14,7 +14,7 @@ if ($admin) {
 
 <div id="message" class="message hidden"></div>
 
-<p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Sites
+<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Sites
 <?php if ($admin) {?>
 	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
 		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
@@ -54,12 +54,11 @@ if ($admin) { ?>
 	</thead>
 	<tbody id="siteTable">
 	<?php
-		$row = 0;
-		foreach ($SiteLocations as $siteData):
-		    ?>
-		    <tr id='tr-<?= $siteData->ID ?>'>
-			<td class='sitenum' id='<?php echo 'td-' . $siteData->ID . '-siteNum'; ?>'><?= $siteData->Site_Number ?></td>
-			
+	$row = 0;
+	foreach ($SiteLocations as $siteData):
+	?>
+		<tr id="tr-<?= $siteData->ID ?>">
+			<td class="sitenum" id="<?php echo "td-" . $siteData->ID . "-siteNum"; ?>"><?= $siteData->Site_Number ?></td>
 			<td>
 			<?php
 			if ($admin) {
@@ -81,7 +80,7 @@ if ($admin) { ?>
 			}
 			?>
 			</td>
-			
+		
 			<td>
 			<?php
 			if ($admin) {
@@ -103,7 +102,7 @@ if ($admin) { ?>
 			}
 			?>
 			</td>
-			
+		
 			<td>
 			<?php
 			if ($admin) {
@@ -125,7 +124,7 @@ if ($admin) { ?>
 			}
 			?>
 			</td>
-			
+		
 			<td>
 				<?php if ($admin) { ?>
 				<label style="display: table-cell; cursor: pointer; white-space:normal !important; overflow-wrap: anywhere" class="btn btn-thin inputHide" for="<?php echo 'siteLoc-' . $row;?>"><?php echo $siteData->Site_Location;?> </label>
@@ -137,7 +136,7 @@ if ($admin) { ?>
 				}
 				?>
 			</td>
-			
+		
 			<td>
 				<?php if ($admin) { ?>
 				<select class="form-control groupSelect" id="<?php echo $siteData->Site_Number . "-groups"; ?>" name="<?php echo $siteData->Site_Number . "-groups[]";?>" multiple="multiple" style="width: 100%"></select>
@@ -148,24 +147,24 @@ if ($admin) { ?>
 				}
 				?>
 			</td>
-		
+	
 			<td>
 			<?php if ($admin) {?>
 				<a id="delete-tooltip" data-toggle="tooltip" title="Delete Site">
-			    <?=
-			    $this->Html->tag('span', "", [
+				<?=
+				$this->Html->tag('span', "", [
 					'class' => "delete glyphicon glyphicon-trash",
 					'id' => 'delete-' . $siteData->ID,
 					'name' => 'delete-' . $siteData->ID
-			    ]);
+				]);
 				?>
 				</a>
 			<?php }?>
 				<a href="chartselection?site=<?=$siteData->Site_Number?>">View</a>
 			</td>
-			<?php
-			$row++;
-			?>
+		<?php
+		$row++;
+		?>
 		</tr>
 	<?php endforeach; ?>
 	</tbody>

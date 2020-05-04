@@ -56,6 +56,7 @@
 		public function viewFeedback() {
 			$this->loadModel("Feedback");
 			$FeedbackText = $this->Feedback->find("all")->order(["Date" => "Desc"]);
+			$this->set("hasFeedback", $FeedbackText->count() > 0);
 			$this->set(compact("FeedbackText"));
 		}
 
