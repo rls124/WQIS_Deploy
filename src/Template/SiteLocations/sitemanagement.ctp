@@ -1,16 +1,15 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
-<?= $this->Html->script('siteManagement.js') ?>
-<?= $this->Html->css('measurementBenchmarks.css') ?>
-<?= $this->Html->css('loading.css') ?>
 
-<script>
 <?php
+echo $this->Html->script("siteManagement.js");
+echo $this->Html->css("measurementBenchmarks.css");
+echo $this->Html->css("loading.css");
+
 if ($admin) {
-	echo "var admin = true;";
+	echo "<script>var admin = true;</script>";
 }
 ?>
-</script>
 
 <div id="message" class="message hidden"></div>
 
@@ -44,6 +43,7 @@ if ($admin) { ?>
 	<thead>
 		<tr>
 			<th>Site Number</th>
+			<th>Measured from</th>
 			<th>Longitude</th>
 			<th>Latitude</th>
 			<th>Site Name</th>
@@ -59,6 +59,9 @@ if ($admin) { ?>
 	?>
 		<tr id="tr-<?= $siteData->ID ?>">
 			<td class="sitenum" id="<?php echo "td-" . $siteData->ID . "-siteNum"; ?>"><?= $siteData->Site_Number ?></td>
+			<td>
+			<?=$siteData->dateRange?>
+			</td>
 			<td>
 			<?php
 			if ($admin) {
@@ -80,7 +83,6 @@ if ($admin) { ?>
 			}
 			?>
 			</td>
-		
 			<td>
 			<?php
 			if ($admin) {

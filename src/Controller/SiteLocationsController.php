@@ -115,6 +115,44 @@ class SiteLocationsController extends AppController {
 		$SiteLocations = $this->SiteLocations->find("all")->order(["Site_Number" => "ASC"]);
 		$numSites = $SiteLocations->count();
 		
+		$categories = ["BacteriaSamples", "NutrientSamples", "PesticideSamples", "PhysicalSamples"];
+		for ($i=0; $i<sizeof($categories); $i++) {
+			$this->loadModel($categories[$i]);
+		}
+		
+		//get min/max date of all the sites
+		foreach ($SiteLocations as $siteData) {
+			$minDate = 3000; //please don't be using this still in 980 years...
+			$maxDate = 0;
+			
+			foreach ($categories as $category) {
+				$measureQuery = $this->$category
+					->find("all", [
+						"conditions" => [
+							"site_location_id" => $siteData->Site_Number
+						],
+						"fields" => [
+							"minDate" => "MIN(YEAR(Date))",
+							"maxDate" => "MAX(YEAR(Date))"
+						]
+					])->first();
+			
+				if ($measureQuery["minDate"] != null && intval($measureQuery["mindate"]) < $minDate) {
+					$minDate = intval($measureQuery["minDate"]);
+				}
+				if (intval($measureQuery["maxDate"]) > $maxDate) {
+					$maxDate = intval($measureQuery["maxDate"]);
+				}
+			}
+			
+			if ($minDate === 3000) {
+				$siteData->dateRange = "No data";
+			}
+			else {
+				$siteData->dateRange = $minDate . " to " . $maxDate;
+			}
+		}
+		
 		$this->set(compact("SiteLocations"));
 		$this->set(compact("numSites"));
 	}
