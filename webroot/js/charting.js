@@ -160,7 +160,7 @@ var Konami = function (callback) {
 			}
 			if (konami.input === konami.pattern) {
 				konami.code(konami._currentLink);
-				konami.input = '';
+				konami.input = "";
 				e.preventDefault();
 				return false;
 			}
@@ -170,7 +170,7 @@ var Konami = function (callback) {
 			this.addEvent(document, "keydown", this.keydownHandler, this);
 		},
 		unload: function () {
-			this.removeEvent(document, 'keydown', this.keydownHandler);
+			this.removeEvent(document, "keydown", this.keydownHandler);
 		},
 		code: function (link) {
 			window.location = link
@@ -186,11 +186,11 @@ var Konami = function (callback) {
 	return konami;
 };
 
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
 	module.exports = Konami;
 }
 else {
-	if (typeof define === 'function' && define.amd) {
+	if (typeof define === "function" && define.amd) {
 		define([], function() {
 			return Konami;
 		});
@@ -232,7 +232,7 @@ function doZoom(chartInstance, zoom, center) {
 		var lastLabelIndex = labels.length - 1;
 		var maxIndex = scale.maxIndex;
 		var sensitivity = 0;
-		var chartCenter =  scale.isHorizontal() ? scale.left + (scale.width/2) : scale.top + (scale.height/2);
+		var chartCenter = scale.isHorizontal() ? scale.left + (scale.width/2) : scale.top + (scale.height/2);
 		var centerPointer = scale.isHorizontal() ? center.x : center.y;
 
 		if (zoom > 1) {
@@ -502,14 +502,11 @@ var zoomPlugin = {
 		var options = chartInstance.options;
 
 		if (options.zoom && options.zoom.drag) {
-			//only want to zoom horizontal axis
-			options.zoom.mode = 'x';
-
-			node.addEventListener('mousedown', function(event){
+			node.addEventListener("mousedown", function(event){
 				chartInstance._dragZoomStart = event;
 			});
 
-			node.addEventListener('mousemove', function(event){
+			node.addEventListener("mousemove", function(event){
 				if (chartInstance._dragZoomStart) {
 					chartInstance._dragZoomEnd = event;
 					chartInstance.update(0);
@@ -518,7 +515,7 @@ var zoomPlugin = {
 				chartInstance.update(0);
 			});
 
-			node.addEventListener('mouseup', function(event){
+			node.addEventListener("mouseup", function(event){
 				if (chartInstance._dragZoomStart) {
 					var chartArea = chartInstance.chartArea;
 					var yAxis = getYAxis(chartInstance);
@@ -645,7 +642,7 @@ var zoomPlugin = {
 		chartInstance.chart.ctx.restore();
 	},
 	destroy: function(chartInstance) {
-		var node = chartInstance.chart.ctx.canvas.removeEventListener('wheel', chartInstance._wheelHandler);
+		var node = chartInstance.chart.ctx.canvas.removeEventListener("wheel", chartInstance._wheelHandler);
 
 		var mc = chartInstance._mc;
 		if (mc) {
@@ -708,7 +705,7 @@ $(document).ready(function () {
 		"esri/Graphic",
 		"esri/layers/support/LabelClass"
 	], function(Map, MapView, MapImageLayer, FeatureLayer, KMLLayer, Home, Fullscreen, Graphic, LabelClass) {
-		$("#sites").append('<optgroup label="Select a Group"  id="groupOpt"> </optgroup>');
+		$("#sites").append('<optgroup label="Select a Group" id="groupOpt"> </optgroup>');
 		for (var group of groups) {
 			$("#groupOpt").append(new Option(group.groupName, group.groupKey, false, false));
 		}
@@ -1095,7 +1092,7 @@ $(document).ready(function () {
 				}
 			}
 		}
-    });
+	});
 	
 	$("#showBenchmarks").change(function() {
 		showBenchmarks = !showBenchmarks;
@@ -1163,7 +1160,7 @@ $(document).ready(function () {
 		$("#endDate").datepicker("update", endDate);
 	}
 	
-    categorySelect.addEventListener("change", function() {
+	categorySelect.addEventListener("change", function() {
 		changeMeasures();
 	});
 	
@@ -1183,20 +1180,20 @@ $(document).ready(function () {
 		}
 	});
 	
-    $(".date-picker").datepicker({
-        trigger: "focus",
-        format: "mm/dd/yyyy",
-        todayHighlight: true,
-        todayBtn: "linked"
-    });
+	$(".date-picker").datepicker({
+		trigger: "focus",
+		format: "mm/dd/yyyy",
+		todayHighlight: true,
+		todayBtn: "linked"
+	});
 
-    $("#startDate").datepicker().on("changeDate", function (selected) {
-        $("#endDate").datepicker("setStartDate", new Date(selected.date.valueOf()));
-    });
-	
-    $("#endDate").datepicker().on("changeDate", function (selected) {
-        $("#startDate").datepicker("setEndDate", new Date(selected.date.valueOf()));
-    });
+	$("#startDate").datepicker().on("changeDate", function (selected) {
+		$("#endDate").datepicker("setStartDate", new Date(selected.date.valueOf()));
+	});
+
+	$("#endDate").datepicker().on("changeDate", function (selected) {
+		$("#startDate").datepicker("setEndDate", new Date(selected.date.valueOf()));
+	});
 
 	$("#sites").select2({
 		closeOnSelect: false,
@@ -1303,7 +1300,7 @@ $(document).ready(function () {
 			checkboxesChanged();
 		});
 		
-        getRange(); //recalculate date range
+		getRange(); //recalculate date range
 		
 		//reset the sortBy field to Date, since none of the other measures will be valid anymore
 		sortBy = "Date";
@@ -1335,7 +1332,7 @@ $(document).ready(function () {
 		//add header column
 		csv.unshift(fields.join(','));
 
-		csvContent += csv.join('\r\n');
+		csvContent += csv.join("\r\n");
 		var link = document.createElement("a");
 		link.setAttribute("href", encodeURI(csvContent));
 		link.setAttribute("download", type + "_export.csv");
