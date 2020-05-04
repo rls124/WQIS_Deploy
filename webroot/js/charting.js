@@ -1125,31 +1125,34 @@ $(document).ready(function () {
 		checkboxesChanged();
 	});
 
-    function getRange() {
+	function getRange() {
 		spinnerInhibited = true;
 		
 		var sites = $("#sites").val();
-        if (sites.length != 0) { //no point making a request if no sites are selected
-            $.ajax({
-                type: "POST",
-                url: "daterange",
-                data: {
-                    "sites": sites,
-                    "category": categorySelect.value
-                },
-                datatype: "JSON",
+		if (sites.length != 0) { //no point making a request if no sites are selected
+			$.ajax({
+				type: "POST",
+				url: "daterange",
+				data: {
+					"sites": sites,
+					"category": categorySelect.value
+				},
+				datatype: "JSON",
 				async: false,
-                success: function (data) {
-                    setDates(data);
-                }
-            });
-        }
+				success: function (data) {
+					setDates(data);
+				},
+				error: function(response) {
+					genericError();
+				}
+			});
+		}
 		else {
 			setDates([null, null]);
 		}
 		
 		spinnerInhibited = false;
-    }
+	}
 	
 	function setDates(dates) {
 		var startDate = dates[0];
