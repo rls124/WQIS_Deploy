@@ -1217,11 +1217,7 @@ $(document).ready(function () {
 	}, false);
 	
 	$("#exportBtn").click(function () {
-		var startDate = $("#startDate").val();
-		var endDate = $("#endDate").val();
-		var sites = $("#sites").val();
 		var category = categorySelect.value;
-		var measurementSearch = measurementSelect.value;
 		var selectedMeasures = getSelectedMeasures();
 		selectedMeasures.push(ucfirst(category) + "Comments");
 
@@ -1230,13 +1226,13 @@ $(document).ready(function () {
 			url: "/WQIS/generic-samples/exportData",
 			datatype: "JSON",
 			data: {
-				"sites": sites,
-				"startDate": startDate,
-				"endDate": endDate,
+				"sites": $("#sites").val(),
+				"startDate": $("#startDate").val(),
+				"endDate": $("#endDate").val(),
 				"category": category,
 				"amountEnter": amountEnter.value,
 				"overUnderSelect": overUnderSelect.value,
-				"measurementSearch": measurementSearch,
+				"measurementSearch": measurementSelect.value,
 				"selectedMeasures": selectedMeasures,
 				"aggregate": aggregateGroup.checked
 			},
@@ -1350,8 +1346,10 @@ $(document).ready(function () {
 	
 	function updateAll() {
 		//validation
-		//check that, if there is something in amountEnter, a measure is also selected
-		if (amountEnter.value != "" && measurementSelect.value === "select") {
+		if ($("#sites").val() == "") { //check that at least one site is selected
+			alert("You must select at least one site to view");
+		}
+		else if (amountEnter.value != "" && measurementSelect.value === "select") { //check that, if there is something in amountEnter, a measure is also selected
 			alert("You must specify a measure to search by");
 		}
 		else {
@@ -1360,12 +1358,7 @@ $(document).ready(function () {
 			getGraphData();
 			getTableData(1);
 			$("#chartsLayoutSelect").show();
-			if (numPages > 0) {
-				exportBtn.disabled = false;
-			}
-			else {
-				exportBtn.disabled = true;
-			}
+			exportBtn.disabled = !(numPages > 0);
 		}
 	}
 	
@@ -1913,12 +1906,10 @@ $(document).ready(function () {
 	function getGraphData() {
 		charts = [];
 
-		var startDate = $("#startDate").val();
-		var endDate = $("#endDate").val();
 		var sites = $("#sites").val();
 		var measures = getSelectedMeasures();
 		var category = categorySelect.value;
-		var measurementSearch = measurementSelect.value;
+		var aggregateMode = aggregateGroup.checked;
 		
 		//build the necessary canvases
 		var nMeasures = measures.length;
@@ -1967,8 +1958,6 @@ $(document).ready(function () {
 			chartDiv.appendChild(chartsGrid);
 		}
 		
-		var aggregateMode = aggregateGroup.checked;
-		
 		$.ajax({
 			type: "POST",
 			url: "/WQIS/generic-samples/graphdata",
@@ -1976,13 +1965,13 @@ $(document).ready(function () {
 			async: false,
 			data: {
 				"sites": sites,
-				"startDate": startDate,
-				"endDate": endDate,
+				"startDate": $("#startDate").val(),
+				"endDate": $("#endDate").val(),
 				"selectedMeasures": measures,
 				"category": category,
 				"amount": amountEnter.value,
 				"overUnderSelect": overUnderSelect.value,
-				"measurementSearch": measurementSearch,
+				"measurementSearch": measurementSelect.value,
 				"aggregate": aggregateMode
 			},
 			success: function(response) {
