@@ -17,7 +17,6 @@ $pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), "
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <?= $this->Html->css("bootstrap-glyphicons.min.css") ?>
-        <?= $this->Html->script("jquery.msgbox.min.js") ?>
         <?= $this->Html->css("styling.css") ?>
         <?= $this->Html->css("cakemessages.css") ?>
 		<?= $this->Html->css("loading.css") ?>
