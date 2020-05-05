@@ -416,10 +416,9 @@ var zoomPlugin = {
 							measureTitle += " (" + thisMeasure.unit + ")";
 						}
 						measureButton.setAttribute("measureName", measureTitle);
-						measureButton.disabled = (measurementSettings[category][j].measureName == chartInstance.options.scales.yAxes[0].scaleLabel.labelString); //eww
+						measureButton.disabled = (measureTitle == chartInstance.options.scales.yAxes[0].scaleLabel.labelString); //eww
 						measureButton.onclick = function() {
 							var measure = $(this)[0].attributes.measure.value;
-							var category = $(this)[0].attributes.category.value;
 							var measureName = $(this)[0].attributes.measureName.value;
 						
 							//first remove the second dataset if present from beforeDatasetsDraw
@@ -439,7 +438,7 @@ var zoomPlugin = {
 									"startDate": $("#startDate").val(),
 									"endDate": $("#endDate").val(),
 									"selectedMeasures": [measure],
-									"category": category,
+									"category": $(this)[0].attributes.category.value,
 									"amount": null,
 									"overUnderSelect": null,
 									"measurementSearch": null,
