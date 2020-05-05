@@ -8,7 +8,7 @@ if ($admin) {
 <p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size: 20pt;"></span>  Feedback</p>
 <hr>
 	<?php if ($hasFeedback) { ?>
-	<table id="tableView" class="table table-striped table-responsive">
+	<table class="table table-striped table-responsive">
 		<thead>
 			<tr>
 				<th>Date</th>

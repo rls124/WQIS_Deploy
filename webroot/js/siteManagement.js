@@ -34,31 +34,70 @@ $(document).ready(function () {
 			
 			//now add the groups assigned to each individual site
 			for (i=0; i<groupings.length; i++) {
-				var groupsForSiteBase = groupings[i].groups.split(",");
-				
-				//sanitize this. In theory there should never be a group ID without a name, but it is possible, especially in development
-				var groupsForSite = [];
-				for (j=0; j<groupsForSiteBase.length; j++) {
-					for (k=0; k<groups.length; k++) {
-						if (groups[k].groupKey == groupsForSiteBase[j]) {
-							groupsForSite.push(parseInt(groupsForSiteBase[j]));
-							break;
+				if (groupings[i].groups != null) {
+					var groupsForSiteBase = groupings[i].groups.split(",");
+					
+					//sanitize this. In theory there should never be a group ID without a name, but it is possible, especially in development
+					var groupsForSite = [];
+					for (j=0; j<groupsForSiteBase.length; j++) {
+						for (k=0; k<groups.length; k++) {
+							if (groups[k].groupKey == groupsForSiteBase[j]) {
+								groupsForSite.push(parseInt(groupsForSiteBase[j]));
+								break;
+							}
 						}
 					}
-				}
-				
-				if (admin) {
-					$("#" + groupings[i].Site_Number + "-groups").val(groupsForSite).trigger("change");
-				}
-				else {
-					var groupsString = groupsForSite[0].toString();
-					for (j=1; j<groupsForSite.length; j++) {
-						groupsString = groupsString + ", " + groupsForSite[j];
+					
+					if (admin) {
+						$("#" + groupings[i].Site_Number + "-groups").val(groupsForSite).trigger("change");
 					}
-					document.getElementById("groups-" + groupings[i].Site_Number).innerText = groupsString;
+					else {
+						var groupsString = groupsForSite[0].toString();
+						for (j=1; j<groupsForSite.length; j++) {
+							groupsString = groupsString + ", " + groupsForSite[j];
+						}
+						document.getElementById("groups-" + groupings[i].Site_Number).innerText = groupsString;
+					}
 				}
 			}
 		}
+	});
+	
+	$("body").on('click', '.delete', function () {
+		var input = $(this);
+		if (!input.attr('id')) {
+			return;
+		}
+		$.confirm("Are you sure you want to delete this record?", function (deleteRecord) {
+			if (deleteRecord) {
+				var siteid = (input.attr('id')).split("-")[1];
+				//Now send ajax data to a delete script.
+				$.ajax({
+					type: "POST",
+					url: "deletesite",
+					datatype: 'JSON',
+					data: {
+						'siteid': siteid
+					},
+					success: function () {
+						var sitenumber = $('#td-' + siteid + '-siteNum').text();
+
+						$('#tr-' + siteid).remove();
+						$('.message').html('Site: <strong>' + sitenumber + '</strong> has been deleted');
+						$('.message').removeClass('error');
+						$('.message').removeClass('hidden');
+						$('.message').removeClass('success');
+						$('.message').addClass('success');
+					},
+					error: function () {
+						$('.message').html('Site: <strong>' + siteid + '</strong> was unable to be deleted');
+						$('.message').removeClass('success');
+						$('.message').removeClass('error');
+						$('.message').addClass('error');
+					}
+				});
+			}
+		});
 	});
 
 	$("#message").on("click", function(){
@@ -174,4 +213,111 @@ $(document).ready(function () {
 			}
 		});
 	});
+	
+	
+	$('#addSiteForm').on('submit', function (e) {
+		e.preventDefault();
+		var sitenumber = $('#add-sitenumber').val();
+		var longitude = $('#add-longitude').val();
+		var latitude = $('#add-latitude').val();
+		var location = $('#add-sitelocation').val();
+		var sitename = $('#add-sitename').val();
+
+		if (!validateAddInput(sitenumber, longitude, latitude, location, sitename)) {
+			return false;
+		}
+
+		if (!$.checkSiteNum(sitenumber)) {
+			$.alert('This Site Number already exists, please create a new one');
+			return false;
+		}
+        
+		$.ajax({
+			type: 'POST',
+			url: 'addsite',
+			datatype: 'JSON',
+			data: {
+				'Site_Number': sitenumber,
+				'Longitude': longitude,
+				'Latitude': latitude,
+				'Site_Location': location,
+				'Site_Name': sitename
+			},
+			success: function (result) {
+				var siteid = result['siteid'];
+				$('#tableView').append('<tr id="tr-' + siteid + '"></tr>');
+				$('#tr-' + siteid).append('<td id="td-' + siteid + '-siteNum">' + sitenumber + '</td>');
+				$('#tr-' + siteid).append('<td id="td-' + siteid + '-monitoredcheckbox"><input type="checkbox" class="form-control checkbox"></td>');
+				$('#tr-' + siteid).append('<td id="td-' + siteid + '-longitude">' + longitude + '</td>');
+				$('#tr-' + siteid).append('<td id="td-' + siteid + '-latitude">' + latitude + '</td>');
+				$('#tr-' + siteid).append('<td id="td-' + siteid + '-siteLoc">' + location + '</td>');
+				$('#tr-' + siteid).append('<td id="td-' + siteid + '-siteName">' + sitename + '</td>');
+				$('#tr-' + siteid).append('<td><span class="edit glyphicon glyphicon-pencil" id="edit-' + siteid + '" name="edit-' + siteid + '" data-toggle="modal" data-target="#editSiteModal" style="margin-right: 5px;"></span>' +
+					'<span class="delete glyphicon glyphicon-trash" id = "delete-' + siteid + '" name = "delete-' + siteid + '" > </span>');
+
+				$('#add-close').trigger('click');
+				$('#add-sitenumber').val('');
+				$('#add-longitude').val('');
+				$('#add-latitude').val('');
+				$('#add-sitelocation').val('');
+				$('#add-sitename').val('');
+				$('#add-monitored').val('');
+				$('.message').html('Site: <strong>' + sitenumber + '</strong> has been added');
+				$('.message').removeClass('error');
+				$('.message').removeClass('hidden');
+				$('.message').removeClass('success');
+				$('.message').addClass('success');
+			},
+			error: function () {
+				$('.message').html('Site: <strong>' + sitenumber + '</strong> could not be added');
+				$('.message').removeClass('success');
+				$('.message').removeClass('hidden');
+				$('.message').removeClass('error');
+				$('.message').addClass('error');
+			}
+		});
+	});
+	
+	$.checkSiteNum = function (sitenumber) {
+		var flag = true;
+		$('tr').each(function() {
+			var celltext = $(this).find('td:first').text();
+			if (sitenumber === celltext) {
+				flag = false;
+			}
+		});
+		return flag;
+	};
+	
+	function validateAddInput(sitenumber, longitude, latitude, sitelocation, sitename) {
+		if (sitenumber === '') {
+			$.alert('Site Number is empty');
+			return false;
+		}
+
+		if (!validateInput(longitude, latitude, sitelocation, sitename)) {
+			return false;
+		}
+		return true;
+	}
+	
+	function validateInput(longitude, latitude, sitelocation, sitename) {
+		if (longitude === '') {
+			$.alert('Longitude is empty');
+			return false;
+		}
+		if (latitude === '') {
+			$.alert('Latitude is empty');
+			return false;
+		}
+		if (sitelocation === '') {
+			$.alert('Site Location is empty');
+			return false;
+		}
+		if (sitename === '') {
+			$.alert('Site Name is empty');
+			return false;
+		}
+		return true;
+	}
 });

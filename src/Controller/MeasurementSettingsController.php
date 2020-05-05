@@ -24,6 +24,7 @@ class MeasurementSettingsController extends AppController {
 			->where(["measureKey" => $measure])
 			->first();
 		$parameter = $this->request->getData("parameter");
+		$this->log($parameter, 'debug');
 		$value = $this->request->getData("value");
 		//Set the edited field
 		$settings->$parameter = $value;

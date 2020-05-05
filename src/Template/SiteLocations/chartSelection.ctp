@@ -57,10 +57,10 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 						<input type="checkbox" value="all" id="allCheckbox" checked><label for="allCheckbox">All</label>
 					</li>
 					<li>
-						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">E. Coli (CFU/100 mil)</label>
+						<input class="measurementCheckbox" type="checkbox" id="EcoliCheckbox" value="Ecoli" checked><label for="Ecoli">E. Coli</label>
 					</li>
 					<li>
-						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">Coliform (CFU/100 mil)</label>
+						<input class="measurementCheckbox" type="checkbox" id="TotalColiformCheckbox" value="TotalColiform" checked><label for="TotalColiformCheckbox">Coliform</label>
 					</li>
 				</ul>
 			</div>

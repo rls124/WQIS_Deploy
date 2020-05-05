@@ -20,6 +20,10 @@ class MeasurementSettingsTable extends Table {
 			->scalar("measureKey")
 			->maxLength("measureKey", 100)
 			->allowEmpty("measureKey", "create");
+			
+		$validator
+			->scalar("unit")
+			->maxLength("unit", 100);
 
 		$validator
 			->numeric("benchmarkMinimum")

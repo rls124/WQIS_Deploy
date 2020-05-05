@@ -7,6 +7,8 @@ class MeasurementSettings extends Entity {
 	protected $_accessible = [
 		"measureKey" => true,
 		"measureName" => true,
+		"unit" => true,
+		"category" => true,
 		"benchmarkMinimum" => true,
 		"benchmarkMaximum" => true,
 		"detectionMinimum" => true,

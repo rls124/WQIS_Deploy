@@ -33,16 +33,9 @@ $(document).ready(function() {
 			return;
 		}
 
-		var rowNumber = (input.attr('id')).split("-")[1];
-		var measure = $('#measure-' + rowNumber).text();
-		var parameter = (input.attr('name')).split('-')[1];
+		var measure = $("#measure-" + (input.attr("id")).split("-")[1]).text();
+		var parameter = input.attr("name");
 		var value = input.val();
-
-		//quick fix for invalid input
-		if (isNaN(parseFloat(value))) {
-			location.reload();
-			return false;
-		}
 
 		$.ajax({
 			type: "POST",

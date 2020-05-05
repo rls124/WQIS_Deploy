@@ -39,7 +39,7 @@ if ($admin) { ?>
 <p>
 	WQIS maintains sample data from <?=$numSites?> collection sites
 </p>
-<table id="tableView" class="table table-striped table-responsive">
+<table class="table table-striped table-responsive">
 	<thead>
 		<tr>
 			<th>Site Number</th>
@@ -180,7 +180,7 @@ if ($admin) { ?>
         
 	<?=
 	    $this->Form->create(false, [
-			'id' => 'addSiteForm'
+			"id" => "addSiteForm"
 		])
 	?>
         <!-- Modal content-->
@@ -266,7 +266,7 @@ if ($admin) { ?>
 		?>
             </div>
             <div class="modal-footer">
-                <button type="submit" id='add-btn' name='add-btn' class="btn btn-default btn-basic btn btn-sm">Add Site</button>
+                <button type="submit" id="add-btn" name="add-btn" class="btn btn-default btn-basic btn btn-sm">Add Site</button>
                 <button type="button" id='add-close' class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
             </div>
         </div>

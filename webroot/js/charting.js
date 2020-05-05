@@ -16,8 +16,6 @@ function genericError() {
 	alert("We encountered a problem, try again later");
 }
 
-const SITE_DATA = "SiteData";
-
 //page state information
 var chartsDisplayMode = "in-line";
 var tablePage = 1;
@@ -129,6 +127,9 @@ $.ajax({
 		measurementSettings = response.settings;
 		groups = response.groups;
 		mapData = response.mapData;
+	},
+	error: function(response) {
+		genericError();
 	}
 });
 
@@ -231,7 +232,7 @@ function doZoom(chartInstance, zoom, center) {
 		var minIndex = scale.minIndex;
 		var lastLabelIndex = labels.length - 1;
 		var maxIndex = scale.maxIndex;
-		var sensitivity = 0;
+		const sensitivity = 0;
 		var chartCenter = scale.isHorizontal() ? scale.left + (scale.width/2) : scale.top + (scale.height/2);
 		var centerPointer = scale.isHorizontal() ? center.x : center.y;
 
@@ -242,38 +243,36 @@ function doZoom(chartInstance, zoom, center) {
 			zoomNS.zoomCumulativeDelta-=1;
 		}
 
-		if (Math.abs(zoomNS.zoomCumulativeDelta) > sensitivity) {
-			if (zoomNS.zoomCumulativeDelta < 0) {
-				if (centerPointer <= chartCenter) {
-					if (minIndex <= 0){
-						maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
-					}
-					else {
-						minIndex = Math.max(0, minIndex - 10);
-					}
+		if (zoomNS.zoomCumulativeDelta < 0) {
+			if (centerPointer <= chartCenter) {
+				if (minIndex <= 0){
+					maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
 				}
 				else {
-					if (maxIndex >= lastLabelIndex) {
-						minIndex = Math.max(0, minIndex - 10);
-					}
-					else {
-						maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
-					}
+					minIndex = Math.max(0, minIndex - 10);
 				}
 			}
-			else if (zoomNS.zoomCumulativeDelta > 0) {
-				if (centerPointer <= chartCenter) {
-					minIndex = minIndex < maxIndex ? minIndex = Math.min(maxIndex, minIndex + 10) : minIndex;
+			else {
+				if (maxIndex >= lastLabelIndex) {
+					minIndex = Math.max(0, minIndex - 10);
 				}
-				else if (centerPointer > chartCenter) {
-					maxIndex = maxIndex > minIndex ? maxIndex = Math.max(minIndex, maxIndex - 10) : maxIndex;
+				else {
+					maxIndex = Math.min(lastLabelIndex, maxIndex + 10);
 				}
 			}
-		
-			zoomNS.zoomCumulativeDelta = 0;
-			scale.options.ticks.min = labels[minIndex];
-			scale.options.ticks.max = labels[maxIndex];
 		}
+		else if (zoomNS.zoomCumulativeDelta > 0) {
+			if (centerPointer <= chartCenter) {
+				minIndex = minIndex < maxIndex ? minIndex = Math.min(maxIndex, minIndex + 10) : minIndex;
+			}
+			else if (centerPointer > chartCenter) {
+				maxIndex = maxIndex > minIndex ? maxIndex = Math.max(minIndex, maxIndex - 10) : maxIndex;
+			}
+		}
+	
+		zoomNS.zoomCumulativeDelta = 0;
+		scale.options.ticks.min = labels[minIndex];
+		scale.options.ticks.max = labels[maxIndex];
 	});
 	
 	chartInstance.update(0);
@@ -405,12 +404,18 @@ var zoomPlugin = {
 				//set options available in the modal
 				for (category in measurementSettings) {
 					for (j=0; j<measurementSettings[category].length; j++) {
+						var thisMeasure = measurementSettings[category][j];
+						
 						//add a button for it
 						var measureButton = document.createElement("button");
-						measureButton.innerText = measurementSettings[category][j].measureKey;
-						measureButton.setAttribute("measure", measurementSettings[category][j].measureKey);
+						measureButton.innerText = thisMeasure.measureName;
+						measureButton.setAttribute("measure", thisMeasure.measureKey);
 						measureButton.setAttribute("category", category);
-						measureButton.setAttribute("measureName", measurementSettings[category][j].measureName);
+						var measureTitle = thisMeasure.measureName;
+						if (thisMeasure.unit != "") {
+							measureTitle += " (" + thisMeasure.unit + ")";
+						}
+						measureButton.setAttribute("measureName", measureTitle);
 						measureButton.disabled = (measurementSettings[category][j].measureName == chartInstance.options.scales.yAxes[0].scaleLabel.labelString); //eww
 						measureButton.onclick = function() {
 							var measure = $(this)[0].attributes.measure.value;
@@ -499,70 +504,27 @@ var zoomPlugin = {
 	},
 	beforeInit: function(chartInstance) {
 		var node = chartInstance.chart.ctx.canvas;
-		var options = chartInstance.options;
+		
+		var wheelHandler = function(e) {
+			var rect = e.target.getBoundingClientRect();
 
-		if (options.zoom && options.zoom.drag) {
-			node.addEventListener("mousedown", function(event){
-				chartInstance._dragZoomStart = event;
-			});
-
-			node.addEventListener("mousemove", function(event){
-				if (chartInstance._dragZoomStart) {
-					chartInstance._dragZoomEnd = event;
-					chartInstance.update(0);
-				}
-
-				chartInstance.update(0);
-			});
-
-			node.addEventListener("mouseup", function(event){
-				if (chartInstance._dragZoomStart) {
-					var chartArea = chartInstance.chartArea;
-					var yAxis = getYAxis(chartInstance);
-					var beginPoint = chartInstance._dragZoomStart;
-					var offsetX = beginPoint.target.getBoundingClientRect().left;
-					var startX = Math.min(beginPoint.x, event.x) - offsetX;
-					var endX = Math.max(beginPoint.x, event.x) - offsetX;
-					var dragDistance = endX - startX;
-					var chartDistance = chartArea.right - chartArea.left;
-					var zoom = 1 + ((chartDistance - dragDistance) / chartDistance );
-
-					if (dragDistance > 0) {
-						doZoom(chartInstance, zoom, {
-							x: (dragDistance / 2) + startX,
-							y: (yAxis.bottom - yAxis.top) / 2,
-						});
-					}
-
-					chartInstance._dragZoomStart = null;
-					chartInstance._dragZoomEnd = null;
-				}
-			});
-		}
-		else {
-			var wheelHandler = function(e) {
-				var rect = e.target.getBoundingClientRect();
-				var offsetX = e.clientX - rect.left;
-				var offsetY = e.clientY - rect.top;
-
-				var center = {
-					x : offsetX,
-					y : offsetY
-				};
-
-				if (e.deltaY < 0) {
-					doZoom(chartInstance, 1.1, center);
-				}
-				else {
-					doZoom(chartInstance, 0.909, center);
-				}
-				//prevent the event from triggering the default behavior (eg Content scrolling)
-				e.preventDefault();
+			var center = {
+				x : e.clientX - rect.left,
+				y : e.clientY - rect.top
 			};
-			chartInstance._wheelHandler = wheelHandler;
 
-			node.addEventListener("wheel", wheelHandler);
-		}
+			if (e.deltaY < 0) {
+				doZoom(chartInstance, 1.1, center);
+			}
+			else {
+				doZoom(chartInstance, 0.909, center);
+			}
+			//prevent the event from triggering the default behavior (eg Content scrolling)
+			e.preventDefault();
+		};
+		chartInstance._wheelHandler = wheelHandler;
+
+		node.addEventListener("wheel", wheelHandler);
 
 		if (Hammer) {
 			var mc = new Hammer.Manager(node);
@@ -627,12 +589,10 @@ var zoomPlugin = {
 			var endPoint = chartInstance._dragZoomEnd;
 			var offsetX = beginPoint.target.getBoundingClientRect().left;
 			var startX = Math.min(beginPoint.x, endPoint.x) - offsetX;
-			var endX = Math.max(beginPoint.x, endPoint.x) - offsetX;
-			var rectWidth = endX - startX;
 
 			ctx.fillStyle = "rgba(225,225,225,0.3)";
 			ctx.lineWidth = 5;
-			ctx.fillRect(startX, yAxis.top, rectWidth, yAxis.bottom - yAxis.top);
+			ctx.fillRect(startX, yAxis.top, (Math.max(beginPoint.x, endPoint.x) - offsetX - startX), yAxis.bottom - yAxis.top);
 		}
 
 		ctx.rect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
@@ -642,8 +602,6 @@ var zoomPlugin = {
 		chartInstance.chart.ctx.restore();
 	},
 	destroy: function(chartInstance) {
-		var node = chartInstance.chart.ctx.canvas.removeEventListener("wheel", chartInstance._wheelHandler);
-
 		var mc = chartInstance._mc;
 		if (mc) {
 			mc.remove("pinchstart");
@@ -674,7 +632,7 @@ $(document).ready(function () {
 			defaultValue: "No Records Found"
 		});
 	
-		templateContent = templateContent + "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
+		templateContent += "<tr><th>" + ucfirst(category) + " Measurements</th><th>{" + category + "Date}</th></tr>";
 		for (i=0; i<measurementSettings[category].length; i++) {
 			fields.push({
 				name: measurementSettings[category][i].measureKey,
@@ -682,10 +640,14 @@ $(document).ready(function () {
 				defaultValue: "No Data"
 			});
 	
-			templateContent = templateContent + "<tr><th>" + measurementSettings[category][i].measureName + "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
+			templateContent += "<tr><th>" + measurementSettings[category][i].measureName;
+			if (measurementSettings[category][i].unit != "") {
+				templateContent += " (" + measurementSettings[category][i].unit + ")";
+			}
+			templateContent += "</th><td>{" + measurementSettings[category][i].measureKey + "}</td></tr>";
 		}
 	}
-	templateContent = templateContent + "</table>";
+	templateContent += "</table>";
 	
 	template = {
 		title: "<b>{siteNumber} - {siteName} ({siteLocation})</b>",
@@ -1313,7 +1275,7 @@ $(document).ready(function () {
 		
 		var csvContent = "data:text/csv;charset=utf-8,";
 		var fields = Object.keys(fileData[0]);
-		for (var i = 0; i < fileData.length; i++) {
+		for (var i=0; i<fileData.length; i++) {
 			fileData[i]["Date"] = fileData[i]["Date"].substring(0, 10);
 		}
 		
@@ -1431,7 +1393,11 @@ $(document).ready(function () {
 				//get index of this measure so we can find its printable name
 				for (j=0; j<measurementSettings[category].length; j++) {
 					if (measurementSettings[category][j].measureKey === selectedMeasures[i]) {
-						columns.push(measurementSettings[category][j].measureName);
+						var measureTitle = measurementSettings[category][j].measureName;
+						if (measurementSettings[category][j].unit != "") {
+							measureTitle += " (" + measurementSettings[category][j].unit + ")";
+						}
+						columns.push(measureTitle);
 						break;
 					}
 				}
@@ -1543,11 +1509,7 @@ $(document).ready(function () {
 											if (!input.attr("id")) {
 												return;
 											}
-			
-											var rowNumber = (input.attr("id")).split("-")[1];
-											var sampleNumber = $("#Sample_Number-" + rowNumber).val();
 		
-											var parameter = (input.attr("name")).split("-")[0];
 											var value = input.val();
 	
 											$.ajax({
@@ -1555,8 +1517,8 @@ $(document).ready(function () {
 												url: "/WQIS/generic-samples/updatefield",
 												datatype: "JSON",
 												data: {
-													"sampleNumber": sampleNumber,
-													"parameter": parameter,
+													"sampleNumber": $("#Sample_Number-" + (input.attr("id")).split("-")[1]).val(),
+													"parameter": (input.attr("name")).split("-")[0],
 													"value": value
 												},
 												success: function () {
@@ -1613,11 +1575,7 @@ $(document).ready(function () {
 											if (!input.attr("id")) {
 												return;
 											}
-			
-											var rowNumber = (input.attr("id")).split("-")[1];
-											var sampleNumber = $("#Sample_Number-" + rowNumber).val();
-		
-											var parameter = (input.attr("name")).split("-")[0];
+
 											var value = input.val();
 	
 											$.ajax({
@@ -1625,8 +1583,8 @@ $(document).ready(function () {
 												url: "/WQIS/generic-samples/updatefield",
 												datatype: "JSON",
 												data: {
-													"sampleNumber": sampleNumber,
-													"parameter": parameter,
+													"sampleNumber": $("#Sample_Number-" + (input.attr("id")).split("-")[1]).val(),
+													"parameter": (input.attr("name")).split("-")[0],
 													"value": value
 												},
 												success: function () {
@@ -2057,29 +2015,23 @@ $(document).ready(function () {
 	function buildChart(k, category, measures, labels, datasets) {
 		var ctx = document.getElementById("chart-" + k).getContext("2d");
 	
-		var measureKey;
+		var measureTitle;
 		//get index of this measure so we can find its printable name
-		var measureIndex;
-		for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
-			if (measurementSettings[category][measureIndex].measureKey === measures[k]) {
-				measureKey = measurementSettings[category][measureIndex].measureName;
+		var thisMeasure;
+		for (var i=0; i<measurementSettings[category].length; i++) {
+			thisMeasure = measurementSettings[category][i];
+			if (thisMeasure.measureKey === measures[k]) {
+				measureTitle = thisMeasure.measureName;
+				if (thisMeasure.unit != "") {
+					measureTitle += " (" + thisMeasure.unit + ")";
+				}
 				break;
 			}
 		}
 	
 		var benchmarkAnnotation = {};
 		if (showBenchmarks) {
-			var benchmarkMax = measurementSettings[category][measureIndex].benchmarkMaximum;
-			var benchmarkMin = measurementSettings[category][measureIndex].benchmarkMinimum;
-			var benchmarkLines = [];
-
-			if (benchmarkMax != null) {
-				benchmarkLines.push(benchmarkLine(benchmarkMax, "red"));
-			}
-			if (benchmarkMin != null) {
-				benchmarkLines.push(benchmarkLine(benchmarkMin, "blue"));
-			}
-			benchmarkAnnotation = {annotations: benchmarkLines};
+			benchmarkAnnotation = {annotations: [benchmarkLine(thisMeasure.benchmarkMaximum, "red"), benchmarkLine(thisMeasure.benchmarkMinimum, "blue")]};
 		}
 		
 		charts.push(new Chart(ctx, {
@@ -2095,7 +2047,7 @@ $(document).ready(function () {
 						{
 							scaleLabel: {
 								display: true,
-								labelString: measureKey,
+								labelString: measureTitle,
 								position: "left"
 							}
 						},
