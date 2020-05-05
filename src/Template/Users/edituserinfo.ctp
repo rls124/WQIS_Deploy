@@ -1,7 +1,7 @@
-<?= $this->Html->css('login_register.css') ?>
-<?= $this->Html->script('changePassword.js') ?>
+<?= $this->Html->css("login_register.css") ?>
+<?= $this->Html->script("changePassword.js") ?>
 
-<div id ='message' class="message hidden"></div>
+<div id="message" class="message hidden"></div>
 
 <div class="mt-3">
 	<h1 class="centeredText" id="wqisHeading"><span class="glyphicon glyphicon-user" style="font-size: 20pt;"></span>  Edit User Info</h1>
@@ -11,35 +11,34 @@
 <div class="container">
 	<?=
 	$this->Form->create(false, [
-		'id' => 'updateUserForm'
+		"id" => "updateUserForm",
+		"autocomplete" => "new-password"
 		]
 	)
 	?>
 	<div class="form-group row">
-		<?php 
-		$uname = '';
+		<?php
 		if ($userinfo !== NULL) {
 			$uname = $user->username;
 		}
 		else {
 			$uname = $username;
 		}
-		?>
-		<?=
-		$this->Form->control('Username', [
-			'label' => [
-				'text' => 'Username',
-				'class' => 'col-lg-2 label-reg lol'
+
+		echo $this->Form->control("Username", [
+			"label" => [
+				"text" => "Username",
+				"class" => "col-lg-2 label-reg lol"
 			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
+			"templates" => [
+				"inputContainer" => "{{content}}"
 			],
-			'class' => "col-lg-10 form-control textinput mainPage",
-			'name' => "username",
-			'default' => $uname,
-			'id' => "username",
-			'placeholder' => "Your Username...",
-			'readonly' => 'readonly'
+			"class" => "col-lg-10 form-control textinput mainPage",
+			"name" => "username",
+			"default" => $uname,
+			"id" => "username",
+			"placeholder" => "Your Username...",
+			"readonly" => "readonly"
 		]);
 		?>
             <p class="errorMessage" id="usernameError"></p>
@@ -60,7 +59,8 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "firstname",
                     'id' => "firstname",
-                    'placeholder' => "Your First Name..."
+                    'placeholder' => "Your First Name...",
+					'autocomplete' => 'new-password'
                 ]);
             ?>
             <p class="errorMessage" id="firstnameError"></p>
@@ -79,7 +79,8 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "lastname",
                     'id' => "lastname",
-                    'placeholder' => "Your Last Name..."
+                    'placeholder' => "Your Last Name...",
+					'autocomplete' => 'new-password'
                 ]);
             ?>
             <p class="errorMessage" id="lastnameError"></p>
@@ -98,7 +99,8 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "organization",
                     'id' => "organization",
-                    'placeholder' => "Your Organization..."
+                    'placeholder' => "Your Organization...",
+					'autocomplete' => 'new-password'
                 ]);
             ?>
             <p class="errorMessage" id="organizationError"></p>
@@ -117,7 +119,8 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "position",
                     'id' => "position",
-                    'placeholder' => "Your Position..."
+                    'placeholder' => "Your Position...",
+					'autocomplete' => 'new-password'
                 ]);
             ?>
             <p class="errorMessage" id="positionError"></p>
@@ -139,7 +142,8 @@
                     'class' => "col-lg-10 form-control textinput mainPage",
                     'name' => "userpw",
                     'id' => "userpw",
-                    'placeholder' => "Your New Password..."
+                    'placeholder' => "Your New Password...",
+					'autocomplete' => 'new-password'
                 ]);
             ?>
             <p class="errorMessage" id="passError"></p>
@@ -157,7 +161,8 @@
                     'class' => "col-lg-10 form-control textinput mainPage mb-1",
                     'name' => "passConfirm",
                     'id' => "passConfirm",
-                    'placeholder' => "Your New Password..."
+                    'placeholder' => "Your New Password...",
+					'autocomplete' => 'new-password'
                 ]);
             ?>
             <p class="errorMessage" id="passConfirmError" style=""></p>
