@@ -12,23 +12,22 @@ class MeasurementSettingsController extends AppController {
 	public function updatefield() {
 		$this->render(false);
 
-		//Ensure that measure is in POST data
+		//ensure that measure is in POST data
 		if (!$this->request->getData("measure")) {
 			return;
 		}
 		$measure = $this->request->getData("measure");
 
-		//Get the settings we are editing
+		//get the settings we are editing
 		$settings = $this->MeasurementSettings
 			->find("all")
 			->where(["measureKey" => $measure])
 			->first();
 		$parameter = $this->request->getData("parameter");
-		$this->log($parameter, 'debug');
 		$value = $this->request->getData("value");
-		//Set the edited field
+		//set the edited field
 		$settings->$parameter = $value;
-		//Save changes
+		//save changes
 		$this->MeasurementSettings->save($settings);
 	}
 }
