@@ -75,52 +75,52 @@
 					"templates" => [
 						"inputContainer" => "{{content}}"
 					],
-					'default' => $user->lastname,
-					'class' => "col-lg-10 form-control textinput mainPage",
-					'name' => "lastname",
-					'id' => "lastname",
-					'placeholder' => "Your Last Name...",
-					'autocomplete' => 'new-password'
+					"default" => $user->lastname,
+					"class" => "col-lg-10 form-control textinput mainPage",
+					"name" => "lastname",
+					"id" => "lastname",
+					"placeholder" => "Your Last Name...",
+					"autocomplete" => "new-password"
 				]);
 			?>
 			<p class="errorMessage" id="lastnameError"></p>
 			</div>
 			<div class="form-group row">
 			<?=
-				$this->Form->control('organization', [
-					'label' => [
-						'text' => 'Organization',
-						'class' => 'col-lg-2 label-reg lol'
+				$this->Form->control("organization", [
+					"label" => [
+						"text" => "Organization",
+						"class" => "col-lg-2 label-reg lol"
 					],
-					'templates' => [
-						'inputContainer' => '{{content}}'
+					"templates" => [
+						"inputContainer" => "{{content}}"
 					],
-					'default' => $user->organization,
-					'class' => "col-lg-10 form-control textinput mainPage",
-					'name' => "organization",
-					'id' => "organization",
-					'placeholder' => "Your Organization...",
-					'autocomplete' => 'new-password'
+					"default" => $user->organization,
+					"class" => "col-lg-10 form-control textinput mainPage",
+					"name" => "organization",
+					"id" => "organization",
+					"placeholder" => "Your Organization...",
+					"autocomplete" => "new-password"
 				]);
 			?>
 			<p class="errorMessage" id="organizationError"></p>
 			</div>
 			<div class="form-group row">
 			<?=
-				$this->Form->control('position', [
-					'label' => [
-						'text' => 'Position',
-						'class' => 'col-lg-2 label-reg lol'
+				$this->Form->control("position", [
+					"label" => [
+						"text" => "Position",
+						"class" => "col-lg-2 label-reg lol"
 					],
-					'templates' => [
-						'inputContainer' => '{{content}}'
+					"templates" => [
+						"inputContainer" => "{{content}}"
 					],
-					'default' => $user->position,
-					'class' => "col-lg-10 form-control textinput mainPage",
-					'name' => "position",
-					'id' => "position",
-					'placeholder' => "Your Position...",
-					'autocomplete' => 'new-password'
+					"default" => $user->position,
+					"class" => "col-lg-10 form-control textinput mainPage",
+					"name" => "position",
+					"id" => "position",
+					"placeholder" => "Your Position...",
+					"autocomplete" => "new-password"
 				]);
 			?>
 			<p class="errorMessage" id="positionError"></p>
@@ -130,39 +130,39 @@
 		
 		<div class="form-group row">
 			<?=
-				$this->Form->control('userpw', [
-					'label' => [
-						'text' => 'New Password',
-						'class' => 'col-lg-2 label-reg lol'
+				$this->Form->control("userpw", [
+					"label" => [
+						"text" => "New Password",
+						"class" => "col-lg-2 label-reg lol"
 					],
-					'templates' => [
-						'inputContainer' => '{{content}}'
+					"templates" => [
+						"inputContainer" => "{{content}}"
 					],
-					'type' => 'password',
-					'class' => "col-lg-10 form-control textinput mainPage",
-					'name' => "userpw",
-					'id' => "userpw",
-					'placeholder' => "Your New Password...",
-					'autocomplete' => 'new-password'
+					"type" => "password",
+					"class" => "col-lg-10 form-control textinput mainPage",
+					"name" => "userpw",
+					"id" => "userpw",
+					"placeholder" => "Your New Password...",
+					"autocomplete" => "new-password"
 				]);
 			?>
 			<p class="errorMessage" id="passError"></p>
 		</div>
 		<div class="form-group row">
 			<?=
-				$this->Form->control('New Password (again)', [
-					'label' => [
-						'class' => 'col-lg-2 label-reg lol'
+				$this->Form->control("New Password (again)", [
+					"label" => [
+						"class" => "col-lg-2 label-reg lol"
 					],
-					'templates' => [
-						'inputContainer' => '{{content}}'
+					"templates" => [
+						"inputContainer" => "{{content}}"
 					],
-					'type' => 'password',
-					'class' => "col-lg-10 form-control textinput mainPage mb-1",
-					'name' => "passConfirm",
-					'id' => "passConfirm",
-					'placeholder' => "Your New Password...",
-					'autocomplete' => 'new-password'
+					"type" => "password",
+					"class" => "col-lg-10 form-control textinput mainPage mb-1",
+					"name" => "passConfirm",
+					"id" => "passConfirm",
+					"placeholder" => "Your New Password...",
+					"autocomplete" => "new-password"
 				]);
 			?>
 			<p class="errorMessage" id="passConfirmError"></p>
@@ -172,69 +172,69 @@
 			<hr>
 			<label>Security Question 1</label>
 			<?=
-				$this->Form->select('securityquestion1',[
-					'What is the first name of the person you first kissed?' => 'What is the first name of the person you first kissed?', 
-					'What is the last name of the teacher who gave you your first failing grade?' => 'What is the last name of the teacher who gave you your first failing grade?', 
-					'What was the name of your elementary / primary school?' => 'What was the name of your elementary / primary school?', 
-					'In what city or town does your nearest sibling live?' => 'In what city or town does your nearest sibling live?', 
-					'What is your favorite book?' => 'What is your favorite book?'
+				$this->Form->select("securityquestion1",[
+					"What is the first name of the person you first kissed?" => "What is the first name of the person you first kissed?", 
+					"What is the last name of the teacher who gave you your first failing grade?" => "What is the last name of the teacher who gave you your first failing grade?", 
+					"What was the name of your elementary / primary school?" => "What was the name of your elementary / primary school?", 
+					"In what city or town does your nearest sibling live?" => "In what city or town does your nearest sibling live?", 
+					"What is your favorite book?" => "What is your favorite book?"
 					], [
-					'default' => $user->securityquestion1,
-					'empty' => 'Choose a security question...',
-					'label' => 'Question 1',
-					'id' => 'securityquestion1',
-					'class' => 'form-control select secPage',
-					'style' => 'font-size: 9pt;',
-					'onchange' => "ensureSecurityInput();"
+					"default" => $user->securityquestion1,
+					"empty" => "Choose a security question...",
+					"label" => "Question 1",
+					"id" => "securityquestion1",
+					"class" => "form-control select secPage",
+					"style" => "font-size: 9pt;",
+					"onchange" => "ensureSecurityInput();"
 					]
 				);
 			?>
 			<p class="errorMessage" id="securityquestion1Error"></p>
 			<?=
-				$this->Form->control('Answer 1', [
-					'label' => false,
-					'templates' => [
-						'inputContainer' => '{{content}}'
+				$this->Form->control("Answer 1", [
+					"label" => false,
+					"templates" => [
+						"inputContainer" => "{{content}}"
 					],
-					'class' => "form-control modalinput secPage mainPage mb-4",
-					'name' => "securityanswer1",
-					'id' => "securityanswer1",
-					'placeholder' => "Your Answer...",
-					'oninput' => "ensureSecurityInput();"
+					"class" => "form-control modalinput secPage mainPage mb-4",
+					"name" => "securityanswer1",
+					"id" => "securityanswer1",
+					"placeholder" => "Your Answer...",
+					"oninput" => "ensureSecurityInput();"
 				]);
 			?>
 			<p class="errorMessage" id="securityanswer1Error"></p>
 			<label>Security Question 2</label>
 			<?=
-				$this->Form->select('securityquestion2',[
-					'What is the name of the road you grew up on?' => 'What is the name of the road you grew up on?', 
-					'What is your mother’s maiden name?' => 'What is your mother’s maiden name?', 
-					'What was the name of your first/current/favorite pet?' => 'What was the name of your first/current/favorite pet?', 
-					'What was the first company that you worked for?' => 'What was the first company that you worked for?', 
-					'Where did you meet your spouse?' => 'Where did you meet your spouse?'
+				$this->Form->select("securityquestion2",[
+					"What is the name of the road you grew up on?" => "What is the name of the road you grew up on?", 
+					"What is your mother’s maiden name?" => "What is your mother’s maiden name?", 
+					"What was the name of your first/current/favorite pet?" => "What was the name of your first/current/favorite pet?", 
+					"What was the first company that you worked for?" => "What was the first company that you worked for?", 
+					"Where did you meet your spouse?" => "Where did you meet your spouse?"
 					], [
-					'default' => $user->securityquestion2,
-					'empty' => 'Choose a security question...',
-					'label' => 'Question 2',
-					'id' => 'securityquestion2',
-					'class' => 'form-control select secPage',
-					'style' => 'font-size: 9pt;',
-					'onchange' => "ensureSecurityInput();"
+					"default" => $user->securityquestion2,
+					"empty" => "Choose a security question...",
+					"label" => "Question 2",
+					"id" => "securityquestion2",
+					"class" => "form-control select secPage",
+					"style" => "font-size: 9pt;",
+					"onchange" => "ensureSecurityInput();"
 					]
 				);
 			?>
 			<p class="errorMessage" id="securityquestion2Error"></p>
 			<?=
-				$this->Form->control('Answer 2', [
-					'label' => false,
-					'templates' => [
-						'inputContainer' => '{{content}}'
+				$this->Form->control("Answer 2", [
+					"label" => false,
+					"templates" => [
+						"inputContainer" => "{{content}}"
 					],
-					'class' => "form-control modalinput secPage mainPage mb-4",
-					'name' => "securityanswer2",
-					'id' => "securityanswer2",
-					'placeholder' => "Your Answer...",
-					'oninput' => "ensureSecurityInput();"
+					"class" => "form-control modalinput secPage mainPage mb-4",
+					"name" => "securityanswer2",
+					"id" => "securityanswer2",
+					"placeholder" => "Your Answer...",
+					"oninput" => "ensureSecurityInput();"
 				]);
 			?>
 			<p class="errorMessage" id="securityanswer2Error"></p>
