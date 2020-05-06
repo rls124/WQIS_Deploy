@@ -89,6 +89,10 @@ textarea{
     color: white;
     cursor: auto;
 }
+.btn-ctrl{
+	margin: 1px;
+	border-color: darkgray;
+}
 .btn-close{
     background-color: #868E96;
     border: medium solid #868E96;

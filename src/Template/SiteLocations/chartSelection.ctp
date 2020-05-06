@@ -39,15 +39,15 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		
 			<h6>Measurements:</h6>
 			<?=
-			$this->Form->select('categorySelect', [
-				'bacteria' => 'Bacteria',
-				'nutrient' => 'Nutrient',
-				'pesticide' => 'Pesticide',
-				'physical' => 'Physical Properties'
+			$this->Form->select("categorySelect", [
+				"bacteria" => "Bacteria",
+				"nutrient" => "Nutrient",
+				"pesticide" => "Pesticide",
+				"physical" => "Physical Properties"
 				], [
-				'label' => 'Category',
-				'id' => 'categorySelect',
-				'class' => 'form-control select'
+				"label" => "Category",
+				"id" => "categorySelect",
+				"class" => "form-control select"
 				]
 			)
 			?>
@@ -69,12 +69,12 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			<div>
 				<h6>From:</h6>
 				<?=
-				$this->Form->control('startDate', [
-					'label' => false,
-					'type' => 'text',
-					'class' => 'form-control date-picker col-lg-12',
-					'id' => 'startDate',
-					'placeholder' => 'mm/dd/yyyy'
+				$this->Form->control("startDate", [
+					"label" => false,
+					"type" => "text",
+					"class" => "form-control date-picker col-lg-12",
+					"id" => "startDate",
+					"placeholder" => "mm/dd/yyyy"
 				])
 				?>
 			</div>
@@ -125,19 +125,19 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			</div>
 			<div>
 			<?=
-			$this->Form->control('amountEnter', [
-				'label' => false,
-				'type' => 'text',
-				'class' => 'form-control input col-lg-12',
-				'id' => 'amountEnter',
-				'placeholder' => 'Get Benchmark'
+			$this->Form->control("amountEnter", [
+				"label" => false,
+				"type" => "text",
+				"class" => "form-control input col-lg-12",
+				"id" => "amountEnter",
+				"placeholder" => "Get Benchmark"
 			])
 			?>
 			</div>
 			
 			<div id="buttonGroup">
-				<button type="button" id="updateButton">Update</button>
-				<button type="button" id="resetButton">Reset</button>
+				<button type="button" id="updateButton" class="btn btn-ctrl">Update</button>
+				<button type="button" id="resetButton" class="btn btn-ctrl">Reset</button>
 			</div>
 		</fieldset>
 		<?= $this->Form->end() ?>
@@ -209,8 +209,8 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 		<div id="collapseTimeline" class="panel-collapse collapse show">
 			<div class="panel-body">
 				<div id="chartsLayoutSelect" style="display: none">
-					<button type="button" id="chartsInlineButton">In-line</button>
-					<button type="button" id="chartsGridButton">Grid</button>
+					<button type="button" id="chartsInlineButton" class="btn btn-sm btn-ctrl">In-line</button>
+					<button type="button" id="chartsGridButton" class="btn btn-sm btn-ctrl">Grid</button>
 					<select id="chartType">
 						<option value="scatter">Scatter</option>
 						<option value="line">Line</option>
@@ -241,11 +241,11 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 					
 					&nbsp;&nbsp;&nbsp;
 					
-					<button type="button" class="firstPageButton"><<</button>
-					<button type="button" class="previousPageButton"><</button>
+					<button type="button" class="firstPageButton btn btn-sm btn-ctrl"><<</button>
+					<button type="button" class="previousPageButton btn btn-sm btn-ctrl"><</button>
 					<select id="pageSelectorTop"></select>
-					<button type="button" class="nextPageButton">></button>
-					<button type="button" class="lastPageButton">>></button>
+					<button type="button" class="nextPageButton btn btn-sm btn-ctrl">></button>
+					<button type="button" class="lastPageButton btn btn-sm btn-ctrl">>></button>
 				</div>
 				
 				<div id="tableDiv"></div>
@@ -263,23 +263,23 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 					
 					&nbsp;&nbsp;&nbsp;
 					
-					<button type="button" class="firstPageButton"><<</button>
-					<button type="button" class="previousPageButton"><</button>
+					<button type="button" class="firstPageButton btn btn-sm btn-ctrl"><<</button>
+					<button type="button" class="previousPageButton btn btn-sm btn-ctrl"><</button>
 					<select id="pageSelectorBottom"></select>
-					<button type="button" class="nextPageButton">></button>
-					<button type="button" class="lastPageButton">>></button>
+					<button type="button" class="nextPageButton btn btn-sm btn-ctrl">></button>
+					<button type="button" class="lastPageButton btn btn-sm btn-ctrl">>></button>
 				</div>
 			</div>
 		</div>
 	</div>
 		
 	<?=
-	$this->Form->button('Export', [
-		'label' => false,
-		'type' => 'submit',
-		'class' => 'btn btn-basic btn-lg mb-3 mt-3 col-md-4 float-right',
-		'id' => 'exportBtn',
-		'disabled' => true
+	$this->Form->button("Export", [
+		"label" => false,
+		"type" => "submit",
+		"class" => "btn btn-basic btn-lg mb-3 mt-3 col-md-4 float-right",
+		"id" => "exportBtn",
+		"disabled" => true
 	])
 	?>
 </div>

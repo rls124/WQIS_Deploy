@@ -20,14 +20,10 @@ if ($admin) {
 </p>
 
 <hr>
-<?php
-if ($admin) { ?>
-<input type="button" class="addSitebtn btn-basic btn mt-2 mb-2 btn-md" value="Add Site" id="addSiteBtn" name="addSiteBtn" data-toggle="modal" data-target="#addSiteModal"/>
-<?php }?>
 <p>
 	WQIS maintains sample data from <?=$numSites?> collection sites
 </p>
-<table class="table table-striped table-responsive">
+<table class="table table-striped">
 	<thead>
 		<tr>
 			<th>Site Number</th>

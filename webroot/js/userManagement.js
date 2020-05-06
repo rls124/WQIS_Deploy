@@ -231,7 +231,7 @@ $(document).ready(function () {
 				$("#add-username").val("");
 				$("#add-userpw").val("");
 				$("#add-passConfirm").val("");
-				$(".message").html("<strong>" + username + '</strong> has been added');
+				$(".message").html("<strong>" + username + "</strong> has been added");
 				$(".message").removeClass("error");
 				$(".message").removeClass("hidden");
 				$(".message").removeClass("success");
@@ -349,7 +349,7 @@ $(function () {
 //creates a popover box upon focus of the pass input field that contains instructions for creating a password
 $(function () {
 	$("#add-userpw")
-		.popover({trigger: "focus", title: 'Password Guidelines', placement: "top", html: true,
+		.popover({trigger: "focus", title: "Password Guidelines", placement: "top", html: true,
 			content: "Passwords must contain characters from three of the four following categories:<br>" +
 				"<br>*English upper case letters (A-Z)" +
 				"<br>*English lower case letters (a-z)" +
@@ -359,7 +359,7 @@ $(function () {
 			$(this).popover("hide");
 		});
 	$("#edit-userpw")
-		.popover({trigger: "focus", title: 'Password Guidelines', placement: "top", html: true,
+		.popover({trigger: "focus", title: "Password Guidelines", placement: "top", html: true,
 			content: "Passwords must contain characters from three of the four following categories:<br>" +
 				"<br>*English upper case letters (A-Z)" +
 				"<br>*English lower case letters (a-z)" +

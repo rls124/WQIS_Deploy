@@ -363,6 +363,7 @@ var zoomPlugin = {
 		var chartNum = node.id.split("-")[1];
 	
 		var zoomInButton = document.createElement("button");
+		zoomInButton.setAttribute("class", "btn btn-sm btn-ctrl");
 		zoomInButton.innerText = "+";
 		zoomInButton.id = "zoomInButton-" + chartNum;
 		zoomInButton.onclick = function() {
@@ -372,6 +373,7 @@ var zoomPlugin = {
 		node.parentElement.appendChild(zoomInButton);
 	
 		var zoomOutButton = document.createElement("button");
+		zoomOutButton.setAttribute("class", "btn btn-sm btn-ctrl");
 		zoomOutButton.innerText = "-";
 		zoomOutButton.id = "zoomOutButton-" + chartNum;
 		zoomOutButton.onclick = function() {
@@ -381,6 +383,7 @@ var zoomPlugin = {
 		node.parentElement.appendChild(zoomOutButton);
 	
 		var resetButton = document.createElement("button");
+		resetButton.setAttribute("class", "btn btn-sm btn-ctrl");
 		resetButton.innerText = "reset";
 		resetButton.id = "resetButton-" + chartNum;
 		resetButton.onclick = function() {
@@ -391,6 +394,7 @@ var zoomPlugin = {
 		if ($("#sites").val().length == 1 || aggregateGroup.checked) {
 			//we don't want to show this button if theres multiple sites, because it'd complicate coloring
 			var compareButton = document.createElement("button");
+			compareButton.setAttribute("class", "btn btn-sm btn-ctrl");
 			compareButton.type = "button";
 			compareButton.setAttribute("data-toggle", "modal");
 			compareButton.setAttribute("data-target", "#compareToModal");
@@ -1433,7 +1437,7 @@ $(document).ready(function () {
 				success: function(response) {
 					//create the blank table
 					var table = document.createElement("table");
-					table.setAttribute("class", "table table-striped table-responsive");
+					table.setAttribute("class", "table table-striped");
 					table.id = "tableView";
 			
 					//build the header row first

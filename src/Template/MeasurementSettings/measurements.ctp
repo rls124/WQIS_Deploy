@@ -13,7 +13,7 @@ echo $this->Html->css("cakemessages.css");
 		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt" title="Information" id="infoGlyph"></span>
 	</a>
 </p>
-<table class="table table-striped table-responsive">
+<table class="table table-striped">
 	<thead>
 		<tr>
 			<?php if ($admin) { echo "<th>Measure Key</th>"; } ?>

@@ -10,11 +10,8 @@
 		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt" title="Information" id="infoGlyph"></span>
 	</a>
 </p>
-
 <hr>
-
-<input type="button" class="btn-basic btn mt-2 mb-2 btn-md" value="Add <?php if (!$admin) { echo "Custom"; }?> Group" id="addGroupBtn" data-toggle="modal" data-target="#addGroupModal"/>
-<table id="tableView" class="table table-striped table-responsive">
+<table id="tableView" class="table table-striped">
 	<thead>
 		<tr>
 			<th>Group Name</th>
