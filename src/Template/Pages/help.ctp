@@ -1,4 +1,8 @@
-<?= $this->Html->css('help.css') ?>
+<?php
+echo $this->Html->css("help.css");
+echo $this->Html->script("help.js");
+?>
+
 <h1>Water Quality Information System Help Page</h1>
 <h2>Map</h2>
 <div class="indent">
@@ -130,7 +134,7 @@
 	</p>
 </div>
 
-<h2>Sites info</h2>
+<h2 id="sites">Site info</h2>
 <div class="indent">
 	<p>
 		The <b><a href="/WQIS/site-locations/sitemanagement">Site Info</a></b> page lists meta-information about every site the WQIS program monitors, including its site number, latitude and longitude, name, a description of its location, and what groups it belongs to.
@@ -147,7 +151,7 @@
 	<?php } ?>
 </div>
 
-<h2>Measurement info</h2>
+<h2 id="measurements">Measurement info</h2>
 <div class="indent">
 	<p>
 		The <b><a href="/WQIS/measurement-settings/measurements">Measurement Info</a></b> page provides meta-information about each measure supported by WQIS. The name and unit of each are listed. Minimum and maximum benchmarks, which represent the <i>recommended</i> range of values, are listed where such guidelines exist. Minimum and maximum detectable levels, which are limited by the capabilities of the sensors or laboratory equipment that record these measurements, are listed when appropriate as well.
@@ -166,7 +170,7 @@
 	<?php } ?>
 </div>
 
-<h2>Groups</h2>
+<h2 id="groups">Groups</h2>
 <div class="indent">
 	<p>
 		[TBD]
@@ -178,7 +182,7 @@
 	<h2>The following sections refer to administrator-only functionality</h2>
 </div>
 
-<h2>File upload</h2>
+<h2 id="fileUpload">File upload</h2>
 <div class="indent">
 	<p>
 		File upload is the core function available to administrators. It is the primary means by which sample data is added to the system.
@@ -197,14 +201,14 @@
 	</p>
 </div>
 
-<h2>Entry form</h2>
+<h2 id="entryForm">Entry form</h2>
 <div class="indent">
 	<p>
 		The entry form tool is the secondary means of uploading data to WQIS. In the administrator panel, select the category of measurements to add, then "Go to Entry Form". Select the date of the measurements at the top of the page. All records added at one time must be from the same date. Then fill in the site number (sample number will be filled in automatically as a function of site number and date), and all relevant measurements. Multiple records can be added at once (using the Add Site button to add a new line in the entry form), but each must be for a different site.
 	</p>
 </div>
 
-<h2>User management</h2>
+<h2 id="userManagement">User management</h2>
 <div class="indent">
 	<p>
 		The <b><a href="/WQIS/users/usermanagement">User Management</a></b> page allows administrators to view and edit all account information about the users of WQIS. Click the pencil icon in the Actions column to edit a user's data. Users can also be deleted by clicking the trashcan icon, or created using the "Add user" button.

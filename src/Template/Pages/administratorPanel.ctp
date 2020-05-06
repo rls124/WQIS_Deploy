@@ -2,48 +2,8 @@
 if ($admin) { ?>
 <link href="../css/administratorPanel.css" rel="stylesheet" type="text/css"/>
 
-<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-home" style="font-size:20pt;"></span>  Administrator Panel
-	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
-	</a>
-</p>
+<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-home" style="font-size:20pt;"></span>  Administrator Panel</p>
 <hr>
-
-<div class="collapse" id="collapseInfo">
-	<div class="card card-body card-info">
-		<ul>
-			<li class="info-li">
-				<span class="glyphicon glyphicon-list-alt" style="font-size: 14pt;"></span>
-				- Used to enter measurements for one or more sites taken on a particular date.
-			</li>
-			<li class="info-li">
-				<span class="glyphicon glyphicon-upload" style="font-size:14pt;"></span>
-				- Used to import water quality data.
-			</li>
-			<hr>
-			<li class="info-li">
-				<span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>
-				- Used to define acceptable values and benchmarks for water quality data.
-			</li>
-			<li class="info-li">
-				<span class="glyphicon glyphicon-map-marker" style="font-size: 14pt;"></span>
-				- Used to add, edit, or delete sites.
-			</li>
-			<li class="info-li">
-				<span class="glyphicon glyphicon-envelope" style="font-size: 14pt;"></span>
-				- Used to view feedback from non-admin users.
-			</li>
-			<li class="info-li">
-				<span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>
-				- Used to add, edit, or delete users.
-			</li>
-			<li class="info-li">
-				<span class="glyphicon glyphicon-folder-open" style="font-size:14pt;"></span>
-				- Used to add, edit, or delete site groups.
-			</li>
-		</ul>
-	</div>
-</div>
 
 <div class="card-deck mb-3">
 	<div class="card big-card">

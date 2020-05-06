@@ -5,7 +5,11 @@
 
 <div id="message" class="message hidden"></div>
 
-<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-folder-open" style="font-size: 20pt;"></span>  Site Groups</p>
+<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-folder-open" style="font-size: 20pt"></span>  Site Groups
+	<a href="/WQIS/pages/help#groups">
+		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt" title="Information" id="infoGlyph"></span>
+	</a>
+</p>
 
 <hr>
 

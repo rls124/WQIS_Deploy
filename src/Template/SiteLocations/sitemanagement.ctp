@@ -13,27 +13,15 @@ if ($admin) {
 
 <div id="message" class="message hidden"></div>
 
-<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt;"></span>  Sites
-<?php if ($admin) {?>
-	<a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">
-		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt;" data-toggle="tooltip" title="Information" id="infoGlyph"></span>
+<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 20pt"></span>  Sites
+	<a href="/WQIS/pages/help#sites">
+		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt" title="Information" id="infoGlyph"></span>
 	</a>
-<?php }?>
 </p>
 
 <hr>
 <?php
 if ($admin) { ?>
-<div class="collapse" id="collapseInfo">
-	<div class="card card-body">
-		<p>This page is used to add, edit, or delete sites.</p>
-		<ul>
-			<li>To add a site, click the 'Add Site' button.</li>
-			<li>To delete a site, click the delete icon in the row containing the site to delete.</li>
-			<li>To edit a site, click the edit icon in the row containing the site to edit.</li>
-		</ul>
-	</div>
-</div>
 <input type="button" class="addSitebtn btn-basic btn mt-2 mb-2 btn-md" value="Add Site" id="addSiteBtn" name="addSiteBtn" data-toggle="modal" data-target="#addSiteModal"/>
 <?php }?>
 <p>
