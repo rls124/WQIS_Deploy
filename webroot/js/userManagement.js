@@ -2,14 +2,14 @@ $(document).ajaxStart(function () {
 	$(".loadingspinnermain").css("visibility", "visible");
 	$("body").css("cursor", "wait");
 }).ajaxStop(function () {
-	$('.loadingspinnermain').css("visibility", "hidden");
+	$(".loadingspinnermain").css("visibility", "hidden");
 	$("body").css("cursor", "default");
 });
 
 $(document).ready(function () {
 	$("#add-firstname").val("");
 	$("#add-lastname").val("");
-	$('#add-email').val("");
+	$("#add-email").val("");
 	$("#add-organization").val("");
 	$("#add-position").val("");
 	$("#add-username").val("");
@@ -29,38 +29,37 @@ $(document).ready(function () {
 		if (!input.attr("id")) {
 			return;
 		}
-		$.confirm("Are you sure you want to delete this record?", function (bool) {
-			if (bool) {
-				var username = (input.attr("id")).split("-")[1];
-				//Now send ajax data to a delete script.
-				$.ajax({
-					type: "POST",
-					url: "deleteUser",
-					datatype: "JSON",
-					data: {
-						"username": username
-					},
-					success: function () {
-						$("#tr-" + username).remove();
-						$(".message").html("<strong>" + username + "</strong> has been deleted");
-						$(".message").removeClass("error");
-						$(".message").removeClass("hidden");
-						$(".message").removeClass("success");
-						$(".message").addClass("success");
-					},
-					error: function () {
-						$(".message").html("<strong>" + username + "</strong> was unable to be deleted");
-						$(".message").removeClass("success");
-						$(".message").removeClass("error");
-						$(".message").addClass("error");
-						$.alert('Unable to delete user');
-					}
-				});
-			}
-		});
+		var bool = window.confirm("Are you sure you want to delete this record?");
+		if (bool) {
+			var username = (input.attr("id")).split("-")[1];
+			//now send ajax data to a delete script
+			$.ajax({
+				type: "POST",
+				url: "deleteUser",
+				datatype: "JSON",
+				data: {
+					"username": username
+				},
+				success: function () {
+					$("#tr-" + username).remove();
+					$(".message").html("<strong>" + username + "</strong> has been deleted");
+					$(".message").removeClass("error");
+					$(".message").removeClass("hidden");
+					$(".message").removeClass("success");
+					$(".message").addClass("success");
+				},
+				error: function () {
+					$(".message").html("<strong>" + username + "</strong> was unable to be deleted");
+					$(".message").removeClass("success");
+					$(".message").removeClass("error");
+					$(".message").addClass("error");
+					$.alert("Unable to delete user");
+				}
+			});
+		}
 	});
 	$("body").on("click", ".edit", function () {
-		$("#edit-header").text('Edit User:');
+		$("#edit-header").text("Edit User:");
 		$("#edit-firstname").val("");
 		$("#edit-lastname").val("");
 		$("#edit-email").val("");
@@ -81,7 +80,7 @@ $(document).ready(function () {
 				"username": username
 			},
 			success: function (result) {
-				var admin = result['admin'];
+				var admin = result["admin"];
 				if (admin === true) {
 					$("#edit-admin").prop("checked", true);
 				}
@@ -90,7 +89,7 @@ $(document).ready(function () {
 				}
 
 				$("#edit-header").text("Edit User: " + result["username"]);
-				$('#edit-username').text(result["username"]);
+				$("#edit-username").text(result["username"]);
 				$("#edit-firstname").val(result["firstname"]);
 				$("#edit-lastname").val(result["lastname"]);
 				$("#edit-organization").val(result["organization"]);
@@ -144,7 +143,7 @@ $(document).ready(function () {
 			},
 			success: function () {
 				$("#td-" + username + "-admin").text(adminVal);
-				$("#td-" + username + "-name").text(firstname + ' ' + lastname);
+				$("#td-" + username + "-name").text(firstname + " " + lastname);
 				$("#td-" + username + "-email").text(email);
 				$("#td-" + username + "-org").text(organization);
 				$("#td-" + username + "-pos").text(position);
@@ -185,7 +184,7 @@ $(document).ready(function () {
 		var adminVal = "general";
 		if ($("#add-admin").is(":checked")) {
 			admin = 1;
-			adminVal = 'admin';
+			adminVal = "admin";
 		}
 
 		if (!validateInput(username, firstname, lastname, email, organization, position) || ((userpw !== "" || passconfirm !== "") && !validatePassword(userpw, passconfirm))) { //validation
@@ -208,7 +207,7 @@ $(document).ready(function () {
 				"admin": admin
 			},
 			success: function () {
-				$('#userTable').append('<tr id="tr-' + username + '"></tr>');
+				$("#userTable").append('<tr id="tr-' + username + '"></tr>');
 				$("#tr-" + username).append("<td>" + username + "</td>");
 				$("#tr-" + username).append('<td id="td-' + username + '-admin">' + adminVal + "</td>");
 				$("#tr-" + username).append('<td id="td-' + username + '-name">' + firstname + " " + lastname + "</td>");
@@ -220,7 +219,7 @@ $(document).ready(function () {
 				$("#add-close").trigger("click");
 				$("#add-firstname").val("");
 				$("#add-lastname").val("");
-				$('#add-email').val("");
+				$("#add-email").val("");
 				$("#add-organization").val("");
 				$("#add-position").val("");
 				$("#add-username").val("");
@@ -351,7 +350,7 @@ $(function () {
 				"<br>*Base 10 digits (0-9)" +
 				"<br>*Nonalphanumeric characters(e.g., !,$,#,%)"})
 		.blur(function () {
-			$(this).popover('hide');
+			$(this).popover("hide");
 		});
 	$("#edit-userpw")
 		.popover({trigger: "focus", title: 'Password Guidelines', placement: "top", html: true,
@@ -361,7 +360,7 @@ $(function () {
 				"<br>*Base 10 digits (0-9)" +
 				"<br>*Nonalphanumeric characters(e.g., !,$,#,%)"})
 		.blur(function () {
-			$(this).popover('hide');
+			$(this).popover("hide");
 		});
 });
 
@@ -376,6 +375,6 @@ $(function () {
 		.popover({trigger: "focus", title: "Password Guidelines", placement: "top", html: true,
 			content: "Passwords must match"})
 		.blur(function () {
-			$(this).popover('hide');
+			$(this).popover("hide");
 		});
 });

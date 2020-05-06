@@ -9,10 +9,10 @@ function ensurePasswordInput() {
 
 $(document).ready(function() {
 	$("body").on("focus", ".mainPage", function(){
-		$(this).css({'backgroundColor':"white", "border":"none"});
+		$(this).css({"backgroundColor":"white", "border":"none"});
 	});
 	$("body").on("focus", ".select", function(){
-		$(this).css({'backgroundColor':"white", "border":"none"});
+		$(this).css({"backgroundColor":"white", "border":"none"});
 	});
 	
 	$("body").on("submit", "#updateUserForm", function() {
@@ -46,40 +46,36 @@ function validateUserCredentials() {
 		displayError("#position", "#positionError", "Please enter your position");
 		return false;
 	}
-	if ($("#securityquestion1").val() === "") {
-		displayError("#securityquestion1", "#securityquestion1Error", "Please select a security question");
-		return false;
+	
+	for (i=1; i<4; i++) {
+		if ($("#securityquestion" + i).val() === "") {
+			displayError("#securityquestion" + i, "#securityquestion" + i + "Error", "Please select a security question");
+			return false;
+		}
 	}
-	if($("#securityquestion2").val() === "") {
-		displayError('#securityquestion2','#securityquestion2Error', 'Please select a security question');
-		return false;
-	}
-	if($('#securityquestion3').val() === "") {
-		displayError('#securityquestion3','#securityquestion3Error', 'Please select a security question');
-		return false;
-	}
+	
 	return true;
 }
 
 function validatePass() {
 	removeErrorMessages();
 	if (!validatePassword()) { 
-		if(!$("#firstname").length) {
-			displayError("#userpw",'#passError', 'Please enter a valid password');
+		if (!$("#firstname").length) {
+			displayError("#userpw", "#passError", "Please enter a valid password");
 		}
 		else {
-			displayError("#userpw",'#passError', 'Please enter a valid password if you wish to change your password');
+			displayError("#userpw", "#passError", "Please enter a valid password if you wish to change your password");
 		}
 		return false;
 	}
 	if ($("#userpw").val() !== $("#passConfirm").val()) {
-		if(!$("#firstname").length) {
-			displayError("#userpw",'#passError', 'Please ensure passwords match');
-			displayError("#passConfirm",'#passConfirmError', 'Please ensure passwords match');
+		if (!$("#firstname").length) {
+			displayError("#userpw", "#passError", "Please ensure passwords match");
+			displayError("#passConfirm", "#passConfirmError", "Please ensure passwords match");
 		}
 		else {
-			displayError("#userpw",'#passError', 'Please ensure passwords match if you wish to change your password');
-			displayError("#passConfirm",'#passConfirmError', 'Please ensure passwords match if you wish to change your password');
+			displayError("#userpw", "#passError", "Please ensure passwords match if you wish to change your password");
+			displayError("#passConfirm", "#passConfirmError", "Please ensure passwords match if you wish to change your password");
 		}
 		
 		return false;
@@ -123,22 +119,22 @@ function removeErrorMessages() {
 //creates a popover box upon focus of the pass input field that contains instructions for creating a password
 $(function () {
 	$("#userpw")
-		.popover({trigger: "focus", title: 'Password Guidelines', placement: "top", html: true,
+		.popover({trigger: "focus", title: "Password Guidelines", placement: "top", html: true,
 		content: "Passwords must contain characters from three of the four following categories:<br>" +
 			"<br>*English upper case letters (A-Z)" +
 			"<br>*English lower case letters (a-z)" +
 			"<br>*Base 10 digits (0-9)" +
 			"<br>*Nonalphanumeric characters(e.g., !,$,#,%)"})
 		.blur(function () {
-		$(this).popover('hide');
+			$(this).popover("hide");
 		});
 });
 
 $(function () {
 	$("#passConfirm")
-		.popover({trigger: "focus", title: 'Password Guidelines', placement: "top", html: true,
+		.popover({trigger: "focus", title: "Password Guidelines", placement: "top", html: true,
 		content: "Passwords must match"})
 		.blur(function () {
-			$(this).popover('hide');
+			$(this).popover("hide");
 		});
 });

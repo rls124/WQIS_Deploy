@@ -1635,29 +1635,28 @@ $(document).ready(function () {
 									return;
 								}
 			
-								$.confirm("Are you sure you want to delete this record?", function (bool) {
-									if (bool) {
-										//delete record with this sample number and category
-										$.ajax({
-											type: "POST",
-											url: "/WQIS/generic-samples/deleteRecord",
-											datatype: "JSON",
-											data: {
-												"sampleNumber": $("#Sample_Number-" + ($(rowDiv).attr("id")).split("-")[1]).val(),
-												"type": category
-											},
-											success: function () {
-												//remove the row from view
-												rowDiv.parentNode.parentNode.style.display = "none";
-						
-												//future work: build a new table, to still maintain correct total number of rows and have correct black/white/black sequencing after deletions
-											},
-											error: function () {
-												genericError();
-											}
-										});
-									}
-								});
+								var bool = window.confirm("Are you sure you want to delete this record?");
+								if (bool) {
+									//delete record with this sample number and category
+									$.ajax({
+										type: "POST",
+										url: "/WQIS/generic-samples/deleteRecord",
+										datatype: "JSON",
+										data: {
+											"sampleNumber": $("#Sample_Number-" + ($(rowDiv).attr("id")).split("-")[1]).val(),
+											"type": category
+										},
+										success: function () {
+											//remove the row from view
+											rowDiv.parentNode.parentNode.style.display = "none";
+					
+											//future work: build a new table, to still maintain correct total number of rows and have correct black/white/black sequencing after deletions
+										},
+										error: function () {
+											genericError();
+										}
+									});
+								}
 							}
 							newCell.append(delButton);
 						}

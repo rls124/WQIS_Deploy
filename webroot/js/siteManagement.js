@@ -68,36 +68,35 @@ $(document).ready(function () {
 		if (!input.attr("id")) {
 			return;
 		}
-		$.confirm("Are you sure you want to delete this record?", function (deleteRecord) {
-			if (deleteRecord) {
-				var siteid = (input.attr("id")).split("-")[1];
-				//now send ajax data to a delete script
-				$.ajax({
-					type: "POST",
-					url: "deletesite",
-					datatype: "JSON",
-					data: {
-						"siteid": siteid
-					},
-					success: function () {
-						var sitenumber = $("#td-" + siteid + "-siteNum").text();
+		var deleteRecord = window.confirm("Are you sure you want to delete this record?")
+		if (deleteRecord) {
+			var siteid = (input.attr("id")).split("-")[1];
+			//now send ajax data to a delete script
+			$.ajax({
+				type: "POST",
+				url: "deletesite",
+				datatype: "JSON",
+				data: {
+					"siteid": siteid
+				},
+				success: function () {
+					var sitenumber = $("#td-" + siteid + "-siteNum").text();
 
-						$("#tr-" + siteid).remove();
-						$(".message").html("Site: <strong>" + sitenumber + "</strong> has been deleted");
-						$(".message").removeClass("error");
-						$(".message").removeClass("hidden");
-						$(".message").removeClass("success");
-						$(".message").addClass("success");
-					},
-					error: function () {
-						$(".message").html("Site: <strong>" + siteid + "</strong> was unable to be deleted");
-						$(".message").removeClass("success");
-						$(".message").removeClass("error");
-						$(".message").addClass("error");
-					}
-				});
-			}
-		});
+					$("#tr-" + siteid).remove();
+					$(".message").html("Site: <strong>" + sitenumber + "</strong> has been deleted");
+					$(".message").removeClass("error");
+					$(".message").removeClass("hidden");
+					$(".message").removeClass("success");
+					$(".message").addClass("success");
+				},
+				error: function () {
+					$(".message").html("Site: <strong>" + siteid + "</strong> was unable to be deleted");
+					$(".message").removeClass("success");
+					$(".message").removeClass("error");
+					$(".message").addClass("error");
+				}
+			});
+		}
 	});
 
 	$("#message").on("click", function(){

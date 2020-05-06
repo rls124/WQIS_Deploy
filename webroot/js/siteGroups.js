@@ -38,34 +38,33 @@ $(document).ready(function () {
 		if (!input.attr("id")) {
 			return;
 		}
-		$.confirm("Are you sure you want to delete this record?", function (deleteRecord) {
-			if (deleteRecord) {
-				var groupkey = (input.attr("id")).split("-")[1];
-				var groupname = $("#td-" + groupkey + "-groupKey").text();
-				$.ajax({
-					type: "POST",
-					url: "deletegroup",
-					datatype: "JSON",
-					data: {
-						"groupkey": groupkey
-					},
-					success: function () {
-						$("#tr-" + groupkey).remove();
-						$(".message").html("Group: <strong>" + groupname + "</strong> has been deleted");
-						$(".message").removeClass("error");
-						$(".message").removeClass("hidden");
-						$(".message").removeClass("success");
-						$(".message").addClass("success");
-					},
-					error: function () {
-						$(".message").html("Group: <strong>" + groupname + "</strong> was unable to be deleted");
-						$(".message").removeClass("success");
-						$(".message").removeClass("error");
-						$(".message").addClass("error");
-					}
-				});
-			}
-		});
+		var deleteRecord = window.confirm("Are you sure you want to delete this record?");
+		if (deleteRecord) {
+			var groupkey = (input.attr("id")).split("-")[1];
+			var groupname = $("#td-" + groupkey + "-groupKey").text();
+			$.ajax({
+				type: "POST",
+				url: "deletegroup",
+				datatype: "JSON",
+				data: {
+					"groupkey": groupkey
+				},
+				success: function () {
+					$("#tr-" + groupkey).remove();
+					$(".message").html("Group: <strong>" + groupname + "</strong> has been deleted");
+					$(".message").removeClass("error");
+					$(".message").removeClass("hidden");
+					$(".message").removeClass("success");
+					$(".message").addClass("success");
+				},
+				error: function () {
+					$(".message").html("Group: <strong>" + groupname + "</strong> was unable to be deleted");
+					$(".message").removeClass("success");
+					$(".message").removeClass("error");
+					$(".message").addClass("error");
+				}
+			});
+		}
 	});
 	
 	$("body").on("click", ".edit", function () {

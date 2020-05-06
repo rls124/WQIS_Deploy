@@ -24,36 +24,36 @@ $(document).ready(function () {
 		if (!input.attr("id")) {
 			return;
 		}
-		$.confirm("Are you sure you want to delete this record?", function (deleteRecord) {
-			if (deleteRecord) {
-				var id = (input.attr("id")).split("-")[1];
+		
+		var deleteRecord = window.confirm("Are you sure you want to delete this record?");
+		if (deleteRecord) {
+			var id = (input.attr("id")).split("-")[1];
 
-				//Now send ajax data to a delete script.
-				$.ajax({
-					type: "POST",
-					url: "deleteFeedback",
-					datatype: "JSON",
-					data: {
-						"ID": id
-					},
-					success: function () {
-						var num = $("#td-" + id + "-siteNum").text();
+			//now send ajax data to a delete script
+			$.ajax({
+				type: "POST",
+				url: "deleteFeedback",
+				datatype: "JSON",
+				data: {
+					"ID": id
+				},
+				success: function () {
+					var num = $("#td-" + id + "-siteNum").text();
 
-						$("#tr-" + id).remove();
-						$(".message").html("Record: <strong>" + num + "</strong> has been deleted");
-						$(".message").removeClass("error");
-						$(".message").removeClass("hidden");
-						$(".message").removeClass("success");
-						$(".message").addClass("success");
-					},
-					error: function () {
-						$(".message").html("Record: <strong>" + id + "</strong> was unable to be deleted");
-						$(".message").removeClass("success");
-						$(".message").removeClass("error");
-						$(".message").addClass("error");
-					}
-				});
-			}
-		});
+					$("#tr-" + id).remove();
+					$(".message").html("Record: <strong>" + num + "</strong> has been deleted");
+					$(".message").removeClass("error");
+					$(".message").removeClass("hidden");
+					$(".message").removeClass("success");
+					$(".message").addClass("success");
+				},
+				error: function () {
+					$(".message").html("Record: <strong>" + id + "</strong> was unable to be deleted");
+					$(".message").removeClass("success");
+					$(".message").removeClass("error");
+					$(".message").addClass("error");
+				}
+			});
+		}
 	});
 });
