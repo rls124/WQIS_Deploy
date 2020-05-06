@@ -2,9 +2,9 @@
 if ($admin) {
 	echo $this->Html->script("measurementSettings.js");
 }
+echo $this->Html->css("measurementBenchmarks.css");
+echo $this->Html->css("cakemessages.css");
 ?>
-<?= $this->Html->css("measurementBenchmarks.css") ?>
-<?= $this->Html->css("cakemessages.css") ?>
 
 <div class="message hidden" id="message"></div>
 

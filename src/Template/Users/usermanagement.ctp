@@ -3,15 +3,15 @@
 
 <div id="message" class="message hidden"></div>
 
-<p class="centeredText" id="wqisHeading" style='font-size:2.5rem;'><span class="glyphicon glyphicon-user" style="font-size: 20pt;"></span>  User Management
+<p class="centeredText" id="wqisHeading" style="font-size:2.5rem"><span class="glyphicon glyphicon-user" style="font-size: 20pt"></span>  User Management
 	<a href="/WQIS/pages/help#userManagement">
 		<span class="glyphicon glyphicon-question-sign" style="font-size:18pt" title="Information" id="infoGlyph"></span>
 	</a>
 </p>
 
 <hr>
-<input type="button" class='addUserbtn btn-basic btn mt-2 mb-3 btn-md' value='Add User' id='addUserBtn' name='addUserBtn' data-toggle="modal" data-target="#addUserModal"/>
-	<table id='tableView' class="table table-striped table-responsive">
+<input type="button" class="addUserbtn btn-basic btn mt-2 mb-3 btn-md" value="Add User" id="addUserBtn" name="addUserBtn" data-toggle="modal" data-target="#addUserModal"/>
+	<table id="tableView" class="table table-striped table-responsive">
 		<thead>
 			<tr>
 				<th>Username</th>
@@ -37,7 +37,8 @@
 				else {
 					echo 'general';
 				}
-				?></td>
+				?>
+			</td>
 			<td id='<?php echo 'td-' . $userData->username . '-name'; ?>'><?= $userData->firstname . ' ' . $userData->lastname; ?></td>
 			<td id='<?php echo 'td-' . $userData->username . '-email'; ?>'><?= $userData->email ?></td>
 			<td id='<?php echo 'td-' . $userData->username . '-org'; ?>'><?= $userData->organization ?></td>
@@ -69,27 +70,25 @@
 		<?php endforeach; ?>
 		</tbody>
 	</table>
-	<input type='button' class='addUserbtn btn-basic btn mb-3 btn-md' value='Add User' id='addUserBtn' name='addUserBtn' style='float: right;' data-toggle="modal" data-target="#addUserModal"/>
+	<input type="button" class="addUserbtn btn-basic btn mb-3 btn-md" value="Add User" id="addUserBtn" name="addUserBtn" style="float: right" data-toggle="modal" data-target="#addUserModal"/>
 </div>
 
 <!-- Modal Stuff for edit button -->
 <div id="editUserModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-
-	<?=
-		$this->Form->create(false, [
-		'id' => 'updateUserForm'
-		]
-		)
-	?>
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="edit-header">Edit User: </h4>
 				<p hidden id="edit-username"></p>
 			</div>
 			<div class="modal-body">
-		<?=
-			$this->Form->control('firstname', [
+			<?php
+			echo $this->Form->create(false, [
+				'id' => 'updateUserForm'
+			]
+			);
+
+			echo $this->Form->control('firstname', [
 			'label' => [
 				'text' => 'First Name',
 				'class' => 'label-reg lol'
@@ -102,9 +101,8 @@
 			'id' => "edit-firstname",
 			'placeholder' => "Your First Name..."
 			]);
-		?>
-		<?=
-			$this->Form->control('lastname', [
+		
+			echo $this->Form->control('lastname', [
 			'label' => [
 				'text' => 'Last Name',
 				'class' => 'label-reg lol'
@@ -117,9 +115,8 @@
 			'id' => "edit-lastname",
 			'placeholder' => "Your Last Name..."
 			]);
-		?>
-		<?=
-			$this->Form->control('email', [
+		
+			echo $this->Form->control('email', [
 			'label' => [
 				'text' => 'Email Address',
 				'class' => 'label-reg lol'
@@ -132,9 +129,8 @@
 			'id' => "edit-email",
 			'placeholder' => "Your Email..."
 			]);
-		?>
-		<?=
-			$this->Form->control('organization', [
+		
+			echo $this->Form->control('organization', [
 			'label' => [
 				'text' => 'Organization',
 				'class' => 'label-reg lol'
@@ -147,9 +143,8 @@
 			'id' => "edit-organization",
 			'placeholder' => "Your Organization..."
 			]);
-		?>
-		<?=
-			$this->Form->control('position', [
+		
+			echo $this->Form->control('position', [
 			'label' => [
 				'text' => 'Position',
 				'class' => 'label-reg lol'
@@ -162,18 +157,16 @@
 			'id' => "edit-position",
 			'placeholder' => "Your Position..."
 			]);
-		?>
-				<label for='#edit-adminChk'>Set as administrator: </label>
-		<?=
-			$this->Form->checkbox('admin', [
-			'checked' => true,
-			'id' => 'edit-admin'
-			]
-			);
-		?>
-				<br>
-		<?=
-			$this->Form->control('userpw', [
+		
+			echo "<label for=\"#edit-isadmin\">Set as administrator: </label>";
+		
+			echo $this->Form->checkbox("admin", [
+				"id" => "edit-isadmin"
+			]);
+		
+			echo "<br>";
+		
+			echo $this->Form->control('userpw', [
 			'label' => [
 				'text' => 'Password',
 				'class' => 'label-reg lol'
@@ -187,9 +180,8 @@
 			'id' => "edit-userpw",
 			'placeholder' => "Your Password..."
 			]);
-		?>
-		<?=
-			$this->Form->control('Password (again)', [
+		
+			echo $this->Form->control('Password (again)', [
 			'label' => [
 				'class' => 'label-reg lol'
 			],
@@ -213,24 +205,21 @@
 	</div>
 </div>
 
-
 <!-- Modal Stuff for Add User button -->
 <div id="addUserModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-	<?=
-		$this->Form->create(false, [
-		'id' => 'addUserForm'
-		]
-		)
-	?>
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title">Add New User</h4>
 			</div>
 			<div class="modal-body">
-		<?=
-			$this->Form->control('firstname', [
+			<?php
+			echo $this->Form->create(false, [
+				'id' => 'addUserForm'
+			]);
+			
+			echo $this->Form->control('firstname', [
 			'label' => [
 				'text' => 'First Name',
 				'class' => 'label-reg lol'

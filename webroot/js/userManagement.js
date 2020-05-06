@@ -81,12 +81,18 @@ $(document).ready(function () {
 			},
 			success: function (result) {
 				var admin = result["admin"];
+				/*
 				if (admin === true) {
-					$("#edit-admin").prop("checked", true);
+					console.log("on");
+					$("#edit-isadmin").prop("checked", true);
 				}
 				else {
-					$("#edit-admin").prop("checked", false);
+					console.log("off");
+					$("#edit-isadmin").prop("checked", false);
 				}
+				*/
+				
+				$("#edit-isadmin").prop("checked", admin);
 
 				$("#edit-header").text("Edit User: " + result["username"]);
 				$("#edit-username").text(result["username"]);
@@ -117,7 +123,7 @@ $(document).ready(function () {
 		var passconfirm = $("#edit-passConfirm").val();
 		var admin = 0;
 		var adminVal = "general";
-		if ($("#edit-admin").is(":checked")) {
+		if ($("#edit-isadmin").is(":checked")) {
 			admin = 1;
 			adminVal = "admin";
 		}
