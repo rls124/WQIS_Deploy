@@ -1,59 +1,59 @@
 //loading graphic
 $(document).ajaxStart(function () {
-	$('.loadingspinnermain').css('visibility', 'visible');
-	$('body').css('cursor', 'wait');
+	$(".loadingspinnermain").css("visibility", "visible");
+	$("body").css("cursor", "wait");
 }).ajaxStop(function () {
-	$('.loadingspinnermain').css('visibility', 'hidden');
-	$('body').css('cursor', 'default');
+	$(".loadingspinnermain").css("visibility", "hidden");
+	$("body").css("cursor", "default");
 });
 
 $(document).ready(function () {
-	$('#add-date').val('');
-	$('#add-feedback').val('');
+	$("#add-date").val("");
+	$("#add-feedback").val("");
 	$(function () {
 		$('[data-toggle="tooltip"]').tooltip();
 	});
-	$('.info').tooltip();
-	$('#delete-tooltip').tooltip();
-	$('#message').on('click', function () {
+	$(".info").tooltip();
+	$("#delete-tooltip").tooltip();
+	$("#message").on("click", function () {
 		$(this).addClass("hidden");
 	});
 
-	$("body").on('click', '.delete', function () {
+	$("body").on("click", ".delete", function () {
 		var input = $(this);
-		if (!input.attr('id')) {
+		if (!input.attr("id")) {
 			return;
 		}
 		$.confirm("Are you sure you want to delete this record?", function (deleteRecord) {
 			if (deleteRecord) {
-				var id = (input.attr('id')).split("-")[1];
+				var id = (input.attr("id")).split("-")[1];
 
 				//Now send ajax data to a delete script.
 				$.ajax({
 					type: "POST",
 					url: "deleteFeedback",
-					datatype: 'JSON',
+					datatype: "JSON",
 					data: {
-						'ID': id
+						"ID": id
 					},
 					success: function () {
-						var num = $('#td-' + id + '-siteNum').text();
+						var num = $("#td-" + id + "-siteNum").text();
 
-						$('#tr-' + id).remove();
-						$('.message').html('Record: <strong>' + num + '</strong> has been deleted');
-						$('.message').removeClass('error');
-						$('.message').removeClass('hidden');
-						$('.message').removeClass('success');
-						$('.message').addClass('success');
+						$("#tr-" + id).remove();
+						$(".message").html("Record: <strong>" + num + "</strong> has been deleted");
+						$(".message").removeClass("error");
+						$(".message").removeClass("hidden");
+						$(".message").removeClass("success");
+						$(".message").addClass("success");
 					},
 					error: function () {
-						$('.message').html('Record: <strong>' + id + '</strong> was unable to be deleted');
-						$('.message').removeClass('success');
-						$('.message').removeClass('error');
-						$('.message').addClass('error');
+						$(".message").html("Record: <strong>" + id + "</strong> was unable to be deleted");
+						$(".message").removeClass("success");
+						$(".message").removeClass("error");
+						$(".message").addClass("error");
 					}
 				});
 			}
 		});
-    });
+	});
 });

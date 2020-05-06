@@ -124,8 +124,8 @@ export function start() {
 	}
 
 	//game logic
-	function play() { hide('start'); reset();          playing = true;  };
-	function lose() { show('start'); setVisualScore(); playing = false; };
+	function play() { hide("start"); reset();          playing = true;  };
+	function lose() { show("start"); setVisualScore(); playing = false; };
 
 	function setVisualScore(n)      { vscore = n || score; invalidateScore(); };
 	function setScore(n)            { score = n; setVisualScore(n);  };
@@ -334,7 +334,7 @@ export function start() {
 			uctx.translate(0.5, 0.5);
 			uctx.clearRect(0, 0, nu*dx, nu*dy);
 			drawPiece(uctx, next.type, padding, padding, next.dir);
-			uctx.strokeStyle = 'black';
+			uctx.strokeStyle = "black";
 			uctx.strokeRect(0, 0, nu*dx - 1, nu*dy - 1);
 			uctx.restore();
 			invalid.next = false;
@@ -343,7 +343,7 @@ export function start() {
 
 	function drawScore() {
 		if (invalid.score) {
-			html('score', ("00000" + Math.floor(vscore)).slice(-5));
+			html("score", ("00000" + Math.floor(vscore)).slice(-5));
 			invalid.score = false;
 		}
 	}
@@ -412,10 +412,10 @@ export function start() {
 	//game constants
 	var KEY     = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
 		DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, BOTTOM: 4, MIN: 0, MAX: 3 },
-		canvas  = document.getElementById('canvas'),
-		ctx     = canvas.getContext('2d'),
-		ucanvas = document.getElementById('upcoming'),
-		uctx    = ucanvas.getContext('2d'),
+		canvas  = document.getElementById("canvas"),
+		ctx     = canvas.getContext("2d"),
+		ucanvas = document.getElementById("upcoming"),
+		uctx    = ucanvas.getContext("2d"),
 		speed   = { start: 0.6, decrement: 0.01, min: 0.1 }, // how long before piece drops by 1 row (seconds)
 		nx      = 10, //width of tetris court (in blocks)
 		ny      = 20, //height of tetris court (in blocks)

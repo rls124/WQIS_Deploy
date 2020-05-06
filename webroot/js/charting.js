@@ -1526,8 +1526,8 @@ $(document).ready(function () {
 													input.attr("style", "display: none");
 													label.attr("style", "display: in-line; cursor: pointer");
 	
-													if (value === '') {
-														label.text('  ');
+													if (value === "") {
+														label.text("  ");
 													}
 													else {
 														label.text(value);
@@ -1592,8 +1592,8 @@ $(document).ready(function () {
 													input.attr("style", "display: none");
 													label.attr("style", "display: in-line; cursor: pointer");
 	
-													if (value === '') {
-														label.text('  ');
+													if (value === "") {
+														label.text("  ");
 													}
 													else {
 														label.text(value);

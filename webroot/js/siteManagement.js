@@ -63,37 +63,37 @@ $(document).ready(function () {
 		}
 	});
 	
-	$("body").on('click', '.delete', function () {
+	$("body").on("click", ".delete", function () {
 		var input = $(this);
-		if (!input.attr('id')) {
+		if (!input.attr("id")) {
 			return;
 		}
 		$.confirm("Are you sure you want to delete this record?", function (deleteRecord) {
 			if (deleteRecord) {
-				var siteid = (input.attr('id')).split("-")[1];
-				//Now send ajax data to a delete script.
+				var siteid = (input.attr("id")).split("-")[1];
+				//now send ajax data to a delete script
 				$.ajax({
 					type: "POST",
 					url: "deletesite",
-					datatype: 'JSON',
+					datatype: "JSON",
 					data: {
-						'siteid': siteid
+						"siteid": siteid
 					},
 					success: function () {
-						var sitenumber = $('#td-' + siteid + '-siteNum').text();
+						var sitenumber = $("#td-" + siteid + "-siteNum").text();
 
-						$('#tr-' + siteid).remove();
-						$('.message').html('Site: <strong>' + sitenumber + '</strong> has been deleted');
-						$('.message').removeClass('error');
-						$('.message').removeClass('hidden');
-						$('.message').removeClass('success');
-						$('.message').addClass('success');
+						$("#tr-" + siteid).remove();
+						$(".message").html("Site: <strong>" + sitenumber + "</strong> has been deleted");
+						$(".message").removeClass("error");
+						$(".message").removeClass("hidden");
+						$(".message").removeClass("success");
+						$(".message").addClass("success");
 					},
 					error: function () {
-						$('.message').html('Site: <strong>' + siteid + '</strong> was unable to be deleted');
-						$('.message').removeClass('success');
-						$('.message').removeClass('error');
-						$('.message').addClass('error');
+						$(".message").html("Site: <strong>" + siteid + "</strong> was unable to be deleted");
+						$(".message").removeClass("success");
+						$(".message").removeClass("error");
+						$(".message").addClass("error");
 					}
 				});
 			}
@@ -139,30 +139,30 @@ $(document).ready(function () {
 				"value": value
 			},
 			success: function () {
-				var label = $('label[for="' + input.attr('id') + '"');
+				var label = $('label[for="' + input.attr("id") + '"');
 
 				input.attr("style", "display: none");
 				label.attr("style", "display: in-line; cursor: pointer");
 
-				if (value === '') {
-					label.text('  ');
+				if (value === "") {
+					label.text("  ");
 				}
 				else {
 					label.text(value);
 				}
-				$('.message').html('<strong>' + parameter + '</strong> for <strong>' + siteNumber + ' </strong> has been updated to <strong>' + value + '</strong>');
-				$('.message').removeClass('error');
-				$('.message').removeClass('hidden');
-				$('.message').removeClass('success');
-				$('.message').addClass('success');
+				$(".message").html("<strong>" + parameter + "</strong> for <strong>" + siteNumber + "</strong> has been updated to <strong>" + value + "</strong>");
+				$(".message").removeClass("error");
+				$(".message").removeClass("hidden");
+				$(".message").removeClass("success");
+				$(".message").addClass("success");
 			},
 			error: function() {
-				alert('data unable to be updated');
-				$('.message').html('<strong>' + parameter + '</strong> for <strong>' + siteNumber + ' </strong> was unable to be updated');
-				$('.message').removeClass('error');
-				$('.message').removeClass('hidden');
-				$('.message').removeClass('success');
-				$('.message').addClass('error');
+				alert("Data unable to be updated");
+				$(".message").html("<strong>" + parameter + "</strong> for <strong>" + siteNumber + "</strong> was unable to be updated");
+				$(".message").removeClass("error");
+				$(".message").removeClass("hidden");
+				$(".message").removeClass("success");
+				$(".message").addClass("error");
 			}
 		});
 	});
@@ -186,102 +186,100 @@ $(document).ready(function () {
 				"value": value
 			},
 			success: function () {
-				var label = $('label[for="' + input.attr('id') + '"');
+				var label = $('label[for="' + input.attr("id") + '"');
 
 				input.attr("style", "display: none");
 				label.attr("style", "display: in-line; cursor: pointer");
 
-				if (value === '') {
-					label.text('  ');
+				if (value === "") {
+					label.text("  ");
 				}
 				else {
 					label.text(value);
 				}
-				$('.message').html('<strong>Groups</strong> for <strong>' + siteNumber + ' </strong> has been updated to <strong>' + value + '</strong>');
-				$('.message').removeClass('error');
-				$('.message').removeClass('hidden');
-				$('.message').removeClass('success');
-				$('.message').addClass('success');
+				$(".message").html("<strong>Groups</strong> for <strong>" + siteNumber + "</strong> has been updated to <strong>" + value + "</strong>");
+				$(".message").removeClass("error");
+				$(".message").removeClass("hidden");
+				$(".message").removeClass("success");
+				$(".message").addClass("success");
 			},
 			error: function() {
-				alert('data unable to be updated');
-				$('.message').html('<strong>Groups</strong> for <strong>' + siteNumber + ' </strong> was unable to be updated');
-				$('.message').removeClass('error');
-				$('.message').removeClass('hidden');
-				$('.message').removeClass('success');
-				$('.message').addClass('error');
+				alert("Data unable to be updated");
+				$(".message").html("<strong>Groups</strong> for <strong>" + siteNumber + "</strong> was unable to be updated");
+				$(".message").removeClass("error");
+				$(".message").removeClass("hidden");
+				$(".message").removeClass("success");
+				$(".message").addClass("error");
 			}
 		});
 	});
 	
-	
-	$('#addSiteForm').on('submit', function (e) {
+	$("#addSiteForm").on("submit", function (e) {
 		e.preventDefault();
-		var sitenumber = $('#add-sitenumber').val();
-		var longitude = $('#add-longitude').val();
-		var latitude = $('#add-latitude').val();
-		var location = $('#add-sitelocation').val();
-		var sitename = $('#add-sitename').val();
+		var sitenumber = $("#add-sitenumber").val();
+		var longitude = $("#add-longitude").val();
+		var latitude = $("#add-latitude").val();
+		var location = $("#add-sitelocation").val();
+		var sitename = $("#add-sitename").val();
 
 		if (!validateAddInput(sitenumber, longitude, latitude, location, sitename)) {
 			return false;
 		}
 
 		if (!$.checkSiteNum(sitenumber)) {
-			$.alert('This Site Number already exists, please create a new one');
+			$.alert("This Site Number already exists, please create a new one");
 			return false;
 		}
         
 		$.ajax({
-			type: 'POST',
-			url: 'addsite',
-			datatype: 'JSON',
+			type: "POST",
+			url: "addsite",
+			datatype: "JSON",
 			data: {
-				'Site_Number': sitenumber,
-				'Longitude': longitude,
-				'Latitude': latitude,
-				'Site_Location': location,
-				'Site_Name': sitename
+				"Site_Number": sitenumber,
+				"Longitude": longitude,
+				"Latitude": latitude,
+				"Site_Location": location,
+				"Site_Name": sitename
 			},
 			success: function (result) {
-				var siteid = result['siteid'];
-				$('#tableView').append('<tr id="tr-' + siteid + '"></tr>');
-				$('#tr-' + siteid).append('<td id="td-' + siteid + '-siteNum">' + sitenumber + '</td>');
-				$('#tr-' + siteid).append('<td id="td-' + siteid + '-monitoredcheckbox"><input type="checkbox" class="form-control checkbox"></td>');
-				$('#tr-' + siteid).append('<td id="td-' + siteid + '-longitude">' + longitude + '</td>');
-				$('#tr-' + siteid).append('<td id="td-' + siteid + '-latitude">' + latitude + '</td>');
-				$('#tr-' + siteid).append('<td id="td-' + siteid + '-siteLoc">' + location + '</td>');
-				$('#tr-' + siteid).append('<td id="td-' + siteid + '-siteName">' + sitename + '</td>');
-				$('#tr-' + siteid).append('<td><span class="edit glyphicon glyphicon-pencil" id="edit-' + siteid + '" name="edit-' + siteid + '" data-toggle="modal" data-target="#editSiteModal" style="margin-right: 5px;"></span>' +
-					'<span class="delete glyphicon glyphicon-trash" id = "delete-' + siteid + '" name = "delete-' + siteid + '" > </span>');
+				var siteid = result["siteid"];
+				$("#tableView").append('<tr id="tr-' + siteid + '"></tr>');
+				$("#tr-" + siteid).append('<td id="td-' + siteid + '-siteNum">' + sitenumber + "</td>");
+				$("#tr-" + siteid).append('<td id="td-' + siteid + '-monitoredcheckbox"><input type="checkbox" class="form-control checkbox"></td>');
+				$("#tr-" + siteid).append('<td id="td-' + siteid + '-longitude">' + longitude + "</td>");
+				$("#tr-" + siteid).append('<td id="td-' + siteid + '-latitude">' + latitude + "</td>");
+				$("#tr-" + siteid).append('<td id="td-' + siteid + '-siteLoc">' + location + "</td>");
+				$("#tr-" + siteid).append('<td id="td-' + siteid + '-siteName">' + sitename + "</td>");
+				$("#tr-" + siteid).append('<td><span class="edit glyphicon glyphicon-pencil" id="edit-' + siteid + '" name="edit-' + siteid + '" data-toggle="modal" data-target="#editSiteModal" style="margin-right: 5px;"></span><span class="delete glyphicon glyphicon-trash" id = "delete-' + siteid + '" name = "delete-' + siteid + '" > </span>');
 
-				$('#add-close').trigger('click');
-				$('#add-sitenumber').val('');
-				$('#add-longitude').val('');
-				$('#add-latitude').val('');
-				$('#add-sitelocation').val('');
-				$('#add-sitename').val('');
-				$('#add-monitored').val('');
-				$('.message').html('Site: <strong>' + sitenumber + '</strong> has been added');
-				$('.message').removeClass('error');
-				$('.message').removeClass('hidden');
-				$('.message').removeClass('success');
-				$('.message').addClass('success');
+				$("#add-close").trigger("click");
+				$("#add-sitenumber").val("");
+				$("#add-longitude").val("");
+				$("#add-latitude").val("");
+				$("#add-sitelocation").val("");
+				$("#add-sitename").val("");
+				$("#add-monitored").val("");
+				$(".message").html("Site: <strong>" + sitenumber + "</strong> has been added");
+				$(".message").removeClass("error");
+				$(".message").removeClass("hidden");
+				$(".message").removeClass("success");
+				$(".message").addClass("success");
 			},
 			error: function () {
-				$('.message').html('Site: <strong>' + sitenumber + '</strong> could not be added');
-				$('.message').removeClass('success');
-				$('.message').removeClass('hidden');
-				$('.message').removeClass('error');
-				$('.message').addClass('error');
+				$(".message").html("Site: <strong>" + sitenumber + "</strong> could not be added");
+				$(".message").removeClass("success");
+				$(".message").removeClass("hidden");
+				$(".message").removeClass("error");
+				$(".message").addClass("error");
 			}
 		});
 	});
 	
 	$.checkSiteNum = function (sitenumber) {
 		var flag = true;
-		$('tr').each(function() {
-			var celltext = $(this).find('td:first').text();
+		$("tr").each(function() {
+			var celltext = $(this).find("td:first").text();
 			if (sitenumber === celltext) {
 				flag = false;
 			}
@@ -290,8 +288,8 @@ $(document).ready(function () {
 	};
 	
 	function validateAddInput(sitenumber, longitude, latitude, sitelocation, sitename) {
-		if (sitenumber === '') {
-			$.alert('Site Number is empty');
+		if (sitenumber === "") {
+			$.alert("Site Number is empty");
 			return false;
 		}
 
@@ -302,20 +300,20 @@ $(document).ready(function () {
 	}
 	
 	function validateInput(longitude, latitude, sitelocation, sitename) {
-		if (longitude === '') {
-			$.alert('Longitude is empty');
+		if (longitude === "") {
+			$.alert("Longitude is empty");
 			return false;
 		}
-		if (latitude === '') {
-			$.alert('Latitude is empty');
+		if (latitude === "") {
+			$.alert("Latitude is empty");
 			return false;
 		}
-		if (sitelocation === '') {
-			$.alert('Site Location is empty');
+		if (sitelocation === "") {
+			$.alert("Site Location is empty");
 			return false;
 		}
-		if (sitename === '') {
-			$.alert('Site Name is empty');
+		if (sitename === "") {
+			$.alert("Site Name is empty");
 			return false;
 		}
 		return true;

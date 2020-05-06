@@ -29,7 +29,7 @@ function validate(){
 }
 
 //removes the error messages underneath their appropriate forms
-function removeErrorMessages(){
+function removeErrorMessages() {
 	for (var i=0; i<document.getElementsByTagName("P").length; i++) {
 		document.getElementsByTagName("P")[i].innerHTML = "";
 	}
@@ -48,53 +48,53 @@ function jsUpdateSize(){
 	var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
 	if (width < 576) { //extra small screens
-		document.getElementById('wqisInfo').style.fontSize = "70%";
-		document.getElementById('wqisHeading').style.fontSize = "27px";
-		document.getElementById('username').style.fontSize = "12pt";
-		document.getElementById('userpw').style.fontSize = "12pt";
-		document.getElementById('login-btn').style.fontSize = "11pt";
-		document.getElementById('createAccountBtn').style.fontSize = "11pt";
-		document.getElementById('sjrwiInfo').style.fontSize = "70%";
-		document.getElementById('ercInfo').style.fontSize = "70%";
+		document.getElementById("wqisInfo").style.fontSize = "70%";
+		document.getElementById("wqisHeading").style.fontSize = "27px";
+		document.getElementById("username").style.fontSize = "12pt";
+		document.getElementById("userpw").style.fontSize = "12pt";
+		document.getElementById("login-btn").style.fontSize = "11pt";
+		document.getElementById("createAccountBtn").style.fontSize = "11pt";
+		document.getElementById("sjrwiInfo").style.fontSize = "70%";
+		document.getElementById("ercInfo").style.fontSize = "70%";
 
-		document.getElementById('login-btn').style.width = "170px";
-		document.getElementById('createAccountBtn').style.width = "170px";
-		document.getElementById('sjrwiImg').style.height = "90px";
-		document.getElementById('ercImg').style.height = "90px";
-		document.getElementById('sjrwiImg').style.width = "120px";
-		document.getElementById('ercImg').style.width = "120px";
+		document.getElementById("login-btn").style.width = "170px";
+		document.getElementById("createAccountBtn").style.width = "170px";
+		document.getElementById("sjrwiImg").style.height = "90px";
+		document.getElementById("ercImg").style.height = "90px";
+		document.getElementById("sjrwiImg").style.width = "120px";
+		document.getElementById("ercImg").style.width = "120px";
 	}
 	else if (width >= 576 && width < 768) { //small screens
-		document.getElementById('wqisInfo').style.fontSize = "90%";
-		document.getElementById('wqisHeading').style.fontSize = "27px";
-		document.getElementById('username').style.fontSize = "12pt";
-		document.getElementById('userpw').style.fontSize = "12pt";
-		document.getElementById('login-btn').style.fontSize = "14pt";
-		document.getElementById('createAccountBtn').style.fontSize = "14pt";
-		document.getElementById('sjrwiInfo').style.fontSize = "90%";
-		document.getElementById('ercInfo').style.fontSize = "90%";
+		document.getElementById("wqisInfo").style.fontSize = "90%";
+		document.getElementById("wqisHeading").style.fontSize = "27px";
+		document.getElementById("username").style.fontSize = "12pt";
+		document.getElementById("userpw").style.fontSize = "12pt";
+		document.getElementById("login-btn").style.fontSize = "14pt";
+		document.getElementById("createAccountBtn").style.fontSize = "14pt";
+		document.getElementById("sjrwiInfo").style.fontSize = "90%";
+		document.getElementById("ercInfo").style.fontSize = "90%";
 
-		document.getElementById('login-btn').style.width = "160px";
-		document.getElementById('createAccountBtn').style.width = "160px";
-		document.getElementById('sjrwiImg').style.height = "120px";
-		document.getElementById('ercImg').style.height = "120px";
+		document.getElementById("login-btn").style.width = "160px";
+		document.getElementById("createAccountBtn").style.width = "160px";
+		document.getElementById("sjrwiImg").style.height = "120px";
+		document.getElementById("ercImg").style.height = "120px";
 	}
 	else if (width >= 768) { //medium screens and up
-		document.getElementById('wqisInfo').style.fontSize = "100%";
-		document.getElementById('wqisHeading').style.fontSize = "36px";
-		document.getElementById('username').style.fontSize = "13pt";
-		document.getElementById('userpw').style.fontSize = "13pt";
-		document.getElementById('login-btn').style.fontSize = "13pt";
-		document.getElementById('createAccountBtn').style.fontSize = "13pt";
-		document.getElementById('sjrwiInfo').style.fontSize = "90%";
-		document.getElementById('ercInfo').style.fontSize = "90%";
+		document.getElementById("wqisInfo").style.fontSize = "100%";
+		document.getElementById("wqisHeading").style.fontSize = "36px";
+		document.getElementById("username").style.fontSize = "13pt";
+		document.getElementById("userpw").style.fontSize = "13pt";
+		document.getElementById("login-btn").style.fontSize = "13pt";
+		document.getElementById("createAccountBtn").style.fontSize = "13pt";
+		document.getElementById("sjrwiInfo").style.fontSize = "90%";
+		document.getElementById("ercInfo").style.fontSize = "90%";
 
-		document.getElementById('login-btn').style.width = "150px";
-		document.getElementById('createAccountBtn').style.width = "150px";
-		document.getElementById('sjrwiImg').style.height = "140px";
-		document.getElementById('ercImg').style.height = "140px";
-		document.getElementById('sjrwiImg').style.width = "160px";
-		document.getElementById('ercImg').style.width = "160px";
+		document.getElementById("login-btn").style.width = "150px";
+		document.getElementById("createAccountBtn").style.width = "150px";
+		document.getElementById("sjrwiImg").style.height = "140px";
+		document.getElementById("ercImg").style.height = "140px";
+		document.getElementById("sjrwiImg").style.width = "160px";
+		document.getElementById("ercImg").style.width = "160px";
 	}
 };
 window.onload = jsUpdateSize;       //when the page first loads
