@@ -19,18 +19,9 @@ $(document).ready(function() {
 		if (!$("#firstname").length) {
 			return validatePass();
 		}
-		else {
-			//make sure the necessary fields have input
-			if (!validateUserCredentials()) {
-				return false;
-			}
-			
-			//if there is input in the password fields, assume the user is trying to change the password
-			if ($("#userpw").val() !== "" || $("#passConfirm").val() !== "") {
-				if (!validatePass()) {
-					return false;
-				}
-			}
+		else if (!validateUserCredentials() || (($("#userpw").val() !== "" || $("#passConfirm").val() !== "") && (!validatePass())) {
+			//make sure the necessary fields have input, and if there is input in the password fields, assume the user is trying to change the password
+			return false;
 		}
 		return true;
 	});
