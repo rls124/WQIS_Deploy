@@ -1179,8 +1179,6 @@ $(document).ready(function () {
 	
 	$("#exportBtn").click(function () {
 		var category = categorySelect.value;
-		var selectedMeasures = getSelectedMeasures();
-		selectedMeasures.push(ucfirst(category) + "Comments");
 
 		$.ajax({
 			type: "POST",
@@ -1194,7 +1192,7 @@ $(document).ready(function () {
 				"amountEnter": amountEnter.value,
 				"overUnderSelect": overUnderSelect.value,
 				"measurementSearch": measurementSelect.value,
-				"selectedMeasures": selectedMeasures,
+				"selectedMeasures": getSelectedMeasures(),
 				"aggregate": aggregateGroup.checked
 			},
 			success: function(response) {
