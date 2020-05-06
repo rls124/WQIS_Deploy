@@ -276,7 +276,7 @@ function validateInput(username, firstname, lastname, email, organization, posit
 
 	//email test
 	if (!(/^([a-zA-Z0-9_\.\-\!\#\$\%\&\'\*\+\/\=\?\^\`\{\|\}\~\;])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email))) {
-		$.alert("Email is not in correct format");
+		alert("Email is not in correct format");
 		return false;
 	}
 	//username test

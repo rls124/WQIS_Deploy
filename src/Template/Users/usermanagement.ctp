@@ -28,44 +28,44 @@
 		$row = 0;
 		foreach ($Users as $userData):
 			?>
-			<tr id='tr-<?= $userData->username ?>'>
+			<tr id="tr-<?= $userData->username ?>">
 			<td><?= $userData->username ?></td>
-			<td id='<?php echo 'td-' . $userData->username . '-admin'; ?>'><?php
+			<td id="<?php echo "td-" . $userData->username . "-admin"; ?>"><?php
 				if ($userData->admin == 1) {
-					echo 'admin';
+					echo "admin";
 				}
 				else {
-					echo 'general';
+					echo "general";
 				}
 				?>
 			</td>
-			<td id='<?php echo 'td-' . $userData->username . '-name'; ?>'><?= $userData->firstname . ' ' . $userData->lastname; ?></td>
-			<td id='<?php echo 'td-' . $userData->username . '-email'; ?>'><?= $userData->email ?></td>
-			<td id='<?php echo 'td-' . $userData->username . '-org'; ?>'><?= $userData->organization ?></td>
-			<td id='<?php echo 'td-' . $userData->username . '-pos'; ?>'><?= $userData->position ?></td>
-			<td><a id="edit-tooltip" data-toggle="tooltip" title="Edit User">
+			<td id="<?php echo "td-" . $userData->username . "-name"; ?>"><?= $userData->firstname . " " . $userData->lastname; ?></td>
+			<td id="<?php echo "td-" . $userData->username . "-email"; ?>"><?= $userData->email ?></td>
+			<td id="<?php echo "td-" . $userData->username . "-org"; ?>"><?= $userData->organization ?></td>
+			<td id="<?php echo "td-" . $userData->username . "-pos"; ?>"><?= $userData->position ?></td>
+			<td>
+				<a id="edit-tooltip" data-toggle="tooltip" title="Edit User">
 				<?=
-				$this->Html->tag('span', "", [
-				'class' => "edit glyphicon glyphicon-pencil",
-				'id' => 'edit-' . $userData->username,
-				'name' => 'edit-' . $userData->username,
-				'data-toggle' => "modal",
-				'data-target' => "#editUserModal"
+				$this->Html->tag("span", "", [
+					"class" => "edit glyphicon glyphicon-pencil",
+					"id" => "edit-" . $userData->username,
+					"name" => "edit-" . $userData->username,
+					"data-toggle" => "modal",
+					"data-target" => "#editUserModal"
 				])
 				?>
-							</a><a id="delete-tooltip" data-toggle="tooltip" title="Delete User">
+				</a>
+				<a id="delete-tooltip" data-toggle="tooltip" title="Delete User">
 				<?=
-				$this->Html->tag('span', "", [
-				'class' => "delete glyphicon glyphicon-trash",
-				'id' => 'delete-' . $userData->username,
-				'name' => 'delete-' . $userData->username
+				$this->Html->tag("span", "", [
+					"class" => "delete glyphicon glyphicon-trash",
+					"id" => "delete-" . $userData->username,
+					"name" => "delete-" . $userData->username
 				])
 				?>
-							</a>
+				</a>
 			</td>
-			<?php
-			$row++;
-			?>
+			<?php $row++; ?>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>
@@ -84,120 +84,67 @@
 			<div class="modal-body">
 			<?php
 			echo $this->Form->create(false, [
-				'id' => 'updateUserForm'
-			]
-			);
-
-			echo $this->Form->control('firstname', [
-			'label' => [
-				'text' => 'First Name',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "firstname",
-			'id' => "edit-firstname",
-			'placeholder' => "Your First Name..."
+				"id" => "updateUserForm"
 			]);
-		
-			echo $this->Form->control('lastname', [
-			'label' => [
-				'text' => 'Last Name',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "lastname",
-			'id' => "edit-lastname",
-			'placeholder' => "Your Last Name..."
-			]);
-		
-			echo $this->Form->control('email', [
-			'label' => [
-				'text' => 'Email Address',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "email",
-			'id' => "edit-email",
-			'placeholder' => "Your Email..."
-			]);
-		
-			echo $this->Form->control('organization', [
-			'label' => [
-				'text' => 'Organization',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "organization",
-			'id' => "edit-organization",
-			'placeholder' => "Your Organization..."
-			]);
-		
-			echo $this->Form->control('position', [
-			'label' => [
-				'text' => 'Position',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput",
-			'name' => "position",
-			'id' => "edit-position",
-			'placeholder' => "Your Position..."
-			]);
+			
+			$fieldIDs = ["firstname", "lastname", "email", "organization", "position"];
+			$fieldNames = ["First Name", "Last Name", "Email", "Organization", "Position"];
+			
+			for ($i=0; $i<sizeof($fieldIDs); $i++) {
+				echo $this->Form->control($fieldIDs[$i], [
+					"label" => [
+						"text" => $fieldNames[$i],
+						"class" => "label-reg lol"
+					],
+					"templates" => [
+						"inputContainer" => "{{content}}"
+					],
+					"class" => "form-control textinput",
+					"name" => $fieldIDs[$i],
+					"id" => "edit-" . $fieldIDs[$i],
+					"placeholder" => "Your " . $fieldNames[$i] . "..."
+				]);
+			}
 		
 			echo "<label for=\"#edit-isadmin\">Set as administrator: </label>";
-		
 			echo $this->Form->checkbox("admin", [
 				"id" => "edit-isadmin"
 			]);
 		
 			echo "<br>";
 		
-			echo $this->Form->control('userpw', [
-			'label' => [
-				'text' => 'Password',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'type' => 'password',
-			'class' => "form-control textinput",
-			'name' => "userpw",
-			'id' => "edit-userpw",
-			'placeholder' => "Your Password..."
+			echo $this->Form->control("userpw", [
+				"label" => [
+					"text" => "Password",
+					"class" => "label-reg lol"
+				],
+				"templates" => [
+					"inputContainer" => "{{content}}"
+				],
+				"type" => "password",
+				"class" => "form-control textinput",
+				"name" => "userpw",
+				"id" => "edit-userpw",
+				"placeholder" => "Your Password..."
 			]);
 		
-			echo $this->Form->control('Password (again)', [
-			'label' => [
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'type' => 'password',
-			'class' => "form-control textinput",
-			'name' => "passConfirm",
-			'id' => "edit-passConfirm",
-			'placeholder' => "Your Password..."
+			echo $this->Form->control("Password (again)", [
+				"label" => [
+					"class" => "label-reg lol"
+				],
+				"templates" => [
+					"inputContainer" => "{{content}}"
+				],
+				"type" => "password",
+				"class" => "form-control textinput",
+				"name" => "passConfirm",
+				"id" => "edit-passConfirm",
+				"placeholder" => "Your Password..."
 			]);
-		?>
+			?>
 			</div>
 			<div class="modal-footer">
-				<button type="submit" id='update-btn' name='update-btn' class="btn btn-default btn-basic btn btn-sm">Save</button>
+				<button type="submit" id="update-btn" name="update-btn" class="btn btn-default btn-basic btn btn-sm">Save</button>
 				<button type="button" id="edit-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -216,145 +163,73 @@
 			<div class="modal-body">
 			<?php
 			echo $this->Form->create(false, [
-				'id' => 'addUserForm'
+				"id" => "addUserForm"
 			]);
 			
-			echo $this->Form->control('firstname', [
-			'label' => [
-				'text' => 'First Name',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput addinput",
-			'name' => "firstname",
-			'id' => "add-firstname",
-			'placeholder' => "Your First Name..."
+			$fieldIDs = ["firstname", "lastname", "email", "organization", "position", "username"];
+			$fieldNames = ["First Name", "Last Name", "Email", "Organization", "Position", "Username"];
+			
+			for ($i=0; $i<sizeof($fieldIDs); $i++) {
+				echo $this->Form->control($fieldIDs[$i], [
+					"label" => [
+						"text" => $fieldNames[$i],
+						"class" => "label-reg lol"
+					],
+					"templates" => [
+						"inputContainer" => "{{content}}"
+					],
+					"class" => "form-control textinput addinput",
+					"name" => $fieldIDs[$i],
+					"id" => "add-" . $fieldIDs[$i],
+					"placeholder" => "Your " . $fieldNames[$i] . "..."
+				]);
+			}
+			
+			echo "<label for=\"#add-admin\">Set as administrator: </label>";
+		
+			echo $this->Form->checkbox("admin", [
+				"label" => [
+					"class" => "addinput"
+				],
+				"checked" => false,
+				"id" => "add-admin"
 			]);
-		?>
-		<?=
-			$this->Form->control('lastname', [
-			'label' => [
-				'text' => 'Last Name',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput addinput",
-			'name' => "lastname",
-			'id' => "add-lastname",
-			'placeholder' => "Your Last Name..."
+		
+			echo "<br>";
+		
+			echo $this->Form->control("userpw", [
+				"label" => [
+					"text" => "Password",
+					"class" => "label-reg lol"
+				],
+				"templates" => [
+					"inputContainer" => "{{content}}"
+				],
+				"type" => "password",
+				"class" => "form-control textinput addinput",
+				"name" => "userpw",
+				"id" => "add-userpw",
+				"placeholder" => "Your Password..."
 			]);
-		?>
-		<?=
-			$this->Form->control('email', [
-			'label' => [
-				'text' => 'Email Address',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput addinput",
-			'name' => "email",
-			'id' => "add-email",
-			'placeholder' => "Your Email..."
+		
+			echo $this->Form->control("Password (again)", [
+				"label" => [
+					"class" => "label-reg lol"
+				],
+				"templates" => [
+					"inputContainer" => "{{content}}"
+				],
+				"type" => "password",
+				"class" => "form-control textinput addinput",
+				"name" => "passConfirm",
+				"id" => "add-passConfirm",
+				"placeholder" => "Your Password..."
 			]);
-		?>
-		<?=
-			$this->Form->control('organization', [
-			'label' => [
-				'text' => 'Organization',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput addinput",
-			'name' => "organization",
-			'id' => "add-organization",
-			'placeholder' => "Your Organization..."
-			]);
-		?>
-		<?=
-			$this->Form->control('position', [
-			'label' => [
-				'text' => 'Position',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput addinput",
-			'name' => "position",
-			'id' => "add-position",
-			'placeholder' => "Your Position..."
-			]);
-		?>
-		<?=
-			$this->Form->control('username', [
-			'label' => [
-				'Username' => 'Username',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'class' => "form-control textinput addinput",
-			'name' => "username",
-			'id' => "add-username",
-			'placeholder' => "Your Username..."
-			]);
-		?>
-				<label for='#add-adminChk'>Set as administrator: </label>
-		<?=
-			$this->Form->checkbox('admin', [
-			'label' => [
-				'class' => 'addinput'
-			],
-			'checked' => false,
-			'id' => 'add-admin'
-			]
-			);
-		?>
-				<br>
-		<?=
-			$this->Form->control('userpw', [
-			'label' => [
-				'text' => 'Password',
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'type' => 'password',
-			'class' => "form-control textinput addinput",
-			'name' => "userpw",
-			'id' => "add-userpw",
-			'placeholder' => "Your Password..."
-			]);
-		?>
-		<?=
-			$this->Form->control('Password (again)', [
-			'label' => [
-				'class' => 'label-reg lol'
-			],
-			'templates' => [
-				'inputContainer' => '{{content}}'
-			],
-			'type' => 'password',
-			'class' => "form-control textinput addinput",
-			'name' => 'passConfirm',
-			'id' => "add-passConfirm",
-			'placeholder' => "Your Password..."
-			]);
-		?>
+			?>
 			</div>
 			<div class="modal-footer">
-				<button type="submit" id='add-btn' name='add-btn' class="btn btn-default btn-basic btn btn-sm">Add User</button>
-				<button type="button" id='add-close' class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
+				<button type="submit" id="add-btn" name="add-btn" class="btn btn-default btn-basic btn btn-sm">Add User</button>
+				<button type="button" id="add-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	<?= $this->Form->end() ?>
