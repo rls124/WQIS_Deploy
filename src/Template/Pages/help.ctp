@@ -118,7 +118,7 @@ echo $this->Html->script("help.js");
 			Any measurement field (not site number, date, or sample number, but including comments) can be edited by clicking its cell. Upon clicking out of the cell, the value will be updated in the database. If the update cannot be done, an error message will be displayed.
 		</p>
 		<p>
-			Individual rows can be deleted as well, using the trash can icon in the admin-only "Actions" column of the table. Be careful, this action cannot be undone without restoring the database from a backup.				
+			Individual rows can be deleted as well, using the trashcan icon in the admin-only "Actions" column of the table. Be careful, this action cannot be undone without restoring the database from a backup.				
 		</p>
 	</div>
 	<?php } ?>
@@ -160,7 +160,7 @@ echo $this->Html->script("help.js");
 	<?php if ($admin) { ?>
 		<div class="adminInfo">
 			<p>
-				The "Measure Key" column on the far left, visible only to administrators, is used internally by the database.
+				The <b>Measure Key</b> column on the far left, visible only to administrators, is used internally by the database.
 			</p>
 			
 			<p>
@@ -173,8 +173,34 @@ echo $this->Html->script("help.js");
 <h2 id="groups">Groups</h2>
 <div class="indent">
 	<p>
-		[TBD]
+		<b>Groups</b> provide a means of organizing related sites. Groups may be created based on any arbitrary criteria, such as spatial proximity, being along the same tributary, etc. All groups have a name, a description, and a set of member sites.
 	</p>
+	<p>
+		A list of all groups and their associated sites may be seen on the <b><a href="/WQIS/site-groups/sitegroups">Groups page</a></b>.
+	</p>
+	<p>
+		Some groups of general interest are visible to all users; these are called <i>public groups</i>. Four such groups currently exist, representing the four high-level watersheds monitored by WQIS. Additionally, individual users may create their own <i>private</i> groups, as needed by their own research or policy interests, using the <b>Add Group</b> button at the bottom of the Groups page. These private groups will not be visible to any other users.
+	</p>
+	<p>
+		From the <b><a href="/WQIS/site-locations/chartselection">View Data</a></b> page, groups may be accessed by clicking the <b>Select sites</b> dropdown in the sidebar. All groups visible to them, public or private, are listed at the top of the dropdown under the <b>Select a Group</b> section. Selecting a group will automatically populate the selection box with every individual site in that group. Individual sites may be added or removed from the search as normal.
+	</p>
+	<p>
+		A user may edit or delete any group which they are the owner of, using the pencil or trashcan buttons in the <b>Actions</b> column of the Groups page.
+	</p>
+	
+	<?php if ($admin) { ?>
+	<div class="adminInfo">
+		<p>
+			Administrators may create and edit public groups, and may view and edit any private group owned by any user.
+		</p>
+		<p>
+			A site may also be added to or removed from a group using the <b><a href="/site-locations/sitemanagement">Sites</a></b> page.
+		</p>
+		<p>
+			Like normal users, administrators may also create private groups for their own personal use. This can be done by selecting the <b>Make private</b> checkbox in the <b>Add group</b> popup window. <i>By default, all administrator-created groups are public unless this checkbox is selected</i>.
+		</p>
+	</div>
+	<?php } ?>
 </div>
 
 <?php if ($admin) { ?>
@@ -185,26 +211,26 @@ echo $this->Html->script("help.js");
 <h2 id="fileUpload">File upload</h2>
 <div class="indent">
 	<p>
-		File upload is the core function available to administrators. It is the primary means by which sample data is added to the system.
+		<b>File upload</b> is the core function available to administrators. It is the primary means by which sample data is added to the system.
 	</p>
 	<p>
-		The St Joseph River Watershed Initiative internally stores their data in a large Excel file, spanning multiple pages. WQIS, however, accepts data only as CSV files. These can be produced from the master Excel file simply using the "Save as" function in Excel. Only one page may be exported at a time
+		The St Joseph River Watershed Initiative internally stores their data in a large Excel file, spanning multiple pages. WQIS, however, accepts data only as CSV files. These can be produced from the master Excel file simply using the <b>Save as</b> function in Excel. Only one page may be exported at a time
 	</p>
 	<p>
 		If constructing input files manually, or via an automated process to bring in bulk data from another organization, it must be ensured that the files produced conform to the appropriate sample category prototype. Sample files should only contain measures from a single category. For instance, a bacteria file should contain only E. Coli and Total Coliform data, not nitrate/nitrite data. Example sample files can be found at <a href="/WQIS/webroot/files/exampleFiles.zip">this link</a>.
 	</p>
 	<p>
-		It is not necessary to specify what type of sample file is being uploaded, this will be determined automatically based on the column headers of the file (hence the importance of adhering to the prescribed format). Certain variations in this format are tolerated (column names are treated as case-insensitive, and some common punctuational or abbreviational options are handled correctly), but this should not be counted on.
+		It is not necessary to specify what type of sample file is being uploaded, this will be determined automatically based on the column headers of the file (hence the importance of adhering to the prescribed format). Certain variations in this format are tolerated (column names are treated as case-insensitive, and some common punctuational or abbreviational options are handled correctly), but this should not be relied upon.
 	</p>
 	<p>
-		Similarly, it is important to ensure that the data itself conforms to the expected format. Other than the comment field, each field accepts only numerical values. Some common, though incorrect, variations in this are supported, such as converting "no data" or similar strings to a <code>null</code> value. Again, however, this should not be counted on. If there are non-conforming entries which need to be supported, contact the development team to ensure the appropriate logic can be implemented to handle those, otherwise they will be rejected.
+		Similarly, it is important to ensure that the data itself conforms to the expected format. Other than the comment field, each field accepts only numerical values. Some common, though incorrect, variations in this are supported, such as converting <code>"no data"</code> or similar strings to a <code>null</code> value. Again, however, this should not be relied upon. If there are non-conforming entries which need to be supported, contact the development team to ensure the appropriate logic can be implemented to handle those, otherwise they will be rejected.
 	</p>
 </div>
 
 <h2 id="entryForm">Entry form</h2>
 <div class="indent">
 	<p>
-		The entry form tool is the secondary means of uploading data to WQIS. In the administrator panel, select the category of measurements to add, then "Go to Entry Form". Select the date of the measurements at the top of the page. All records added at one time must be from the same date. Then fill in the site number (sample number will be filled in automatically as a function of site number and date), and all relevant measurements. Multiple records can be added at once (using the Add Site button to add a new line in the entry form), but each must be for a different site.
+		The <b>entry form</b> tool is the secondary means of uploading data to WQIS. In the administrator panel, select the category of measurements to add, then "Go to Entry Form". Select the date of the measurements at the top of the page. All records added at one time must be from the same date. Then fill in the site number (sample number will be filled in automatically as a function of site number and date), and all relevant measurements. Multiple records can be added at once (using the Add Site button to add a new line in the entry form), but each must be for a different site.
 	</p>
 </div>
 

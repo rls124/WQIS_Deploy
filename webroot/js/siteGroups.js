@@ -130,7 +130,7 @@ $(document).ready(function () {
 			},
 			success: function (result) {
 				var groupkey = result["groupkey"];
-				$('#tableView').append('<tr id="tr-' + groupkey + '"></tr>');
+				$("#tableView").append('<tr id="tr-' + groupkey + '"></tr>');
 				$("#tr-" + groupkey).append('<td id="td-' + groupkey + '-groupKey">' + groupname + '</td>');
 				$("#tr-" + groupkey).append('<td id="td-' + groupkey + '-groupDescription">' + groupdescription + '</td>');
 				$("#tr-" + groupkey).append('<td id="td-' + groupkey + '-sites">' + sitesString + '</td>');
@@ -139,7 +139,7 @@ $(document).ready(function () {
 				$("#add-groupname").val("");
 				$('#add-groupdescription').val("");
 				$('#add-sites').val("");
-				$(".message").html('Group: <strong>' + groupname + '</strong> has been added');
+				$(".message").html("Group: <strong>" + groupname + "</strong> has been added");
 				$(".message").removeClass("error");
 				$(".message").removeClass("hidden");
 				$(".message").removeClass("success");
