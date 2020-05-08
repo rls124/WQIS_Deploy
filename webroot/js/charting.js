@@ -45,6 +45,7 @@ const tableNoData = document.getElementById("tableNoData");
 const chartsNoData = document.getElementById("chartsNoData");
 const tableSettingsTop = document.getElementById("tableSettingsTop");
 const tableSettingsBottom = document.getElementById("tableSettingsBottom");
+const compareOptionsDiv = document.getElementById("compareTargetOptions");
 
 //global variables used by the map
 var mapData;
@@ -385,106 +386,7 @@ var zoomPlugin = {
 			compareButton.innerText = "Compare to other measure";
 			compareButton.id = "compareButton-" + chartNum;
 			compareButton.onclick = function() {
-				//first clear the existing contents
-				var optionsDiv = document.getElementById("compareTargetOptions");
-				optionsDiv.innerHTML = "";
-				
-				//set options available in the modal
-				for (category in measurementSettings) {
-					for (j=0; j<measurementSettings[category].length; j++) {
-						var thisMeasure = measurementSettings[category][j];
-						
-						//add a button for it
-						var measureButton = document.createElement("button");
-						measureButton.innerText = thisMeasure.measureName;
-						measureButton.setAttribute("measure", thisMeasure.measureKey);
-						measureButton.setAttribute("category", category);
-						var measureTitle = thisMeasure.measureName;
-						if (thisMeasure.unit != "") {
-							measureTitle += " (" + thisMeasure.unit + ")";
-						}
-						measureButton.setAttribute("measureName", measureTitle);
-						measureButton.disabled = (measureTitle == chartInstance.options.scales.yAxes[0].scaleLabel.labelString); //eww
-						measureButton.onclick = function() {
-							var measure = $(this)[0].attributes.measure.value;
-							var measureName = $(this)[0].attributes.measureName.value;
-						
-							//first remove the second dataset if present from beforeDatasetsDraw
-							chartInstance.data.datasets = [chartInstance.data.datasets[0]];
-						
-							//also make sure the label for that dataset is the measure, not the site number, which is the default for single-measure graphing
-							chartInstance.data.datasets[0].label = chartInstance.options.scales.yAxes[0].scaleLabel.labelString;
-						
-							//retrieve data from the server
-							$.ajax({
-								type: "POST",
-								url: "/WQIS/generic-samples/graphdata",
-								datatype: "JSON",
-								async: false,
-								data: {
-									"sites": $("#sites").val(),
-									"startDate": $("#startDate").val(),
-									"endDate": $("#endDate").val(),
-									"selectedMeasures": [measure],
-									"category": $(this)[0].attributes.category.value,
-									"amount": null,
-									"overUnderSelect": null,
-									"measurementSearch": null,
-									"aggregate": aggregateGroup.checked
-								},
-								success: function(response) {
-									if (response.length == 0) {
-										alert("No data for this measure over this range");
-									}
-									else {
-										var newDataset = {
-											label: measureName,
-											yAxisID: "comparison",
-											borderColor: selectColor(2,2),
-											data: [],
-											lineTension: 0,
-											fill: false,
-											borderWidth: 1.5,
-											showLine: (chartType.value === "line"),
-											spanGaps: true
-										}
-
-										for (i=0; i<response.length; i++) {
-											var newRow = [];
-											var date = response[i].Date.split("T")[0];
-											newRow.t = date;
-											newRow.y = response[i][measure];
-				
-											newDataset.data.push(newRow);
-										}
-										
-										chartInstance.data.datasets.push(newDataset);
-									
-										//add new y-axis
-										chartInstance.options.scales.yAxes[1].scaleLabel.labelString = measureName;
-										chartInstance.options.scales.yAxes[1].display = true;
-									}
-								},
-								error: function(response) {
-									genericError();
-								}
-							});
-						
-							chartInstance.update();
-						}
-					
-						optionsDiv.appendChild(measureButton);
-					}
-				}
-				
-				//set up the clear button
-				var clearBtn = document.getElementById("clearCompare");
-				clearBtn.onclick = function() {
-					//remove the second dataset and hide its axis label
-					chartInstance.data.datasets = [chartInstance.data.datasets[0]];
-					chartInstance.options.scales.yAxes[1].display = false;
-					chartInstance.update();
-				}
+				rebuildCompareModal(chartInstance);
 			}
 			node.parentElement.appendChild(compareButton);
 		}
@@ -604,6 +506,120 @@ var zoomPlugin = {
 Chart.pluginService.register(zoomPlugin);
 
 },{"chart.js":1,"hammerjs":1}]},{},[2]);
+
+function rebuildCompareModal(chartInstance) {
+	var yAxes = chartInstance.options.scales.yAxes;
+	
+	//first clear the existing contents
+	compareOptionsDiv.innerHTML = "";
+	
+	var selectedTitle = yAxes[1].scaleLabel.labelString; //title of the currently selected comparison measure, if any
+	
+	//set options available in the modal
+	for (category in measurementSettings) {
+		for (j=0; j<measurementSettings[category].length; j++) {
+			var thisMeasure = measurementSettings[category][j];
+			var measureTitle = thisMeasure.measureName;
+			if (thisMeasure.unit != "") {
+				measureTitle += " (" + thisMeasure.unit + ")";
+			}
+			
+			//add a button for it
+			var measureButton = document.createElement("button");
+			if (measureTitle == selectedTitle) {
+				measureButton.setAttribute("class", "btn btn-sm btn-ctrl btn-danger");
+			}
+			else {
+				measureButton.setAttribute("class", "btn btn-sm btn-ctrl");
+			}
+			measureButton.innerText = thisMeasure.measureName;
+			measureButton.setAttribute("measure", thisMeasure.measureKey);
+			measureButton.setAttribute("category", category);
+			measureButton.setAttribute("measureName", measureTitle);
+			measureButton.disabled = (measureTitle == yAxes[0].scaleLabel.labelString || measureTitle == yAxes[1].scaleLabel.labelString); //eww
+			measureButton.onclick = function() {
+				var measure = $(this)[0].attributes.measure.value;
+				var measureName = $(this)[0].attributes.measureName.value;
+			
+				//first remove the second dataset if present from beforeDatasetsDraw
+				chartInstance.data.datasets = [chartInstance.data.datasets[0]];
+			
+				//also make sure the label for that dataset is the measure, not the site number, which is the default for single-measure graphing
+				chartInstance.data.datasets[0].label = yAxes[0].scaleLabel.labelString;
+			
+				//retrieve data from the server
+				$.ajax({
+					type: "POST",
+					url: "/WQIS/generic-samples/graphdata",
+					datatype: "JSON",
+					async: false,
+					data: {
+						"sites": $("#sites").val(),
+						"startDate": $("#startDate").val(),
+						"endDate": $("#endDate").val(),
+						"selectedMeasures": [measure],
+						"category": $(this)[0].attributes.category.value,
+						"amount": null,
+						"overUnderSelect": null,
+						"measurementSearch": null,
+						"aggregate": aggregateGroup.checked
+					},
+					success: function(response) {
+						if (response.length == 0) {
+							alert("No data for this measure over this range");
+						}
+						else {
+							var newDataset = {
+								label: measureName,
+								yAxisID: "comparison",
+								borderColor: selectColor(2,2),
+								data: [],
+								lineTension: 0,
+								fill: false,
+								borderWidth: 1.5,
+								showLine: (chartType.value === "line"),
+								spanGaps: true
+							}
+
+							for (i=0; i<response.length; i++) {
+								var newRow = [];
+								var date = response[i].Date.split("T")[0];
+								newRow.t = date;
+								newRow.y = response[i][measure];
+	
+								newDataset.data.push(newRow);
+							}
+							
+							chartInstance.data.datasets.push(newDataset);
+						
+							//add new y-axis
+							chartInstance.options.scales.yAxes[1].scaleLabel.labelString = measureName;
+							chartInstance.options.scales.yAxes[1].display = true;
+						}
+					},
+					error: function(response) {
+						genericError();
+					}
+				});
+			
+				chartInstance.update();
+				
+				rebuildCompareModal(chartInstance); //clear and redetermine what buttons should be colored
+			}
+		
+			compareOptionsDiv.appendChild(measureButton);
+		}
+	}
+	
+	//set up the clear button
+	var clearBtn = document.getElementById("clearCompare");
+	clearBtn.onclick = function() {
+		//remove the second dataset and hide its axis label
+		chartInstance.data.datasets = [chartInstance.data.datasets[0]];
+		chartInstance.options.scales.yAxes[1].display = false;
+		chartInstance.update();
+	}
+}
 
 $(document).ready(function () {
 	if (typeof admin == "undefined") {
