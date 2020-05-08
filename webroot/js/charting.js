@@ -46,6 +46,9 @@ const chartsNoData = document.getElementById("chartsNoData");
 const tableSettingsTop = document.getElementById("tableSettingsTop");
 const tableSettingsBottom = document.getElementById("tableSettingsBottom");
 const compareOptionsDiv = document.getElementById("compareTargetOptions");
+const checkboxList = document.getElementById("checkboxList");
+const numRowsDropdownTop = document.getElementById("numRowsDropdownTop");
+const numRowsDropdownBottom = document.getElementById("numRowsDropdownBottom");
 
 //global variables used by the map
 var mapData;
@@ -107,11 +110,11 @@ function benchmarkLine(val, color) {
 
 function getSelectedMeasures() {
 	var measures = [];
-	var checkboxList = document.getElementsByClassName("measurementCheckbox");
+	var checkboxes = document.getElementsByClassName("measurementCheckbox");
 	
-	for (var i=0; i<checkboxList.length; i++) {
-		if (checkboxList[i].checked) {
-			measures.push(checkboxList[i].value);
+	for (var i=0; i<checkboxes.length; i++) {
+		if (checkboxes[i].checked) {
+			measures.push(checkboxes[i].value);
 		}
 	}
 	
@@ -710,28 +713,29 @@ $(document).ready(function () {
 		});
 		//add markers to the map at each sites longitude and latitude
 		for (var i=0; i<visibleSites.length; i++) {
+			var site = visibleSites[i];
+			
 			var pointGraphic = new Graphic({
 					ObjectID: i,
 					geometry: {
 					type: "point",
-					longitude: visibleSites[i]["Longitude"],
-					latitude: visibleSites[i]["Latitude"]
+					longitude: site.Longitude,
+					latitude: site.Latitude
 				},
-				attributes: {}
-			});
-			
-			pointGraphic.attributes.siteNumber = visibleSites[i]["Site_Number"].toString();
-			pointGraphic.attributes.siteName = visibleSites[i]["Site_Name"];
-			pointGraphic.attributes.siteLocation = visibleSites[i]["Site_Location"];
-			
-			pointGraphic.symbol = {
-				type: "simple-marker",
-				color: defaultPointColor,
-				outline: {
-					color: [255,255,255],
-					width: 2
+				attributes: {
+					siteNumber: site.Site_Number.toString(),
+					siteName: site.Site_Name,
+					siteLocation: site.Site_Location
+				},
+				symbol: {
+					type: "simple-marker",
+					color: defaultPointColor,
+					outline: {
+						color: [255,255,255],
+						width: 2
+					}
 				}
-			}
+			});
 			
 			for (var shortField in measurementSettings) {
 				var field = shortField + "_samples";
@@ -751,7 +755,7 @@ $(document).ready(function () {
 				}
 			}
 			
-			visibleSites[i].graphic = pointGraphic;
+			site.graphic = pointGraphic;
 			
 			graphics.push(pointGraphic);
 		}
@@ -824,21 +828,18 @@ $(document).ready(function () {
 
 			//highlight points when they're clicked
 			view.on("click", function(event) {
+
 				view.hitTest(event.screenPoint).then(function(response) {
-					var hitPoint = false; //have we hit a collection site?
+					//var hitPoint = false; //have we hit a collection site?
+					clearHighlight();
 					response.results.forEach(function(graphic) {
 						if (graphic.graphic.ObjectID != null) { //if this is actually a site icon, not a watershed or something
-							clearHighlight();
+							//clearHighlight();
 							
 							highlightPoint(graphic.graphic);
-							hitPoint = true;
+							//hitPoint = true;
 						}
 					});
-										
-					if (!hitPoint) {
-						//we clicked something other than a collection site, clear the highlight
-						clearHighlight();
-					}
 				});
 			});
 					
@@ -958,7 +959,6 @@ $(document).ready(function () {
 	
 	function setColor(point, color) {
 		point.symbol.color = color;
-		
 		view.graphics.remove(point);
 		view.graphics.add(point);
 	}
@@ -985,28 +985,14 @@ $(document).ready(function () {
 		}
 	}
 	
-	$("#searchGroupsDropdown").change(function() {
-		var selected = $("#searchGroupsDropdown").val();
-		
-		if (selected == "") {
-			//reset
-			$("#sites").val(null).trigger("change");
-		}
-		else {
-			//get all the sites that are in this group
-			var inGroup = [];
-			for (var site of mapData.SiteData) {
-				if (site.groups.split(",").includes(selected)) {
-					//select it in the sites dropdown
-					inGroup.push(site.Site_Number);
-				}
-			}
-			$("#sites").val(inGroup).trigger("change");
-		}
-	});
-	
 	$("#sites").change(function() {
 		var optSelected = $("option:selected", this);
+		
+		//first clear out the existing ones
+		for (var point of selectedPoints) {
+			setColor(point, defaultPointColor);
+		}
+		
 		if (optSelected.length > 0) {
 			var selected = $("#sites").val();
 
@@ -1022,13 +1008,8 @@ $(document).ready(function () {
 				
 				$("#sites").val(inGroup).trigger("change");
 			}
-			else if (optSelected.parent()[0].id == "siteOpt") {
+			else {
 				getRange();
-				
-				//first clear out the existing ones
-				for (var point of selectedPoints) {
-					setColor(point, defaultPointColor);
-				}
 				
 				selectedPoints = [];
 				
@@ -1044,6 +1025,9 @@ $(document).ready(function () {
 				}
 			}
 		}
+		else {
+			selectedPoints = [];
+		}
 	});
 	
 	$("#showBenchmarks").change(function() {
@@ -1053,17 +1037,16 @@ $(document).ready(function () {
 	});
 	
 	$("#allCheckbox").change(function() {
-		var checkboxList = document.getElementsByClassName("measurementCheckbox");
-		for (i=0; i<checkboxList.length; i++) {
-			checkboxList[i].checked = allCheckbox.checked;
+		var checkboxes = document.getElementsByClassName("measurementCheckbox");
+		for (i=0; i<checkboxes.length; i++) {
+			checkboxes[i].checked = allCheckbox.checked;
 		}
 	});
 	
 	function checkboxesChanged() {
-		var checkboxList = document.getElementsByClassName("measurementCheckbox");
-		
-		for (i=0; i<checkboxList.length; i++) {
-			if (checkboxList[i].checked === false) {
+		var checkboxes = document.getElementsByClassName("measurementCheckbox");
+		for (i=0; i<checkboxes.length; i++) {
+			if (checkboxes[i].checked === false) {
 				allCheckbox.checked = false; //deselect the All checkbox
 				break;
 			}
@@ -1089,7 +1072,7 @@ $(document).ready(function () {
 				datatype: "JSON",
 				async: false,
 				success: function (data) {
-					setDates(data);
+					setDates(data[0], data[1]);
 				},
 				error: function(response) {
 					genericError();
@@ -1097,15 +1080,13 @@ $(document).ready(function () {
 			});
 		}
 		else {
-			setDates([null, null]);
+			setDates(null, null);
 		}
 		
 		spinnerInhibited = false;
 	}
 	
-	function setDates(dates) {
-		var startDate = dates[0];
-		var endDate = dates[1];
+	function setDates(startDate, endDate) {
 		$("#startDate").val(startDate);
 		$("#endDate").val(endDate);
 		$("#startDate").datepicker("update", startDate);
@@ -1117,18 +1098,19 @@ $(document).ready(function () {
 	});
 	
 	measurementSelect.addEventListener("change", function() {
-		var category = categorySelect.value;
-		var measureIndex
-			for (measureIndex=0; measureIndex<measurementSettings[category].length; measureIndex++) {
-				if (measurementSettings[category][measureIndex].measureKey === measurementSelect.value) {
-					break;
-				}
-			}	
-		if (measurementSettings[category][measureIndex].benchmarkMaximum == null) {
+		var category = measurementSettings[categorySelect.value];
+		var measureIndex;
+		for (measureIndex=0; measureIndex<category.length; measureIndex++) {
+			if (category[measureIndex].measureKey === measurementSelect.value) {
+				break;
+			}
+		}
+		
+		if (category[measureIndex].benchmarkMaximum == null) {
 			amountEnter.placeholder = "No Benchmark Available";
 		}
 		else {
-			amountEnter.placeholder = "Benchmark: " + measurementSettings[category][measureIndex].benchmarkMaximum;
+			amountEnter.placeholder = "Benchmark: " + category[measureIndex].benchmarkMaximum + " " + category[measureIndex].unit;
 		}
 	});
 	
@@ -1197,7 +1179,6 @@ $(document).ready(function () {
 	
 	function changeMeasures() {
 		//when the measurement category is changed, change both lists of available measurements to match
-		var checkboxList = document.getElementById("checkboxList");
 		var measurementCheckboxes = document.getElementsByClassName("measurementCheckbox");
 		var categoryData = measurementSettings[categorySelect.value];
 		
@@ -1365,8 +1346,6 @@ $(document).ready(function () {
 			}
 
 			var category = categorySelect.value;
-			var measurementSearch = measurementSelect.value;
-			var numRows = document.getElementById("numRowsDropdownTop").value;
 			var selectedMeasures = getSelectedMeasures();
 			var aggregateMode = aggregateGroup.checked;
 
@@ -1413,9 +1392,9 @@ $(document).ready(function () {
 					"category": category,
 					"amountEnter": amountEnter.value,
 					"overUnderSelect": overUnderSelect.value,
-					"measurementSearch": measurementSearch,
+					"measurementSearch": measurementSelect.value,
 					"selectedMeasures": selectedMeasures,
-					"numRows": numRows,
+					"numRows": numRowsDropdownTop.value,
 					"pageNum": tablePage,
 					"sortBy": sortBy,
 					"sortDirection": sortDirection,
@@ -1667,13 +1646,13 @@ $(document).ready(function () {
 	}
 	
 	$("#numRowsDropdownTop").change(function() {
-		$("#numRowsDropdownBottom").val($("#numRowsDropdownTop").val());
+		$("#numRowsDropdownBottom").val(numRowsDropdownTop.value);
 		getNumRecords();
 		getTableData(1);
 	});
 	
 	$("#numRowsDropdownBottom").change(function() {
-		$("#numRowsDropdownTop").val($("#numRowsDropdownBottom").val());
+		$("#numRowsDropdownTop").val(numRowsDropdownBottom.value);
 		getNumRecords();
 		getTableData(1);
 	});
@@ -1735,7 +1714,7 @@ $(document).ready(function () {
 			},
 			success: function(response) {
 				numResults = response[0];
-				var numRows = document.getElementById("numRowsDropdownTop").value;
+				var numRows = numRowsDropdownTop.value;
 				if (numRows > -1) {
 					numPages = Math.ceil(numResults / numRows);
 				}
