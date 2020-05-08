@@ -50,11 +50,8 @@ class SiteGroupsController extends AppController {
 		$json = json_encode(["groupname" => $group->groupName,
 			"groupdescription" => $group->groupDescription,
 			"sites" => $sites]);
-
-		$this->response = $this->response->withStringBody($json);
-		$this->response = $this->response->withType("json");
-
-		return $this->response;
+		
+		return $this->response->withType("json")->withStringBody($json);
 	}
 
 	public function updategroupdata() {

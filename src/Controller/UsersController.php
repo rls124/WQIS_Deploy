@@ -139,11 +139,8 @@ class UsersController extends AppController {
 			"organization" => $user->organization,
 			"position" => $user->position]);
 		
-		
-		$this->response = $this->response->withStringBody($json);
-		$this->response = $this->response->withType("json");
-	
-		return $this->response;
+
+		return $this->response->withType("json")->withStringBody($json);
 	}
 
 	public function updateuserdata() {
@@ -305,10 +302,7 @@ class UsersController extends AppController {
 				]);
 			}
 			
-			$this->response = $this->response->withStringBody($json);
-			$this->response = $this->response->withType("json");
-	
-			return $this->response;
+			return $this->response->withType("json")->withStringBody($json);
 		}
 		return $this->redirect(["controller" => "Users", "action" => "login"]);
 	}
@@ -350,10 +344,7 @@ class UsersController extends AppController {
 				"responseData" => $responseData
 			]);
 			
-			$this->response = $this->response->withStringBody($json);
-			$this->response = $this->response->withType("json");
-	
-			return $this->response;
+			return $this->response->withType("json")->withStringBody($json);
 		}
 		return $this->redirect(["controller" => "Users", "action" => "login"]);
 	}

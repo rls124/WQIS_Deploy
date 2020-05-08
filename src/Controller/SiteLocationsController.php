@@ -97,12 +97,8 @@ class SiteLocationsController extends AppController {
 		//format date properly
 		$mindate = date("m/d/Y", strtotime($measureQuery["mindate"]));
 		$maxdate = date("m/d/Y", strtotime($measureQuery["maxdate"]));
-		$dateRange = json_encode([$mindate, $maxdate]);
 		
-		$this->response = $this->response->withStringBody($dateRange);
-		$this->response = $this->response->withType("json");
-		
-		return $this->response;
+		return $this->response->withType("json")->withStringBody(json_encode([$mindate, $maxdate]));
 	}
 
 	public function sitemanagement() {
@@ -207,31 +203,6 @@ class SiteLocationsController extends AppController {
 		
 		//save changes
 		$this->SiteLocations->save($site);
-	}
-
-	public function fetchsitedata() {
-		$this->render(false);
-		//Check if siteid is set
-		if (!$this->request->getData("siteid")) {
-			return;
-		}
-		$siteid = $this->request->getData("siteid");
-
-		$site = $this->SiteLocations
-			->find("all")
-			->where(["ID" => $siteid])
-			->first();
-
-		$json = json_encode(["sitenumber" => $site->Site_Number,
-			"longitude" => $site->Longitude,
-			"latitude" => $site->Latitude,
-			"sitelocation" => $site->Site_Location,
-			"sitename" => $site->Site_Name]);
-		
-		$this->response = $this->response->withStringBody($json);
-		$this->response = $this->response->withType("json");
-			
-		return $this->response;
 	}
 
 	public function addsite() {
