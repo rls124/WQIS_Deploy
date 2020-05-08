@@ -247,11 +247,8 @@ class SiteLocationsController extends AppController {
 					->find("all")
 					->where(["Site_Number" => $Site_Number])
 					->first();
-				$this->response->type("json");
-
-				$json = json_encode(["siteid" => $site->ID]);
-				$this->response->body($json);
-				return;
+				
+				return $this->response->withType("json")->withStringBody(json_encode(["siteid" => $site->ID]));
 			}
 		}
 	}
