@@ -7,13 +7,13 @@ echo $this->Html->script("help.js");
 <h2>Map</h2>
 <div class="indent">
 	<p>
-		The map, built on ESRI's ArcGIS platform, provides a visual representation of the location of each sample site. Click on a point to view the most recent sample data associated with it.
+		The <b>Map</b>, built on ESRI's <a href="https://www.esri.com/en-us/arcgis/about-arcgis/overview">ArcGIS</a> platform, provides a visual representation of the location of each sample site. It is a geographic information system, designed to aid in the analysis of spatial data. Click on a point to view the most recent sample data associated with it.
 	</p>
 	
 	<h4>Layers</h4>
 	<div class="indent">
 		<p>
-			One of the main advantages of using a GIS based webmap is access to toggleable map layers. Layers are a way to display different geographical features or datasets on the map. WQIS currently incorporates the following layers:
+			One of the main advantages of using a GIS-based map is access to toggleable <b>map layers</b>. Layers are a way to display different geographical features or datasets on the map. WQIS currently incorporates the following layers:
 			
 			<ul>
 				<li>Watersheds</li>
@@ -34,7 +34,7 @@ echo $this->Html->script("help.js");
 	<h4>Basemaps</h4>
 	<div class="indent">
 		<p>
-			Basemaps are different backgrounds for the map that highlight different features. For example, the default 'Satellite' basemap offers a colorful photographic view. Whereas the 'Streets' basemap displays all major and minor road ways in the area, but forgoes environmental details.
+			<b>Basemaps</b> are different backgrounds for the map that highlight different features. For example, the default 'Satellite' basemap offers a colorful photographic view. Whereas the 'Streets' basemap displays all major and minor road ways in the area, but forgoes environmental details.
 		</p>
 	</div>
 </div>
@@ -71,7 +71,7 @@ echo $this->Html->script("help.js");
 <h2>Timeline</h2>
 <div class="indent">
 	<p>
-		The Timeline section is for graphically displaying measurement trends across time. The Timeline will show searched measures over a user defined period of time.
+		The <b>Timeline</b> section is for graphically displaying measurement trends across time. The Timeline will show searched measures over a user defined period of time.
 	</p>
 	<p>
 		A graph will appear for each selected field, and multiple lines will appear on the graph for each site selected. If multiple sites are selected, they will be highlighted in unique colors for easy differentiation. These results can be viewed in an in-line or grid format. The in-line format simply dedicated each graph to its own line, while the grid layout will display all graphs in rows of two.
@@ -86,14 +86,14 @@ echo $this->Html->script("help.js");
 		By default the Timeline graphs display as scatterplots, but the user may choose to display them as a line graph instead. Note that, while line graph view can still be used even with a filter enabled, this may be misleading, as it implies continuity in the measurements despite measures not fitting the filter being hidden.
 	</p>
 	<p>
-		
+		Users may also compare two measurements within a single graph. Click the "Compare to other measure" button underneath a graph, and select one from the popup window. The second measure will be shown in a different color, with a scale given on the right side of the graph. Note that, because color is necessary to distinguish the two measures being compared, this feature is available only for either single-site searches, or searches using the Aggregate tool.
 	</p>
 </div>
 
 <h2>Table</h2>
 <div class="indent">
 	<p>
-		The Table displays, row-by-row, all queried data associated with each sample record. As with the Timeline, the Table displays all the measurements selected in the "View data" section of the search panel. Additionally, the site number, sample number, and date are alway shown if searching by one or more discrete sites. If aggregate mode is used, the site and sample numbers are not shown, only the date, because these fields cannot be averaged.
+		The <b>Table</b> displays, row-by-row, all queried data associated with each sample record. As with the Timeline, the Table displays all the measurements selected in the "View data" section of the search panel. Additionally, the site number, sample number, and date are alway shown if searching by one or more discrete sites. If aggregate mode is used, the site and sample numbers are not shown, only the date, because these fields cannot be averaged.
 	</p>
 	<?php if ($admin) { ?>
 	<div class="adminInfo">
