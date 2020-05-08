@@ -172,19 +172,7 @@ var Konami = function (callback) {
 	return konami;
 };
 
-if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
-	module.exports = Konami;
-}
-else {
-	if (typeof define === "function" && define.amd) {
-		define([], function() {
-			return Konami;
-		});
-	}
-	else {
-		window.Konami = Konami;
-	}
-}
+window.Konami = Konami;
 
 //for zoom functionality in the graphs
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -509,11 +497,10 @@ Chart.pluginService.register(zoomPlugin);
 
 function rebuildCompareModal(chartInstance) {
 	var yAxes = chartInstance.options.scales.yAxes;
+	var selectedTitle = yAxes[1].scaleLabel.labelString; //title of the currently selected comparison measure, if any
 	
 	//first clear the existing contents
 	compareOptionsDiv.innerHTML = "";
-	
-	var selectedTitle = yAxes[1].scaleLabel.labelString; //title of the currently selected comparison measure, if any
 	
 	//set options available in the modal
 	for (category in measurementSettings) {
