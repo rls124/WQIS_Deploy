@@ -4,21 +4,21 @@ $pageName = substr($this->request->getUri(), strrpos($this->request->getUri(), "
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <?= $this->Html->charset() ?>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Water Quality Information System</title>
-        <?= $this->Html->meta("icon") ?>
+	<head>
+		<?= $this->Html->charset() ?>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Water Quality Information System</title>
+		<?= $this->Html->meta("icon") ?>
 
-        <?= $this->fetch("meta") ?>
-        <?= $this->fetch("css") ?>
-        <?= $this->fetch("script") ?>
+		<?= $this->fetch("meta") ?>
+		<?= $this->fetch("css") ?>
+		<?= $this->fetch("script") ?>
 
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <?= $this->Html->css("bootstrap-glyphicons.min.css") ?>
-        <?= $this->Html->css("styling.css") ?>
-        <?= $this->Html->css("cakemessages.css") ?>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+		<?= $this->Html->css("bootstrap-glyphicons.min.css") ?>
+		<?= $this->Html->css("styling.css") ?>
+		<?= $this->Html->css("cakemessages.css") ?>
 		<?= $this->Html->css("loading.css") ?>
 
 <script>
@@ -185,8 +185,8 @@ $(document).ready(function () {
 				</ul>
 			</div>
 		</nav>
-		        
-        <?= $this->Flash->render() ?>
+				
+		<?= $this->Flash->render() ?>
 		<div class="container content col-lg-12" style="top: 7vh">
 		<?= $this->fetch("content") ?>
 		</div>
