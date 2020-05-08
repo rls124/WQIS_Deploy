@@ -29,7 +29,7 @@
 	<?php
 		$row = 0;
 		foreach ($SiteGroups as $siteGroup) {
-		    ?>
+			?>
 			<tr id="tr-<?= $siteGroup->groupKey ?>">
 				<td class="groupkey" id="<?php echo "td-" . $siteGroup->groupKey . "-groupKey"; ?>"><?= $siteGroup->groupName ?></td>
 				<td id="<?php echo "td-" . $siteGroup->groupDescription . "-groupDescription"; ?>"><?= $siteGroup->groupDescription ?></td>
@@ -94,7 +94,7 @@
 
 <!-- Modal for edit button -->
 <div id="editGroupModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+	<div class="modal-dialog">
 		<form id="updateGroupForm">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -152,24 +152,24 @@
 				</div>
 			</div>
 		</form>
-    </div>
+	</div>
 </div>
 
 <!-- Modal for Add Site button -->
 <div id="addGroupModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        
+	<div class="modal-dialog">
+		
 	<?=
-	    $this->Form->create(false, [
+		$this->Form->create(false, [
 			"id" => "addGroupForm"
 		])
 	?>
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add New Group</h4>
-            </div>
-            <div class="modal-body">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Add New Group</h4>
+			</div>
+			<div class="modal-body">
 			<?php if (!$admin) {
 				echo "<p>This custom group will only be visible to you</p>";
 			}
@@ -215,12 +215,12 @@
 					<input type="checkbox" name="makePrivate" id="makePrivate" value="true">
 					<label class="ml-3 mr-1" for="makePrivate">Make private</label>
 				<?php } ?>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" id="add-btn" name="add-btn" class="btn btn-default btn-basic btn btn-sm">Add Group</button>
-                <button type="button" id="add-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" id="add-btn" name="add-btn" class="btn btn-default btn-basic btn btn-sm">Add Group</button>
+				<button type="button" id="add-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
+			</div>
+		</div>
 	<?= $this->Form->end() ?>
-    </div>
+	</div>
 </div>

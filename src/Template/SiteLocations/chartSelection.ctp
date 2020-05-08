@@ -43,7 +43,6 @@ echo "</script>";
 
 <div class="sidebarContainer">
 	<div id="sidebarInner">
-		<div style="height: 7vh"></div> <!--filler space so the sidebar doesn't get covered by the navbar-->
 		<div id="searchBox">
 		<fieldset>
 			<h6>Sites:</h6>
@@ -159,7 +158,7 @@ echo "</script>";
 		</div>
 	</div>
 	
-	<div class="sidebarToggle" id="sidebarToggle" style="margin-top: 70px; z-index: 1; cursor: pointer;">
+	<div class="sidebarToggle" id="sidebarToggle" style="margin-top: 15px; z-index: 1; cursor: pointer;">
 		<div class="bar1"></div>
 		<div class="bar2"></div>
 		<div class="bar3"></div>

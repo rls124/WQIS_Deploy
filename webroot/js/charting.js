@@ -1747,7 +1747,7 @@ $(document).ready(function () {
 	
 	function toggleSearchSidebar() {
 		//expand the search sidebar and shift the rest of the page over, or the opposite
-		if (sidebarInner.style.width == "20vw") {
+		if (sidebarInner.style.width == "19vw") {
 			closeSearchSidebar();
 		}
 		else {
@@ -1756,11 +1756,11 @@ $(document).ready(function () {
 	}
 	
 	function openSearchSidebar() {
-		sidebarInner.style.width = "20vw";
+		sidebarInner.style.width = "19vw";
 		sidebarInner.style.paddingLeft = "10px";
 		sidebarInner.style.paddingRight = "10px";
-		main.style.marginLeft = "20.5vw";
-		main.style.width = "77.5vw";
+		main.style.marginLeft = "19.5vw";
+		main.style.width = "78vw";
 		sidebarToggle.classList.toggle("change");
 	}
 	

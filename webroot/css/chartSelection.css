@@ -211,7 +211,6 @@ textarea{
 .sidebarContainer {
 	height: 100%;
 	position: fixed;
-	top: 0;
 	left: 0;
 	transition: 0.5s;
 }
@@ -224,6 +223,7 @@ textarea{
 #sidebarInner{
 	height: 100%;
 	width: 0;
+	padding-bottom: 7vh;
 	float: left;
 	background-color: #5085A5;
 	color: #F7F9FB;
