@@ -12,56 +12,50 @@ $(document).ready(function () {
 		admin = false;
 	}
 	
-	$.ajax({
-		type: "POST",
-		url: "/WQIS/sitegroups/fetchGroups",
-		datatype: "JSON",
-		async: false,
-		success: function (data) {
-			var groups = data[0];
-			var groupings = data[1];
+	$(".groupSelect").select2({
+		closeOnSelect: false,
+		placeholder: "Select sites",
+		width: "resolve"
+	});
+	
+	//add groups list to all dropdowns
+	for (i=0; i<groups.length; i++) {
+		$(".groupSelect").append(new Option(groups[i].groupName, groups[i].groupKey, false, false));
+	}
+	
+	//now add the groups assigned to each individual site
+	for (i=0; i<groupings.length; i++) {
+		if (groupings[i].groups != null) {
+			var groupsForSiteBase = groupings[i].groups.split(",");
 			
-			$(".groupSelect").select2({
-				closeOnSelect: false,
-				placeholder: "Select sites",
-				width: "resolve"
-			});
-			
-			//add groups list to all dropdowns
-			for (i=0; i<groups.length; i++) {
-				$(".groupSelect").append(new Option(groups[i].groupName, groups[i].groupKey, false, false));
-			}
-			
-			//now add the groups assigned to each individual site
-			for (i=0; i<groupings.length; i++) {
-				if (groupings[i].groups != null) {
-					var groupsForSiteBase = groupings[i].groups.split(",");
-					
-					//sanitize this. In theory there should never be a group ID without a name, but it is possible, especially in development
-					var groupsForSite = [];
-					for (j=0; j<groupsForSiteBase.length; j++) {
-						for (k=0; k<groups.length; k++) {
-							if (groups[k].groupKey == groupsForSiteBase[j]) {
-								groupsForSite.push(parseInt(groupsForSiteBase[j]));
-								break;
-							}
+			if (admin) {
+				//sanitize this. In theory there should never be a group ID without a name, but it is possible, especially in development
+				var groupsForSite = [];
+				for (j=0; j<groupsForSiteBase.length; j++) {
+					for (k=0; k<groups.length; k++) {
+						if (groups[k].groupKey == groupsForSiteBase[j]) {
+							groupsForSite.push(parseInt(groupsForSiteBase[j]));
+							break;
 						}
-					}
-					
-					if (admin) {
-						$("#" + groupings[i].Site_Number + "-groups").val(groupsForSite).trigger("change");
-					}
-					else {
-						var groupsString = groupsForSite[0].toString();
-						for (j=1; j<groupsForSite.length; j++) {
-							groupsString = groupsString + ", " + groupsForSite[j];
-						}
-						document.getElementById("groups-" + groupings[i].Site_Number).innerText = groupsString;
 					}
 				}
+				
+				$("#" + groupings[i].Site_Number + "-groups").val(groupsForSite).trigger("change");
+			}
+			else {
+				var groupNames = [];
+				for (j=0; j<groupsForSiteBase.length; j++) {
+					for (k=0; k<groups.length; k++) {
+						if (groups[k].groupKey == groupsForSiteBase[j]) {
+							groupNames.push(groups[k].groupName);
+						}
+					}
+				}
+				
+				document.getElementById("groups-" + groupings[i].Site_Number).innerText = groupNames.join(", ");
 			}
 		}
-	});
+	}
 	
 	$("body").on("click", ".delete", function () {
 		var input = $(this);

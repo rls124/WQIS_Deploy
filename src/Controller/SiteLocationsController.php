@@ -115,13 +115,13 @@ class SiteLocationsController extends AppController {
 		$SiteLocations = $this->SiteLocations->find("all")->order(["Site_Number" => "ASC"]);
 		$numSites = $SiteLocations->count();
 		
+		//get min/max date of all the sites
 		$categories = ["BacteriaSamples", "NutrientSamples", "PesticideSamples", "PhysicalSamples"];
 		for ($i=0; $i<sizeof($categories); $i++) {
 			$this->loadModel($categories[$i]);
 		}
 		
-		//get min/max date of all the sites
-		foreach ($SiteLocations as $siteData) {
+		foreach ($SiteLocations as $site) {
 			$minDate = 3000; //please don't be using this still in 980 years...
 			$maxDate = 0;
 			
@@ -129,7 +129,7 @@ class SiteLocationsController extends AppController {
 				$measureQuery = $this->$category
 					->find("all", [
 						"conditions" => [
-							"site_location_id" => $siteData->Site_Number
+							"site_location_id" => $site->Site_Number
 						],
 						"fields" => [
 							"minDate" => "MIN(YEAR(Date))",
@@ -146,13 +146,31 @@ class SiteLocationsController extends AppController {
 			}
 			
 			if ($minDate === 3000) {
-				$siteData->dateRange = "No data";
+				$site->dateRange = "No data";
 			}
 			else {
-				$siteData->dateRange = $minDate . " to " . $maxDate;
+				$site->dateRange = $minDate . " to " . $maxDate;
 			}
 		}
 		
+		//get all groups visible to this user
+		$this->loadModel("SiteGroups");
+		$SiteGroups = $this->SiteGroups
+			->find("all", [
+				"conditions" => [
+					"owner IN " => ["all", $this->Auth->user("userid")]
+				],
+				"fields" => [
+					"groupKey",
+					"groupName"
+				]
+			]);
+		
+		//get group-site relationships
+		$Groupings = $this->SiteLocations->find()->select(["Site_Number", "groups"]);
+		
+		$this->set(compact("SiteGroups"));
+		$this->set(compact("Groupings"));
 		$this->set(compact("SiteLocations"));
 		$this->set(compact("numSites"));
 	}

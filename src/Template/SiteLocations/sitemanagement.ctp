@@ -6,9 +6,13 @@ echo $this->Html->script("siteManagement.js");
 echo $this->Html->css("measurementBenchmarks.css");
 echo $this->Html->css("loading.css");
 
+echo "<script>";
 if ($admin) {
-	echo "<script>var admin = true;</script>";
+	echo "var admin = true;";
 }
+echo "var groupings=" . json_encode($Groupings) . ";";
+echo "var groups=" . json_encode($SiteGroups) . ";";
+echo "</script>";
 ?>
 
 <div id="message" class="message hidden"></div>
@@ -125,7 +129,7 @@ if ($admin) {
 		
 			<td>
 				<?php if ($admin) { ?>
-				<select class="form-control groupSelect" id="<?php echo $siteData->Site_Number . "-groups"; ?>" name="<?php echo $siteData->Site_Number . "-groups[]";?>" multiple="multiple" style="width: 100%"></select>
+				<select class="form-`control groupSelect" id="<?php echo $siteData->Site_Number . "-groups"; ?>" name="<?php echo $siteData->Site_Number . "-groups[]";?>" multiple="multiple" style="width: 100%"></select>
 				<?php
 				}
 				else {

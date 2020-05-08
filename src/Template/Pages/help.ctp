@@ -134,7 +134,7 @@ echo $this->Html->script("help.js");
 	</p>
 </div>
 
-<h2 id="sites">Site info</h2>
+<h2 id="sites">Sites</h2>
 <div class="indent">
 	<p>
 		The <b><a href="/WQIS/site-locations/sitemanagement">Site Info</a></b> page lists meta-information about every site the WQIS program monitors, including its site number, latitude and longitude, name, a description of its location, and what groups it belongs to.
@@ -151,7 +151,7 @@ echo $this->Html->script("help.js");
 	<?php } ?>
 </div>
 
-<h2 id="measurements">Measurement info</h2>
+<h2 id="measurements">Measurements</h2>
 <div class="indent">
 	<p>
 		The <b><a href="/WQIS/measurement-settings/measurements">Measurement Info</a></b> page provides meta-information about each measure supported by WQIS. The name and unit of each are listed. Minimum and maximum benchmarks, which represent the <i>recommended</i> range of values, are listed where such guidelines exist. Minimum and maximum detectable levels, which are limited by the capabilities of the sensors or laboratory equipment that record these measurements, are listed when appropriate as well.
