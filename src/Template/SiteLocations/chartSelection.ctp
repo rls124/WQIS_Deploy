@@ -12,9 +12,9 @@
 <script defer src="https://js.arcgis.com/4.14/"></script>
 
 <?php if (isset($runTutorial)) { ?>
-	<script defer src="../js/tutorial.js"></script>
-	<script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
-	<link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
+<script defer src="../js/tutorial.js"></script>
+<script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
 <?php } ?>
 
 <script>
@@ -22,6 +22,9 @@
 if ($admin) {
 	echo "var admin = true;";
 }
+echo "var measurementSettings=" . json_encode($measurementSettings) . ";";
+echo "var groups=" . json_encode($groups) . ";";
+echo "var mapData=" . json_encode($mapData) . ";";
 ?>
 var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else { echo "null"; }?>;
 </script>
@@ -82,12 +85,12 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			<div>
 				<h6>To:</h6>
 				<?=
-				$this->Form->control('endDate', [
-					'label' => false,
-					'type' => 'text',
-					'class' => 'form-control date-picker col-lg-12',
-					'id' => 'endDate',
-					'placeholder' => 'mm/dd/yyyy'
+				$this->Form->control("endDate", [
+					"label" => false,
+					"type" => "text",
+					"class" => "form-control date-picker col-lg-12",
+					"id" => "endDate",
+					"placeholder" => "mm/dd/yyyy"
 				])
 				?>
 			</div>
@@ -97,28 +100,28 @@ var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else 
 			<div>
 				<h6>Filter by (optional):</h6>
 				<?=
-				$this->Form->select('measurementSelect', [
-					'select' => 'Select a measure',
-					'Ecoli' => 'E. Coli (CFU/100 mil)',
-					'TotalColiform' => 'Coliform (CFU/100 mil)'
+				$this->Form->select("measurementSelect", [
+					"select" => "Select a measure",
+					"Ecoli" => "E. Coli",
+					"TotalColiform" => "Coliform"
 					], [
-					'label' => 'Measurement',
-					'id' => 'measurementSelect',
-					'class' => 'form-control select'
+					"label" => "Measurement",
+					"id" => "measurementSelect",
+					"class" => "form-control select"
 					]
 				)
 				?>
 			</div>
 			<div>
 			<?=
-			$this->Form->select('overUnderSelect', [
-				'>=' => 'Over',
-				'<=' => 'Under',
-				'=' => 'Equal To'
+			$this->Form->select("overUnderSelect", [
+				">=" => "Over",
+				"<=" => "Under",
+				"=" => "Equal To"
 				], [
-				'label' => 'Search',
-				'id' => 'overUnderSelect',
-				'class' => 'form-control select'
+				"label" => "Search",
+				"id" => "overUnderSelect",
+				"class" => "form-control select"
 				]
 			)
 			?>

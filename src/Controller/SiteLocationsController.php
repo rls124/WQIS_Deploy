@@ -26,13 +26,9 @@ class SiteLocationsController extends AppController {
 		else if (isset($_GET["runTutorial"])) {
 			$this->set("runTutorial", true);
 		}
-	}
-	
-	public function chartsInitData() {
-		//get measurementSettings, sites, and groups all in a single query to reduce loading time
-		$this->render(false);
+		
+		//get measurement settings
 		$this->loadModel("MeasurementSettings");
-		$this->loadModel("SiteGroups");
 		
 		$bacteriaSettings = $this->MeasurementSettings->find("all")
 			->where(["Category" => "Bacteria"]);
@@ -46,11 +42,14 @@ class SiteLocationsController extends AppController {
 		$physicalSettings = $this->MeasurementSettings->find("all")
 			->where(["Category" => "Physical"]);
 		
+		//get groups
+		$this->loadModel("SiteGroups");
+		
 		//show only groups that are either public or owned by this user
 		$groups = $this->SiteGroups->find("all", ["conditions" =>
 				["owner IN " => ["all", $this->Auth->user("userid")]]]);
 		
-		//get the sites
+		//get the sites and the most recent sample data for each
 		$sites = $this->SiteLocations->find("all")->order("Site_Number");
 		$connection = ConnectionManager::get("default");
 		
@@ -68,16 +67,11 @@ class SiteLocationsController extends AppController {
 			$mapData = array_merge($mapData, [$tableNames[$i] => $queryResult]);
 		}
 		
-		$json = json_encode([
-			"settings" => ["bacteria" => $bacteriaSettings, "nutrient" => $nutrientSettings, "pesticide" => $pesticideSettings, "physical" => $physicalSettings],
-			"groups" => $groups,
-			"mapData" => $mapData
-		]);
+		$measurementSettings = ["bacteria" => $bacteriaSettings, "nutrient" => $nutrientSettings, "pesticide" => $pesticideSettings, "physical" => $physicalSettings];
 		
-		$this->response = $this->response->withStringBody($json);
-		$this->response = $this->response->withType("json");
-	
-		return $this->response;
+		$this->set(compact("measurementSettings"));
+		$this->set(compact("groups"));
+		$this->set(compact("mapData"));
 	}
 
 	public function daterange() {

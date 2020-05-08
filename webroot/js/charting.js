@@ -1,4 +1,4 @@
-var spinnerInhibited = true; //inhibit this initially so basic setup tasks that are done through AJAX, like loading the map, can be done without showing this. Can also inhibit as needed for minor things that aren't expected to take much time
+var spinnerInhibited = false; //inhibit as needed for minor things that aren't expected to take much time (getRange())
 
 //loading graphic
 $(document).ajaxStart(function() {
@@ -116,22 +116,6 @@ function getSelectedMeasures() {
 	
 	return measures;
 }
-
-//get all data needed for initial page loading
-$.ajax({
-	type: "POST",
-	url: "chartsInitData",
-	datatype: "JSON",
-	async: false,
-	success: function(response) {
-		measurementSettings = response.settings;
-		groups = response.groups;
-		mapData = response.mapData;
-	},
-	error: function(response) {
-		genericError();
-	}
-});
 
 //konami code detection for easter egg
 var Konami = function (callback) {
@@ -2068,6 +2052,4 @@ $(document).ready(function () {
 			}
 		}));
 	}
-
-	spinnerInhibited = false;
 });
