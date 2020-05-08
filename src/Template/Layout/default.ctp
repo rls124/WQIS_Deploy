@@ -83,9 +83,15 @@ function hideBrowserCompatibilityMessage() {
 <?php } ?>
 
 $(document).ready(function () {
+	//allow dropdowns that have a link as the root element to be clicked
 	$(".dropdown").click(function(event) {
-		location.href = event.target.href;
+		var tgt = event.target.href;
+		if (tgt[tgt.length-1] != "#") { //if the last char is # that means its a dropdown that has to be clicked to activate and doesn't actually have a destination
+			location.href = tgt;
+		}
 	});
+	
+	<?php if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { echo "browserDetect();"; } ?>
 });
 </script>
 	</head>
@@ -193,7 +199,6 @@ $(document).ready(function () {
 				}
 			?>
 		</div>
-		<?php if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { ?><script>browserDetect();</script><?php } ?>
 		
 		<!--
 		Produced with love by the students of IPFW/PFW.

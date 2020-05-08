@@ -830,14 +830,10 @@ $(document).ready(function () {
 			view.on("click", function(event) {
 
 				view.hitTest(event.screenPoint).then(function(response) {
-					//var hitPoint = false; //have we hit a collection site?
 					clearHighlight();
 					response.results.forEach(function(graphic) {
 						if (graphic.graphic.ObjectID != null) { //if this is actually a site icon, not a watershed or something
-							//clearHighlight();
-							
 							highlightPoint(graphic.graphic);
-							//hitPoint = true;
 						}
 					});
 				});
