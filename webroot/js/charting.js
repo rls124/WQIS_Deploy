@@ -947,6 +947,9 @@ $(document).ready(function () {
 		if (preselectSite) {
 			$("#sites").val(preselectSite).trigger("change");
 		}
+		else if (preselectGroup) {
+			$("#sites").val(preselectGroup).trigger("change");
+		}
 		else {
 			//trigger change anyway, to make "Select sites" show since for some reason that doesn't work by default
 			$("#sites").trigger("change");

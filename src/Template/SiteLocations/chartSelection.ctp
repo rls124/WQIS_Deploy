@@ -15,19 +15,31 @@
 <script defer src="../js/tutorial.js"></script>
 <script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
-<?php } ?>
+<?php }
+echo "<script>";
 
-<script>
-<?php
 if ($admin) {
 	echo "var admin = true;";
 }
 echo "var measurementSettings=" . json_encode($measurementSettings) . ";";
 echo "var groups=" . json_encode($groups) . ";";
 echo "var mapData=" . json_encode($mapData) . ";";
+
+if (isset($_GET["site"])) {
+	echo "var preselectSite=" . $_GET["site"] . ";";
+}
+else {
+	echo "var preselectSite=null;";
+}
+
+if (isset($_GET["group"])) {
+	echo "var preselectGroup=" . $_GET["group"] . ";";
+}
+else {
+	echo "var preselectGroup=null;";
+}
+echo "</script>";
 ?>
-var preselectSite = <?php if(isset($_GET["site"])) { echo $_GET["site"]; } else { echo "null"; }?>;
-</script>
 
 <div class="sidebarContainer">
 	<div id="sidebarInner">

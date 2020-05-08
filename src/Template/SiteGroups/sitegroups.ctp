@@ -83,6 +83,7 @@
 					?>
 					</a>
 				<?php } ?>
+					<a href="/WQIS/site-locations/chartselection?group=<?=$siteGroup->groupKey?>">View</a>
 				</td>
 				<?php $row++; ?>
 			</tr>
