@@ -3,7 +3,7 @@ function ensurePasswordInput() {
 		$("#changePass-btn").removeAttr("disabled");
 	}
 	else {
-		$("#changePass-btn").attr("disabled", "disabled");    
+		$("#changePass-btn").attr("disabled", "disabled");
 	}
 }
 

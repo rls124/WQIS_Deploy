@@ -3,8 +3,8 @@ $(document).ajaxStart(function() {
 	$(".loadingspinnermain").css("visibility", "visible");
 	$("body").css("cursor", "wait");
 }).ajaxStop(function() {
-    $(".loadingspinnermain").css("visibility", "hidden");
-    $("body").css("cursor", "default");
+	$(".loadingspinnermain").css("visibility", "hidden");
+	$("body").css("cursor", "default");
 });
 
 $(document).ready(function () {
@@ -223,7 +223,7 @@ $(document).ready(function () {
 			$.alert("This Site Number already exists, please create a new one");
 			return false;
 		}
-        
+		
 		$.ajax({
 			type: "POST",
 			url: "addsite",
