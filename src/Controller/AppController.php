@@ -62,6 +62,8 @@ class AppController extends Controller {
 				],
 				"storage" => "Session"
 			]);
+			
+			$this->set("pageName", substr($this->request->getUri(), strrpos($this->request->getUri(), "/") + 1));
 
 			$this->set("userinfo", $this->Auth->user());
 			$this->set("admin", $this->Auth->user("admin"));
