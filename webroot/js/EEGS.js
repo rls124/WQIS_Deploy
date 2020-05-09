@@ -392,7 +392,6 @@ export function start() {
 			<p><canvas id="upcoming"></canvas></p>
 			<p>score <span id="score">00000</span></p>
 			<p>rows <span id="rows">0</span></p>
-			<p>Level <span id="level">1</span></p>
 		</div>
 		<canvas id="canvas"></canvas>
 	`;
@@ -432,7 +431,6 @@ export function start() {
 		score,         //the current score
 		vscore,        //the currently displayed score (it catches up to score in small chunks - like a spinning slot machine)
 		rows,          //number of completed rows in the current game
-		level,         //current level number
 		step;          //how long before current piece drops by 1 row
 
 	/*
