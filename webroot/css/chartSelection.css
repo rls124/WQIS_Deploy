@@ -24,20 +24,20 @@ body,
 }
 .color-box{
 	width: 10px;
-    height: 10px;
-    display: inline-block;
-    background-color: #ccc;
-    left: 5px;
-    top: 5px;
+	height: 10px;
+	display: inline-block;
+	background-color: #ccc;
+	left: 5px;
+	top: 5px;
 }
 #main{
 	padding-left: 20px;
 	top: 10px;
 }
 textarea{
-    width: 100%;
-    resize: both;
-    overflow: hidden;
+	width: 100%;
+	resize: both;
+	overflow: hidden;
 }
 
 /*icons for sortable table headers*/
@@ -68,79 +68,79 @@ textarea{
 }
 
 .btn-basic{
-    background-color: #2a5171;
-    border: medium solid #2a5171;
-    color: white;
+	background-color: #2a5171;
+	border: medium solid #2a5171;
+	color: white;
 }
 .btn-basic:hover{
-    background-color: #8eceff;
-    text-shadow: 1px 1px 3px black;
-    color:black;
+	background-color: #8eceff;
+	text-shadow: 1px 1px 3px black;
+	color:black;
 }
 .btn-basic:active{
-    background-color: #dddddd;
-    border: medium solid #77b0d9;
-    color: black;
+	background-color: #dddddd;
+	border: medium solid #77b0d9;
+	color: black;
 }
 .btn-basic:disabled:hover{
-    background-color: #2a5171;
-    border-color: #2a5171;
-    text-shadow: none;
-    color: white;
-    cursor: auto;
+	background-color: #2a5171;
+	border-color: #2a5171;
+	text-shadow: none;
+	color: white;
+	cursor: auto;
 }
 .btn-ctrl{
 	margin: 1px;
 	border-color: darkgray;
 }
 .btn-close{
-    background-color: #868E96;
-    border: medium solid #868E96;
-    color: white;
+	background-color: #868E96;
+	border: medium solid #868E96;
+	color: white;
 }
 .btn-close:hover{
-    background-color: #d4d8db;
-    text-shadow: 1px 1px 3px black;
-    color:black;
+	background-color: #d4d8db;
+	text-shadow: 1px 1px 3px black;
+	color:black;
 }
 .btn-close:active{
-    background-color: #dddddd;
-    border: medium solid #77b0d9;
-    color: black;
+	background-color: #dddddd;
+	border: medium solid #77b0d9;
+	color: black;
 }
 .btn-close:disabled:hover{
-    background-color: #2a5171;
-    border-color: #2a5171;
-    text-shadow: none;
-    color: white;
-    cursor: auto;
+	background-color: #2a5171;
+	border-color: #2a5171;
+	text-shadow: none;
+	color: white;
+	cursor: auto;
 }
 .inputHide{
-    background-color: #bdbdbd;
-    min-width: 90px;
-    white-space: pre;
+	background-color: #bdbdbd;
+	min-width: 90px;
+	white-space: pre;
 }
 .btn-thin{
-    margin:0 auto;
-    padding-top:1px;
-    padding-bottom:1px;
-    height:26px;
+	margin:0 auto;
+	padding-top:1px;
+	padding-bottom:1px;
+	height:26px;
 }
 .btn-thin:hover{
-    border-color: rgb(57, 156, 255);
+	border-color: rgb(57, 156, 255);
 }
 .delete:hover {
-    color: #FF0000;
-    cursor: pointer;
+	color: #FF0000;
+	cursor: pointer;
 }
 .panel-heading .colpsible-panel:after {
-    font-family: 'Glyphicons Halflings'; 
-    content: "\e114";    
-    float: right;        
-    color: #408080;         
+	font-family: 'Glyphicons Halflings'; 
+	content: "\e114";
+	float: right;
+	color: #408080;
 }
 .panel-heading .colpsible-panel.collapsed:after {
-    content: "\e080"; 
+	content: "\e080"; 
 }
 .collapsible-panel:before{
 	content: '\2212';
@@ -232,28 +232,25 @@ textarea{
 	overflow: hidden;
 }
 .bar1, .bar2, .bar3 {
-  width: 25px;
-  height: 3px;
-  background-color: white;
-  margin: 6px 0;
-  transition: 0.2s;
+	width: 25px;
+	height: 3px;
+	background-color: white;
+	margin: 6px 0;
+	transition: 0.2s;
 }
-
 /* Rotate first bar */
 .change .bar1 {
-  -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
-  transform: rotate(-45deg) translate(-5px, 6px) ;
+	-webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+	transform: rotate(-45deg) translate(-5px, 6px) ;
 }
-
 /* Fade out the second bar */
 .change .bar2 {
-  opacity: 0;
+	opacity: 0;
 }
-
 /* Rotate last bar */
 .change .bar3 {
-  -webkit-transform: rotate(45deg) translate(-6px, -8px) ;
-  transform: rotate(45deg) translate(-6px, -8px) ;
+	-webkit-transform: rotate(45deg) translate(-6px, -8px) ;
+	transform: rotate(45deg) translate(-6px, -8px) ;
 }
 #searchBox{
 	overflow-y: auto;
@@ -262,13 +259,16 @@ textarea{
 	color: black;
 }
 .select:focus, .date-picker:focus{
-    transition: .1s;
-    outline: solid #2a5171;
+	transition: .1s;
+	outline: solid #2a5171;
+}
+label {
+	padding-left: 3px;
 }
 
 /*Table Stuff*/
 table{
-    border: thin solid #FFF;
+	border: thin solid #FFF;
 	background: #FFF;
 	border-collapse: collapse;
 	width: 100%; 
@@ -292,16 +292,16 @@ th{
 
 /*datepicker stuff*/
 #startDate, #endDate{
-    font-size: 12pt;
-    height: 38px;
+	font-size: 12pt;
+	height: 38px;
 }
 #startDate:focus, #endDate:focus{
-    transition: .1s;
-    outline: solid #2a5171;
+	transition: .1s;
+	outline: solid #2a5171;
 }
 .datepicker{
-    border: solid medium #2a5171;
-    background-color: #f4f6fa;
+	border: solid medium #2a5171;
+	background-color: #f4f6fa;
 }
 
 #buttonGroup{

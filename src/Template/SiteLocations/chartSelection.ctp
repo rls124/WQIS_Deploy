@@ -47,7 +47,7 @@ echo "</script>";
 		<fieldset>
 			<h6>Sites:</h6>
 			<select class="form-control" id="sites" name="site[]" multiple="multiple" style="width: 100%"></select>
-			<input type="checkbox" id="aggregateGroup">Aggregate
+			<input type="checkbox" id="aggregateGroup"><label for="aggregateGroup">Aggregate</label>
 		
 			<hr/>
 		
