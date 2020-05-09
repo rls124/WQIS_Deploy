@@ -10,20 +10,20 @@ let mapDisplayTest =
 let searchBoxToggleTest =
     "search box toggles" &&& fun _ ->
         //initial state should be "open"
-        assert (((element "#sidebarInner").GetAttribute("style")).Contains("width: 20vw")) //open
+        assert (((element "#sidebarInner").GetAttribute("style")).Contains("width: 19vw")) //open
         click "#sidebarToggle"
         assert (((element "#sidebarInner").GetAttribute("style")).Contains("width: 0px")) //closed
 
         //make sure its now open for the rest of the tests to proceed
         click "#sidebarToggle"
-        assert (((element "#sidebarInner").GetAttribute("style")).Contains("width: 20vw")) //open again
+        assert (((element "#sidebarInner").GetAttribute("style")).Contains("width: 19vw")) //open again
 
 let changeCategoryTest =
     "changing category sets correct measurement options" &&& fun _ ->
         "#categorySelect" << "Nutrient"
     
         //we should be able to select "Nitrate/Nitrite" from the measurementSelect dropdown now
-        "#measurementSelect" << "Nitrate/Nitrite (mg/L)"
+        "#measurementSelect" << "Nitrate/Nitrite"
         "#measurementSelect" << "Select a measure" //reset that so we don't disrupt the search test later
 
         //display fields should contain that as well
@@ -40,7 +40,7 @@ let searchTest =
 let numRows () =
     (((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr") |> List.length)
 
-let tablePaginationTest =
+let tablePaginationTest verbose =
     //"Show ___ results" dropdown correctly works, prev/next page buttons work, and number of rows and pages displayed is correct
     "table pagination works" &&& fun _ ->
         //should always start on page 1, and these should always match
@@ -59,10 +59,11 @@ let tablePaginationTest =
         sleep 1 //wait to populate
 
         let numPagesReturned = read((element "#pageSelectorTop" |> elementWithin "option:last-child"))
-        printfn "Last page = %s" numPagesReturned
-
         let numRecordsDisplayed = read(".totalResults")
-        printfn "Shows %s results" numRecordsDisplayed
+
+        if verbose then
+            printfn "Last page = %s" numPagesReturned
+            printfn "Shows %s results" numRecordsDisplayed
 
         //check number of results is correct
         (totalRowsCounted-1).ToString() == read(".totalResults")
@@ -77,11 +78,18 @@ let tableSortTest =
         let el = ((element "#tableView" |> elementWithin "tbody") |> elementsWithin "tr")
         let row = el.[0]
         let cells = row |> elementsWithin "th"
-        let sampleNumberCol = cells.[2]
-        click sampleNumberCol
-        //TODO: validate that this actually works, all we do for now is click on the column
+        let firstMeasureCol = cells.[4]
+        click firstMeasureCol
 
         sleep 1 //wait to populate
+
+        //TODO: validate that this actually works, all we do for now is click on the column
+        //this should work, doesn't for some reason
+        //let thisRow = el.[1]
+        //printfn "%s" (read el)
+        //let cellsInRow = thisRow |> elementsWithin "td"
+        //let thisCell = cellsInRow.[4]
+        //printfn "%s" (read thisCell)
 
 let tableEditTest persistEdits verbose =
     //table edit works
@@ -135,3 +143,10 @@ let preselectSiteTest baseUrl =
 
         //validate that this site is selected
         "401 Flatrock Creek/Auglaize River" == read("#sites")
+
+let preselectGroupTest baseUrl =
+    //preselecting a group via GET request works
+    "preselecting group works" &&& fun _ ->
+        url (baseUrl + "site-locations/chartselection?group=1")
+
+        //todo: validate this actually works

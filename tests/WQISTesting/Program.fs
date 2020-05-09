@@ -56,7 +56,7 @@ let runTests(opts) =
     ChartSelectionTests.searchBoxToggleTest
     ChartSelectionTests.changeCategoryTest
     ChartSelectionTests.searchTest
-    ChartSelectionTests.tablePaginationTest
+    ChartSelectionTests.tablePaginationTest opts.verbose
     ChartSelectionTests.tableSortTest
     if (not opts.prodEnvironment) || (opts.prodEnvironment && opts.overrideSafety) then
         if (opts.userType = "admin") then
@@ -67,6 +67,7 @@ let runTests(opts) =
         printf("Skipping table edit test because we are targetting production. Use --override to force\r\n")
 
     ChartSelectionTests.preselectSiteTest baseUrl
+    ChartSelectionTests.preselectGroupTest baseUrl
 
     NavigationTests.navbarLinksWorkTest baseUrl opts.userType
 
