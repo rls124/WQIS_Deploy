@@ -105,7 +105,7 @@ function hideBrowserCompatibilityMessage() {
 		Produced with love by the students of IPFW/PFW.
 		Bobby Nicola, Mack Crawford, Seth Snider, Nicholas Tayloe
 		-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		<script src="https://unpkg.com/@popperjs/core@2"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 		
 		<?php if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { echo "<script>browserDetect();</script>"; } ?>

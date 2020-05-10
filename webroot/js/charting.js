@@ -957,7 +957,15 @@ $(document).ready(function () {
 	});
 	
 	function setColor(point, color) {
-		point.symbol.color = color;
+		point.symbol = {
+			type: "simple-marker",
+			color: color,
+			outline: {
+				color: [255,255,255],
+				width: 2
+			}
+		};
+		
 		view.graphics.remove(point);
 		view.graphics.add(point);
 	}
