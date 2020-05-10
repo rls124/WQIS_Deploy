@@ -965,9 +965,6 @@ $(document).ready(function () {
 				width: 2
 			}
 		};
-		
-		view.graphics.remove(point);
-		view.graphics.add(point);
 	}
 	
 	function highlightPoint(point) {
@@ -982,12 +979,12 @@ $(document).ready(function () {
 	}
 	
 	function selectPoint() {
-		var siteNum = mapData["SiteData"][view.popup.selectedFeature.ObjectID].Site_Number;
+		var siteNum = mapData["SiteData"][view.popup.selectedFeature.ObjectID].Site_Number.toString();
 		var currentlySelected = $("#sites").val();
 		
-		if (!currentlySelected.includes(siteNum.toString())) {
+		if (!currentlySelected.includes(siteNum)) {
 			//add it
-			currentlySelected.push(siteNum.toString());
+			currentlySelected.push(siteNum);
 			$("#sites").val(currentlySelected).trigger("change");
 		}
 	}
