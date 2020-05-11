@@ -41,6 +41,7 @@ const categorySelect = document.getElementById("categorySelect");
 const overUnderSelect = document.getElementById("overUnderSelect");
 const chartType = document.getElementById("chartType");
 const allCheckbox = document.getElementById("allCheckbox");
+const tableDiv = document.getElementById("tableDiv");
 const tableNoData = document.getElementById("tableNoData");
 const chartsNoData = document.getElementById("chartsNoData");
 const tableSettingsTop = document.getElementById("tableSettingsTop");
@@ -1036,8 +1037,22 @@ $(document).ready(function () {
 	
 	$("#showBenchmarks").change(function() {
 		showBenchmarks = !showBenchmarks;
-		resetCharts();
-		getGraphData();
+		
+		var measures = getSelectedMeasures();
+		var category = categorySelect.value;
+		
+		for (i=0; i<charts.length; i++) {
+			var thisMeasure;
+			for (var j=0; j<measurementSettings[category].length; j++) {
+				thisMeasure = measurementSettings[category][j];
+				if (thisMeasure.measureKey === measures[i]) {
+					break;
+				}
+			}
+			
+			charts[i].options.annotation = showBenchmarks ? {annotations: [benchmarkLine(thisMeasure.benchmarkMaximum, "red"), benchmarkLine(thisMeasure.benchmarkMinimum, "blue")]} : {};
+			charts[i].update(0);
+		}
 	});
 	
 	$("#allCheckbox").change(function() {
@@ -1331,7 +1346,7 @@ $(document).ready(function () {
 			tableSettingsBottom.style = "display: block";
 	
 			tablePage = page;
-			document.getElementById("tableDiv").innerHTML = "";
+			tableDiv.innerHTML = "";
 			$("#pageSelectorTop").val(tablePage);
 			$("#pageSelectorBottom").val(tablePage);
 
@@ -1634,7 +1649,7 @@ $(document).ready(function () {
 						}
 					}
 
-					document.getElementById("tableDiv").append(table);
+					tableDiv.append(table);
 				},
 				error: function(response) {
 					genericError();
@@ -1790,7 +1805,7 @@ $(document).ready(function () {
 	
 	function resetTable() {
 		//remove the old table
-		document.getElementById("tableDiv").innerHTML = "";
+		tableDiv.innerHTML = "";
 		
 		var sampleTable = document.getElementById("tableView");
 		if (sampleTable != null) {
@@ -1998,11 +2013,6 @@ $(document).ready(function () {
 				break;
 			}
 		}
-	
-		var benchmarkAnnotation = {};
-		if (showBenchmarks) {
-			benchmarkAnnotation = {annotations: [benchmarkLine(thisMeasure.benchmarkMaximum, "red"), benchmarkLine(thisMeasure.benchmarkMinimum, "blue")]};
-		}
 		
 		charts.push(new Chart(ctx, {
 			type: "line",
@@ -2011,7 +2021,7 @@ $(document).ready(function () {
 				datasets: datasets
 			},
 			options: {
-				annotation: benchmarkAnnotation,
+				annotation: showBenchmarks ? {annotations: [benchmarkLine(thisMeasure.benchmarkMaximum, "red"), benchmarkLine(thisMeasure.benchmarkMinimum, "blue")]} : {},
 				scales: {
 					yAxes: [
 						{
