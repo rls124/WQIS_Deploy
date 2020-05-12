@@ -4,7 +4,6 @@
 <?php
 echo $this->Html->script("siteManagement.js");
 echo $this->Html->css("measurementBenchmarks.css");
-echo $this->Html->css("loading.css");
 
 echo "<script>";
 if ($admin) {
@@ -53,16 +52,16 @@ echo "</script>";
 			<td>
 			<?php
 			if ($admin) {
-				echo $this->Form->control('Longitude', ['maxlength' => '12',
-					'id' => 'Longitude-' . $row,
-					'class' => 'inputfields tableInput',
-					'size' => '11',
-					'value' => $siteData->Longitude,
-					'style' => 'display: none',
-					'label' => [
-						'style' => 'display: in-line; cursor: pointer',
-						'class' => 'btn btn-thin inputHide',
-						'text' => $siteData->Longitude . ' '
+				echo $this->Form->control("Longitude", ["maxlength" => "12",
+					"id" => "Longitude-" . $row,
+					"class" => "inputfields tableInput",
+					"size" => "11",
+					"value" => $siteData->Longitude,
+					"style" => "display: none",
+					"label" => [
+						"style" => "display: in-line; cursor: pointer",
+						"class" => "btn btn-thin inputHide",
+						"text" => $siteData->Longitude . " "
 					]
 				]);
 			}
@@ -74,16 +73,16 @@ echo "</script>";
 			<td>
 			<?php
 			if ($admin) {
-				echo $this->Form->control('Latitude', ['maxlength' => '12',
-					'id' => 'Latitude-' . $row,
-					'class' => 'inputfields tableInput',
-					'size' => '11',
-					'value' => $siteData->Latitude,
-					'style' => 'display: none',
-					'label' => [
-						'style' => 'display: in-line; cursor: pointer',
-						'class' => 'btn btn-thin inputHide',
-						'text' => $siteData->Latitude . ' '
+				echo $this->Form->control("Latitude", ["maxlength" => "12",
+					"id" => "Latitude-" . $row,
+					"class" => "inputfields tableInput",
+					"size" => "11",
+					"value" => $siteData->Latitude,
+					"style" => "display: none",
+					"label" => [
+						"style" => "display: in-line; cursor: pointer",
+						"class" => "btn btn-thin inputHide",
+						"text" => $siteData->Latitude . " "
 					]
 				]);
 			}
@@ -96,16 +95,16 @@ echo "</script>";
 			<td>
 			<?php
 			if ($admin) {
-				echo $this->Form->control('Site_Name', ['maxlength' => '12',
-					'id' => 'Site_Name-' . $row,
-					'class' => 'inputfields tableInput',
-					'size' => '11',
-					'value' => $siteData->Site_Name,
-					'style' => 'display: none',
-					'label' => [
-						'style' => 'display: in-line; cursor: pointer',
-						'class' => 'btn btn-thin inputHide',
-						'text' => $siteData->Site_Name . ' '
+				echo $this->Form->control("Site_Name", ["maxlength" => "12",
+					"id" => "Site_Name-" . $row,
+					"class" => "inputfields tableInput",
+					"size" => "11",
+					"value" => $siteData->Site_Name,
+					"style" => "display: none",
+					"label" => [
+						"style" => "display: in-line; cursor: pointer",
+						"class" => "btn btn-thin inputHide",
+						"text" => $siteData->Site_Name . " "
 					]
 				]);
 			}
@@ -117,7 +116,7 @@ echo "</script>";
 		
 			<td>
 				<?php if ($admin) { ?>
-				<label style="display: table-cell; cursor: pointer; white-space:normal !important; overflow-wrap: anywhere" class="btn btn-thin inputHide" for="<?php echo 'siteLoc-' . $row;?>"><?php echo $siteData->Site_Location;?> </label>
+				<label style="display: table-cell; cursor: pointer; white-space:normal !important; overflow-wrap: anywhere" class="btn btn-thin inputHide" for="<?php echo "siteLoc-" . $row;?>"><?php echo $siteData->Site_Location;?> </label>
 				<textarea rows="4" cols="50" class="tableInput" name="siteLoc-<?php echo $row;?>" style="display: none" id="siteLoc-<?php echo $row;?>"><?php echo $siteData->Site_Location;?></textarea>		
 				<?php
 				}
@@ -142,10 +141,10 @@ echo "</script>";
 			<?php if ($admin) {?>
 				<a id="delete-tooltip" data-toggle="tooltip" title="Delete Site">
 				<?=
-				$this->Html->tag('span', "", [
-					'class' => "delete glyphicon glyphicon-trash",
-					'id' => 'delete-' . $siteData->ID,
-					'name' => 'delete-' . $siteData->ID
+				$this->Html->tag("span", "", [
+					"class" => "delete glyphicon glyphicon-trash",
+					"id" => "delete-" . $siteData->ID,
+					"name" => "delete-" . $siteData->ID
 				]);
 				?>
 				</a>
@@ -164,100 +163,100 @@ echo "</script>";
 
 <!-- Modal Stuff for Add Site button -->
 <div id="addSiteModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        
+	<div class="modal-dialog">
+		
 	<?=
-	    $this->Form->create(false, [
+		$this->Form->create(false, [
 			"id" => "addSiteForm"
 		])
 	?>
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add New Site</h4>
-            </div>
-            <div class="modal-body">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Add New Site</h4>
+			</div>
+			<div class="modal-body">
 		<?=
-		    $this->Form->control('sitenumber', [
-			'label' => [
-			    'text' => 'Site Number',
-			    'class' => 'label-reg lol'
+			$this->Form->control("sitenumber", [
+			"label" => [
+				"text" => "Site Number",
+				"class" => "label-reg lol"
 			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
+			"templates" => [
+				"inputContainer" => "{{content}}"
 			],
-			'class' => "form-control textinput addinput",
-			'name' => "sitenumber",
-			'id' => "add-sitenumber",
-			'placeholder' => "Site Number..."
-		    ]);
+			"class" => "form-control textinput addinput",
+			"name" => "sitenumber",
+			"id" => "add-sitenumber",
+			"placeholder" => "Site Number..."
+			]);
 		?>
 		<?=
-		    $this->Form->control('longitude', [
-			'label' => [
-			    'text' => 'Longitude',
-			    'class' => 'label-reg lol'
+			$this->Form->control("longitude", [
+			"label" => [
+				"text" => "Longitude",
+				"class" => "label-reg lol"
 			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
+			"templates" => [
+				"inputContainer" => "{{content}}"
 			],
-			'class' => "form-control textinput addinput",
-			'name' => "longitude",
-			'id' => "add-longitude",
-			'placeholder' => "Longitude..."
-		    ]);
+			"class" => "form-control textinput addinput",
+			"name" => "longitude",
+			"id" => "add-longitude",
+			"placeholder" => "Longitude..."
+			]);
 		?>
 		<?=
-		    $this->Form->control('latitude', [
-			'label' => [
-			    'text' => 'Latitude',
-			    'class' => 'label-reg lol'
+			$this->Form->control("latitude", [
+			"label" => [
+				"text" => "Latitude",
+				"class" => "label-reg lol"
 			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
+			"templates" => [
+				"inputContainer" => "{{content}}"
 			],
-			'class' => "form-control textinput addinput",
-			'name' => "latitude",
-			'id' => "add-latitude",
-			'placeholder' => "Latitude..."
-		    ]);
+			"class" => "form-control textinput addinput",
+			"name" => "latitude",
+			"id" => "add-latitude",
+			"placeholder" => "Latitude..."
+			]);
 		?>
 		<?=
-		    $this->Form->control('sitelocation', [
-			'label' => [
-			    'text' => 'Site Location',
-			    'class' => 'label-reg lol'
+			$this->Form->control("sitelocation", [
+			"label" => [
+				"text" => "Site Location",
+				"class" => "label-reg lol"
 			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
+			"templates" => [
+				"inputContainer" => "{{content}}"
 			],
-			'class' => "form-control textinput addinput",
-			'name' => "sitelocation",
-			'id' => "add-sitelocation",
-			'placeholder' => "Site Location..."
-		    ]);
+			"class" => "form-control textinput addinput",
+			"name" => "sitelocation",
+			"id" => "add-sitelocation",
+			"placeholder" => "Site Location..."
+			]);
 		?>
 		<?=
-		    $this->Form->control('sitename', [
-			'label' => [
-			    'text' => 'Site Name',
-			    'class' => 'label-reg lol'
+			$this->Form->control("sitename", [
+			"label" => [
+				"text" => "Site Name",
+				"class" => "label-reg lol"
 			],
-			'templates' => [
-			    'inputContainer' => '{{content}}'
+			"templates" => [
+				"inputContainer" => "{{content}}"
 			],
-			'class' => "form-control textinput addinput",
-			'name' => "sitename",
-			'id' => "add-sitename",
-			'placeholder' => "Site Name..."
-		    ]);
+			"class" => "form-control textinput addinput",
+			"name" => "sitename",
+			"id" => "add-sitename",
+			"placeholder" => "Site Name..."
+			]);
 		?>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" id="add-btn" name="add-btn" class="btn btn-default btn-basic btn btn-sm">Add Site</button>
-                <button type="button" id='add-close' class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" id="add-btn" name="add-btn" class="btn btn-default btn-basic btn btn-sm">Add Site</button>
+				<button type="button" id="add-close" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Close</button>
+			</div>
+		</div>
 	<?= $this->Form->end() ?>
 	</div>
 </div>

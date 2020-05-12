@@ -2,7 +2,6 @@
 if ($admin) {
 	echo $this->Html->script("contact.js");
 	echo $this->Html->css("userManagement.css");
-	echo $this->Html->css("loading.css");
 ?>
 
 <p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size: 20pt;"></span>  Feedback</p>

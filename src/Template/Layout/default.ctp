@@ -15,8 +15,6 @@
 		<?php
 		echo $this->Html->css("bootstrap-glyphicons.min.css");
 		echo $this->Html->css("styling.css");
-		echo $this->Html->css("cakemessages.css");
-		echo $this->Html->css("loading.css");
 		echo $this->Html->script("navbar.js");
 
 if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { //if user has not previously clicked ok on the browser compatibility warning within this browser session
