@@ -1,5 +1,5 @@
 <?php $this->start("navbar"); ?>
-<nav class="navbar navbar-expand navbar-dark fixed-top" id="navbar" style="background-color: #5085A5; height: 7vh">
+<nav class="navbar navbar-expand navbar-dark fixed-top" id="navbar">
 	<?= $this->Html->link(__("WQIS"), ["controller" => "users", "action" => "login"], ["class" => "navbar-brand"]); ?>
 	
 	<div class="navbar-collapse">
@@ -46,7 +46,7 @@
 			
 			if ($admin) {?>
 			<li class="nav-item dropdown hoverDropdown">
-				<a href="/WQIS/contact/contact" class="nav-link <?php if ($pageName == "about") { echo "active"; }?>" data-toggle="dropdown">Contact</a>
+				<a href="/WQIS/contact/contact" class="nav-link <?php if ($pageName == "contact") { echo "active"; }?>" data-toggle="dropdown">Contact</a>
 				<ul class="dropdown-menu">
 					<li><a class="dropdown-item" href="/WQIS/contact/viewfeedback">View feedback</a></li>
 				</ul>
@@ -62,7 +62,7 @@
 		?>
 		</ul>
 
-		<ul class="navbar-nav text-right pull-right" style="list-style: none;">
+		<ul class="navbar-nav text-right pull-right" style="list-style: none">
 		<?php if ($userinfo) { ?>
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -73,7 +73,7 @@
 					}
 				?>
 				</a>
-				<div class="dropdown-menu" style="right: 0; left: auto;" aria-labelledby="userDropdownMenu">
+				<div class="dropdown-menu" style="right: 0; left: auto" aria-labelledby="userDropdownMenu">
 					<a class="dropdown-item" href="/WQIS/users/edituserinfo">User profile</a>
 					<a class="dropdown-item" href="<?php echo $this->Url->build(["controller" => "users", "action" => "logout"]) ?>">Log out</a>
 				</div>

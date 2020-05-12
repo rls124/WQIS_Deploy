@@ -39,7 +39,12 @@ body{
 	color: white;
 	cursor: auto;
 }
-li.hoverDropdown:hover > .dropdown-menu {
+/*navbar stuff*/
+.navbar{
+	background-color: #5085A5;
+	height: 7vh;	
+}
+li.hoverDropdown:hover > .dropdown-menu{
 	display: block;
 }
 .nav-link{
@@ -51,7 +56,7 @@ li.hoverDropdown:hover > .dropdown-menu {
 .active{
 	font-weight: bold;
 }
-/** Notices and Errors **/
+/* Notices and Errors */
 .cake-error,
 .cake-debug,
 .notice,
