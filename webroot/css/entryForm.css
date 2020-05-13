@@ -27,12 +27,6 @@
 .centerLabel {
     margin-top: 9px;
 }
-#infoGlyph{
-    color: #2a5171;
-}
-#infoGlyph:hover{
-    color: #638de2;
-}
 .btn-close{
     background-color: #1fa83d;
     border: medium solid #1fa83d;

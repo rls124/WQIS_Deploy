@@ -13,12 +13,6 @@
 table{
     border: thin solid #FFF;
 }
-#infoGlyph{
-    color: #2a5171;
-}
-#infoGlyph:hover{
-    color: #638de2;
-}
 .btn-close{
     background-color: #868E96;
     border: medium solid #868E96;

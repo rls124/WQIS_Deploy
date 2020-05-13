@@ -1,12 +1,6 @@
 table{
     border: thin solid #FFF;
 }
-#infoGlyph{
-    color: #2a5171;
-}
-#infoGlyph:hover{
-    color: #638de2;
-}
 .inputHide{
     background-color: #bdbdbd;
     min-width: 90px;

@@ -1,145 +1,131 @@
 body{
-    color:#373737;
+	color:#373737;
 }
 .btn-close{
-    background-color: #868E96;
-    border: medium solid #868E96;
-    color: white;
+	background-color: #868E96;
+	border: medium solid #868E96;
+	color: white;
 }
 .btn-close:hover{
-    background-color: #d4d8db;
-    text-shadow: 1px 1px 3px black;
-    color:black;
+	background-color: #d4d8db;
+	text-shadow: 1px 1px 3px black;
+	color:black;
 }
 .btn-close:active{
-    background-color: #dddddd;
-    border: medium solid #77b0d9;
-    color: black;
+	background-color: #dddddd;
+	border: medium solid #77b0d9;
+	color: black;
 }
 .btn-close:disabled:hover{
-    background-color: #2a5171;
-    border-color: #2a5171;
-    text-shadow: none;
-    color: white;
-    cursor: auto;
+	background-color: #2a5171;
+	border-color: #2a5171;
+	text-shadow: none;
+	color: white;
+	cursor: auto;
 }
 /*Page specific css*/
 .panel{
-    border-radius: 5px;
-    border: solid thin rgb(150, 150, 150);
+	border-radius: 5px;
+	border: solid thin rgb(150, 150, 150);
 }
 .panel-title{
-    color: black;
-    font-weight: normal;
-    margin-left: 10px;
+	color: black;
+	font-weight: normal;
+	margin-left: 10px;
 }
 .list-group-item{
-    border: solid thin #312f32;
+	border: solid thin #312f32;
 }
 .btn-file {
-    position: relative;
-    overflow: hidden;
+	position: relative;
+	overflow: hidden;
 }
 .btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
 }
 .spacer{
-    margin-top:60px;
+	margin-top:60px;
 }
 .card{
-    border: solid medium #868E96;
-    border-radius: 5px;
-    cursor: pointer;
-    display: inline-block;
+	border: solid medium #868E96;
+	border-radius: 5px;
+	cursor: pointer;
+	display: inline-block;
 
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 .card:hover{
-    transition: .2s;
-    background-color: #e5f1fc;
-    border: solid medium #367fc8;
+	transition: .2s;
+	background-color: #e5f1fc;
+	border: solid medium #367fc8;
 }
 .card:active{
-    border: solid medium #83c4f0;
-    outline: solid medium #8eceff;
+	border: solid medium #83c4f0;
+	outline: solid medium #8eceff;
 }
 .big-card{
-    border: solid medium #2a5171;
+	border: solid medium #2a5171;
 }
 .big-card:hover{
-    border: solid medium #2a5171;
-    background-color: white;
-    cursor: default;
+	border: solid medium #2a5171;
+	background-color: white;
+	cursor: default;
 }
 .big-card:active{
-    border: solid medium #2a5171;
-    outline: none;
+	border: solid medium #2a5171;
+	outline: none;
 }
 .card-info {
-    border: none;
-    width: 100%;
-    margin-bottom: 5px;
+	border: none;
+	width: 100%;
+	margin-bottom: 5px;
 }
 .card-info:hover{
-    border: none;
-    background-color: white;
-    cursor: default;
+	border: none;
+	background-color: white;
+	cursor: default;
 }
 .card-info:active{
-    border: none;
-    outline: none;
+	border: none;
+	outline: none;
 }
 .card-block{
-    padding: 10px 10px 5px 10px;
+	padding: 10px 10px 5px 10px;
 }
-.cardCollapse, .cardModal{
-    color: black;
-}
-.cardModal:hover{
-    text-decoration: none;
-    color: black;
-}
-.modal-content{
-    border: solid medium #2a5171;
+.cardCollapse,{
+	color: black;
 }
 #fileType, #entryType{
-    border: solid thin #868E96 !important;
-}
-#infoGlyph{
-    color: #2a5171;
-}
-#infoGlyph:hover{
-    color: #638de2;
+	border: solid thin #868E96 !important;
 }
 ul{
-    list-style-type:none;
+	list-style-type:none;
 }
 .info-li{
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 #FileUploadDiv{
-    border: solid thin #868E96;
-    background-color: #eaeaea;
+	border: solid thin #868E96;
+	background-color: #eaeaea;
 }
 .center{
-    margin-left: 0px;
-    margin-right: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
 }

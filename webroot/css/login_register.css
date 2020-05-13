@@ -1,57 +1,54 @@
-/*
-    For login and register pages
-*/
-
+/*For login and register pages*/
 .errorMessage{
-    color: #a30000;
-    text-align: center;
+	color: #a30000;
+	text-align: center;
 }
 .requiredText{
-    font-style: italic;
-    font-weight: bolder;
-    color: #2a5171;
+	font-style: italic;
+	font-weight: bolder;
+	color: #2a5171;
 }
 .label-reg, .label-login{
-    font-size: 11pt;
+	font-size: 11pt;
 }
 .lol{
-    margin-top: 9px;
+	margin-top: 9px;
 }
 .label-reg{
-    text-align: right;
+	text-align: right;
 }
 .textinput{
-    border: none;
+	border: none;
 }
 .textinput:focus{
-    transition: .1s;
-    outline: solid #2a5171;
+	transition: .1s;
+	outline: solid #2a5171;
 }
 .select:focus{
-    transition: .1s;
-    outline: solid #2a5171;
+	transition: .1s;
+	outline: solid #2a5171;
 }
 .modalinput:focus{
-    transition: .1s;
-    outline: solid #2a5171;
+	transition: .1s;
+	outline: solid #2a5171;
 }
 #sjrwiImg, #ercImg{
-    float: left;
-    margin-right: 10px;
-    width: 150px;
-    height: 120px;
+	float: left;
+	margin-right: 10px;
+	width: 150px;
+	height: 120px;
 }
 #wqisInfo{
-    text-align: justify;
+	text-align: justify;
 }
 .card{
-    background-color:#f4f6fa;
-    border: solid medium #2a5171;
-    margin-bottom: 20px;
-    padding: 10px;
-    text-align: justify;
+	background-color:#f4f6fa;
+	border: solid medium #2a5171;
+	margin-bottom: 20px;
+	padding: 10px;
+	text-align: justify;
 }
 .popover{
-    border: solid medium #2a5171;
-    font-size: 10pt;
+	border: solid medium #2a5171;
+	font-size: 10pt;
 }

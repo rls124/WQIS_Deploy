@@ -39,6 +39,12 @@ body{
 	color: white;
 	cursor: auto;
 }
+#infoGlyph{
+    color: #2a5171;
+}
+#infoGlyph:hover{
+    color: #638de2;
+}
 /*navbar stuff*/
 .navbar{
 	background-color: #5085A5;
