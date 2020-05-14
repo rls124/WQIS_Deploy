@@ -517,12 +517,7 @@ function rebuildCompareModal(chartInstance) {
 			
 			//add a button for it
 			var measureButton = document.createElement("button");
-			if (measureTitle == selectedTitle) {
-				measureButton.setAttribute("class", "btn btn-sm btn-ctrl btn-danger");
-			}
-			else {
-				measureButton.setAttribute("class", "btn btn-sm btn-ctrl");
-			}
+			measureButton.setAttribute("class", (measureTitle == selectedTitle) ? "btn btn-sm btn-ctrl btn-danger" : "btn btn-sm btn-ctrl");
 			measureButton.innerText = thisMeasure.measureName;
 			measureButton.setAttribute("measure", thisMeasure.measureKey);
 			measureButton.setAttribute("category", category);
@@ -1364,12 +1359,8 @@ $(document).ready(function () {
 			var aggregateMode = aggregateGroup.checked;
 
 			//set up the column names and IDs to actually display
-			if (!aggregateMode) {
-				var columns = ["Site ID", "Date", "Sample Number"];
-			}
-			else {
-				var columns = ["Date"];
-			}
+			var columns = aggregateMode ? ["Date"] : ["Site ID", "Date", "Sample Number"];
+			
 			for (i=0; i<selectedMeasures.length; i++) {
 				//get index of this measure so we can find its printable name
 				for (j=0; j<measurementSettings[category].length; j++) {
@@ -1383,15 +1374,15 @@ $(document).ready(function () {
 					}
 				}
 			}
-			if (!aggregateMode) {
+			if (aggregateMode) {
+				var columnIDs = ((["Date"]).concat(selectedMeasures));
+			}
+			else {
 				var columnIDs = ((["site_location_id", "Date", "Sample_Number"]).concat(selectedMeasures));
 				if (admin) {
 					columns.push("Comments");
 					columnIDs.push(ucfirst(category) + "Comments");
 				}
-			}
-			else {
-				var columnIDs = ((["Date"]).concat(selectedMeasures));
 			}
 
 			$.ajax({
