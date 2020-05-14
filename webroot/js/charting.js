@@ -1040,12 +1040,12 @@ $(document).ready(function () {
 		showBenchmarks = !showBenchmarks;
 		
 		var measures = getSelectedMeasures();
-		var category = categorySelect.value;
+		var category = measurementSettings[categorySelect.value];
 		
 		for (i=0; i<charts.length; i++) {
 			var thisMeasure;
-			for (var j=0; j<measurementSettings[category].length; j++) {
-				thisMeasure = measurementSettings[category][j];
+			for (var j=0; j<category.length; j++) {
+				thisMeasure = category[j];
 				if (thisMeasure.measureKey === measures[i]) {
 					break;
 				}
