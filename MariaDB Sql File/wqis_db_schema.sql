@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2020 at 01:44 AM
--- Server version: 10.4.6-MariaDB
--- PHP Version: 7.3.9
+-- Generation Time: May 14, 2020 at 06:05 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.2.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -33,12 +32,34 @@ CREATE TABLE `bacteria_samples` (
   `site_location_id` int(11) DEFAULT NULL,
   `Date` date DEFAULT NULL,
   `Sample_Number` bigint(20) NOT NULL,
-  `EcoliRawCount` int(11) DEFAULT NULL,
   `Ecoli` int(11) DEFAULT NULL,
-  `TotalColiformRawCount` int(11) DEFAULT NULL,
   `TotalColiform` int(11) DEFAULT NULL,
   `BacteriaComments` varchar(200) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `benchmarks`
+--
+
+CREATE TABLE `benchmarks` (
+  `Measure` varchar(100) NOT NULL,
+  `Minimum_Acceptable_Value` double(6,3) DEFAULT NULL,
+  `Maximum_Acceptable_Value` double(6,3) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detection_limits`
+--
+
+CREATE TABLE `detection_limits` (
+  `Measure` varchar(100) NOT NULL,
+  `Lowest_Acceptable_Value` double(7,3) NOT NULL,
+  `Highest_Acceptable_Value` double(7,3) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -50,7 +71,9 @@ CREATE TABLE `feedback` (
   `ID` int(11) NOT NULL,
   `Feedback` varchar(4096) NOT NULL,
   `Date` datetime(6) NOT NULL DEFAULT current_timestamp(6),
-  `User` varchar(100) NOT NULL
+  `User` varchar(100) DEFAULT NULL,
+  `Name` varchar(100) DEFAULT NULL,
+  `Email` varchar(100) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -62,10 +85,13 @@ CREATE TABLE `feedback` (
 CREATE TABLE `measurement_settings` (
   `measureKey` varchar(100) NOT NULL,
   `measureName` varchar(100) NOT NULL,
+  `unit` varchar(100) NOT NULL,
+  `category` varchar(20) NOT NULL,
   `benchmarkMinimum` double DEFAULT NULL,
   `benchmarkMaximum` double DEFAULT NULL,
   `detectionMinimum` double DEFAULT NULL,
-  `detectionMaximum` double DEFAULT NULL
+  `detectionMaximum` double DEFAULT NULL,
+  `Visible` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -115,7 +141,7 @@ CREATE TABLE `physical_samples` (
   `Date` date NOT NULL,
   `Sample_Number` bigint(20) NOT NULL,
   `Time` time DEFAULT NULL,
-  `Bridge_to_Water_Height` double DEFAULT NULL,
+  `Bridge_to_Water_Height` decimal(5,3) DEFAULT NULL,
   `Water_Temp` decimal(5,2) DEFAULT NULL,
   `pH` decimal(5,3) DEFAULT NULL,
   `Conductivity` decimal(5,3) DEFAULT NULL,
@@ -125,8 +151,20 @@ CREATE TABLE `physical_samples` (
   `Turbidity_Scale_Value` int(4) DEFAULT NULL,
   `PhysicalComments` varchar(200) DEFAULT '',
   `Import_Date` date DEFAULT NULL,
-  `Import_Time` time DEFAULT NULL,
-  `Requires_Checking` varchar(200) DEFAULT NULL
+  `Import_Time` time DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `site_groups`
+--
+
+CREATE TABLE `site_groups` (
+  `groupKey` int(11) NOT NULL,
+  `groupName` varchar(200) NOT NULL,
+  `groupDescription` varchar(500) DEFAULT NULL,
+  `owner` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -142,7 +180,8 @@ CREATE TABLE `site_locations` (
   `Longitude` decimal(20,10) NOT NULL,
   `Latitude` decimal(20,10) NOT NULL,
   `Site_Location` varchar(200) NOT NULL,
-  `Site_Name` varchar(200) NOT NULL
+  `Site_Name` varchar(200) NOT NULL,
+  `groups` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -154,6 +193,7 @@ CREATE TABLE `site_locations` (
 CREATE TABLE `users` (
   `userid` int(11) NOT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT 0,
+  `hasTakenTutorial` tinyint(1) NOT NULL DEFAULT 0,
   `username` varchar(60) NOT NULL,
   `userpw` varchar(60) NOT NULL,
   `firstname` varchar(40) DEFAULT NULL,
@@ -171,13 +211,6 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`userid`, `admin`, `username`, `userpw`, `firstname`, `lastname`, `email`, `organization`, `position`, `Created`, `securityquestion1`, `securityanswer1`, `securityquestion2`, `securityanswer2`, `securityquestion3`, `securityanswer3`) VALUES
-(0, 1, 'root', '$2y$10$XAGR1xVZGOrxL1r03dNLd.g/WAKeH7UMucJvE4UCO60EyIQYNQ3dS', 'admin', 'admin', 'admin@admin.com', 'WQIS', 'admin', '2018-01-21', NULL, NULL, NULL, NULL, NULL, NULL),
-
---
 -- Indexes for dumped tables
 --
 
@@ -188,6 +221,18 @@ ALTER TABLE `bacteria_samples`
   ADD PRIMARY KEY (`ID`),
   ADD UNIQUE KEY `Sample_Number` (`Sample_Number`),
   ADD KEY `fk_site_location_id1` (`site_location_id`);
+
+--
+-- Indexes for table `benchmarks`
+--
+ALTER TABLE `benchmarks`
+  ADD PRIMARY KEY (`Measure`);
+
+--
+-- Indexes for table `detection_limits`
+--
+ALTER TABLE `detection_limits`
+  ADD PRIMARY KEY (`Measure`);
 
 --
 -- Indexes for table `feedback`
@@ -224,6 +269,12 @@ ALTER TABLE `physical_samples`
   ADD PRIMARY KEY (`ID`),
   ADD UNIQUE KEY `Sample_Number` (`Sample_Number`),
   ADD KEY `fk_site_location_id4` (`site_location_id`);
+
+--
+-- Indexes for table `site_groups`
+--
+ALTER TABLE `site_groups`
+  ADD PRIMARY KEY (`groupKey`);
 
 --
 -- Indexes for table `site_locations`
@@ -273,6 +324,12 @@ ALTER TABLE `physical_samples`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `site_groups`
+--
+ALTER TABLE `site_groups`
+  MODIFY `groupKey` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `site_locations`
 --
 ALTER TABLE `site_locations`
@@ -305,6 +362,12 @@ ALTER TABLE `nutrient_samples`
 --
 ALTER TABLE `pesticide_samples`
   ADD CONSTRAINT `fk_site_location_id3` FOREIGN KEY (`site_location_id`) REFERENCES `site_locations` (`Site_Number`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `physical_samples`
+--
+ALTER TABLE `physical_samples`
+  ADD CONSTRAINT `fk_site_location_id4` FOREIGN KEY (`site_location_id`) REFERENCES `site_locations` (`Site_Number`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
