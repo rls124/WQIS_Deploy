@@ -975,7 +975,8 @@ $(document).ready(function () {
 	
 	function clearHighlight() {
 		if (clickedPoint != null) {
-			setColor(clickedPoint, defaultPointColor);
+			//handle case where de-clicked point is still selected and should be colored orange, not default blue
+			setColor(clickedPoint, ($("#sites").val().includes(mapData["SiteData"][clickedPoint.ObjectID].Site_Number.toString()) ? selectedPointColor : defaultPointColor));
 		}
 	}
 	

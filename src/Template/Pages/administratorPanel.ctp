@@ -15,9 +15,9 @@ echo $this->Html->script("administratorPanel.js");
 		<div class="card-block">
 			<?=
 		    $this->Form->create("entryForm", [
-			"url" => 'javascript:void(0);',
-			"id" => 'entryForm',
-			"name" => 'entryForm'
+			"url" => "javascript:void(0);",
+			"id" => "entryForm",
+			"name" => "entryForm"
 		    ])
 			?>
 			<div class="row">
@@ -37,7 +37,7 @@ echo $this->Html->script("administratorPanel.js");
 			</div>
 
 			<div class="row center mb-0">
-                <input type="submit" class="btn btn-basic col-md-5 mb-0" value="Go To Entry Form" id="EntryFormBtn" name="EntryForm" style="height:43px;" disabled>
+                <input type="submit" class="btn btn-basic col-md-5 mb-0" value="Go To Entry Form" id="EntryFormBtn" name="EntryForm" style="height:43px" disabled>
 			</div>
 			<?= $this->Form->end() ?>
             </div>
@@ -48,17 +48,17 @@ echo $this->Html->script("administratorPanel.js");
             </div>
             <div class="card-block">
 				<?=
-				$this->Form->create('fileupload', [
-				"url" => 'javascript:void(0);',
-				'type' => 'file',
-				"id" => 'fileupload',
-				"name" => 'fileupload'
+				$this->Form->create("fileupload", [
+				"url" => "javascript:void(0);",
+				"type" => "file",
+				"id" => "fileupload",
+				"name" => "fileupload"
 				])
 				?>
 				<div class="row mb-2">
 					<label class="btn btn-file btn-basic ml-3 mr-1" style="font-size: 12pt; margin-top: 5px">Choose File <input type="file" name="file" accept=".csv" id="chooseFileButton"> </label>
 
-					<div class="col-sm ml-2 mr-3 mb-1 mt-1" id="FileUploadDiv" style="padding-left: 5px;">
+					<div class="col-sm ml-2 mr-3 mb-1 mt-1" id="FileUploadDiv" style="padding-left: 5px">
 						<label id="FileUploadLabel" style="font-size: 12pt; margin-top: 8px; color: #919191"> File Name</label>
 					</div>
 				</div>
@@ -82,16 +82,16 @@ echo $this->Html->script("administratorPanel.js");
 	<div class="row">
 		<div class="col-sm-4">
 			<div class="card" style="width:100%; margin-top:10px;">
-				<a onclick="location.href = '<?php echo $this->Url->build(["controller" => 'MeasurementSettings', "action" => 'measurements']) ?>';">
+				<a onclick="location.href = '<?php echo $this->Url->build(["controller" => "MeasurementSettings", "action" => "measurements"]) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-scale" style="font-size: 14pt;"></span>  Measurement Settings</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-scale" style="font-size: 14pt"></span>  Measurement Settings</h5>
 					</div>
 				</a>
 			</div>
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a onclick="location.href = '<?php echo $this->Url->build(["controller" => 'users', "action" => 'usermanagement']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size: 1.15rem;"><span class="glyphicon glyphicon-user" style="font-size:14pt;"></span>  User Management</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size: 1.15rem;"><span class="glyphicon glyphicon-user" style="font-size:14pt"></span>  User Management</h5>
 					</div>
 				</a>
 			</div>
@@ -100,14 +100,14 @@ echo $this->Html->script("administratorPanel.js");
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a onclick="location.href = '<?php echo $this->Url->build(["controller" => 'SiteLocations', "action" => 'sitemanagement']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 14pt;"></span>  Site Management</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-map-marker" style="font-size: 14pt"></span>  Site Management</h5>
 					</div>
 				</a>
 			</div>
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a onclick="location.href = '<?php echo $this->Url->build(["controller" => 'SiteGroups', "action" => 'sitegroups']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-folder-open" style="font-size: 14pt;"></span>&nbsp; Site Groups</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size:1.15rem;"><span class="glyphicon glyphicon-folder-open" style="font-size: 14pt"></span>&nbsp; Site Groups</h5>
 					</div>
 				</a>
 			</div>
@@ -116,14 +116,13 @@ echo $this->Html->script("administratorPanel.js");
 			<div class="card" style="width:100%; margin-top:10px;">
 				<a onclick="location.href = '<?php echo $this->Url->build(["controller" => 'contact', "action" => 'viewfeedback']) ?>';">
 					<div class="card-header" style="height: 50px;">
-						<h5 class="card-title centeredText mb-0" style="font-size: 1.15rem;"><span class="glyphicon glyphicon-envelope" style="font-size:14pt;"></span>  View Feedback</h5>
+						<h5 class="card-title centeredText mb-0" style="font-size: 1.15rem;"><span class="glyphicon glyphicon-envelope" style="font-size:14pt"></span>  View Feedback</h5>
 					</div>
 				</a>
 			</div>
 		</div>
 	</div>
 </div>
-
 <?php
 }
 else {
