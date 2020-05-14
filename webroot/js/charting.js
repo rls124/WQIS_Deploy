@@ -1119,18 +1119,12 @@ $(document).ready(function () {
 	
 	measurementSelect.addEventListener("change", function() {
 		var category = measurementSettings[categorySelect.value];
-		var measureIndex;
-		for (measureIndex=0; measureIndex<category.length; measureIndex++) {
-			if (category[measureIndex].measureKey === measurementSelect.value) {
+		for (var i=0; i<category.length; i++) {
+			var measure = category[i];
+			if (measure.measureKey === measurementSelect.value) {
+				amountEnter.placeholder = (measure.benchmarkMaximum == null) ? "No Benchmark Available" : "Benchmark: " + measure.benchmarkMaximum + " " + measure.unit;
 				break;
 			}
-		}
-		
-		if (category[measureIndex].benchmarkMaximum == null) {
-			amountEnter.placeholder = "No Benchmark Available";
-		}
-		else {
-			amountEnter.placeholder = "Benchmark: " + category[measureIndex].benchmarkMaximum + " " + category[measureIndex].unit;
 		}
 	});
 	
