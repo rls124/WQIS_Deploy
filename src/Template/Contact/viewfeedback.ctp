@@ -4,10 +4,10 @@ if ($admin) {
 	echo $this->Html->css("userManagement.css");
 ?>
 
-<p class="centeredText" style="font-size:2.5rem;"><span class="glyphicon glyphicon-list-alt" style="font-size: 20pt;"></span>  Feedback</p>
+<p class="centeredText" style="font-size:2.5rem"><span class="glyphicon glyphicon-list-alt" style="font-size: 20pt"></span>  Feedback</p>
 <hr>
-	<?php if ($hasFeedback) { ?>
-	<table class="table table-striped table-responsive">
+<?php if ($hasFeedback) { ?>
+	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th>Date</th>
@@ -35,9 +35,9 @@ if ($admin) {
 						}
 						?>
 					</td>
-					<td><?= $feedbackData->Name ?></td>
-					<td><?= $feedbackData->Email ?></td>
-					<td><?= $feedbackData->Feedback ?></td>
+					<td><?= htmlspecialchars($feedbackData->Name) ?></td>
+					<td><?= htmlspecialchars($feedbackData->Email) ?></td>
+					<td><?= htmlspecialchars($feedbackData->Feedback) ?></td>
 					<td>
 						<a data-toggle="tooltip" title="Delete Feedback">
 						<?=

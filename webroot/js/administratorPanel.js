@@ -11,12 +11,11 @@ $(document).ready(function () {
 	});
 
 	$("#chooseFileButton").change(function () {
-		//might be good to have a "clear" button for this...
 		$("#submitFile").prop("disabled", false);
 	});
 	
-	$("#entryForm").attr("action", "<?= $this->Html->Url->build(["controller" => "GenericSamples", "action" => "entryform"]); ?>");
-	$("#fileupload").attr("action", "<?= $this->Html->Url->build(["controller" => "GenericSamples", "action" => "uploadlog"]); ?>");
+	$("#entryForm").attr("action", "/WQIS/generic-samples/entryform");
+	$("#fileupload").attr("action", "/WQIS/generic-samples/uploadlog");
 });
 
 $(function(){

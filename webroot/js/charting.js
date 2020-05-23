@@ -196,6 +196,7 @@ var zoomNS = Chart.Zoom = Chart.Zoom || {};
 
 function doZoom(chartInstance, zoom, center) {
 	var ca = chartInstance.chartArea;
+	console.log(center);
 	if (!center) {
 		center = {
 			x: (ca.left + ca.right) / 2,
