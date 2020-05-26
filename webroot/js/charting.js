@@ -1,21 +1,3 @@
-var spinnerInhibited = false; //inhibit as needed for minor things that aren't expected to take much time (getRange())
-
-//loading graphic
-$(document).ajaxStart(function() {
-	//check if loading spinner is inhibited first
-	if (!spinnerInhibited) {
-		$(".loadingspinnermain").css("visibility", "visible");
-		$("body").css("cursor", "wait");
-	}
-}).ajaxStop(function() {
-	$(".loadingspinnermain").css("visibility", "hidden");
-	$("body").css("cursor", "default");
-});
-
-function genericError() {
-	alert("We encountered a problem, try again later");
-}
-
 //page state information
 var chartsDisplayMode = "in-line";
 var tablePage = 1;
@@ -27,6 +9,7 @@ var showBenchmarks = true;
 var charts = [];
 var measurementSettings; //will be filled in with the contents of the MeasurementSettings table, containing category/name/alias/benchmarks/detection limits for each
 var groups;
+var spinnerInhibited = false; //inhibit as needed for minor things that aren't expected to take much time (getRange())
 
 //pointers to static page elements
 const sidebarInner = document.getElementById("sidebarInner");
@@ -50,6 +33,19 @@ const compareOptionsDiv = document.getElementById("compareTargetOptions");
 const checkboxList = document.getElementById("checkboxList");
 const numRowsDropdownTop = document.getElementById("numRowsDropdownTop");
 const numRowsDropdownBottom = document.getElementById("numRowsDropdownBottom");
+const loadingSpinner = document.getElementById("loadingSpinner");
+
+//loading graphic
+$(document).ajaxStart(function() {
+	//check if loading spinner is inhibited first
+	if (!spinnerInhibited) {
+		loadingSpinner.style.visibility = "visible";
+		$("body").css("cursor", "wait");
+	}
+}).ajaxStop(function() {
+	loadingSpinner.style.visibility = "hidden";
+	$("body").css("cursor", "default");
+});
 
 //global variables used by the map
 var mapData;
@@ -196,7 +192,6 @@ var zoomNS = Chart.Zoom = Chart.Zoom || {};
 
 function doZoom(chartInstance, zoom, center) {
 	var ca = chartInstance.chartArea;
-	console.log(center);
 	if (!center) {
 		center = {
 			x: (ca.left + ca.right) / 2,
@@ -205,12 +200,11 @@ function doZoom(chartInstance, zoom, center) {
 	}
 
 	//do the zoom here
-	helpers.each(chartInstance.scales, function(scale, id) {
+	helpers.each(chartInstance.scales, function(scale) {
 		var labels = scale.chart.data.labels;
 		var minIndex = scale.minIndex;
 		var lastLabelIndex = labels.length - 1;
 		var maxIndex = scale.maxIndex;
-		const sensitivity = 0;
 		var chartCenter = scale.isHorizontal() ? scale.left + (scale.width/2) : scale.top + (scale.height/2);
 		var centerPointer = scale.isHorizontal() ? center.x : center.y;
 
@@ -240,11 +234,11 @@ function doZoom(chartInstance, zoom, center) {
 			}
 		}
 		else if (zoomNS.zoomCumulativeDelta > 0) {
-			if (centerPointer <= chartCenter) {
-				minIndex = minIndex < maxIndex ? minIndex = Math.min(maxIndex, minIndex + 10) : minIndex;
+			if (maxIndex > minIndex) {
+				maxIndex = Math.max(minIndex, maxIndex - 10);
 			}
-			else if (centerPointer > chartCenter) {
-				maxIndex = maxIndex > minIndex ? maxIndex = Math.max(minIndex, maxIndex - 10) : maxIndex;
+			else if (centerPointer <= chartCenter) {
+				minIndex = Math.min(maxIndex, minIndex + 10);
 			}
 		}
 	
@@ -256,10 +250,9 @@ function doZoom(chartInstance, zoom, center) {
 	chartInstance.update(0);
 }
 
-function doPan(chartInstance, deltaX, deltaY) {
-	helpers.each(chartInstance.scales, function(scale, id) {
+function doPan(chartInstance, deltaX) {
+	helpers.each(chartInstance.scales, function(scale) {
 		var labels = scale.chart.data.labels;
-		var lastLabelIndex = labels.length - 1;
 		var offsetAmt = Math.max((scale.ticks.length - ((scale.options.gridLines.offsetGridLines) ? 0 : 1)), 1);
 		var panSpeed = 100;
 		var minIndex = scale.minIndex;
@@ -273,7 +266,7 @@ function doPan(chartInstance, deltaX, deltaY) {
 			minIndex--;
 			maxIndex--;
 		}
-		else if (zoomNS.panCumulativeDelta < -step && maxIndex < lastLabelIndex - 1) {
+		else if (zoomNS.panCumulativeDelta < -step && maxIndex < labels.length - 1) {
 			//dragging to higher values
 			minIndex++;
 			maxIndex++;
@@ -336,10 +329,9 @@ var zoomPlugin = {
 		};
 		
 		var node = chartInstance.chart.ctx.canvas;
+		var chartNum = node.id.split("-")[1];
 		
 		//add buttons
-		var chartNum = node.id.split("-")[1];
-	
 		var zoomInButton = document.createElement("button");
 		zoomInButton.setAttribute("class", "btn btn-sm btn-ctrl");
 		zoomInButton.innerText = "+";
@@ -433,26 +425,22 @@ var zoomPlugin = {
 				zoomNS.zoomCumulativeDelta = 0;
 			});
 
-			var currentDeltaX = null, currentDeltaY = null;
+			var currentDeltaX = null;
 			var handlePan = function handlePan(e) {
-				if (currentDeltaX !== null && currentDeltaY !== null) {
+				if (currentDeltaX !== null) {
 					var deltaX = e.deltaX - currentDeltaX;
-					var deltaY = e.deltaY - currentDeltaY;
 					currentDeltaX = e.deltaX;
-					currentDeltaY = e.deltaY;
-					doPan(chartInstance, deltaX, deltaY);
+					doPan(chartInstance, deltaX);
 				}
 			};
 
 			mc.on("panstart", function(e) {
 				currentDeltaX = 0;
-				currentDeltaY = 0;
 				handlePan(e);
 			});
 			mc.on("panmove", handlePan);
 			mc.on("panend", function(e) {
 				currentDeltaX = null;
-				currentDeltaY = null;
 				zoomNS.panCumulativeDelta = 0;
 			});
 			chartInstance._mc = mc;
@@ -570,8 +558,7 @@ function rebuildCompareModal(chartInstance) {
 
 							for (i=0; i<response.length; i++) {
 								var newRow = [];
-								var date = response[i].Date.split("T")[0];
-								newRow.t = date;
+								newRow.t = response[i].Date.split("T")[0];
 								newRow.y = response[i][measure];
 	
 								newDataset.data.push(newRow);
@@ -590,7 +577,6 @@ function rebuildCompareModal(chartInstance) {
 				});
 			
 				chartInstance.update();
-				
 				rebuildCompareModal(chartInstance); //clear and redetermine what buttons should be colored
 			}
 		
@@ -604,8 +590,14 @@ function rebuildCompareModal(chartInstance) {
 		//remove the second dataset and hide its axis label
 		chartInstance.data.datasets = [chartInstance.data.datasets[0]];
 		chartInstance.options.scales.yAxes[1].display = false;
+		chartInstance.options.scales.yAxes[1].scaleLabel.labelString = "";
 		chartInstance.update();
+		rebuildCompareModal(chartInstance); //clear and redetermine what buttons should be colored
 	}
+}
+
+function genericError() {
+	alert("We encountered a problem, try again later");
 }
 
 $(document).ready(function () {
@@ -753,7 +745,6 @@ $(document).ready(function () {
 			}
 			
 			site.graphic = pointGraphic;
-			
 			graphics.push(pointGraphic);
 		}
 		
@@ -779,7 +770,7 @@ $(document).ready(function () {
 			url: "https://gisago.mcgi.state.mi.us/arcgis/rest/services/OpenData/hydro/MapServer/",
 			sublayers:[{
 				id:5,
-				}],
+			}],
 			visible: false	
 		}));
 		//Michigan Wetlands
@@ -787,7 +778,7 @@ $(document).ready(function () {
 			url: "https://gisago.mcgi.state.mi.us/arcgis/rest/services/OpenData/hydro/MapServer/",
 			sublayers:[{
 				id:18,
-				}],
+			}],
 			visible: false	
 		}));
 		//Michigan Lakes
@@ -795,7 +786,7 @@ $(document).ready(function () {
 			url: "https://gisago.mcgi.state.mi.us/arcgis/rest/services/OpenData/hydro/MapServer/",
 			sublayers:[{
 				id:23,
-				}],
+			}],
 			visible: false	
 		}));
 		//Ohio Dams
@@ -803,7 +794,7 @@ $(document).ready(function () {
 			url: "https://gis.ohiodnr.gov/arcgis/rest/services/DSW_Services/Ohio_Dams/MapServer",
 			sublayers:[{
 				id:6,
-				}],
+			}],
 			visible: false	
 		}));
 		mapLayers.push(sampleSitesLayer);
@@ -1037,10 +1028,11 @@ $(document).ready(function () {
 		
 		var measures = getSelectedMeasures();
 		var category = measurementSettings[categorySelect.value];
+		var nInCat = category.length;
 		
 		for (i=0; i<charts.length; i++) {
 			var thisMeasure;
-			for (var j=0; j<category.length; j++) {
+			for (var j=0; j<nInCat; j++) {
 				thisMeasure = category[j];
 				if (thisMeasure.measureKey === measures[i]) {
 					break;
@@ -1061,7 +1053,9 @@ $(document).ready(function () {
 	
 	function checkboxesChanged() {
 		var checkboxes = document.getElementsByClassName("measurementCheckbox");
-		for (i=0; i<checkboxes.length; i++) {
+		var n = checkboxes.length;
+		
+		for (i=0; i<n; i++) {
 			if (checkboxes[i].checked === false) {
 				allCheckbox.checked = false; //deselect the All checkbox
 				break;
@@ -1115,7 +1109,9 @@ $(document).ready(function () {
 	
 	measurementSelect.addEventListener("change", function() {
 		var category = measurementSettings[categorySelect.value];
-		for (var i=0; i<category.length; i++) {
+		var nInCat = category.length;
+		
+		for (var i=0; i<nInCat; i++) {
 			var measure = category[i];
 			if (measure.measureKey === measurementSelect.value) {
 				amountEnter.placeholder = (measure.benchmarkMaximum == null) ? "No Benchmark Available" : "Benchmark: " + measure.benchmarkMaximum + " " + measure.unit;
@@ -1192,46 +1188,30 @@ $(document).ready(function () {
 		var measurementCheckboxes = document.getElementsByClassName("measurementCheckbox");
 		var categoryData = measurementSettings[categorySelect.value];
 		
-		//first clear all the measures currently listed
-		while (measurementSelect.options.length > 0) {
-			measurementSelect.remove(0);
-		}
+		var nToRemove = measurementCheckboxes.length;
 		
-		for (i=measurementCheckboxes.length-1; i>=0; i--) {
+		//first clear all the measures currently listed
+		for (i=nToRemove-1; i>=0; i--) {
 			checkboxList.removeChild(measurementCheckboxes[i].parentNode);
 		}
 		
 		allCheckbox.checked = true;
-	
-		var option = document.createElement("option");
-		option.value = "select";
-		option.text = "Select a measure";
-		measurementSelect.appendChild(option);
+		
+		measurementSelect.innerHTML = `<option value="select">Select a measure</option>`;
 		
 		for (i=0; i<categoryData.length; i++) {
+			var key = categoryData[i].measureKey;
+			var name = categoryData[i].measureName;
+			
 			//fill in the measurementSelect dropdown
 			var option = document.createElement("option");
-			option.value = categoryData[i].measureKey;
-			option.text = categoryData[i]["measureName"];
+			option.value = key;
+			option.text = name;
 			measurementSelect.appendChild(option);
 			
 			//now create the checkboxes as well
 			var listItem = document.createElement("li");
-				
-			var box = document.createElement("input");
-			box.value = categoryData[i].measureKey;
-			box.id = categoryData[i].measureKey + "Checkbox";
-			box.type = "checkbox";
-			box.setAttribute("class", "measurementCheckbox");
-			box.checked = true;
-			
-			var boxLabel = document.createElement("label");
-			boxLabel.innerText = categoryData[i]["measureName"];
-			boxLabel.setAttribute("for", categoryData[i].measureKey + "Checkbox");
-			
-			listItem.appendChild(box);
-			listItem.appendChild(boxLabel);
-			
+			listItem.innerHTML = `<input value="` + key + `" id="` + key + `Checkbox" type="checkbox" class="measurementCheckbox" checked><label for=` + key + `"Checkbox">` + name + `</label>`;
 			checkboxList.appendChild(listItem);
 		}
 		
@@ -1282,10 +1262,6 @@ $(document).ready(function () {
 	}
 	
 	$("#updateButton").click(function() {
-		updateAll();
-	});
-	
-	function updateAll() {
 		//validation
 		if ($("#sites").val() == "") { //check that at least one site is selected
 			alert("You must select at least one site to view");
@@ -1301,7 +1277,7 @@ $(document).ready(function () {
 			$("#chartsLayoutSelect").show();
 			exportBtn.disabled = !(numPages > 0);
 		}
-	}
+	});
 	
 	$("#resetButton").click(function() {
 		//clear all parameters to default values, and clear the chart/table view
@@ -1309,6 +1285,7 @@ $(document).ready(function () {
 		$("#sites").val(null).trigger("change");
 		$("#categorySelect").val("bacteria");
 		changeMeasures();
+		aggregateGroup.checked = false;
 		$("#chartsLayoutSelect").hide();
 		exportBtn.disabled = true;
 	});
@@ -1407,6 +1384,9 @@ $(document).ready(function () {
 					"aggregate": aggregateMode
 				},
 				success: function(response) {
+					var nCols = aggregateMode ? selectedMeasures.length + 1 : selectedMeasures.length + 3;
+					const responseLength = response.length;
+					
 					//create the blank table
 					var table = document.createElement("table");
 					table.setAttribute("class", "table table-striped");
@@ -1417,7 +1397,7 @@ $(document).ready(function () {
 			
 					for (i=0; i<columns.length; i++) {
 						var newCell = document.createElement("th");
-						newCell.innerHTML = columns[i];
+						newCell.innerText = columns[i];
 						newCell.setAttribute("class", "sort-by headerSort" + ((columnIDs[i] === sortBy) ? (" " + sortDirection) : ""));
 						newCell.id = columnIDs[i];
 						newCell.onclick = function() {setSort(event);};
@@ -1428,174 +1408,169 @@ $(document).ready(function () {
 						var actionsCell = document.createElement("th");
 						actionsCell.innerText = "Actions";
 						tableHeader.appendChild(actionsCell);
-					}
-				
-					//fill in each row
-					for (var i=0; i<response[0].length; i++) {
-						var newRow = table.insertRow();
-				
-						Object.keys(response[0][i]).forEach(function(key) {
-							if (key != "ID" && !(key.includes("Comment") && !admin)) { //this logic can be cleaned up a lot
-								var newCell = newRow.insertCell();
-								var value = response[0][i][key];
-						
+					
+						//fill in each row (with editable cells and comment field)
+						for (var i=0; i<responseLength; i++) {
+							var newRow = table.insertRow();
+
+							Object.keys(response[i]).forEach(function(key, keyNum) {
+								var value = response[i][key];
 								if (key === "Date") {
 									//we get the date in a weird format, parse it to something more appropriate
 									value = value.split("T")[0];
 								}
-					
-								if (admin && !aggregateMode) {
+								
+								if (keyNum<3) {
+									var newCell = newRow.insertCell();
+									var label = document.createElement("label");
+									label.innerText = value;
+									
 									var textDiv = document.createElement("div");
 									textDiv.setAttribute("class", "input text");
 									newCell.appendChild(textDiv);
-										
-									if (!key.includes("Comment")) {
-										var label = document.createElement("label");
-										label.style = "display: table-cell; cursor: pointer; white-space:normal !important";
-										label.setAttribute("class", "btn btn-thin inputHide");
-										label.setAttribute("for", key + "-" + i);
-										label.innerText = value;
-										
-										label.onclick = function () {
-											var label = $(this);
-											var input = $("#" + label.attr("for"));
-											input.trigger("click");
-											label.attr("style", "display: none");
-											input.attr("style", "display: in-line");
-										};
-						
-										textDiv.appendChild(label);
+									
+									label.style = "display: table-cell; cursor: pointer; white-space:normal !important";
+									label.setAttribute("class", "btn btn-thin inputHide");
+									label.id = key + "-" + i;
+									
+									textDiv.appendChild(label);
+								}
+								else if (keyNum<nCols && !key.includes("Comment")) {
+									var newCell = newRow.insertCell();
+									var textDiv = document.createElement("div");
+									textDiv.setAttribute("class", "input text");
+									newCell.appendChild(textDiv);
+									
+									var label = document.createElement("label");
+									label.style = "display: table-cell; cursor: pointer; white-space:normal !important";
+									label.setAttribute("class", "btn btn-thin inputHide");
+									label.setAttribute("for", key + "-" + i);
+									label.innerText = value;
+									
+									label.onclick = function () {
+										var label = $(this);
+										var input = $("#" + label.attr("for"));
+										input.trigger("click");
+										label.attr("style", "display: none");
+										input.attr("style", "display: in-line");
+									};
+
+									textDiv.appendChild(label);
 								
-										var cellInput = document.createElement("input");
-										cellInput.type = "text";
-										cellInput.name = key + "-" + i;
-										cellInput.setAttribute("maxlength", 20);
-										cellInput.size = 20;
-										cellInput.setAttribute("class", "inputfields tableInput");
-										cellInput.style = "display: none";
-										cellInput.id = key + "-" + i;
-										cellInput.setAttribute("value", value);
-							
-										cellInput.onfocusout = (function () {
-											var input = $(this);
+									var cellInput = document.createElement("input");
+									cellInput.type = "text";
+									cellInput.name = key + "-" + i;
+									cellInput.setAttribute("maxlength", 20);
+									cellInput.size = 20;
+									cellInput.setAttribute("class", "inputfields tableInput");
+									cellInput.style = "display: none";
+									cellInput.id = key + "-" + i;
+									cellInput.setAttribute("value", value);
+								
+									cellInput.onfocusout = (function () {
+										var input = $(this);
 
-											if (!input.attr("id")) {
-												return;
+										if (!input.attr("id")) {
+											return;
+										}
+
+										var value = input.val();
+
+										$.ajax({
+											type: "POST",
+											url: "/WQIS/generic-samples/updatefield",
+											datatype: "JSON",
+											data: {
+												"sampleNumber": $("#Sample_Number-" + (input.attr("id")).split("-")[1]).text(),
+												"parameter": (input.attr("name")).split("-")[0],
+												"value": value
+											},
+											success: function () {
+												var label = $('label[for="' + input.attr("id") + '"');
+
+												input.attr("style", "display: none");
+												label.attr("style", "display: in-line; cursor: pointer");	
+													
+												label.text(value === "" ? "  " : value);
+											},
+											error: function() {
+												genericError();
 											}
-		
-											var value = input.val();
-	
-											$.ajax({
-												type: "POST",
-												url: "/WQIS/generic-samples/updatefield",
-												datatype: "JSON",
-												data: {
-													"sampleNumber": $("#Sample_Number-" + (input.attr("id")).split("-")[1]).val(),
-													"parameter": (input.attr("name")).split("-")[0],
-													"value": value
-												},
-												success: function () {
-													var label = $('label[for="' + input.attr('id') + '"');
-
-													input.attr("style", "display: none");
-													label.attr("style", "display: in-line; cursor: pointer");
-	
-													if (value === "") {
-														label.text("  ");
-													}
-													else {
-														label.text(value);
-													}
-												},
-												error: function() {
-													genericError();
-												}
-											});
 										});
-						
-										textDiv.appendChild(cellInput);
-									}
-									else {
-										//handle comments column separately because its a larger amount of text that needs to be displayed in multiple lines
-										var label = document.createElement("label");
-										label.style = "display: table-cell; cursor: pointer; white-space:normal !important; overflow-wrap: anywhere";
-										label.setAttribute("class", "btn btn-thin inputHide");
-										label.setAttribute("for", key + "-" + i);
-										label.innerText = value;
-										
-										label.onclick = function () {
-											var label = $(this);
-											var input = $("#" + label.attr("for"));
-											input.trigger("click");
-											label.attr("style", "display: none");
-											input.attr("style", "display: in-line");
-										};
-										
-										textDiv.appendChild(label);
-										
-										var textArea = document.createElement("textarea");
-										textArea.setAttribute("rows", "4");
-										textArea.setAttribute("cols", "50");
-										textArea.setAttribute("class", "tableInput");
-										textArea.setAttribute("name", key + "-" + i);
-										textArea.setAttribute("style", "display: none");
-										textArea.setAttribute("id", key + "-" + i);
-										textArea.innerText = value;
-										
-										textArea.onfocusout = (function () {
-											var input = $(this);
-
-											if (!input.attr("id")) {
-												return;
-											}
-
-											var value = input.val();
-	
-											$.ajax({
-												type: "POST",
-												url: "/WQIS/generic-samples/updatefield",
-												datatype: "JSON",
-												data: {
-													"sampleNumber": $("#Sample_Number-" + (input.attr("id")).split("-")[1]).val(),
-													"parameter": (input.attr("name")).split("-")[0],
-													"value": value
-												},
-												success: function () {
-													var label = $('label[for="' + input.attr('id') + '"');
-
-													input.attr("style", "display: none");
-													label.attr("style", "display: in-line; cursor: pointer");
-	
-													if (value === "") {
-														label.text("  ");
-													}
-													else {
-														label.text(value);
-													}
-												},
-												error: function() {
-													genericError();
-												}
-											});
-										});
-										
-										textDiv.appendChild(textArea);
-									}
-								}
-								else {
-									if (!key.includes("Comment")) {
-										var label = document.createElement("label");
-										label.style = "display: table-cell; cursor: pointer; white-space:normal !important;";
-										label.setAttribute("for", key + "-" + i);
-										label.innerText = value;
+									});
 							
-										newCell.appendChild(label);
-									}
+									textDiv.appendChild(cellInput);
 								}
-							}
-						});
-				
-						if (admin && !aggregateMode) {
+							});
+
+							//handle comments column separately because its a larger amount of text that needs to be displayed in multiple lines
+							var key = ucfirst(category) + "Comments";
+							var value = response[i][key];
+							var newCell = newRow.insertCell();
+							
+							var textDiv = document.createElement("div");
+							textDiv.setAttribute("class", "input text");
+							newCell.appendChild(textDiv);
+							
+							var label = document.createElement("label");
+							label.style = "display: table-cell; cursor: pointer; white-space:normal !important; overflow-wrap: anywhere";
+							label.setAttribute("class", "btn btn-thin inputHide");
+							label.setAttribute("for", key + "-" + i);
+							label.innerText = value;
+							
+							label.onclick = function () {
+								var label = $(this);
+								var input = $("#" + label.attr("for"));
+								input.trigger("click");
+								label.attr("style", "display: none");
+								input.attr("style", "display: in-line");
+							};
+							
+							textDiv.appendChild(label);
+
+							var textArea = document.createElement("textarea");
+							textArea.setAttribute("rows", "4");
+							textArea.setAttribute("cols", "50");
+							textArea.setAttribute("class", "tableInput");
+							textArea.setAttribute("name", key + "-" + i);
+							textArea.setAttribute("style", "display: none");
+							textArea.setAttribute("id", key + "-" + i);
+							textArea.innerText = value;
+							
+							textArea.onfocusout = (function () {
+								var input = $(this);
+
+								if (!input.attr("id")) {
+									return;
+								}
+
+								var value = input.val();
+
+								$.ajax({
+									type: "POST",
+									url: "/WQIS/generic-samples/updatefield",
+									datatype: "JSON",
+									data: {
+										"sampleNumber": $("#Sample_Number-" + (input.attr("id")).split("-")[1]).text(),
+										"parameter": (input.attr("name")).split("-")[0],
+										"value": value
+									},
+									success: function () {
+										var label = $('label[for="' + input.attr("id") + '"');
+
+										input.attr("style", "display: none");
+										label.attr("style", "display: in-line; cursor: pointer");
+
+										label.text(value === "" ? "  " : value);
+									},
+									error: function() {
+										genericError();
+									}
+								});
+							});
+							
+							textDiv.appendChild(textArea);
+							
 							//add the deletion button
 							var newCell = newRow.insertCell();
 							var delButton = document.createElement("span");
@@ -1604,11 +1579,11 @@ $(document).ready(function () {
 							delButton.setAttribute("name", "Delete-" + i);
 							delButton.onclick = function() {
 								var rowDiv = this;
-		
+
 								if (!$(rowDiv).attr("id")) {
 									return;
 								}
-			
+
 								var bool = window.confirm("Are you sure you want to delete this record?");
 								if (bool) {
 									//delete record with this sample number and category
@@ -1617,14 +1592,12 @@ $(document).ready(function () {
 										url: "/WQIS/generic-samples/deleteRecord",
 										datatype: "JSON",
 										data: {
-											"sampleNumber": $("#Sample_Number-" + ($(rowDiv).attr("id")).split("-")[1]).val(),
+											"sampleNumber": $("#Sample_Number-" + ($(rowDiv).attr("id")).split("-")[1]).text(),
 											"type": category
 										},
 										success: function () {
 											//remove the row from view
 											rowDiv.parentNode.parentNode.style.display = "none";
-					
-											//future work: build a new table, to still maintain correct total number of rows and have correct black/white/black sequencing after deletions
 										},
 										error: function () {
 											genericError();
@@ -1633,6 +1606,29 @@ $(document).ready(function () {
 								}
 							}
 							newCell.append(delButton);
+						}
+					}
+					else {
+						//fill in each row (without editable cells and comment field)
+						for (var i=0; i<responseLength; i++) {
+							var newRow = table.insertRow();
+
+							Object.keys(response[i]).forEach(function(key) {
+								var value = response[i][key];
+								if (key === "Date") {
+									//we get the date in a weird format, parse it to something more appropriate
+									value = value.split("T")[0];
+								}
+
+								var newCell = newRow.insertCell();
+				
+								var label = document.createElement("label");
+								label.style = "display: table-cell; white-space:normal !important;";
+								label.setAttribute("for", key + "-" + i);
+								label.innerText = value;
+
+								newCell.appendChild(label);
+							});
 						}
 					}
 
@@ -1718,15 +1714,10 @@ $(document).ready(function () {
 				"selectedMeasures": getSelectedMeasures(),
 				"aggregate": aggregateGroup.checked
 			},
-			success: function(response) {
-				numResults = response[0];
+			success: function(numResults) {
 				var numRows = numRowsDropdownTop.value;
-				if (numRows > -1) {
-					numPages = Math.ceil(numResults / numRows);
-				}
-				else {
-					numPages = 1;
-				}
+				numPages = numRows > -1 ? Math.ceil(numResults / numRows) : 1;
+				
 				$(".totalResults").text(numResults);
 				
 				//build up options for the page selector dropdowns
@@ -1819,12 +1810,7 @@ $(document).ready(function () {
 		
 		//check if this was already the sortBy field, if so then we swap the sort direction
 		if (sortBy === field) {
-			if (sortDirection === "Desc") {
-				sortDirection = "Asc";
-			}
-			else {
-				sortDirection = "Desc";
-			}
+			sortDirection = (sortDirection === "Desc") ? "Asc" : "Desc";
 		}
 		
 		resetTable();
@@ -1993,10 +1979,7 @@ $(document).ready(function () {
 		for (var i=0; i<measurementSettings[category].length; i++) {
 			thisMeasure = measurementSettings[category][i];
 			if (thisMeasure.measureKey === measures[k]) {
-				measureTitle = thisMeasure.measureName;
-				if (thisMeasure.unit != "") {
-					measureTitle += " (" + thisMeasure.unit + ")";
-				}
+				measureTitle = thisMeasure.unit == "" ? thisMeasure.measureName : thisMeasure.measureName + " (" + thisMeasure.unit + ")";
 				break;
 			}
 		}

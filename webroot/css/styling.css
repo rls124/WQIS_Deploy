@@ -151,8 +151,8 @@ div.message.hidden {
 	height: 0;
 }
 /* Loading Spinner */
-.loadingspinnermain {
-    visibility: hidden;
+.loadingspinner {
+	visibility: hidden;
     position: fixed;
 }
 .csscssload-load-frame {

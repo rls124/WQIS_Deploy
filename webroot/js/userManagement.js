@@ -1,8 +1,8 @@
 $(document).ajaxStart(function () {
-	$(".loadingspinnermain").css("visibility", "visible");
+	document.getElementById("loadingSpinner").style.visibility = "visible";
 	$("body").css("cursor", "wait");
 }).ajaxStop(function () {
-	$(".loadingspinnermain").css("visibility", "hidden");
+	document.getElementById("loadingSpinner").style.visibility = "hidden";
 	$("body").css("cursor", "default");
 });
 

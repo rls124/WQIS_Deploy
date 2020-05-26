@@ -91,7 +91,7 @@ function hideBrowserCompatibilityMessage() {
 		</div>
 	
 		<!--loading spinner-->
-		<div class="csscssload-load-frame loadingspinnermain" id="loadingSpinner">
+		<div class="csscssload-load-frame loadingspinner" id="loadingSpinner">
 			<?php
 				for ($i=0; $i<24; $i++) {
 					echo "<div class=\"cssload-dot\"></div>";

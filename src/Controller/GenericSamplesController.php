@@ -6,8 +6,8 @@ use App\Controller\AppController;
 class GenericSamplesController extends AppController {	
 	public function removeBOM($str) {
 		//remove the UTF-8 byte order mark (BOM). Excel exports CSVs with this, its unneeded and breaks our importer, so remove it
-		if(substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
-			$str=substr($str, 3);
+		if (substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
+			$str = substr($str, 3);
 		}
 		return $str;
 	}
@@ -46,7 +46,12 @@ class GenericSamplesController extends AppController {
 	
 		if ($aggregate == "false") {
 			//individual mode
-			$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]);
+			if ($this->Auth->user("admin")) { //check if user is admin, since non-admins don't see comments
+				$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]);
+			}
+			else {
+				$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures);
+			}
 	
 			$query = $this->$model->find("all", [
 				"fields" => $fields,
@@ -70,9 +75,8 @@ class GenericSamplesController extends AppController {
 				->order(["Date" => "Desc"]);
 		}
 
-		$this->set(compact("query"));
 		return $this->response->withType("application/json")->withStringBody(json_encode($query));
-}
+	}
 	
 	public function tablePages() {
 		$this->render(false);
@@ -122,7 +126,7 @@ class GenericSamplesController extends AppController {
 			])->count();
 		}
 		
-		return $this->response->withType("json")->withStringBody(json_encode([$count]));
+		return $this->response->withType("json")->withStringBody(json_encode($count));
 	}
 
 	public function tabledata() {
@@ -166,7 +170,12 @@ class GenericSamplesController extends AppController {
 		
 		if ($aggregate == "false") {
 			//individual mode
-			$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]);
+			if ($this->Auth->user("admin")) { //check if user is admin, since non-admins don't see comments
+				$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]);
+			}
+			else {
+				$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures);
+			}
 		
 			$query = $this->$model->find("all", [
 				"fields" => $fields,
@@ -194,7 +203,7 @@ class GenericSamplesController extends AppController {
 				->order([$sortBy => $sortDirection]);
 		}
 		
-		return $this->response->withType("json")->withStringBody(json_encode([$query]));
+		return $this->response->withType("json")->withStringBody(json_encode($query));
 	}
 
 	public function uploadlog() {
@@ -231,7 +240,7 @@ class GenericSamplesController extends AppController {
 			else if ($fileType == 2) {
 				//nutrient
 				$model = "NutrientSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Phosphorus', 'NitrateNitrite', 'DRP', 'Ammonia', 'NutrientComments');
+				$columnIDs = array("site_location_id", "Date", "Sample_Number", "Phosphorus", "NitrateNitrite", "DRP", "Ammonia", "NutrientComments");
 				$columnText = array("Site Number", "Date", "Sample number", "Phosphorus (mg/L)", "Nitrate/Nitrite (mg/L)", "Dissolved Reactive Phosphorus", "Ammonia", "Comments");
 
 				$this->set("fileTypeName", "Nutrient Samples");
@@ -600,11 +609,11 @@ class GenericSamplesController extends AppController {
 	}
 
 	public function add() {
-		//api handler for mobile collector app
+		//API handler for mobile collector app. Currently hardcoded to physical samples for dev purposes
 		$this->render(false);
 		$this->request->allowMethod(['post', 'put']);
 		$modelName = "PhysicalSamples";
-		$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time');
+		$columns = array("site_location_id", "Date", "Sample_Number", "Time", "Bridge_to_Water_Height", "Water_Temp", "pH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity_Scale_Value", "PhysicalComments", "Import_Date", "Import_Time");
 		
 		$this->loadModel($modelName);
 		$model = $this->$modelName;
@@ -612,7 +621,7 @@ class GenericSamplesController extends AppController {
 		$sample = $model->newEntity();
 		
 		//go through each column and find the postdata name that is associated
-		for ($col = 0; $col < sizeof($columns); $col++) {
+		for ($col=0; $col<sizeof($columns); $col++) {
 			$requestField = "";
 			$requestField = $columns[$col];
 			if ($request->getData($requestField) == null) {
@@ -620,7 +629,8 @@ class GenericSamplesController extends AppController {
 				if ($col == 12) {
 					$rowData[$columns[12]] = " "; //physical comments can't be null in db
 				}
-			} else {
+			}
+			else {
 				$rowData[$columns[$col]] = $request->getData($requestField);
 			}
 		}
@@ -635,19 +645,19 @@ class GenericSamplesController extends AppController {
 		}
 
 		$this->set([
-			'message' => $message,
-			'_serialize' => ['message']
+			"message" => $message,
+			"_serialize" => ["message"]
 		]);
 
-		$this->response = $this->response->withType('text');
+		$this->response = $this->response->withType("text");
 		$this->response->getBody()->write($message);
-		return $this->response; // return success or error message to the app
+		return $this->response; //return success or error message to the app
 	}
 
 	public function updatefield() {
 		$this->render(false);
 		
-		//Ensure sample number data was included
+		//ensure sample number data was included
 		if (!$this->request->getData("sampleNumber")) {
 			return;
 		}
@@ -655,7 +665,7 @@ class GenericSamplesController extends AppController {
 		
 		$parameter = $this->request->getData("parameter");
 		$parameter = strtolower($parameter); //shouldn't need to do this, but it'll reduce the risk of someone fucking this up again. Like I did.
-		$value = $this->request->getData('value');
+		$value = $this->request->getData("value");
 		
 		if ($parameter == "ecoli" || $parameter == "totalcoliform" || $parameter == "bacteriacomments") { //bacteria
 			$model = "BacteriaSamples";
@@ -672,12 +682,12 @@ class GenericSamplesController extends AppController {
 		
 		$this->loadModel($model);
 		
-		//Get the sample we are editing
+		//get the sample we are editing
 		$sample = $this->$model
 			->find("all")
 			->where(["Sample_Number" => $sampleNumber])
 			->first();
-		//Set the edited field
+		//set the edited field
 		$parameter = $this->request->getData("parameter");
 		$sample->$parameter = $value;
 		//Save changes
