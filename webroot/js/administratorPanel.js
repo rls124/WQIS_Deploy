@@ -14,8 +14,8 @@ $(document).ready(function () {
 		$("#submitFile").prop("disabled", false);
 	});
 	
-	$("#entryForm").attr("action", "/WQIS/generic-samples/entryform");
-	$("#fileupload").attr("action", "/WQIS/generic-samples/uploadlog");
+	$("#entryForm").attr("action", "/WQIS/samples/entryform");
+	$("#fileupload").attr("action", "/WQIS/samples/uploadlog");
 });
 
 $(function(){

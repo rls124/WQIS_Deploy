@@ -124,7 +124,7 @@ else {?>
 				"id" => "totalrows"
 			]);
 
-			echo $this->Form->button("Submit " . $formType . " Measurements", [
+			echo $this->Form->button("Submit " . ucfirst($formType) . " Measurements", [
 				"class" => "btn btn-basic mb-3",
 				"style" => "float: right;"
 			]);

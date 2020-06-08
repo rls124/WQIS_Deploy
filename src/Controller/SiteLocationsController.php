@@ -46,14 +46,13 @@ class SiteLocationsController extends AppController {
 		$this->loadModel("SiteGroups");
 		
 		//show only groups that are either public or owned by this user
-		$groups = $this->SiteGroups->find("all", ["conditions" =>
-				["owner IN " => ["all", $this->Auth->user("userid")]]]);
+		$groups = $this->SiteGroups->find("all", ["conditions" => ["owner IN " => ["all", $this->Auth->user("userid")]]]);
 		
 		//get the sites and the most recent sample data for each
 		$sites = $this->SiteLocations->find("all")->order("Site_Number");
 		$connection = ConnectionManager::get("default");
 		
-		$mapData = ["SiteData" => $sites];
+		$mapData = [];
 		$tableNames = ["bacteria_samples", "nutrient_samples", "pesticide_samples", "physical_samples"];
 		
 		for ($i=0; $i<sizeof($tableNames); $i++) {
@@ -69,6 +68,7 @@ class SiteLocationsController extends AppController {
 		
 		$measurementSettings = ["bacteria" => $bacteriaSettings, "nutrient" => $nutrientSettings, "pesticide" => $pesticideSettings, "physical" => $physicalSettings];
 		
+		$this->set(compact("sites"));
 		$this->set(compact("measurementSettings"));
 		$this->set(compact("groups"));
 		$this->set(compact("mapData"));
@@ -76,10 +76,14 @@ class SiteLocationsController extends AppController {
 
 	public function daterange() {
 		$this->render(false);
-
-		$sites = $this->request->getData("sites");
 		
-		$model = ucfirst($this->request->getData("category")) . "Samples";
+		//we use this method both in the API and the site itself, so we have to be able to accept data either as $_POST or session-saved POST
+		$session = $this->getRequest()->getSession();
+		$postData = $session->check("postData") ? $session->read("postData") : $_POST;
+
+		$sites = $postData["sites"];
+		
+		$model = ucfirst($postData["category"]) . "Samples";
 		$this->loadModel($model);
 		
 		//get min/max date of all the sites
@@ -207,26 +211,30 @@ class SiteLocationsController extends AppController {
 
 	public function addsite() {
 		$this->render(false);
+		
+		if (!($this->request->is("post") && isset($_POST["Site_Number"]))) {
+			return;
+		}
+		
 		$SiteLocation = $this->SiteLocations->newEntity();
-		if ($this->request->is("post")) {
-			$SiteLocation = $this->SiteLocations->patchEntity($SiteLocation, $this->request->getData());
+		$SiteLocation = $this->SiteLocations->patchEntity($SiteLocation, $this->request->getData());
 
-			$Site_Number = $this->request->getData("Site_Number");
+		$Site_Number = $this->request->getData("Site_Number");
 
-			if ($this->SiteLocations->save($SiteLocation)) {
-				$site = $this->SiteLocations
-					->find("all")
-					->where(["Site_Number" => $Site_Number])
-					->first();
-				
-				return $this->response->withType("json")->withStringBody(json_encode(["siteid" => $site->ID]));
-			}
+		if ($this->SiteLocations->save($SiteLocation)) {
+			$site = $this->SiteLocations
+				->find("all")
+				->where(["Site_Number" => $Site_Number])
+				->first();
+			
+			return $this->response->withType("json")->withStringBody(json_encode(["siteid" => $site->ID]));
 		}
 	}
 
 	public function deletesite() {
 		$this->render(false);
-		//Check if siteid is set
+		
+		//check if siteid is set
 		if (!$this->request->getData("siteid")) {
 			return;
 		}
@@ -237,5 +245,166 @@ class SiteLocationsController extends AppController {
 			->first();
 		//delete the site
 		$this->SiteLocations->delete($site);
+	}
+	
+	//API methods
+	public function latestmeasures() {
+		//return the most recent sample data for all sites
+		$this->render(false);
+		
+		$session = $this->getRequest()->getSession();
+		$postData = $session->read("postData");
+		
+		$connection = ConnectionManager::get("default");
+		
+		$latestMeasures = [];
+		$tableNames = ["bacteria_samples", "nutrient_samples", "pesticide_samples", "physical_samples"];
+		
+		if (isset($postData["sites"])) {
+			$sites = $postData["sites"];
+			
+			for ($i=0; $i<sizeof($tableNames); $i++) {
+				$query = "select * from (select site_location_id, max(Date) as maxdate from " .
+					$tableNames[$i] .
+					" where site_location_id in (" .
+					implode(",", $sites) .
+					") group by site_location_id) as x inner join " .
+					$tableNames[$i] .
+					" as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
+					
+				$queryResult = $connection->execute($query)->fetchAll("assoc");
+				$latestMeasures = array_merge($latestMeasures, [$tableNames[$i] => $queryResult]);
+			}
+		}
+		else {
+			for ($i=0; $i<sizeof($tableNames); $i++) {
+				$query = "select * from (select site_location_id, max(Date) as maxdate from " .
+					$tableNames[$i] .
+					" group by site_location_id) as x inner join " .
+					$tableNames[$i] .
+					" as f on f.site_location_id = x.site_location_id and f.Date = x.maxdate ORDER BY `f`.`site_location_id` ASC";
+					
+				$queryResult = $connection->execute($query)->fetchAll("assoc");
+				$latestMeasures = array_merge($latestMeasures, [$tableNames[$i] => $queryResult]);
+			}
+		}
+		
+		return $this->response->withType("json")->withStringBody(json_encode($latestMeasures));
+	}
+	
+	public function attributes() {
+		$this->render(false);
+		
+		$session = $this->getRequest()->getSession();
+		//validate
+		if (!($session->check("postData") && ($postData = $session->read("postData")) && isset($postData["site"]))) {
+			return;
+		}
+		
+		if (isset($postData["attributes"])) {
+			$query = $this->SiteLocations
+				->find("all")
+				->select($postData["attributes"])
+				->where(["Site_Number" => $postData["site"]])
+				->first();
+		}
+		else {
+			$query = $this->SiteLocations
+				->find("all")
+				->where(["Site_Number" => $postData["site"]])
+				->first();
+		}
+		
+		return $this->response->withType("json")->withStringBody(json_encode($query));
+	}
+	
+	public function latitude() {
+		$this->render(false);
+		
+		$session = $this->getRequest()->getSession();
+		//validate
+		if (!($session->check("postData") && ($postData = $session->read("postData")) && isset($postData["site"]))) {
+			return;
+		}
+		
+		$query = $this->SiteLocations
+			->find("all")
+			->select("latitude")
+			->where(["Site_Number" => $postData["site"]])
+			->first();
+		
+		return $this->response->withType("json")->withStringBody(json_encode($query));
+	}
+	
+	public function longitude() {
+		$this->render(false);
+		
+		$session = $this->getRequest()->getSession();
+		//validate
+		if (!($session->check("postData") && ($postData = $session->read("postData")) && isset($postData["site"]))) {
+			return;
+		}
+		
+		$query = $this->SiteLocations
+			->find("all")
+			->select("longitude")
+			->where(["Site_Number" => $postData["site"]])
+			->first();
+		
+		return $this->response->withType("json")->withStringBody(json_encode($query));
+	}
+	
+	public function sitelocation() {
+		$this->render(false);
+		
+		$session = $this->getRequest()->getSession();
+		//validate
+		if (!($session->check("postData") && ($postData = $session->read("postData")) && isset($postData["site"]))) {
+			return;
+		}
+		
+		$query = $this->SiteLocations
+			->find("all")
+			->select("Site_Location")
+			->where(["Site_Number" => $postData["site"]])
+			->first();
+		
+		return $this->response->withType("json")->withStringBody(json_encode($query));
+	}
+	
+	public function sitename() {
+		$this->render(false);
+		
+		$session = $this->getRequest()->getSession();
+		//validate
+		if (!($session->check("postData") && ($postData = $session->read("postData")) && isset($postData["site"]))) {
+			return;
+		}
+		
+		$query = $this->SiteLocations
+			->find("all")
+			->select("Site_Name")
+			->where(["Site_Number" => $postData["site"]])
+			->first();
+		
+		return $this->response->withType("json")->withStringBody(json_encode($query));
+	}
+	
+	public function groups() {
+		$this->render(false);
+		
+		$session = $this->getRequest()->getSession();
+		//validate
+		if (!($session->check("postData") && ($postData = $session->read("postData")) && isset($postData["site"]))) {
+			return;
+		}
+		
+		$query = $this->SiteLocations
+			->find("all")
+			->select("groups")
+			->where(["Site_Number" => $postData["site"]])
+			->first();
+		
+		return $this->response->withType("json")->withStringBody(json_encode($query));
 	}
 }

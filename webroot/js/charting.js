@@ -10,18 +10,19 @@ var charts = [];
 var measurementSettings; //will be filled in with the contents of the MeasurementSettings table, containing category/name/alias/benchmarks/detection limits for each
 var groups;
 var spinnerInhibited = false; //inhibit as needed for minor things that aren't expected to take much time (getRange())
+const numSites = siteData.length;
 
 //pointers to static page elements
 const sidebarInner = document.getElementById("sidebarInner");
 const main = document.getElementById("main");
 const sidebarToggle = document.getElementById("sidebarToggle");
 const chartDiv = document.getElementById("chartDiv");
-const amountEnter = document.getElementById("amountEnter");
+const filterAmount = document.getElementById("filterAmount");
 const measurementSelect = document.getElementById("measurementSelect");
 const exportBtn = document.getElementById("exportBtn");
 const aggregateGroup = document.getElementById("aggregateGroup");
 const categorySelect = document.getElementById("categorySelect");
-const overUnderSelect = document.getElementById("overUnderSelect");
+const filterDirection = document.getElementById("filterDirection");
 const chartType = document.getElementById("chartType");
 const allCheckbox = document.getElementById("allCheckbox");
 const tableDiv = document.getElementById("tableDiv");
@@ -525,7 +526,7 @@ function rebuildCompareModal(chartInstance) {
 				//retrieve data from the server
 				$.ajax({
 					type: "POST",
-					url: "/WQIS/generic-samples/graphdata",
+					url: "/WQIS/samples/graphdata",
 					datatype: "JSON",
 					async: false,
 					data: {
@@ -535,8 +536,8 @@ function rebuildCompareModal(chartInstance) {
 						"selectedMeasures": [measure],
 						"category": $(this)[0].attributes.category.value,
 						"amount": null,
-						"overUnderSelect": null,
-						"measurementSearch": null,
+						"filterDirection": null,
+						"filterBy": null,
 						"aggregate": aggregateGroup.checked
 					},
 					success: function(response) {
@@ -655,7 +656,7 @@ $(document).ready(function () {
 		}
 		
 		$("#sites").append('<optgroup label="Select Site(s)" id="siteOpt"> </optgroup>');
-		for (var site of mapData["SiteData"]) {
+		for (var site of siteData) {
 			$("#siteOpt").append(new Option(site.Site_Number + " " + site.Site_Name, site.Site_Number, false, false));
 		}
 		
@@ -681,7 +682,6 @@ $(document).ready(function () {
 		];
 		
 		//build the points layer
-		var visibleSites = mapData["SiteData"];
 		var graphics = [];
 		const labels = new LabelClass({
 			labelExpressionInfo: {
@@ -701,8 +701,8 @@ $(document).ready(function () {
 			labelPlacement: "above-center"
 		});
 		//add markers to the map at each sites longitude and latitude
-		for (var i=0; i<visibleSites.length; i++) {
-			var site = visibleSites[i];
+		for (var i=0; i<numSites; i++) {
+			var site = siteData[i];
 			
 			var pointGraphic = new Graphic({
 					ObjectID: i,
@@ -730,9 +730,9 @@ $(document).ready(function () {
 				var field = shortField + "_samples";
 				
 				for (rowNum=0; rowNum<mapData[field].length; rowNum++) {
-					var siteNumber = mapData[field][rowNum]["site_location_id"];
+					var siteNumber = mapData[field][rowNum].site_location_id;
 					if (pointGraphic.attributes.siteNumber == siteNumber) {
-						pointGraphic.attributes[shortField + "Date"] = mapData[field][rowNum]["Date"].split("T")[0];
+						pointGraphic.attributes[shortField + "Date"] = mapData[field][rowNum].Date.split("T")[0];
 						for (z=0; z<measurementSettings[shortField].length; z++) {
 							var key = measurementSettings[shortField][z].measureKey;
 							if (mapData[field][rowNum][key] !== null) {
@@ -963,12 +963,12 @@ $(document).ready(function () {
 	function clearHighlight() {
 		if (clickedPoint != null) {
 			//handle case where de-clicked point is still selected and should be colored orange, not default blue
-			setColor(clickedPoint, ($("#sites").val().includes(mapData["SiteData"][clickedPoint.ObjectID].Site_Number.toString()) ? selectedPointColor : defaultPointColor));
+			setColor(clickedPoint, ($("#sites").val().includes(siteData[clickedPoint.ObjectID].Site_Number.toString()) ? selectedPointColor : defaultPointColor));
 		}
 	}
 	
 	function selectPoint() {
-		var siteNum = mapData["SiteData"][view.popup.selectedFeature.ObjectID].Site_Number.toString();
+		var siteNum = siteData[view.popup.selectedFeature.ObjectID].Site_Number.toString();
 		var currentlySelected = $("#sites").val();
 		
 		if (!currentlySelected.includes(siteNum)) {
@@ -992,7 +992,7 @@ $(document).ready(function () {
 			if (optSelected.parent()[0].id == "groupOpt") {		
 				//get all the sites that are in this group
 				var inGroup = [];
-				for (var site of mapData.SiteData) {
+				for (var site of siteData) {
 					if (site.groups.includes(selected)) {
 						//select it in the sites dropdown
 						inGroup.push(site.Site_Number);
@@ -1008,10 +1008,10 @@ $(document).ready(function () {
 				
 				for (i=0; i<selected.length; i++) {
 					//get associated graphic for this point
-					for (j=0; j<mapData["SiteData"].length; j++) {
-						if (mapData["SiteData"][j].Site_Number.toString() === selected[i]) {
-							setColor(mapData["SiteData"][j].graphic, selectedPointColor);
-							selectedPoints.push(mapData["SiteData"][j].graphic);
+					for (j=0; j<numSites; j++) {
+						if (siteData[j].Site_Number.toString() === selected[i]) {
+							setColor(siteData[j].graphic, selectedPointColor);
+							selectedPoints.push(siteData[j].graphic);
 							break;
 						}
 					}
@@ -1114,7 +1114,7 @@ $(document).ready(function () {
 		for (var i=0; i<nInCat; i++) {
 			var measure = category[i];
 			if (measure.measureKey === measurementSelect.value) {
-				amountEnter.placeholder = (measure.benchmarkMaximum == null) ? "No Benchmark Available" : "Benchmark: " + measure.benchmarkMaximum + " " + measure.unit;
+				filterAmount.placeholder = (measure.benchmarkMaximum == null) ? "No Benchmark Available" : "Benchmark: " + measure.benchmarkMaximum + " " + measure.unit;
 				break;
 			}
 		}
@@ -1157,20 +1157,21 @@ $(document).ready(function () {
 	}, false);
 	
 	$("#exportBtn").click(function () {
+		//export data
 		var category = categorySelect.value;
 
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/generic-samples/exportData",
+			url: "/WQIS/samples/getRecords",
 			datatype: "JSON",
 			data: {
 				"sites": $("#sites").val(),
 				"startDate": $("#startDate").val(),
 				"endDate": $("#endDate").val(),
 				"category": category,
-				"amountEnter": amountEnter.value,
-				"overUnderSelect": overUnderSelect.value,
-				"measurementSearch": measurementSelect.value,
+				"filterAmount": filterAmount.value,
+				"filterDirection": filterDirection.value,
+				"filterBy": measurementSelect.value,
 				"selectedMeasures": getSelectedMeasures(),
 				"aggregate": aggregateGroup.checked
 			},
@@ -1215,7 +1216,7 @@ $(document).ready(function () {
 			checkboxList.appendChild(listItem);
 		}
 		
-		amountEnter.value = "";
+		filterAmount.value = "";
 		
 		$(".measurementCheckbox").change(function() {
 			checkboxesChanged();
@@ -1235,7 +1236,7 @@ $(document).ready(function () {
 		var csvContent = "data:text/csv;charset=utf-8,";
 		var fields = Object.keys(fileData[0]);
 		for (var i=0; i<fileData.length; i++) {
-			fileData[i]["Date"] = fileData[i]["Date"].substring(0, 10);
+			fileData[i].Date = fileData[i].Date.substring(0, 10);
 		}
 		
 		//make null values not have text
@@ -1266,7 +1267,7 @@ $(document).ready(function () {
 		if ($("#sites").val() == "") { //check that at least one site is selected
 			alert("You must select at least one site to view");
 		}
-		else if (amountEnter.value != "" && measurementSelect.value === "select") { //check that, if there is something in amountEnter, a measure is also selected
+		else if (filterAmount.value != "" && measurementSelect.value === "select") { //check that, if there is something in filterAmount, a measure is also selected
 			alert("You must specify a measure to search by");
 		}
 		else {
@@ -1365,7 +1366,7 @@ $(document).ready(function () {
 
 			$.ajax({
 				type: "POST",
-				url: "/WQIS/generic-samples/tabledata",
+				url: "/WQIS/samples/tabledata",
 				datatype: "JSON",
 				async: false,
 				data: {
@@ -1373,9 +1374,9 @@ $(document).ready(function () {
 					"startDate": $("#startDate").val(),
 					"endDate": $("#endDate").val(),
 					"category": category,
-					"amountEnter": amountEnter.value,
-					"overUnderSelect": overUnderSelect.value,
-					"measurementSearch": measurementSelect.value,
+					"filterAmount": filterAmount.value,
+					"filterDirection": filterDirection.value,
+					"filterBy": measurementSelect.value,
 					"selectedMeasures": selectedMeasures,
 					"numRows": numRowsDropdownTop.value,
 					"pageNum": tablePage,
@@ -1478,7 +1479,7 @@ $(document).ready(function () {
 
 										$.ajax({
 											type: "POST",
-											url: "/WQIS/generic-samples/updatefield",
+											url: "/WQIS/samples/updatefield",
 											datatype: "JSON",
 											data: {
 												"sampleNumber": $("#Sample_Number-" + (input.attr("id")).split("-")[1]).text(),
@@ -1548,7 +1549,7 @@ $(document).ready(function () {
 
 								$.ajax({
 									type: "POST",
-									url: "/WQIS/generic-samples/updatefield",
+									url: "/WQIS/samples/updatefield",
 									datatype: "JSON",
 									data: {
 										"sampleNumber": $("#Sample_Number-" + (input.attr("id")).split("-")[1]).text(),
@@ -1589,7 +1590,7 @@ $(document).ready(function () {
 									//delete record with this sample number and category
 									$.ajax({
 										type: "POST",
-										url: "/WQIS/generic-samples/deleteRecord",
+										url: "/WQIS/samples/deleteRecord",
 										datatype: "JSON",
 										data: {
 											"sampleNumber": $("#Sample_Number-" + ($(rowDiv).attr("id")).split("-")[1]).text(),
@@ -1700,7 +1701,7 @@ $(document).ready(function () {
 		//get the number of records
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/generic-samples/tablePages",
+			url: "/WQIS/samples/tablePages",
 			datatype: "JSON",
 			async: false,
 			data: {
@@ -1708,9 +1709,9 @@ $(document).ready(function () {
 				"startDate": $("#startDate").val(),
 				"endDate": $("#endDate").val(),
 				"category": categorySelect.value,
-				"amountEnter": amountEnter.value,
-				"overUnderSelect": overUnderSelect.value,
-				"measurementSearch": measurementSelect.value,
+				"filterAmount": filterAmount.value,
+				"filterDirection": filterDirection.value,
+				"filterBy": measurementSelect.value,
 				"selectedMeasures": getSelectedMeasures(),
 				"aggregate": aggregateGroup.checked
 			},
@@ -1876,7 +1877,7 @@ $(document).ready(function () {
 		
 		$.ajax({
 			type: "POST",
-			url: "/WQIS/generic-samples/graphdata",
+			url: "/WQIS/samples/graphdata",
 			datatype: "JSON",
 			async: false,
 			data: {
@@ -1885,9 +1886,9 @@ $(document).ready(function () {
 				"endDate": $("#endDate").val(),
 				"selectedMeasures": measures,
 				"category": category,
-				"amount": amountEnter.value,
-				"overUnderSelect": overUnderSelect.value,
-				"measurementSearch": measurementSelect.value,
+				"amount": filterAmount.value,
+				"filterDirection": filterDirection.value,
+				"filterBy": measurementSelect.value,
 				"aggregate": aggregateMode
 			},
 			success: function(response) {

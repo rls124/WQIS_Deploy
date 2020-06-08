@@ -32,32 +32,7 @@ Development environment:
 		[TBD]
 
 	MacOS:
-		MAMP is recommended for WQIS setup on MacOS. It is possible to use XAMPP if necessary, but MAMP is much easier to setup for WQIS and seems to run more reliably on MacOS.
-
-		1. Install and open MAMP.
-
-		2. In Finder, create a new folder called "WQIS" in the htdocs folder (Path: Applications/MAMP/htdocs/WQIS). Copy all of the contents from the GitHub repo into this folder.
-
-		3. Download CakePHP. We are currently using CakePHP 3.8.3, this can be downloaded from https://github.com/cakephp/cakephp/releases/tag/3.8.3. Copy the bin and vendor folders from cakephp-3-8-3 to the WQIS folder (replace the existing bin and vendor folders), and create a new "logs" folder.
-
-		4. The default settings for phpmyadmin don't allow you to import a file as large as our SQL dump, so we need to reconfigure that. Go to MAMP/conf/php7.3.8/php.ini, and make these changes:
-
-			post_max_size = 128M
-			upload_max_filesize = 128M
-			max_execution_time = 300
-			max_input_time = 300
-
-		5. Go to localhost:8888/phpmyadmin. Click "Databases" in the top row, and create a new database called wqis_db.
-
-		6. Now click "Import" in the top row, then "browse", then select the sql file at MAMP/htdocs/WQIS/MariaDB Sql File/wqis_db.sql. Then click "Go". It may take a few seconds. 
-		
-		7. On the left panel you should now see the wqis_db database, and should be able to view its entries.
-
-		8. We need to create a new user that the system itself will use to access the database. Go to "Home", then "user accounts", then "add user". Create a new user with username "programUser" and password "waterquality". Grant this user all "Data" privileges (SELECT, INSERT, UPDATE, DELETE, FILE).
-
-		9. Go to MAMP/htdocs/WQIS/config/app.php. Make sure 'host' => 'localhost' (~line 225), and 'port' => '8889' (~line 231).
-
-		10. You should now be able to log in to wqis. Use the root account, password is waterquality.
+		[TBD]
 
 Live server:
 	1. Follow the instructions for the development environment first

@@ -1,6 +1,6 @@
 <?php
 /*
-Pages controller. Handles (ideally) static pages in the /pages/ path
+Pages controller. Handles static pages in the /pages/ path
 */
 namespace App\Controller;
 
@@ -21,9 +21,9 @@ class PagesController extends AppController {
 	public function display(...$path) {
 		$count = count($path);
 		if (!$count) {
-			return $this->redirect('/');
+			return $this->redirect("/");
 		}
-		if (in_array('..', $path, true) || in_array('.', $path, true)) {
+		if (in_array("..", $path, true) || in_array(".", $path, true)) {
 			throw new ForbiddenException();
 		}
 		$page = $subpage = null;
@@ -44,7 +44,7 @@ class PagesController extends AppController {
 		$this->set(compact("page", "subpage"));
 
 		try {
-			$this->render(implode('/', $path));
+			$this->render(implode("/", $path));
 		}
 		catch (MissingTemplateException $exception) {
 			if (Configure::read("debug")) {

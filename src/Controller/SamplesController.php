@@ -2,80 +2,15 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
-class GenericSamplesController extends AppController {	
+class SamplesController extends AppController {
 	public function removeBOM($str) {
 		//remove the UTF-8 byte order mark (BOM). Excel exports CSVs with this, its unneeded and breaks our importer, so remove it
-		if (substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
+		if (substr($str, 0,3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
 			$str = substr($str, 3);
 		}
 		return $str;
-	}
-	
-	public function exportData() {
-		$this->render(false);
-
-		//get request data
-		$startDate = date("Ymd", strtotime($_POST["startDate"]));
-		$endDate = date("Ymd", strtotime($_POST["endDate"]));
-		$sites = $_POST["sites"];
-		$amount = $_POST["amountEnter"];
-		$searchDirection = $_POST["overUnderSelect"];
-		$measurementSearch = $_POST["measurementSearch"];
-		$category = $_POST["category"];
-		$selectedMeasures = $_POST["selectedMeasures"];
-		$aggregate = $_POST["aggregate"];
-	
-		//set model
-		$model = ucfirst($category) . "Samples";
-		$this->loadModel($model);
-	
-		$query = "";
-		
-		$andConditions = [
-			"site_location_id IN" => $sites,
-			$model . ".Date >=" => $startDate,
-			$model . ".Date <=" => $endDate
-		];
-		
-		if ($amount != "") {
-			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
-		}
-	
-		$andConditions = GenericSamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
-	
-		if ($aggregate == "false") {
-			//individual mode
-			if ($this->Auth->user("admin")) { //check if user is admin, since non-admins don't see comments
-				$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]);
-			}
-			else {
-				$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures);
-			}
-	
-			$query = $this->$model->find("all", [
-				"fields" => $fields,
-				"conditions" => [
-					"and" => $andConditions
-				]
-			])->order(["Date" => "Desc"]);
-		}
-		else {
-			//aggregate mode
-			$query = $this->$model->find();
-			
-			$selection = ["Date"];
-			for ($i=0; $i<sizeof($selectedMeasures); $i++) {
-				$selection = array_merge($selection, [$selectedMeasures[$i] => $query->func()->avg($selectedMeasures[$i])]);
-			}
-		
-			$query->select($selection)
-				->where($andConditions)
-				->group("Date")
-				->order(["Date" => "Desc"]);
-		}
-
-		return $this->response->withType("application/json")->withStringBody(json_encode($query));
 	}
 	
 	public function tablePages() {
@@ -85,9 +20,9 @@ class GenericSamplesController extends AppController {
 		$startDate = date("Ymd", strtotime($_POST["startDate"]));
 		$endDate = date("Ymd", strtotime($_POST["endDate"]));
 		$sites = $_POST["sites"];
-		$amount = $_POST["amountEnter"];
-		$searchDirection = $_POST["overUnderSelect"];
-		$measurementSearch = $_POST["measurementSearch"];
+		$amount = $_POST["filterAmount"];
+		$searchDirection = $_POST["filterDirection"];
+		$filterBy = $_POST["filterBy"];
 		$category = $_POST["category"];
 		$selectedMeasures = $_POST["selectedMeasures"];
 		$aggregate = $_POST["aggregate"];
@@ -102,10 +37,10 @@ class GenericSamplesController extends AppController {
 			$model . ".Date <=" => $endDate
 		];
 		
-		$andConditions = GenericSamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
+		$andConditions = SamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
 			
 		if ($amount != "") {
-			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
+			$andConditions = array_merge($andConditions, [$model . "." . $filterBy . " " . $searchDirection => $amount]);
 		}
 		
 		if ($aggregate == "false") {
@@ -136,9 +71,9 @@ class GenericSamplesController extends AppController {
 		$startDate = date("Ymd", strtotime($_POST["startDate"]));
 		$endDate = date("Ymd", strtotime($_POST["endDate"]));
 		$sites = $_POST["sites"];
-		$amount = $_POST["amountEnter"];
-		$searchDirection = $_POST["overUnderSelect"];
-		$measurementSearch = $_POST["measurementSearch"];
+		$amount = $_POST["filterAmount"];
+		$searchDirection = $_POST["filterDirection"];
+		$filterBy = $_POST["filterBy"];
 		$category = $_POST["category"];
 		$selectedMeasures = $_POST["selectedMeasures"];
 		$sortBy = $_POST["sortBy"];
@@ -163,10 +98,10 @@ class GenericSamplesController extends AppController {
 		];
 		
 		if ($amount != "") {
-			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
+			$andConditions = array_merge($andConditions, [$model . "." . $filterBy . " " . $searchDirection => $amount]);
 		}
 		
-		$andConditions = GenericSamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
+		$andConditions = SamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
 		
 		if ($aggregate == "false") {
 			//individual mode
@@ -208,7 +143,7 @@ class GenericSamplesController extends AppController {
 
 	public function uploadlog() {
 		//record start time so we can figure out how long the whole page took to load, including the controller
-		$time = explode(' ', microtime());
+		$time = explode(" ", microtime());
 		$time = $time[1] + $time[0];
 		$startTime = $time;
 
@@ -227,40 +162,36 @@ class GenericSamplesController extends AppController {
 			
 			$csv = array_map("str_getcsv", file($file["tmp_name"]));
 			
-			$fileType = GenericSamplesController::getFileTypeFromHeaders($csv); //determine filetype from column headers
+			$fileTypeName = SamplesController::getFileTypeFromHeaders($csv); //determine filetype from column headers
+			$model = $fileTypeName . "Samples";
 			
-			if ($fileType == 1) {
-				//bacteria
-				$model = "BacteriaSamples";
-				$columnIDs = array("site_location_id", "Date", "Sample_Number", "Ecoli", "TotalColiform", "BacteriaComments");
-				$columnText = array("Site Number", "Date", "Sample Number", "Ecoli", "Total Coliform", "Comments");
-				
-				$this->set("fileTypeName", "Bacteria Samples");
-			}
-			else if ($fileType == 2) {
-				//nutrient
-				$model = "NutrientSamples";
-				$columnIDs = array("site_location_id", "Date", "Sample_Number", "Phosphorus", "NitrateNitrite", "DRP", "Ammonia", "NutrientComments");
-				$columnText = array("Site Number", "Date", "Sample number", "Phosphorus (mg/L)", "Nitrate/Nitrite (mg/L)", "Dissolved Reactive Phosphorus", "Ammonia", "Comments");
+			$this->loadModel("MeasurementSettings");
+			$measuresAll = $this->MeasurementSettings->find("all", [
+					"conditions" => [
+						"and" => ["category" => $fileTypeName]
+					],
+					"fields" => ["measureKey", "measureName"]
+				])
+				->order(["measureKey" => "Asc"])
+				->all();
 
-				$this->set("fileTypeName", "Nutrient Samples");
+			if ($fileTypeName == "Physical") { //hacky temp solution. THESE NEED TO BE ADDED TO THE MEASURES DATABASE
+				$columnIDs = ["site_location_id", "Date", "Sample_Number", "Time", "Bridge_to_Water_Height"];
+				$columnText = ["Site Number", "Date", "Sample Number", "Time", "Bridge to Water Height"];
 			}
-			else if ($fileType == 3) {
-				//pesticide
-				$model = "PesticideSamples";
-				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Atrazine', 'Alachlor', 'Metolachlor', 'PesticideComments');
-				$columnText = array("Site Number", "Date", "Sample number", "Atrazine", "Alachlor", "Metolachlor", "Comments");
-				
-				$this->set("fileTypeName", "Pesticide Samples");
+			else {
+				$columnIDs = ["site_location_id", "Date", "Sample_Number"];
+				$columnText = ["Site Number", "Date", "Sample Number"];
 			}
-			else if ($fileType == 4) {
-				//physical properties
-				$model = "PhysicalSamples";
- 				$columnIDs = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time');
-				$columnText = array("Site Number", "Date", "Sample number", "Time", "Bridge to Water Height", "Water Temp", "PH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity (scale value)", "Comments", "Import Date", "Import Time");
-				
-				$this->set("fileTypeName", "Physical Property Samples");
+			
+			foreach ($measuresAll as $measure) {
+				$columnIDs[] = $measure->measureKey;
+				$columnText[] = $measure->measureName;
 			}
+			$columnIDs[] = $fileTypeName . "Comments";
+			$columnText[] = "Comments";
+			
+			$this->set("fileTypeName", $fileTypeName . " Samples");
 			
 			$this->loadModel($model);
 		
@@ -332,10 +263,7 @@ class GenericSamplesController extends AppController {
 									$table->TDS = $currentRow[8];
 									$table->DO = $currentRow[9];
 									$table->Turbidity = $currentRow[10];
-									$table->Turbidity_Scale_Value = $currentRow[11];
-									$table->PhysicalComments = $currentRow[12];
-									$table->Import_Date = $currentRow[13];
-									$table->Import_Time = $currentRow[14];
+									$table->PhysicalComments = $currentRow[11];
 									break;
 							}
 
@@ -380,7 +308,9 @@ class GenericSamplesController extends AppController {
 		
 		$headerRow = $csv[0];
 		
-		$headerRow[0] = GenericSamplesController::removeBOM($headerRow[0]); //fix issue with Excel exporting CSVs with UTF-8 BOM encoding
+		$headerRow[0] = SamplesController::removeBOM($headerRow[0]); //fix issue with Excel exporting CSVs with UTF-8 BOM encoding
+		
+		$types = ["Bacteria", "Nutrient", "Pesticide", "Physical"];
 		
 		$bacteriaHeader = array(
 			array("site number", "site_number", "sitenumber"),
@@ -423,11 +353,8 @@ class GenericSamplesController extends AppController {
 			array("conductivity"),
 			array("tds"),
 			array("do"),
-			array("turbidity (meter reading)"),
-			array("turbidity (scale value)"),
+			array("turbidity"),
 			array("comments"),
-			array("import date", "import_date", "importdate"),
-			array("import time", "import_time", "importtime"),
 		);
 		
 		$nutrientHeaderAmmonia = array(
@@ -475,7 +402,7 @@ class GenericSamplesController extends AppController {
 			}
 			
 			if ($correctType) {
-				return $typeNumber + 1;
+				return $types[$typeNumber];
 			}
 		}
 	}
@@ -531,7 +458,7 @@ class GenericSamplesController extends AppController {
 			return;
 		}
 		
-		$modelName = ucfirst($name) . "Samples";
+		$model = ucfirst($name) . "Samples";
 		if ($name == "bacteria") {
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Ecoli', 'TotalColiform', 'BacteriaComments');
 		}
@@ -542,16 +469,14 @@ class GenericSamplesController extends AppController {
 			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Altrazine', 'Alachlor', 'Metolachlor', 'PesticideComments');
 		}
 		elseif ($name == "physical") {
-			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'Turbidity_Scale_Value', 'PhysicalComments', 'Import_Date', 'Import_Time');
+			$columns = array('site_location_id', 'Date', 'Sample_Number', 'Time', 'Bridge_to_Water_Height', 'Water_Temp', 'pH', 'Conductivity', 'TDS', 'DO', 'Turbidity', 'PhysicalComments');
 		}
-		
-		$this->loadModel($modelName);
-		$model = $this->$modelName;
+		$this->loadModel($model);
 		
 		$rows = $this->request->getData("totalrows");
 		$request = $this->request;
 		
-		$sample = $model->newEntity();
+		$sample = $this->$model->newEntity();
 		
 		//check if the request is post, and the request has at least one sample
 		if ($request->is("post") && $request->getData("site_location_id-0")) {
@@ -577,8 +502,8 @@ class GenericSamplesController extends AppController {
 				}
 			
 				//create the entity to save
-				$sample = $model->patchEntity($model->newEntity(), $rowData);
-				if ($model->save($sample)) {
+				$sample = $this->$model->patchEntity($this->$model->newEntity(), $rowData);
+				if ($this->$model->save($sample)) {
 					$successes++;
 				}
 				else {
@@ -594,7 +519,7 @@ class GenericSamplesController extends AppController {
 			}
 		}
 		
-		$siteLocations = $model->SiteLocations->find("all");
+		$siteLocations = $this->$model->SiteLocations->find("all");
 		$this->set(compact("sample", "siteLocations"));
 		$this->set("_serialize", ["sample"]);
 		$this->set('mode', $mode);
@@ -611,9 +536,9 @@ class GenericSamplesController extends AppController {
 	public function add() {
 		//API handler for mobile collector app. Currently hardcoded to physical samples for dev purposes
 		$this->render(false);
-		$this->request->allowMethod(['post', 'put']);
+		$this->request->allowMethod(["post", "put"]);
 		$modelName = "PhysicalSamples";
-		$columns = array("site_location_id", "Date", "Sample_Number", "Time", "Bridge_to_Water_Height", "Water_Temp", "pH", "Conductivity", "TDS", "DO", "Turbidity", "Turbidity_Scale_Value", "PhysicalComments", "Import_Date", "Import_Time");
+		$columns = array("site_location_id", "Date", "Sample_Number", "Time", "Bridge_to_Water_Height", "Water_Temp", "pH", "Conductivity", "TDS", "DO", "Turbidity", "PhysicalComments");
 		
 		$this->loadModel($modelName);
 		$model = $this->$modelName;
@@ -664,22 +589,18 @@ class GenericSamplesController extends AppController {
 		$sampleNumber = $this->request->getData("sampleNumber");
 		
 		$parameter = $this->request->getData("parameter");
-		$parameter = strtolower($parameter); //shouldn't need to do this, but it'll reduce the risk of someone fucking this up again. Like I did.
 		$value = $this->request->getData("value");
 		
-		if ($parameter == "ecoli" || $parameter == "totalcoliform" || $parameter == "bacteriacomments") { //bacteria
-			$model = "BacteriaSamples";
+		if (($exploded = preg_split("@(?=Comments)@", $parameter)) && sizeof($exploded) == 2 && $exploded[1] == "Comments") {
+			$model = ucfirst($exploded[0]) . "Samples";
 		}
-		elseif ($parameter == "nitratenitrite" || $parameter == "phosphorus" || $parameter == "drp" || $parameter == "ammonia" || $parameter == "nutrientcomments") { //nutrient
-			$model = "NutrientSamples";
+		else {
+			$this->loadModel("MeasurementSettings");
+			$model = $this->MeasurementSettings->find("all")
+				->select(["category"])
+				->where(["measureKey" => $parameter])
+				->first()->category . "Samples";
 		}
-		elseif ($parameter == "atrazine" || $parameter == "alachlor" || $parameter == "metolachlor" || $parameter == "pesticidecomments") { //pesticide
-			$model = "PesticideSamples";
-		}
-		elseif ($parameter == "conductivity" || $parameter == "do" || $parameter == "bridge_to_water_height" || $parameter == "ph" || $parameter == "water_temp" || $parameter == "tds" || $parameter == "turbidity" || $parameter == "physicalcomments") { //water quality meter
-			$model = "PhysicalSamples";
-		}
-		
 		$this->loadModel($model);
 		
 		//get the sample we are editing
@@ -687,14 +608,13 @@ class GenericSamplesController extends AppController {
 			->find("all")
 			->where(["Sample_Number" => $sampleNumber])
 			->first();
-		//set the edited field
-		$parameter = $this->request->getData("parameter");
+
+		//save changes
 		$sample->$parameter = $value;
-		//Save changes
 		$this->$model->save($sample);
 	}
 	
-	public function ensureNotNullCondition($conditionsList, $selectedMeasures) {
+	private function ensureNotNullCondition($conditionsList, $selectedMeasures) {
 		//don't return rows in which none of the selected measurements actually have data in them
 		$notAllNullString = "NOT ( (" . $selectedMeasures[0] . " IS NULL)";
 		for ($i=1; $i<sizeof($selectedMeasures); $i++) {
@@ -713,8 +633,8 @@ class GenericSamplesController extends AppController {
 		$sites = $this->request->getData("sites");
 		$category = $_POST["category"];
 		$amount = $_POST["amount"];
-		$searchDirection = $_POST["overUnderSelect"];
-		$measurementSearch = $_POST["measurementSearch"];
+		$searchDirection = $_POST["filterDirection"];
+		$filterBy = $_POST["filterBy"];
 		$selectedMeasures = $_POST["selectedMeasures"];
 		$aggregate = $_POST["aggregate"];
 		
@@ -728,10 +648,10 @@ class GenericSamplesController extends AppController {
 			$model . ".Date <= " => $endDate
 		];
 		
-		$andConditions = GenericSamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
+		$andConditions = SamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
 		
 		if ($amount != "") {
-			$andConditions = array_merge($andConditions, [$model . "." . $measurementSearch . " " . $searchDirection => $amount]);
+			$andConditions = array_merge($andConditions, [$model . "." . $filterBy . " " . $searchDirection => $amount]);
 		}
 		
 		if ($aggregate == "false") {
@@ -761,5 +681,93 @@ class GenericSamplesController extends AppController {
 		}
 		
 		return $this->response->withType("json")->withStringBody(json_encode($query));
+	}
+	
+	//API methods
+	public function getRecords() {
+		$this->render(false);
+		
+		//we use this method both in the API and the site itself, so we have to be able to accept data either as $_POST or session-saved POST
+		$session = $this->getRequest()->getSession();
+		$postData = $session->check("postData") ? $session->read("postData") : $_POST;
+		
+		$query = "";
+		
+		//get request data and pre-process it
+		$category = $postData["category"]; //must always be set
+		$selectedMeasures = $postData["selectedMeasures"]; //must always be set
+		
+		//set model
+		$model = ucfirst($category) . "Samples";
+		$this->loadModel($model);
+	
+		if (isset($postData["sampleNumbers"])) {
+			//we want to get a single sample with these numbers
+			$sampleNumbers = $postData["sampleNumbers"];
+			
+			$query = $this->$model->find("all", [
+					"fields" => array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]),
+					"conditions" => [
+						"and" => ["Sample_Number IN" => $sampleNumbers]
+					]
+				])->order(["Date" => "Desc"]);
+		}
+		else {
+			//we need more data
+			$sites = $postData["sites"];
+			$amount = isset($postData["filterAmount"]) ? $postData["filterAmount"] : "";
+			$filterBy = isset($postData["filterBy"]) ? $postData["filterBy"] : "";
+			$searchDirection = isset($postData["filterDirection"]) ? $postData["filterDirection"] : "=";
+			$aggregate = isset($postData["aggregate"]) ? $postData["aggregate"] : "false";
+			
+			$andConditions = [
+				"site_location_id IN" => $sites,
+			];
+			
+			if (isset($postData["startDate"])) {
+				$andConditions = array_merge($andConditions, [$model . ".Date >=" => date("Ymd", strtotime($postData["startDate"]))]);
+			}
+			if (isset($postData["endDate"])) {
+				$andConditions = array_merge($andConditions, [$model . ".Date <=" => date("Ymd", strtotime($postData["endDate"]))]);
+			}
+			if ($amount != "") {
+				$andConditions = array_merge($andConditions, [$model . "." . $filterBy . " " . $searchDirection => $amount]);
+			}
+		
+			$andConditions = SamplesController::ensureNotNullCondition($andConditions, $selectedMeasures);
+			
+			if ($aggregate == "true") {
+				//aggregate mode
+				$query = $this->$model->find();
+				
+				$selection = ["Date"];
+				for ($i=0; $i<sizeof($selectedMeasures); $i++) {
+					$selection = array_merge($selection, [$selectedMeasures[$i] => $query->func()->avg($selectedMeasures[$i])]);
+				}
+			
+				$query->select($selection)
+					->where($andConditions)
+					->group("Date")
+					->order(["Date" => "Desc"]);
+			}
+			else {
+				//individual mode
+				if ($this->Auth->user("admin")) { //check if user is admin, since non-admins don't see comments
+					$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures, [(ucfirst($category) . "Comments")]);
+				}
+				else {
+					$fields = array_merge(["site_location_id", "Date", "Sample_Number"], $selectedMeasures);
+				}
+		
+				$query = $this->$model->find("all", [
+					"fields" => $fields,
+					"conditions" => [
+						"and" => $andConditions
+					]
+				])->order(["Date" => "Desc"]);
+			}
+		}
+
+		return $this->response->withType("application/json")->withStringBody(json_encode($query));
 	}
 }

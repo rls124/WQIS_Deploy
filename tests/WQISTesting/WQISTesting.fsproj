@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Include="ChartSelectionTests.fs" />
+    <Compile Include="APITests.fs" />
     <Compile Include="NavigationTests.fs" />
     <Compile Include="UserTests.fs" />
     <Compile Include="Program.fs" />
@@ -14,13 +15,13 @@
 
   <ItemGroup>
     <PackageReference Include="canopy" Version="2.1.5" />
-    <PackageReference Include="CommandLineParser.FSharp" Version="2.7.82" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="81.0.4044.6900" />
+    <PackageReference Include="CommandLineParser.FSharp" Version="2.8.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="83.0.4103.3900" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.26.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.7.1" />
+    <PackageReference Update="FSharp.Core" Version="4.7.2" />
   </ItemGroup>
 
 </Project>

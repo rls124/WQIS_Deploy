@@ -2,12 +2,12 @@ Automated testing is accomplished via an F# program using Canopy. This is curren
 
 This program is also used for our demonstration capability, either live or pre-recorded. This allows for shared code between those similar needs, reducing development time and file size. Most of the runtime options and actions available for test mode are also available for demo mode. The main difference from test mode is that demo mode makes no effort to validate what is displayed on the screen is actually correct, and there are accomodations to make it easier for the audience to see what is happening (built-in delays, scrolling to the appropriate part of the screen).
 
-You will need Visual Studio to compile the project (can also probably compile it by command line, but I've not tested this). Canopy, Selenium.WebDriver.ChromeDriver, Selenium.WebDriver.GeckoDriver, and CommandLineParser.FSharp are NuGet dependencies. You'll also need Chrome and/or Firefox installed.
+You will need Visual Studio to compile the project (can also probably compile it by command line, but I've not tested this). Canopy, Selenium.WebDriver.ChromeDriver, and commandlineparser are NuGet dependencies. You'll also need Chrome installed.
 
 Build the project from VS using Build -> Build Solution, then run the program from the command line (the executable will be stored at WQIS/tests/WQISTesting/bin/Debug/netcoreapp3.1/WQISTesting.exe).
 
 Options:
-	-P: Run from the production site (currently configured to https://wqis.cityoffortwayne.org) instead of localhost (currently doesn't work, production site is not yet live but soon will be)
+	-P: Run from the production site (currently configured to https://emerald.pfw.edu/WQIS) instead of localhost (currently doesn't work, production is incompatible with this test tool but will be supported after the redesign exits beta)
 
 	-B: Run from the beta test site (currently configured to https://emerald.pfw.edu/WQISBeta) instead of localhost
 
@@ -17,10 +17,4 @@ Options:
 
 	--override: Overrides limitations on database editing for the production environment, which exist to prevent flawed code from altering data and potentially giving users incorrect results. ONLY USE THIS IF YOU ARE VIRTUALLY CERTAIN IT WILL WORK CORRECTLY.
 
-	--browser: Browser to use for testing. Supports Chrome and Firefox
-
-Notes:
-
-	* Firefox currently does not work properly, there is an unknown problem with the Select2-based Sites dropdown which breaks search functionality. This is thought to be a problem with Canopy
-
-	* When running in Chrome, the test program will produce many errors of the form "[1587753169.691][SEVERE]: Timed out receiving message from renderer: 0.100". These are harmless, it is a bug in ChromeDriver itself. ChromeDriver v82 is supposed to resolve this.
+	--demo: Demonstration mode

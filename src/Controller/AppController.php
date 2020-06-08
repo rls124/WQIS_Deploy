@@ -17,22 +17,47 @@ class AppController extends Controller {
 
 		$this->loadComponent("RequestHandler");
 		$this->loadComponent("Flash");
-
-		$this->loadComponent("Auth", [
-			"loginAction" => [
-				"controller" => "Users",
-				"action" => "login"
-			],
-			"authError" => "You are not authorized to view this page.",
-			"authenticate" => [
-				"Form" => [
-					"fields" => ["username" => "username", "password" => "userpw"]
-				]
-			],
-			"storage" => "Session"
-		]);
 		
-		//$this->loadComponent("Csrf"); //disabled because it breaks AJAX. Need to handle the token for this, evaluating impact
+        if ($this->request->getParam("controller") === "API") {
+			$this->loadComponent("Auth", [
+				"loginAction" => [
+					"controller" => "Users",
+					"action" => "login"
+				],
+				"authError" => "You are not authorized to view this page.",
+				"authenticate" => [
+					"Basic" => [
+						"fields" => ["username" => "username", "password" => "userpw"]
+					]
+				],
+				"storage" => "Session"
+			]);
+		
+			$user = $this->Auth->identify();
+			$params = $this->request->getAttribute("params")["pass"];
+			$session = $this->getRequest()->getSession();
+			
+			$postData = json_decode(file_get_contents("php://input"), true);
+			
+			$session->write("postData", $postData);
+			
+			$this->redirect(["controller" => $params[0], "action" => $params[1]]);
+		}
+		else {
+			$this->loadComponent("Auth", [
+				"loginAction" => [
+					"controller" => "Users",
+					"action" => "login"
+				],
+				"authError" => "You are not authorized to view this page.",
+				"authenticate" => [
+					"Form" => [
+						"fields" => ["username" => "username", "password" => "userpw"]
+					]
+				],
+				"storage" => "Session"
+			]);
+		}
 	}
 
 	public function beforeFilter(Event $event) {
@@ -49,19 +74,42 @@ class AppController extends Controller {
 
 	public function beforeRender(Event $event) {
 		if ($this->request->getParam("_ext") !== "json") {
-			$this->loadComponent("Auth", [
-				"loginAction" => [
-					"controller" => "Users",
-					"action" => "login"
-				],
-				"authError" => "You are not authorized to view this page.",
-				"authenticate" => [
-					"Form" => [
-						"fields" => ["username" => "username", "password" => "userpw"]
-					]
-				],
-				"storage" => "Session"
-			]);
+			if ($this->request->getParam("controller") === "API") {
+				$tarController = $this->request->getParam("action");
+				$tarAction = $this->request->getAttribute('params')["pass"][0];
+				$this->loadComponent("Auth", [
+					"loginAction" => [
+						"controller" => "Users",
+						"action" => "login"
+					],
+					"authError" => "You are not authorized to view this page.",
+					"authenticate" => [
+						"Basic" => [
+							"fields" => ["username" => "username", "password" => "userpw"]
+						]
+					],
+					"storage" => "Session"
+				]);
+			
+				$session = $this->getRequest()->getSession();
+				$session->write("postData", $_POST);
+				$this->redirect(["controller" => $tarController, "action" => $tarAction]);
+			}
+			else {
+				$this->loadComponent("Auth", [
+					"loginAction" => [
+						"controller" => "Users",
+						"action" => "login"
+					],
+					"authError" => "You are not authorized to view this page.",
+					"authenticate" => [
+						"Form" => [
+							"fields" => ["username" => "username", "password" => "userpw"]
+						]
+					],
+					"storage" => "Session"
+				]);
+			}
 			
 			$this->set("pageName", substr($this->request->getUri(), strrpos($this->request->getUri(), "/") + 1));
 

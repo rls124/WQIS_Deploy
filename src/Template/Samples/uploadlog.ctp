@@ -1,4 +1,4 @@
-<?= $this->Html->css('uploadlog.css') ?>
+<?= $this->Html->css("uploadlog.css") ?>
 <div class="row" style="margin:10px;">
 	<div class="col-xs">
 		<h1>File Upload Report</h1>
@@ -12,7 +12,7 @@
 <?php
 if (isset($valid)) {
 	echo "<p>Error with upload of file " . $fileName . ": </p>";
-	echo "<p>" . $valid['errorMessage'] . "</p>";
+	echo "<p>" . $valid["errorMessage"] . "</p>";
 }
 else if (isset($log)) {
 	if ($countFails > 0) {
@@ -69,7 +69,7 @@ else if (isset($log)) {
 		}
 		else {
 			?>
-			<h3>File uploaded successfully. <?php echo $countSuccesses;?> rows added</h3>
+			<h3>File uploaded successfully. <?=$countSuccesses?> rows added</h3>
 			<a href=\"/WQIS/pages/administratorpanel\">Return to administrator panel</a>
 			<?php
 		}
@@ -98,7 +98,7 @@ else if (isset($log)) {
 <script>
 <?php
 $time = microtime();
-$time = explode(' ', $time);
+$time = explode(" ", $time);
 $time = $time[1] + $time[0];
 $finish = $time;
 $total_time = round(($finish - $startTime), 4);

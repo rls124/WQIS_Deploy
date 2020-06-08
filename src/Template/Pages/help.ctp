@@ -248,6 +248,13 @@ echo $this->Html->script("help.js");
 	</p>
 </div>
 
+<h2>API</h2>
+<div class="indent">
+	<p>
+		To allow a wider array of queries and alternate means of displaying and analyzing data beyond the scope of the WQIS project itself, WQIS exposes an Application Programming Interface available to external developers. See the <b><a href="/WQIS/pages/developers">WQIS for Developers</a></b> page for more details.
+	</p>
+</div>
+
 <br>
 <?php } ?>
 

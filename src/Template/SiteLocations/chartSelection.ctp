@@ -24,6 +24,7 @@ if ($admin) {
 echo "var measurementSettings=" . json_encode($measurementSettings) . ";";
 echo "var groups=" . json_encode($groups) . ";";
 echo "var mapData=" . json_encode($mapData) . ";";
+echo "var siteData=" . json_encode($sites) . ";";
 
 if (isset($_GET["site"])) {
 	echo "var preselectSite=" . $_GET["site"] . ";";
@@ -125,13 +126,13 @@ echo "</script>";
 			</div>
 			<div>
 			<?=
-			$this->Form->select("overUnderSelect", [
+			$this->Form->select("filterDirection", [
 				">=" => "Over",
 				"<=" => "Under",
 				"=" => "Equal To"
 				], [
 				"label" => "Search",
-				"id" => "overUnderSelect",
+				"id" => "filterDirection",
 				"class" => "form-control select"
 				]
 			)
@@ -139,11 +140,11 @@ echo "</script>";
 			</div>
 			<div>
 			<?=
-			$this->Form->control("amountEnter", [
+			$this->Form->control("filterAmount", [
 				"label" => false,
 				"type" => "text",
 				"class" => "form-control input col-lg-12",
-				"id" => "amountEnter",
+				"id" => "filterAmount",
 				"placeholder" => "Get Benchmark"
 			])
 			?>
