@@ -20,7 +20,7 @@ Development environment:
 
 		6. From xampp-control, click the admin button next to MySql (or just go to localhost/phpmyadmin). Click "Databases" in the top row, and create a new database called wqis_db.
 
-		7. Now click "Import" in the top row, then "browse", then select the sql file at C:\xampp\htdocs\wqis\MariaDB Sql File\wqis_db.sql. Then click "Go". It may take a few seconds
+		7. Now click "Import" in the top row, then "browse", then select the sql file at C:\xampp\htdocs\wqis\documentation\database\wqis_db.sql. Then click "Go". It may take a few seconds
 
 		8. On the left panel you should now see the wqis_db database, and should be able to view its entries.
 
@@ -49,7 +49,7 @@ Development environment:
 
 		5. Go to localhost:8888/phpmyadmin. Click "Databases" in the top row, and create a new database called wqis_db.
 
-		6. Now click "Import" in the top row, then "browse", then select the sql file at MAMP/htdocs/WQIS/MariaDB Sql File/wqis_db.sql. Then click "Go". It may take a few seconds. 
+		6. Now click "Import" in the top row, then "browse", then select the sql file at MAMP/htdocs/WQIS/documentation/database/wqis_db.sql. Then click "Go". It may take a few seconds. 
 		
 		7. On the left panel you should now see the wqis_db database, and should be able to view its entries.
 
