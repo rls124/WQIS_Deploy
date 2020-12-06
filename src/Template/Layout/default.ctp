@@ -10,7 +10,7 @@
 		<?= $this->fetch("css") ?>
 		<?= $this->fetch("script") ?>
 
-		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 		<?php
 		echo $this->Html->css("bootstrap-glyphicons.min.css");
@@ -103,7 +103,7 @@ function hideBrowserCompatibilityMessage() {
 		Produced with love by the students of IPFW/PFW.
 		Bobby Nicola, Mack Crawford, Seth Snider, Nicholas Tayloe
 		-->
-		<script src="https://unpkg.com/@popperjs/core@2"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 		
 		<?php if (!isset($_COOKIE["ignoreBrowserCompatibility"])) { echo "<script>browserDetect();</script>"; } ?>
